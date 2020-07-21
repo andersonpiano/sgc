@@ -1,22 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Unidadeshospitalares extends Admin_Controller {
+class Setores extends Admin_Controller {
 
     public function __construct()
     {
         parent::__construct();
 
         /* Load :: Common */
-        $this->load->model('cemerge/unidadehospitalar_model');
-        $this->lang->load('admin/unidadeshospitalares');
+        $this->load->model('cemerge/setor_model');
+        $this->lang->load('admin/setores');
 
         /* Title Page */
-        $this->page_title->push(lang('menu_unidadeshospitalares'));
+        $this->page_title->push(lang('menu_setores'));
         $this->data['pagetitle'] = $this->page_title->show();
 
         /* Breadcrumbs :: Common */
-        $this->breadcrumbs->unshift(1, lang('menu_unidadeshospitalares'), 'admin/unidadeshospitalares');
+        $this->breadcrumbs->unshift(1, lang('menu_setores'), 'admin/setores');
     }
 
 
@@ -32,75 +32,65 @@ class Unidadeshospitalares extends Admin_Controller {
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
             /* Get all hospitals */
-            $this->data['unidadeshospitalares'] = $this->unidadehospitalar_model->get_all();
+            $this->data['setores'] = $this->setor_model->get_all();
 
             /* Load Template */
-            $this->template->admin_render('admin/unidadeshospitalares/index', $this->data);
+            $this->template->admin_render('admin/setores/index', $this->data);
         }
     }
 
     public function create()
     {
         /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_unidadeshospitalares_create'), 'admin/unidadeshospitalares/create');
+        $this->breadcrumbs->unshift(2, lang('menu_setores_create'), 'admin/setores/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Variables */
         $tables = $this->config->item('tables', 'ion_auth');
 
         /* Validate form input */
-        $this->form_validation->set_rules('cnpj', 'lang:unidadeshospitalares_cnpj', 'required');
-        $this->form_validation->set_rules('razaosocial', 'lang:unidadeshospitalares_razaosocial', 'required');
-        $this->form_validation->set_rules('nomefantasia', 'lang:unidadeshospitalares_nomefantasia', 'required');
+        $this->form_validation->set_rules('nome', 'lang:setores_nome', 'required');
+        $this->form_validation->set_rules('unidade_hospitalar', 'lang:setores_unidade_hospitalar', 'required');
 
         if ($this->form_validation->run() == TRUE)
         {
-            $cnpj = $this->input->post('cnpj');
-            $razaosocial = $this->input->post('razaosocial');
-            $nomefantasia = $this->input->post('nomefantasia');
-            $active = $this->input->post('active');
+            $nome = $this->input->post('nome');
+            $unidade_hospitalar = $this->input->post('unidade_hospitalar');
+            //$active = $this->input->post('active');
 
             $additional_data = array(
-                'cnpj' => $this->input->post('cnpj'),
-                'razaosocial' => $this->input->post('razaosocial'),
-                'nomefantasia' => $this->input->post('nomefantasia'),
-                'active' => $this->input->post('active')
+                'nome' => $this->input->post('nome'),
+                'unidade_hospitalar' => $this->input->post('unidade_hospitalar')
             );
         }
 
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true
-            && $this->unidadehospitalar_model->insert($additional_data)
+            && $this->setor_model->insert($additional_data)
         )
         {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
-            redirect('admin/unidadeshospitalares', 'refresh');
+            redirect('admin/setores', 'refresh');
         }
         else
         {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-            $this->data['cnpj'] = array(
-                'name'  => 'cnpj',
-                'id'    => 'cnpj',
+            $this->data['nome'] = array(
+                'name'  => 'nome',
+                'id'    => 'nome',
                 'type'  => 'text',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('cnpj'),
+                'value' => $this->form_validation->set_value('nome'),
             );
-            $this->data['razaosocial'] = array(
-                'name'  => 'razaosocial',
-                'id'    => 'razaosocial',
+            $this->data['unidade_hospitalar'] = array(
+                'name'  => 'unidade_hospitalar',
+                'id'    => 'unidade_hospitalar',
                 'type'  => 'text',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('razaosocial'),
+                'value' => $this->form_validation->set_value('unidade_hospitalar'),
             );
-            $this->data['nomefantasia'] = array(
-                'name'  => 'nomefantasia',
-                'id'    => 'nomefantasia',
-                'type'  => 'text',
-                'class' => 'form-control',
-                'value' => $this->form_validation->set_value('nomefantasia'),
-            );
+            /*
             $this->data['active'] = array(
                 'name'  => 'active',
                 'id'    => 'active',
@@ -108,9 +98,10 @@ class Unidadeshospitalares extends Admin_Controller {
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('active'),
             );
+            */
 
             /* Load Template */
-            $this->template->admin_render('admin/unidadeshospitalares/create', $this->data);
+            $this->template->admin_render('admin/setores/create', $this->data);
         }
     }
 
@@ -118,23 +109,23 @@ class Unidadeshospitalares extends Admin_Controller {
     {
         $id = (int) $id;
 
-        if ( ! $this->ion_auth->logged_in() OR ( ! $this->ion_auth->is_admin() && ! ($this->ion_auth->user()->row()->id == $id))) {
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->is_admin()) {
             redirect('auth', 'refresh');
         }
 
         /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_unidadeshospitalares_edit'), 'admin/unidadeshospitalares/edit');
+        $this->breadcrumbs->unshift(2, lang('menu_setores_edit'), 'admin/setores/edit');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Load Data */
-        $unidadehospitalar = $this->unidadehospitalar_model->get_by_id($id);
+        $setor = $this->setor_model->get_by_id($id);
         //$groups        = $this->ion_auth->groups()->result_array();
         //$currentGroups = $this->ion_auth->get_users_groups($id)->result();
 
         /* Validate form input */
-        $this->form_validation->set_rules('cnpj', 'lang:unidadeshospitalares_cnpj', 'required');
-        $this->form_validation->set_rules('razaosocial', 'lang:unidadeshospitalares_razaosocial', 'required');
-        //$this->form_validation->set_rules('nomefantasia', 'lang:unidadeshospitalares_nomefantasia', 'required');
+        $this->form_validation->set_rules('nome', 'lang:setores_nome', 'required');
+        $this->form_validation->set_rules('unidade_hospitalar', 'lang:setores_unidade_hospitalar', 'required');
+        //$this->form_validation->set_rules('nomefantasia', 'lang:setores_nomefantasia', 'required');
         //$this->form_validation->set_rules('active', 'lang:edit_user_validation_company_label', 'required');
 
         if (isset($_POST) && ! empty($_POST)) {
@@ -144,17 +135,15 @@ class Unidadeshospitalares extends Admin_Controller {
 
             if ($this->form_validation->run() == true) {
                 $data = array(
-                    'cnpj' => $this->input->post('cnpj'),
-                    'razaosocial' => $this->input->post('razaosocial'),
-                    'nomefantasia' => $this->input->post('nomefantasia'),
-                    'active' => $this->input->post('active')
+                    'nome' => $this->input->post('nome'),
+                    'unidade_hospitalar' => $this->input->post('unidade_hospitalar')
                 );
 
-                if ($this->unidadehospitalar_model->update($unidadehospitalar->id, $data)) {
+                if ($this->setor_model->update($setor->id, $data)) {
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
 
                     if ($this->ion_auth->is_admin()) {
-                        redirect('admin/unidadeshospitalares', 'refresh');
+                        redirect('admin/setores', 'refresh');
                     } else {
                         redirect('admin', 'refresh');
                     }
@@ -176,52 +165,47 @@ class Unidadeshospitalares extends Admin_Controller {
         // set the flash data error message if there is one
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-        // pass the unidadehospitalar to the view
-        $this->data['unidadehospitalar'] = $unidadehospitalar;
+        // pass the setor to the view
+        $this->data['setor'] = $setor;
 
-        $this->data['cnpj'] = array(
-            'name'  => 'cnpj',
-            'id'    => 'cnpj',
+        $this->data['nome'] = array(
+            'name'  => 'nome',
+            'id'    => 'nome',
             'type'  => 'text',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('cnpj', $unidadehospitalar->cnpj)
+            'value' => $this->form_validation->set_value('nome', $setor->nome)
         );
-        $this->data['razaosocial'] = array(
-            'name'  => 'razaosocial',
-            'id'    => 'razaosocial',
+        $this->data['unidade_hospitalar'] = array(
+            'name'  => 'unidade_hospitalar',
+            'id'    => 'unidade_hospitalar',
             'type'  => 'text',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('razaosocial', $unidadehospitalar->razaosocial)
+            'value' => $this->form_validation->set_value('unidade_hospitalar', $setor->unidade_hospitalar)
         );
-        $this->data['nomefantasia'] = array(
-            'name'  => 'nomefantasia',
-            'id'    => 'nomefantasia',
-            'type'  => 'text',
-            'class' => 'form-control',
-            'value' => $this->form_validation->set_value('nomefantasia', $unidadehospitalar->nomefantasia)
-        );
+        /*
         $this->data['active'] = array(
             'name'  => 'active',
             'id'    => 'active',
             'type'  => 'checkbox',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('active', $unidadehospitalar->active)
+            'value' => $this->form_validation->set_value('active', $setor->active)
         );
+        */
 
         /* Load Template */
-        $this->template->admin_render('admin/unidadeshospitalares/edit', $this->data);
+        $this->template->admin_render('admin/setores/edit', $this->data);
     }
 
     public function view($id)
     {
         /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_users_profile'), 'admin/unidadeshospitalares/view');
+        $this->breadcrumbs->unshift(2, lang('menu_setores'), 'admin/setores/view');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Data */
         $id = (int) $id;
 
-        $this->data['unidadehospitalar'] = $this->unidadehospitalar_model->get_by_id($id);
+        $this->data['setor'] = $this->setor_model->get_by_id($id);
         /*
         // Setores
         foreach ($this->data['user_info'] as $k => $user)
@@ -231,7 +215,7 @@ class Unidadeshospitalares extends Admin_Controller {
         */
 
         /* Load Template */
-        $this->template->admin_render('admin/unidadeshospitalares/view', $this->data);
+        $this->template->admin_render('admin/setores/view', $this->data);
     }
 
     public function _get_csrf_nonce()
@@ -244,7 +228,6 @@ class Unidadeshospitalares extends Admin_Controller {
 
         return array($key => $value);
     }
-
 
     public function _valid_csrf_nonce()
     {

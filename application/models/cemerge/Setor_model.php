@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Unidadehospitalar_model extends CI_Model {
-    private $table = 'unidadeshospitalares';
+class Setor_model extends CI_Model {
+    private $table = 'setores';
 
     public function __construct()
     {

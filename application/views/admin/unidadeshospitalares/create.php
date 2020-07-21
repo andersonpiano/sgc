@@ -14,55 +14,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="col-md-12">
                              <div class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title"><?php echo lang('users_create_user'); ?></h3>
+                                    <h3 class="box-title"><?php echo lang('unidadeshospitalares_create'); ?></h3>
                                 </div>
                                 <div class="box-body">
                                     <?php echo $message;?>
 
-                                    <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_user')); ?>
+                                    <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_unidadehospitalar')); ?>
                                         <div class="form-group">
-                                            <?php echo lang('users_firstname', 'first_name', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('unidadeshospitalares_cnpj', 'cnpj', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
-                                                <?php echo form_input($first_name);?>
+                                                <?php echo form_input($cnpj);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('users_lastname', 'last_name', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('unidadeshospitalares_razaosocial', 'razaosocial', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
-                                                <?php echo form_input($last_name);?>
+                                                <?php echo form_input($razaosocial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('users_company', 'company', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('unidadeshospitalares_nomefantasia', 'nomefantasia', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
-                                                <?php echo form_input($company);?>
+                                                <?php echo form_input($nomefantasia);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('users_email', 'email', array('class' => 'col-sm-2 control-label')); ?>
+                                            <label class="col-sm-2 control-label"><?php echo lang('unidadeshospitalares_active');?></label>
                                             <div class="col-sm-10">
-                                                <?php echo form_input($email);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('users_phone', 'phone', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
-                                                <?php echo form_input($phone);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('users_password', 'password', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
-                                                <?php echo form_input($password);?>
-                                                <div class="progress" style="margin:0">
-                                                    <div class="pwstrength_viewport_progress"></div>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="active" value="1" checked>
+                                                        <?php echo htmlspecialchars(lang('unidadeshospitalares_active'), ENT_QUOTES, 'UTF-8'); ?>
+                                                    </label>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('users_password_confirm', 'password_confirm', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
-                                                <?php echo form_input($password_confirm);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -70,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_submit'))); ?>
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
-                                                    <?php echo anchor('admin/users', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                    <?php echo anchor('admin/unidadeshospitalares', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
                                             </div>
                                         </div>
