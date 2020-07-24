@@ -27,6 +27,18 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_users_create']     = 'Criar';
 /* *********** */$lang['menu_users_edit']       = 'Editar';
 
+/* ****** */$lang['menu_profissionais']  = 'Médicos';
+/* *********** */$lang['menu_profissionais_create']     = 'Criar';
+/* *********** */$lang['menu_profissionais_edit']       = 'Editar';
+
+/* ****** */$lang['menu_escalas']  = 'Escalas';
+/* *********** */$lang['menu_escalas_create']     = 'Criar';
+/* *********** */$lang['menu_escalas_edit']       = 'Editar';
+
+/* ****** */$lang['menu_plantoes']  = 'Plantões';
+/* *********** */$lang['menu_plantoes_create']     = 'Criar';
+/* *********** */$lang['menu_plantoes_edit']       = 'Editar';
+
 /* ****** */$lang['menu_unidadeshospitalares']  = 'Unidades Hospitalares';
 /* *********** */$lang['menu_unidadeshospitalares_create']     = 'Criar';
 /* *********** */$lang['menu_unidadeshospitalares_edit']       = 'Editar';

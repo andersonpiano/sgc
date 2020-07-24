@@ -1,23 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Setores extends Admin_Controller {
+class Profissionais extends Admin_Controller {
 
     public function __construct()
     {
         parent::__construct();
 
         /* Load :: Common */
-        $this->load->model('cemerge/setor_model');
-        $this->load->model('cemerge/unidadehospitalar_model');
-        $this->lang->load('admin/setores');
+        $this->load->model('cemerge/profissional_model');
+        $this->lang->load('admin/profissionais');
 
         /* Title Page */
-        $this->page_title->push(lang('menu_setores'));
+        $this->page_title->push(lang('menu_profissionais'));
         $this->data['pagetitle'] = $this->page_title->show();
 
         /* Breadcrumbs :: Common */
-        $this->breadcrumbs->unshift(1, lang('menu_setores'), 'admin/setores');
+        $this->breadcrumbs->unshift(1, lang('menu_profissionais'), 'admin/profissionais');
     }
 
 
@@ -32,56 +31,62 @@ class Setores extends Admin_Controller {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-            /* Get all sectors */
-            $this->data['setores'] = $this->setor_model->get_all();
-
-            /*  Unidades hospitalares */
-            // Corrigir atributo para unidadehospitalar_id
-            foreach ($this->data['setores'] as $k => $setor) {
-                $this->data['setores'][$k]->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
-            }
+            /* Get all hospitals */
+            $this->data['profissionais'] = $this->profissional_model->get_all();
 
             /* Load Template */
-            $this->template->admin_render('admin/setores/index', $this->data);
+            $this->template->admin_render('admin/profissionais/index', $this->data);
         }
     }
 
     public function create()
     {
         /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_setores_create'), 'admin/setores/create');
+        $this->breadcrumbs->unshift(2, lang('menu_profissionais_create'), 'admin/profissionais/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Variables */
         $tables = $this->config->item('tables', 'ion_auth');
 
         /* Validate form input */
-        $this->form_validation->set_rules('nome', 'lang:setores_nome', 'required');
-        $this->form_validation->set_rules('unidadehospitalar_id', 'lang:setores_unidadehospitalar', 'required');
+        $this->form_validation->set_rules('registro', 'lang:profissionais_registro', 'required');
+        $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
+        $this->form_validation->set_rules('email', 'lang:profissionais_email', 'required|valid_email');
 
-        if ($this->form_validation->run() == true) {
+        if ($this->form_validation->run() == TRUE)
+        {
+            $registro = $this->input->post('registro');
             $nome = $this->input->post('nome');
-            $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+            $email = $this->input->post('email');
             $active = $this->input->post('active');
 
             $additional_data = array(
+                'registro' => $this->input->post('registro'),
                 'nome' => $this->input->post('nome'),
-                'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
+                'email' => $this->input->post('email'),
                 'active' => $this->input->post('active')
             );
         }
 
-        // Realizar o insert no model de setores
+        // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true
-            && $this->setor_model->insert($additional_data)
-        ) {
+            && $this->profissional_model->insert($additional_data)
+        )
+        {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
-            redirect('admin/setores', 'refresh');
-        } else {
+            redirect('admin/profissionais', 'refresh');
+        }
+        else
+        {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-            $unidadeshospitalares = $this->_get_unidadeshospitalares();
-
+            $this->data['registro'] = array(
+                'name'  => 'registro',
+                'id'    => 'registro',
+                'type'  => 'text',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('registro'),
+            );
             $this->data['nome'] = array(
                 'name'  => 'nome',
                 'id'    => 'nome',
@@ -89,13 +94,12 @@ class Setores extends Admin_Controller {
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('nome'),
             );
-            $this->data['unidadehospitalar_id'] = array(
-                'name'  => 'unidadehospitalar_id',
-                'id'    => 'unidadehospitalar_id',
+            $this->data['email'] = array(
+                'name'  => 'email',
+                'id'    => 'email',
                 'type'  => 'text',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
-                'options' => $unidadeshospitalares
+                'value' => $this->form_validation->set_value('email'),
             );
             $this->data['active'] = array(
                 'name'  => 'active',
@@ -106,7 +110,7 @@ class Setores extends Admin_Controller {
             );
 
             /* Load Template */
-            $this->template->admin_render('admin/setores/create', $this->data);
+            $this->template->admin_render('admin/profissionais/create', $this->data);
         }
     }
 
@@ -114,22 +118,24 @@ class Setores extends Admin_Controller {
     {
         $id = (int) $id;
 
-        if (!$this->ion_auth->logged_in() or !$this->ion_auth->is_admin()) {
+        if ( ! $this->ion_auth->logged_in() OR ( ! $this->ion_auth->is_admin() && ! ($this->ion_auth->user()->row()->id == $id))) {
             redirect('auth', 'refresh');
         }
 
         /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_setores_edit'), 'admin/setores/edit');
+        $this->breadcrumbs->unshift(2, lang('menu_profissionais_edit'), 'admin/profissionais/edit');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Load Data */
-        $setor = $this->setor_model->get_by_id($id);
-        /*  Unidade hospitalar */
-        $setor->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
+        $profissional = $this->profissional_model->get_by_id($id);
+        //$groups        = $this->ion_auth->groups()->result_array();
+        //$currentGroups = $this->ion_auth->get_users_groups($id)->result();
 
         /* Validate form input */
-        $this->form_validation->set_rules('nome', 'lang:setores_nome', 'required');
-        $this->form_validation->set_rules('unidadehospitalar_id', 'lang:setores_unidadehospitalar', 'required');
+        $this->form_validation->set_rules('registro', 'lang:profissionais_registro', 'required');
+        $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
+        $this->form_validation->set_rules('email', 'lang:profissionais_email', 'required|valid_email');
+        //$this->form_validation->set_rules('active', 'lang:edit_user_validation_company_label', 'required');
 
         if (isset($_POST) && ! empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
@@ -138,15 +144,17 @@ class Setores extends Admin_Controller {
 
             if ($this->form_validation->run() == true) {
                 $data = array(
+                    'registro' => $this->input->post('registro'),
                     'nome' => $this->input->post('nome'),
-                    'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id')
+                    'email' => $this->input->post('email'),
+                    'active' => $this->input->post('active')
                 );
 
-                if ($this->setor_model->update($setor->id, $data)) {
+                if ($this->profissional_model->update($profissional->id, $data)) {
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
 
                     if ($this->ion_auth->is_admin()) {
-                        redirect('admin/setores', 'refresh');
+                        redirect('admin/profissionais', 'refresh');
                     } else {
                         redirect('admin', 'refresh');
                     }
@@ -168,54 +176,62 @@ class Setores extends Admin_Controller {
         // set the flash data error message if there is one
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-        // pass the setor to the view
-        $this->data['setor'] = $setor;
+        // pass the profissional to the view
+        $this->data['profissional'] = $profissional;
 
-        // pass unidades to the dropdown
-        $unidadeshospitalares = $this->_get_unidadeshospitalares();
-
+        $this->data['registro'] = array(
+            'name'  => 'registro',
+            'id'    => 'registro',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('registro', $profissional->registro)
+        );
         $this->data['nome'] = array(
             'name'  => 'nome',
             'id'    => 'nome',
             'type'  => 'text',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('nome', $setor->nome)
+            'value' => $this->form_validation->set_value('nome', $profissional->nome)
         );
-        $this->data['unidadehospitalar_id'] = array(
-            'name'  => 'unidadehospitalar_id',
-            'id'    => 'unidadehospitalar_id',
-            'type'  => 'select',
+        $this->data['email'] = array(
+            'name'  => 'email',
+            'id'    => 'email',
+            'type'  => 'text',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('unidadehospitalar_id', $setor->unidadehospitalar_id),
-            'options' => $unidadeshospitalares,
-            'selected' => $setor->unidadehospitalar_id
+            'value' => $this->form_validation->set_value('email', $profissional->email)
         );
         $this->data['active'] = array(
             'name'  => 'active',
             'id'    => 'active',
             'type'  => 'checkbox',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('active', $setor->active)
+            'value' => $this->form_validation->set_value('active', $profissional->active)
         );
 
         /* Load Template */
-        $this->template->admin_render('admin/setores/edit', $this->data);
+        $this->template->admin_render('admin/profissionais/edit', $this->data);
     }
 
     public function view($id)
     {
         /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_setores'), 'admin/setores/view');
+        $this->breadcrumbs->unshift(2, lang('menu_users_profile'), 'admin/profissionais/view');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Data */
         $id = (int) $id;
 
-        $this->data['setor'] = $this->setor_model->get_by_id($id);
-        $this->data['setor']->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($this->data['setor']->unidadehospitalar_id);
+        $this->data['profissional'] = $this->profissional_model->get_by_id($id);
+        /*
+        // Setores
+        foreach ($this->data['user_info'] as $k => $user)
+        {
+            $this->data['user_info'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+        }
+        */
 
         /* Load Template */
-        $this->template->admin_render('admin/setores/view', $this->data);
+        $this->template->admin_render('admin/profissionais/view', $this->data);
     }
 
     public function _get_csrf_nonce()
@@ -229,6 +245,7 @@ class Setores extends Admin_Controller {
         return array($key => $value);
     }
 
+
     public function _valid_csrf_nonce()
     {
         if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue'))
@@ -239,18 +256,5 @@ class Setores extends Admin_Controller {
         {
             return FALSE;
         }
-    }
-
-    public function _get_unidadeshospitalares()
-    {
-        // pass unidades to the view
-        $unidades = $this->unidadehospitalar_model->get_all();
-
-        $unidadeshospitalares = array();
-        foreach ($unidades as $unidade) {
-            $unidadeshospitalares[$unidade->id] = $unidade->razaosocial;
-        }
-
-        return $unidadeshospitalares;
     }
 }

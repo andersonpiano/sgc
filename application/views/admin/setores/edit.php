@@ -27,9 +27,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('setores_unidade_hospitalar', 'unidade_hospitalar', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('setores_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
-                                                <?php echo form_input($unidade_hospitalar);?>
+                                                <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">

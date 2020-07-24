@@ -24,15 +24,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 												<td><?php echo $setor->nome; ?></td>
 											</tr>
 											<tr>
-												<th><?php echo lang('setores_unidade_hospitalar'); ?></th>
-												<td><?php echo htmlspecialchars($setor->unidade_hospitalar, ENT_QUOTES, 'UTF-8'); ?></td>
+												<th><?php echo lang('setores_unidadehospitalar'); ?></th>
+												<td><?php echo htmlspecialchars($setor->unidadehospitalar->razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
 											</tr>
-											<!--
 											<tr>
-												<th><?php echo lang('unidadeshospitalares_status'); ?></th>
-												<td><?php echo ($unidadehospitalar->active) ? '<span class="label label-success">'.lang('unidadeshospitalares_active').'</span>' : '<span class="label label-default">'.lang('unidadeshospitalares_inactive').'</span>'; ?></td>
+												<th><?php echo lang('setores_status'); ?></th>
+												<td><?php echo ($setor->active) ? '<span class="label label-success">'.lang('setores_active').'</span>' : '<span class="label label-default">'.lang('setores_inactive').'</span>'; ?></td>
 											</tr>
-											-->
 											<!--
 											<tr>
 												<th><?php //echo lang('users_groups'); ?></th>

@@ -57,6 +57,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-cubes"></i> <span><?php echo lang('menu_setores'); ?></span>
                             </a>
                         </li>
+                        <li class="<?=active_link_controller('profissionais')?>">
+                            <a href="<?php echo site_url('admin/profissionais'); ?>">
+                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_profissionais'); ?></span>
+                            </a>
+                        </li>
+                        <li class="<?=active_link_controller('escalas')?>">
+                            <a href="<?php echo site_url('admin/escalas'); ?>">
+                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_escalas'); ?></span>
+                            </a>
+                        </li>
+                        <li class="<?=active_link_controller('plantoes')?>">
+                            <a href="<?php echo site_url('admin/plantoes'); ?>">
+                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_plantoes'); ?></span>
+                            </a>
+                        </li>
                         <li class="<?=active_link_controller('users')?>">
                             <a href="<?php echo site_url('admin/users'); ?>">
                                 <i class="fa fa-user"></i> <span><?php echo lang('menu_users'); ?></span>

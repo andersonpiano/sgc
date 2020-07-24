@@ -13,14 +13,11 @@ class Dashboard extends Admin_Controller {
     }
 
 
-	public function index()
-	{
-        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
-        {
+    public function index()
+    {
+        if (! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
             redirect('auth/login', 'refresh');
-        }
-        else
-        {
+        } else {
             /* Title Page */
             $this->page_title->push(lang('menu_dashboard'));
             $this->data['pagetitle'] = $this->page_title->show();
@@ -47,5 +44,5 @@ class Dashboard extends Admin_Controller {
             /* Load Template */
             $this->template->admin_render('admin/dashboard/index', $this->data);
         }
-	}
+    }
 }

@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $lang['setores_create']              = 'Criar setor';
 $lang['setores_edit']                = 'Editar setor';
 $lang['setores_nome']                = 'Nome';
-$lang['setores_unidade_hospitalar']   = 'Unidade Hospitalar';
+$lang['setores_unidadehospitalar']   = 'Unidade Hospitalar';
 $lang['setores_action']              = 'Ação';
 $lang['setores_active']              = 'Ativo';
 $lang['setores_created_on']          = 'Criado em';

@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Unidadehospitalar_model extends MY_Model {
-    protected $table = 'unidadeshospitalares';
+class Profissional_model extends MY_Model {
+    protected $table = 'profissionais';
 
     public function __construct()
     {
