@@ -50,11 +50,15 @@ class MY_Controller extends CI_Controller
 
 class Admin_Controller extends MY_Controller
 {
-    public function __construct()
+    public function __construct($permitted_groups = null)
     {
         parent::__construct();
 
-        if (!$this->ion_auth->logged_in() OR !$this->ion_auth->is_admin()) {
+        if (!$permitted_groups) {
+            $permitted_groups = array('admin');
+        }
+
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($permitted_groups)) {
             redirect('auth/login', 'refresh');
         } else {
             /* Load */
@@ -88,9 +92,9 @@ class Admin_Controller extends MY_Controller
 
 class Public_Controller extends MY_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
         if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin()) {
             $this->data['admin_link'] = true;
@@ -103,5 +107,5 @@ class Public_Controller extends MY_Controller
         } else {
             $this->data['logout_link'] = false;
         }
-	}
+    }
 }

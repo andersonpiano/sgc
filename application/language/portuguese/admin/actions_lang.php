@@ -21,6 +21,8 @@ $lang['actions_see']            = 'Ver';
 $lang['actions_submit']         = 'Enviar';
 $lang['actions_yes']            = 'Sim';
 $lang['actions_delete']         = 'Excluir';
+$lang['actions_to_offer']       = 'Oferecer';
+$lang['actions_confirmar']      = 'Confirmar';
 
 $lang['actions_security_error']     = 'Erro de segurança';
 $lang['actions_file_install_exist'] = 'Vecê deve %s dos arquivos de instalação.';

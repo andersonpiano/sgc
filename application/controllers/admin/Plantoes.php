@@ -3,14 +3,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Plantoes extends Admin_Controller {
 
+    private $_permitted_groups = array('admin', 'profissionais');
+
+    private $_profissional = null;
+
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct($this->_permitted_groups);
 
         /* Load :: Common */
         $this->load->model('cemerge/escala_model');
         $this->load->model('cemerge/plantao_model');
+        $this->load->model('cemerge/profissional_model');
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $this->load->model('cemerge/unidadehospitalar_model');
+        $this->load->model('cemerge/setor_model');
         $this->lang->load('admin/plantoes');
+
+        /* Profissional */
+        $userId = $this->ion_auth->user()->row()->id;
+        if ($this->ion_auth->in_group('profissionais')) {
+            $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId])[0];
+            if ($usuarioProfissional) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional->profissional_id])[0];
+            }
+        }
 
         /* Title Page */
         $this->page_title->push(lang('menu_plantoes'));
@@ -23,8 +40,7 @@ class Plantoes extends Admin_Controller {
 
     public function index()
     {
-        $permitted_groups = array('admin', 'profissionais');
-        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($groups)) {
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
             redirect('auth/login', 'refresh');
         } else {
             /* Breadcrumbs */
@@ -36,14 +52,137 @@ class Plantoes extends Admin_Controller {
                 $this->data['passagens'] = $this->plantao_model->get_all();
                 $this->data['recebidos'] = $this->plantao_model->get_all();
             } else {
-                $this->data['plantoes'] = $this->escala_model->get_where(['profissional_id' => $this->ion_auth->user()->row()->id]);
-                $this->data['passagens'] = $this->plantao_model->get_where(['profissional_id' => $this->ion_auth->user()->row()->id]);
-                $this->data['recebidos'] = $this->plantao_model->get_where(['profissional_id' => $this->ion_auth->user()->row()->id]);
+                $this->data['plantoes'] = $this->escala_model->get_where(['profissional_id' => $this->_profissional->id]);
+                $this->data['passagens'] = $this->plantao_model->get_where(['profissionaltitular_id' => $this->_profissional->id]);
+                $this->data['recebidos'] = $this->plantao_model->get_where(['profissionalsubstituto_id' => $this->_profissional->id]);
             }
 
             /* Load Template */
             $this->template->admin_render('admin/plantoes/index', $this->data);
         }
+    }
+
+    public function tooffer($id)
+    {
+        $id = (int) $id;
+
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
+            redirect('auth', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_plantoes_tooffer'), 'admin/plantoes/tooffer');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Load Data */
+        $plantao = $this->escala_model->get_by_id($id);
+        $plantao->setor = $this->setor_model->get_by_id($plantao->setor_id);
+        $plantao->setor->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($plantao->setor->unidadehospitalar_id);
+        $plantao->profissional = $this->profissional_model->get_by_id($plantao->profissional_id);
+        $tipospassagem = $this->_get_tipos_passagem();
+
+        $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
+        //var_dump($profissionais);
+        //exit;
+        $profissionais_setor = $this->_get_profissionais_setor($profissionais);
+
+        /* Validate form input */
+        $this->form_validation->set_rules('dataplantao', 'lang:plantoes_dataplantao', 'required');
+        $this->form_validation->set_rules('horainicialplantao', 'lang:plantoes_horainicialplantao', 'required');
+        $this->form_validation->set_rules('horafinalplantao', 'lang:plantoes_horafinalplantao', 'required');
+        $this->form_validation->set_rules('tipopassagem', 'lang:plantoes_tipopassagem', 'required');
+        $this->form_validation->set_rules('profissionalsubstituto_id', 'lang:plantoes_profissional_substituto', 'required');
+
+        if (isset($_POST) && ! empty($_POST)) {
+            if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
+                show_error($this->lang->line('error_csrf'));
+            }
+
+            if ($this->form_validation->run() == true) {
+                $data = array(
+                    'dataplantao' => $this->input->post('dataplantao'),
+                    'horainicialplantao' => $this->input->post('horainicialplantao'),
+                    'horafinalplantao' => $this->input->post('horafinalplantao'),
+                    'tipopassagem' => $this->input->post('tipopassagem'),
+                    'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id')
+                );
+
+                if ($this->plantao_model->update($plantao->id, $data)) {
+                    $this->session->set_flashdata('message', $this->ion_auth->messages());
+
+                    if ($this->ion_auth->is_admin()) {
+                        redirect('admin/plantoes', 'refresh');
+                    } else {
+                        redirect('admin', 'refresh');
+                    }
+                } else {
+                    $this->session->set_flashdata('message', $this->ion_auth->errors());
+
+                    if ($this->ion_auth->is_admin()) {
+                        redirect('auth', 'refresh');
+                    } else {
+                        redirect('/', 'refresh');
+                    }
+                }
+            }
+        }
+
+        // display the edit user form
+        $this->data['csrf'] = $this->_get_csrf_nonce();
+
+        // set the flash data error message if there is one
+        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+        // pass the plantao to the view
+        $this->data['plantao'] = $plantao;
+
+        $this->data['dataplantao'] = array(
+            'name'  => 'dataplantao',
+            'id'    => 'dataplantao',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('dataplantao', $plantao->dataplantao)
+        );
+        $this->data['horainicialplantao'] = array(
+            'name'  => 'horainicialplantao',
+            'id'    => 'horainicialplantao',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('horainicialplantao', $plantao->horainicialplantao)
+        );
+        $this->data['horafinalplantao'] = array(
+            'name'  => 'horafinalplantao',
+            'id'    => 'horafinalplantao',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('horafinalplantao', $plantao->horafinalplantao)
+        );
+        $this->data['tipopassagem'] = array(
+            'name'  => 'tipopassagem',
+            'id'    => 'tipopassagem',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'options' => $tipospassagem
+        );
+        $this->data['profissionalsubstituto_id'] = array(
+            'name'  => 'profissionalsubstituto_id',
+            'id'    => 'profissionalsubstituto_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'options' => $profissionais_setor
+        );
+        /*
+        $this->data['active'] = array(
+            'name'  => 'active',
+            'id'    => 'active',
+            'type'  => 'checkbox',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('active', $plantao->active)
+        );
+        */
+
+        /* Load Template */
+        $this->template->admin_render('admin/plantoes/tooffer', $this->data);
     }
 
     public function create()
@@ -239,6 +378,25 @@ class Plantoes extends Admin_Controller {
 
         /* Load Template */
         $this->template->admin_render('admin/plantoes/view', $this->data);
+    }
+
+    public function _get_tipos_passagem()
+    {
+        return array(
+            '0' => 'Cessão',
+            '1' => 'Troca'
+        );
+    }
+
+    public function _get_profissionais_setor($profissionais)
+    {
+        $profissionaissetor = array();
+        foreach ($profissionais as $profissional) {
+            $profissionaissetor[$profissional->profissional_id] = $profissional->nomeprofissional;
+            // ?????
+        }
+
+        return $profissionaissetor;
     }
 
     public function _get_csrf_nonce()

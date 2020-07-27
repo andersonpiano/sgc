@@ -1,21 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Template {
-
+class Template
+{
     protected $CI;
 
     public function __construct()
-    {	
-		$this->CI =& get_instance();
+    {
+        $this->CI =& get_instance();
     }
 
-
-    public function admin_render($content, $data = NULL)
+    public function admin_render($content, $data = null)
     {
-        if ( ! $content)
-        {
-            return NULL;
+        if (!$content) {
+            return null;
         }
         else
         {
@@ -28,8 +26,7 @@ class Template {
 
             return $this->CI->load->view('admin/_templates/template', $this->template);
         }
-	}
-
+    }
 
     public function auth_render($content, $data = NULL)
     {
@@ -45,6 +42,6 @@ class Template {
 
             return $this->CI->load->view('auth/_templates/template', $this->template);
         }
-	}
+    }
 
 }

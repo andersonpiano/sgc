@@ -28,7 +28,7 @@ class MY_model extends CI_Model {
     {
         $query = $this->db->get_where($this->table, $where);
 
-        return $query->row();
+        return $query->result();
     }
 
     public function update($id, $data)
