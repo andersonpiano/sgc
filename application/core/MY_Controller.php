@@ -3,9 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MY_Controller extends CI_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
         /* COMMON :: ADMIN & PUBLIC */
         /* Load */
@@ -19,56 +19,44 @@ class MY_Controller extends CI_Controller
         $this->data['avatar_dir'] = $this->config->item('avatar_dir');
 
         /* Any mobile device (phones or tablets) */
-        if ($this->mobile_detect->isMobile())
-        {
-            $this->data['mobile'] = TRUE;
+        if ($this->mobile_detect->isMobile()) {
+            $this->data['mobile'] = true;
 
-            if ($this->mobile_detect->isiOS()){
-                $this->data['ios'] = TRUE;
-                $this->data['android'] = FALSE;
-            }
-            elseif ($this->mobile_detect->isAndroidOS())
-            {
-                $this->data['ios'] = FALSE;
-                $this->data['android'] = TRUE;
-            }
-            else
-            {
-                $this->data['ios'] = FALSE;
-                $this->data['android'] = FALSE;
+            if ($this->mobile_detect->isiOS()) {
+                $this->data['ios'] = true;
+                $this->data['android'] = false;
+            } elseif ($this->mobile_detect->isAndroidOS()) {
+                $this->data['ios'] = false;
+                $this->data['android'] = true;
+            } else {
+                $this->data['ios'] = false;
+                $this->data['android'] = false;
             }
 
-            if ($this->mobile_detect->getBrowsers('IE')){
-                $this->data['mobile_ie'] = TRUE;
+            if ($this->mobile_detect->getBrowsers('IE')) {
+                $this->data['mobile_ie'] = true;
+            } else {
+                $this->data['mobile_ie'] = false;
             }
-            else
-            {
-                $this->data['mobile_ie'] = FALSE;
-            }
+        } else {
+            $this->data['mobile'] = false;
+            $this->data['ios'] = false;
+            $this->data['android'] = false;
+            $this->data['mobile_ie'] = false;
         }
-        else
-        {
-            $this->data['mobile'] = FALSE;
-            $this->data['ios'] = FALSE;
-            $this->data['android'] = FALSE;
-            $this->data['mobile_ie'] = FALSE;
-        }
-	}
+    }
 }
 
 
 class Admin_Controller extends MY_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
-        {
+        if (!$this->ion_auth->logged_in() OR !$this->ion_auth->is_admin()) {
             redirect('auth/login', 'refresh');
-        }
-        else
-        {
+        } else {
             /* Load */
             $this->load->config('admin/dp_config');
             $this->load->library(['admin/breadcrumbs', 'admin/page_title']);
@@ -86,15 +74,12 @@ class Admin_Controller extends MY_Controller
             $this->data['admin_prefs'] = $this->prefs_model->admin_prefs();
             $this->data['user_login'] = $this->prefs_model->user_info_login($this->ion_auth->user()->row()->id);
 
-            if ($this->router->fetch_class() == 'dashboard')
-            {
+            if ($this->router->fetch_class() == 'dashboard') {
                 $this->data['dashboard_alert_file_install'] = $this->core_model->get_file_install();
-                $this->data['header_alert_file_install'] = NULL;
-            }
-            else
-            {
-                $this->data['dashboard_alert_file_install'] = NULL;
-                $this->data['header_alert_file_install'] = NULL; /* << A MODIFIER !!! */
+                $this->data['header_alert_file_install'] = null;
+            } else {
+                $this->data['dashboard_alert_file_install'] = null;
+                $this->data['header_alert_file_install'] = null; /* << A MODIFIER !!! */
             }
         }
     }
@@ -107,22 +92,16 @@ class Public_Controller extends MY_Controller
 	{
 		parent::__construct();
 
-        if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin())
-        {
-            $this->data['admin_link'] = TRUE;
-        }
-        else
-        {
-            $this->data['admin_link'] = FALSE;
+        if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin()) {
+            $this->data['admin_link'] = true;
+        } else {
+            $this->data['admin_link'] = false;
         }
 
-        if ($this->ion_auth->logged_in())
-        {
-            $this->data['logout_link'] = TRUE;
-        }
-        else
-        {
-            $this->data['logout_link'] = FALSE;
+        if ($this->ion_auth->logged_in()) {
+            $this->data['logout_link'] = true;
+        } else {
+            $this->data['logout_link'] = false;
         }
 	}
 }

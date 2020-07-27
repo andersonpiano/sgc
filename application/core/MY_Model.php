@@ -24,6 +24,13 @@ class MY_model extends CI_Model {
         return $query->row();
     }
 
+    public function get_where($where)
+    {
+        $query = $this->db->get_where($this->table, $where);
+
+        return $query->row();
+    }
+
     public function update($id, $data)
     {
         $where = "id = $id";

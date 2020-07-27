@@ -249,6 +249,7 @@ class Setores extends Admin_Controller {
         $unidadeshospitalares = array();
         foreach ($unidades as $unidade) {
             $unidadeshospitalares[$unidade->id] = $unidade->razaosocial;
+            // ?????
         }
 
         return $unidadeshospitalares;

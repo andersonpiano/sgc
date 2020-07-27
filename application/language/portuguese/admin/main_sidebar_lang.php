@@ -35,7 +35,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_escalas_create']     = 'Criar';
 /* *********** */$lang['menu_escalas_edit']       = 'Editar';
 
-/* ****** */$lang['menu_plantoes']  = 'Plantões';
+/* ****** */$lang['menu_plantoes']  = 'Meus Plantões';
 /* *********** */$lang['menu_plantoes_create']     = 'Criar';
 /* *********** */$lang['menu_plantoes_edit']       = 'Editar';
 
