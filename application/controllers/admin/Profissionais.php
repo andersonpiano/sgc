@@ -19,7 +19,6 @@ class Profissionais extends Admin_Controller {
         $this->breadcrumbs->unshift(1, lang('menu_profissionais'), 'admin/profissionais');
     }
 
-
     public function index()
     {
         if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())

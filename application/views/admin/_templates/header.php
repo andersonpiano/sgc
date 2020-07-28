@@ -42,6 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <link rel="stylesheet" href="<?php echo base_url($plugins_dir . '/colorpickersliders/colorpickersliders.min.css'); ?>">
 <?php endif; ?>
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/domprojects/css/dp.min.css'); ?>">
+        <script src="<?php echo base_url($frameworks_dir . '/jquery/jquery.min.js'); ?>"></script>
 <?php if ($mobile === FALSE): ?>
         <!--[if lt IE 9]>
             <script src="<?php echo base_url($plugins_dir . '/html5shiv/html5shiv.min.js'); ?>"></script>
@@ -50,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php endif; ?>
     </head>
     <body class="hold-transition skin-green fixed sidebar-mini">
-<?php if ($mobile === FALSE && $admin_prefs['transition_page'] == TRUE): ?>
+<?php if ($mobile === false && $admin_prefs['transition_page'] == true): ?>
         <div class="wrapper animsition">
 <?php else: ?>
         <div class="wrapper">

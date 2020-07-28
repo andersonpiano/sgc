@@ -21,19 +21,15 @@ class Users extends Admin_Controller {
 
     public function index()
     {
-        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
-        {
+        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
             redirect('auth/login', 'refresh');
-        }
-        else
-        {
+        } else {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
             /* Get all users */
             $this->data['users'] = $this->ion_auth->users()->result();
-            foreach ($this->data['users'] as $k => $user)
-            {
+            foreach ($this->data['users'] as $k => $user) {
                 $this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
             }
 
@@ -41,7 +37,6 @@ class Users extends Admin_Controller {
             $this->template->admin_render('admin/users/index', $this->data);
         }
     }
-
 
     public function create()
     {
@@ -61,8 +56,7 @@ class Users extends Admin_Controller {
         $this->form_validation->set_rules('password', 'lang:users_password', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
         $this->form_validation->set_rules('password_confirm', 'lang:users_password_confirm', 'required');
 
-        if ($this->form_validation->run() == TRUE)
-        {
+        if ($this->form_validation->run() == true) {
             $username = strtolower($this->input->post('first_name')) . ' ' . strtolower($this->input->post('last_name'));
             $email    = strtolower($this->input->post('email'));
             $password = $this->input->post('password');
@@ -75,13 +69,10 @@ class Users extends Admin_Controller {
             );
         }
 
-        if ($this->form_validation->run() == TRUE && $this->ion_auth->register($username, $password, $email, $additional_data))
-        {
+        if ($this->form_validation->run() == true && $this->ion_auth->register($username, $password, $email, $additional_data)) {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             redirect('admin/users', 'refresh');
-        }
-        else
-        {
+        } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $this->data['first_name'] = array(
@@ -140,20 +131,17 @@ class Users extends Admin_Controller {
         }
     }
 
-
     public function delete()
     {
         /* Load Template */
         $this->template->admin_render('admin/users/delete', $this->data);
     }
 
-
     public function edit($id)
     {
         $id = (int) $id;
 
-        if ( ! $this->ion_auth->logged_in() OR ( ! $this->ion_auth->is_admin() && ! ($this->ion_auth->user()->row()->id == $id)))
-        {
+        if (!$this->ion_auth->logged_in() or ( ! $this->ion_auth->is_admin() && ! ($this->ion_auth->user()->row()->id == $id))) {
             redirect('auth', 'refresh');
         }
 
@@ -172,21 +160,17 @@ class Users extends Admin_Controller {
         $this->form_validation->set_rules('phone', 'lang:edit_user_validation_phone_label', 'required');
         $this->form_validation->set_rules('company', 'lang:edit_user_validation_company_label', 'required');
 
-        if (isset($_POST) && ! empty($_POST))
-        {
-            if ($this->_valid_csrf_nonce() === FALSE OR $id != $this->input->post('id'))
-            {
+        if (isset($_POST) && ! empty($_POST)) {
+            if ($this->_valid_csrf_nonce() === false OR $id != $this->input->post('id')) {
                 show_error($this->lang->line('error_csrf'));
             }
 
-            if ($this->input->post('password'))
-            {
+            if ($this->input->post('password')) {
                 $this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
                 $this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
             }
 
-            if ($this->form_validation->run() == TRUE)
-            {
+            if ($this->form_validation->run() == true) {
                 $data = array(
                     'first_name' => $this->input->post('first_name'),
                     'last_name'  => $this->input->post('last_name'),
@@ -194,49 +178,36 @@ class Users extends Admin_Controller {
                     'phone'      => $this->input->post('phone')
                 );
 
-                if ($this->input->post('password'))
-                {
+                if ($this->input->post('password')) {
                     $data['password'] = $this->input->post('password');
                 }
 
-                if ($this->ion_auth->is_admin())
-                {
+                if ($this->ion_auth->is_admin()) {
                     $groupData = $this->input->post('groups');
 
-                    if (isset($groupData) && !empty($groupData))
-                    {
+                    if (isset($groupData) && !empty($groupData)) {
                         $this->ion_auth->remove_from_group('', $id);
 
-                        foreach ($groupData as $grp)
-                        {
+                        foreach ($groupData as $grp) {
                             $this->ion_auth->add_to_group($grp, $id);
                         }
                     }
                 }
 
-                if($this->ion_auth->update($user->id, $data))
-                {
+                if($this->ion_auth->update($user->id, $data)) {
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
 
-                    if ($this->ion_auth->is_admin())
-                    {
+                    if ($this->ion_auth->is_admin()) {
                         redirect('admin/users', 'refresh');
-                    }
-                    else
-                    {
+                    } else {
                         redirect('admin', 'refresh');
                     }
-                }
-                else
-                {
+                } else {
                     $this->session->set_flashdata('message', $this->ion_auth->errors());
 
-                    if ($this->ion_auth->is_admin())
-                    {
+                    if ($this->ion_auth->is_admin()) {
                         redirect('auth', 'refresh');
-                    }
-                    else
-                    {
+                    } else {
                         redirect('/', 'refresh');
                     }
                 }
@@ -296,42 +267,32 @@ class Users extends Admin_Controller {
             'type' => 'password'
         );
 
-
         /* Load Template */
         $this->template->admin_render('admin/users/edit', $this->data);
     }
-
 
     function activate($id, $code = FALSE)
     {
         $id = (int) $id;
 
-        if ($code !== FALSE)
-        {
+        if ($code !== false) {
             $activation = $this->ion_auth->activate($id, $code);
-        }
-        else if ($this->ion_auth->is_admin())
-        {
+        } else if ($this->ion_auth->is_admin()) {
             $activation = $this->ion_auth->activate($id);
         }
 
-        if ($activation)
-        {
+        if ($activation) {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             redirect('admin/users', 'refresh');
-        }
-        else
-        {
+        } else {
             $this->session->set_flashdata('message', $this->ion_auth->errors());
             redirect('auth/forgot_password', 'refresh');
         }
     }
 
-
-    public function deactivate($id = NULL)
+    public function deactivate($id = null)
     {
-        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
-        {
+        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
             return show_error('You must be an administrator to view this page.');
         }
 
@@ -345,8 +306,7 @@ class Users extends Admin_Controller {
 
         $id = (int) $id;
 
-        if ($this->form_validation->run() === FALSE)
-        {
+        if ($this->form_validation->run() === false) {
             $user = $this->ion_auth->user($id)->row();
 
             $this->data['csrf']       = $this->_get_csrf_nonce();
@@ -356,18 +316,13 @@ class Users extends Admin_Controller {
 
             /* Load Template */
             $this->template->admin_render('admin/users/deactivate', $this->data);
-        }
-        else
-        {
-            if ($this->input->post('confirm') == 'yes')
-            {
-                if ($this->_valid_csrf_nonce() === FALSE OR $id != $this->input->post('id'))
-                {
+        } else {
+            if ($this->input->post('confirm') == 'yes') {
+                if ($this->_valid_csrf_nonce() === FALSE OR $id != $this->input->post('id')) {
                     show_error($this->lang->line('error_csrf'));
                 }
 
-                if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin())
-                {
+                if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin()) {
                     $this->ion_auth->deactivate($id);
                 }
             }
@@ -375,7 +330,6 @@ class Users extends Admin_Controller {
             redirect('admin/users', 'refresh');
         }
     }
-
 
     public function profile($id)
     {
@@ -387,15 +341,13 @@ class Users extends Admin_Controller {
         $id = (int) $id;
 
         $this->data['user_info'] = $this->ion_auth->user($id)->result();
-        foreach ($this->data['user_info'] as $k => $user)
-        {
+        foreach ($this->data['user_info'] as $k => $user) {
             $this->data['user_info'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
         }
 
         /* Load Template */
         $this->template->admin_render('admin/users/profile', $this->data);
     }
-
 
     public function _get_csrf_nonce()
     {
@@ -408,16 +360,14 @@ class Users extends Admin_Controller {
         return array($key => $value);
     }
 
-
     public function _valid_csrf_nonce()
     {
-        if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue'))
-        {
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
+        if ($this->input->post($this->session->flashdata('csrfkey')) !== false
+            && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue')
+        ) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

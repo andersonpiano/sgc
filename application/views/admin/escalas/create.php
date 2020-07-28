@@ -3,6 +3,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?>
 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on('change', '#unidadehospitalar_id', function() {
+            var val = $(this).val();
+            var url = 'admin/escalas/setores/' + val;
+            $.ajax({
+                url: "<?php echo(site_url());?>" + url,
+                method: 'get',
+                dataType: 'json',
+                success: function(responseData) {
+                    $('#setor_id').empty();
+                    $.each(responseData, function(i, p) {
+                        $('#setor_id').append($('<option></option>').val(p.id).html(p.nome));
+                    });
+                },
+            });
+        });
+    });
+</script>
+
             <div class="content-wrapper">
                 <section class="content-header">
                     <?php echo $pagetitle; ?>
@@ -21,9 +41,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala')); ?>
                                         <div class="form-group">
-                                            <?php echo lang('escalas_dataplantao', 'dataplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-10">
+                                                <?php echo form_dropdown($unidadehospitalar_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-10">
+                                                <?php echo form_dropdown($setor_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_datainicialplantao', 'datainicialplantao', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo form_input($dataplantao);?>
+                                                <?php echo form_input($datainicialplantao);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_datafinalplantao', 'datafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-4">
+                                                <?php echo form_input($datafinalplantao);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -36,17 +74,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <?php echo lang('escalas_horafinalplantao', 'horafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo form_input($horafinalplantao);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"><?php echo lang('escalas_active');?></label>
-                                            <div class="col-sm-10">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" name="active" value="1" checked>
-                                                        <?php echo htmlspecialchars(lang('escalas_active'), ENT_QUOTES, 'UTF-8'); ?>
-                                                    </label>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">

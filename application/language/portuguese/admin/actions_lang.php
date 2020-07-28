@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['actions_cancel']         = 'Cancelar';
 $lang['actions_create']         = 'Criar';
+$lang['actions_create_user']    = 'Criar Usuário';
 $lang['actions_default_values'] = 'Valores padrões';
 $lang['actions_edit']           = 'Editar';
 $lang['actions_ok']             = 'Ok';

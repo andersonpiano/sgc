@@ -24,6 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
+                                                <th><?php echo lang('escalas_unidadehospitalar');?></th>
+                                                <th><?php echo lang('escalas_setor');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
                                                 <th><?php echo lang('escalas_horainicialplantao');?></th>
                                                 <th><?php echo lang('escalas_horafinalplantao');?></th>
@@ -33,6 +35,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <tbody>
 <?php foreach ($escalas as $escala):?>
                                             <tr>
+                                                <td><?php echo htmlspecialchars($escala->razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->nomesetor, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->horainicialplantao, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->horafinalplantao, ENT_QUOTES, 'UTF-8'); ?></td>

@@ -9,6 +9,9 @@ class Escalas extends Admin_Controller {
 
         /* Load :: Common */
         $this->load->model('cemerge/escala_model');
+        $this->load->model('cemerge/unidadehospitalar_model');
+        $this->load->model('cemerge/setor_model');
+        $this->load->model('cemerge/profissional_model');
         $this->lang->load('admin/escalas');
 
         /* Title Page */
@@ -31,8 +34,9 @@ class Escalas extends Admin_Controller {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-            /* Get all hospitals */
-            $this->data['escalas'] = $this->escala_model->get_all();
+            /* Get all escalas */
+            $where = array();
+            $this->data['escalas'] = $this->escala_model->get_escalas($where);
 
             /* Load Template */
             $this->template->admin_render('admin/escalas/index', $this->data);
@@ -49,42 +53,83 @@ class Escalas extends Admin_Controller {
         $tables = $this->config->item('tables', 'ion_auth');
 
         /* Validate form input */
-        $this->form_validation->set_rules('dataplantao', 'lang:escalas_dataplantao', 'required');
+        $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
+        $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
+        $this->form_validation->set_rules('datainicialplantao', 'lang:escalas_datainicialplantao', 'required');
+        $this->form_validation->set_rules('datafinalplantao', 'lang:escalas_datafinalplantao', 'required');
         $this->form_validation->set_rules('horainicialplantao', 'lang:escalas_horainicialplantao', 'required');
         $this->form_validation->set_rules('horafinalplantao', 'lang:escalas_horafinalplantao', 'required');
 
-        if ($this->form_validation->run() == TRUE)
-        {
-            $dataplantao = $this->input->post('dataplantao');
+        if ($this->form_validation->run() == true) {
+            $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+            $setor_id = $this->input->post('setor_id');
+            $datainicialplantao = $this->input->post('datainicialplantao');
+            $datafinalplantao = $this->input->post('datafinalplantao');
             $horainicialplantao = $this->input->post('horainicialplantao');
             $horafinalplantao = $this->input->post('horafinalplantao');
             //$active = $this->input->post('active');
 
             $additional_data = array(
-                'dataplantao' => $this->input->post('dataplantao'),
+                'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
+                'setor_id' => $this->input->post('setor_id'),
+                'datainicialplantao' => $this->input->post('datainicialplantao'),
+                'datafinalplantao' => $this->input->post('datafinalplantao'),
                 'horainicialplantao' => $this->input->post('horainicialplantao'),
                 'horafinalplantao' => $this->input->post('horafinalplantao')
             );
         }
 
-        // Realizar o insert no model de unidades hospitalares
-        if ($this->form_validation->run() == true
-            && $this->escala_model->insert($additional_data)
-        )
-        {
-            $this->session->set_flashdata('message', $this->ion_auth->messages());
-            redirect('admin/escalas', 'refresh');
-        }
-        else
-        {
+        // Realizar o insert no model
+        if ($this->form_validation->run() == true) {
+            $success = false;
+
+            $datainicial = new DateTime($additional_data['datainicialplantao']);
+            $datafinal = new DateTime($additional_data['datafinalplantao']);
+
+            // Loop para inserir no período
+            for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {
+                $hrinicialplantao = $additional_data['horainicialplantao'];
+                $hrfinalplantao = $additional_data['horafinalplantao'];
+                $dtinicialplantao = $i->format("Y-m-d");
+                $dtfinalplantao = $dtinicialplantao;
+                if ((int)$hrinicialplantao > (int)$hrfinalplantao) {
+                    $dtfinalplantao = $i->modify('+1 day')->format("Y-m-d");
+                }
+                $insert_data = array(
+                    'setor_id' => $additional_data['setor_id'],
+                    'dataplantao' => $dtinicialplantao,
+                    'datafinalplantao' => $dtfinalplantao,
+                    'horainicialplantao' => $hrinicialplantao,
+                    'horafinalplantao' => $hrfinalplantao
+                );
+                $success = $this->escala_model->insert($insert_data);
+            }
+
+            if ($success) {
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
+                redirect('admin/escalas', 'refresh');
+            } else {
+                $this->session->set_flashdata('message', $this->ion_auth->errors());
+                redirect('admin/escalas', 'refresh');
+            }
+        } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-            $this->data['dataplantao'] = array(
-                'name'  => 'dataplantao',
-                'id'    => 'dataplantao',
+            $unidadeshospitalares = $this->_get_unidadeshospitalares();
+
+            $this->data['datainicialplantao'] = array(
+                'name'  => 'datainicialplantao',
+                'id'    => 'datainicialplantao',
                 'type'  => 'date',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('dataplantao'),
+                'value' => date('Y') . "-" . date('m', strtotime("next month")) . "-01",
+            );
+            $this->data['datafinalplantao'] = array(
+                'name'  => 'datafinalplantao',
+                'id'    => 'datafinalplantao',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => date('Y') . "-" . date('m-t', strtotime("next month")),
             );
             $this->data['horainicialplantao'] = array(
                 'name'  => 'horainicialplantao',
@@ -100,15 +145,21 @@ class Escalas extends Admin_Controller {
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('horafinalplantao'),
             );
-            /*
-            $this->data['active'] = array(
-                'name'  => 'active',
-                'id'    => 'active',
-                'type'  => 'checkbox',
+            $this->data['unidadehospitalar_id'] = array(
+                'name'  => 'unidadehospitalar_id',
+                'id'    => 'unidadehospitalar_id',
+                'type'  => 'select',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('active'),
+                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+                'options' => $unidadeshospitalares,
             );
-            */
+            $this->data['setor_id'] = array(
+                'name'  => 'setor_id',
+                'id'    => 'setor_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('setor_id'),
+            );
 
             /* Load Template */
             $this->template->admin_render('admin/escalas/create', $this->data);
@@ -259,5 +310,27 @@ class Escalas extends Admin_Controller {
         {
             return FALSE;
         }
+    }
+
+    public function _get_unidadeshospitalares()
+    {
+        $unidades = $this->unidadehospitalar_model->get_all();
+
+        $unidadeshospitalares = array();
+        foreach ($unidades as $unidade) {
+            $unidadeshospitalares[$unidade->id] = $unidade->razaosocial;
+        }
+
+        return $unidadeshospitalares;
+    }
+
+    public function setores($id)
+    {
+        $id = (int) $id;
+
+        $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id]);
+
+        echo json_encode($setores);
+        exit;
     }
 }

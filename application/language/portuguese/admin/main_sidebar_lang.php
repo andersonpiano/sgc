@@ -27,7 +27,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_users_create']     = 'Criar';
 /* *********** */$lang['menu_users_edit']       = 'Editar';
 
-/* ****** */$lang['menu_profissionais']  = 'Médicos';
+/* ****** */$lang['menu_profissionais']  = 'Médicos(as)';
 /* *********** */$lang['menu_profissionais_create']     = 'Criar';
 /* *********** */$lang['menu_profissionais_edit']       = 'Editar';
 

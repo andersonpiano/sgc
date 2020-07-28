@@ -92,7 +92,7 @@ class Setores extends Admin_Controller {
             $this->data['unidadehospitalar_id'] = array(
                 'name'  => 'unidadehospitalar_id',
                 'id'    => 'unidadehospitalar_id',
-                'type'  => 'text',
+                'type'  => 'select',
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('unidadehospitalar_id'),
                 'options' => $unidadeshospitalares

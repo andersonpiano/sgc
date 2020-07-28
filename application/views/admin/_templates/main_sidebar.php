@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="<?php echo base_url($avatar_dir . '/m_001.png'); ?>" class="img-circle" alt="User Image">
+                            <img src="<?php echo base_url($avatar_dir . '/generic.png'); ?>" class="img-circle" alt="User Image">
                         </div>
                         <div class="pull-left info">
                             <p><?php echo $user_login['firstname'].$user_login['lastname']; ?></p>
@@ -62,17 +62,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
                         <li class="<?=active_link_controller('setores')?>">
                             <a href="<?php echo site_url('admin/setores'); ?>">
-                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_setores'); ?></span>
+                                <i class="fa fa-plus-square"></i> <span><?php echo lang('menu_setores'); ?></span>
                             </a>
                         </li>
                         <li class="<?=active_link_controller('profissionais')?>">
                             <a href="<?php echo site_url('admin/profissionais'); ?>">
-                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_profissionais'); ?></span>
+                                <i class="fa fa-user-md"></i> <span><?php echo lang('menu_profissionais'); ?></span>
                             </a>
                         </li>
                         <li class="<?=active_link_controller('escalas')?>">
                             <a href="<?php echo site_url('admin/escalas'); ?>">
-                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_escalas'); ?></span>
+                                <i class="fa fa-calendar"></i> <span><?php echo lang('menu_escalas'); ?></span>
                             </a>
                         </li>
 
@@ -94,7 +94,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li class="<?=active_link_function('interfaces')?>"><a href="<?php //echo site_url('admin/prefs/interfaces/admin'); ?>"><?php //echo lang('menu_interfaces'); ?></a></li>
+                                <li class="<?=active_link_function('interfaces')?>"><a href="<?php echo site_url('admin/prefs/interfaces/admin'); ?>"><?php echo lang('menu_interfaces'); ?></a></li>
                             </ul>
                         </li>
 <?php endif; ?>
