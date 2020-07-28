@@ -8,4 +8,11 @@ class Escala_model extends MY_Model {
     {
         parent::__construct($this->table);
     }
+
+    public function get_escalas($where)
+    {
+        $query = $this->db->get_where('vw_escalas', $where);
+
+        return $query->result();
+    }
 }

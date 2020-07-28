@@ -47,6 +47,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_setores_create']     = 'Criar';
 /* *********** */$lang['menu_setores_edit']       = 'Editar';
 
+/* ****** */$lang['menu_security']       = 'Segurança';
 /* ****** */$lang['menu_security_groups']       = 'Perfis';
 /* *********** */$lang['menu_groups_create']    = 'Criar';
 /* *********** */$lang['menu_groups_edit']      = 'Editar';

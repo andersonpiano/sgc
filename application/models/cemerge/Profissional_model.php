@@ -10,7 +10,7 @@ class Profissional_model extends MY_Model {
     }
 
     public function get_profissionais_por_setor($setor_id) {
-        $query = $this->db->get_where('vw_profissional_setor', ['setor_id' => $setor_id]);
+        $query = $this->db->get_where('vw_profissionais_setor', ['setor_id' => $setor_id]);
 
         return $query->result();
     }

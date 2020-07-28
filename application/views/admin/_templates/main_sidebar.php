@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             <aside class="main-sidebar">
                 <section class="sidebar">
-<?php if ($admin_prefs['user_panel'] == TRUE): ?>
+<?php if ($admin_prefs['user_panel'] == true): ?>
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
@@ -18,7 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
 
 <?php endif; ?>
-<?php if ($admin_prefs['sidebar_form'] == TRUE): ?>
+<?php if ($admin_prefs['sidebar_form'] == true): ?>
                     <!-- Search form -->
                     <form action="#" method="get" class="sidebar-form">
                         <div class="input-group">
@@ -44,8 +44,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-dashboard"></i> <span><?php echo lang('menu_dashboard'); ?></span>
                             </a>
                         </li>
+<?php if($this->ion_auth->in_group('profissionais')) :?>
+                        <li class="header text-uppercase"><?php echo lang('menu_plantoes'); ?></li>
+                        <li class="<?=active_link_controller('plantoes')?>">
+                            <a href="<?php echo site_url('admin/plantoes'); ?>">
+                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_plantoes'); ?></span>
+                            </a>
+                        </li>
+<?php endif; ?>
 
-
+<?php if($this->ion_auth->in_group('admin')) :?>
                         <li class="header text-uppercase"><?php echo lang('menu_administration'); ?></li>
                         <li class="<?=active_link_controller('unidadeshospitalares')?>">
                             <a href="<?php echo site_url('admin/unidadeshospitalares'); ?>">
@@ -67,11 +75,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-cubes"></i> <span><?php echo lang('menu_escalas'); ?></span>
                             </a>
                         </li>
-                        <li class="<?=active_link_controller('plantoes')?>">
-                            <a href="<?php echo site_url('admin/plantoes'); ?>">
-                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_plantoes'); ?></span>
-                            </a>
-                        </li>
+
+                        <li class="header text-uppercase"><?php echo lang('menu_security'); ?></li>
                         <li class="<?=active_link_controller('users')?>">
                             <a href="<?php echo site_url('admin/users'); ?>">
                                 <i class="fa fa-user"></i> <span><?php echo lang('menu_users'); ?></span>
@@ -89,32 +94,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li class="<?=active_link_function('interfaces')?>"><a href="<?php echo site_url('admin/prefs/interfaces/admin'); ?>"><?php echo lang('menu_interfaces'); ?></a></li>
+                                <li class="<?=active_link_function('interfaces')?>"><a href="<?php //echo site_url('admin/prefs/interfaces/admin'); ?>"><?php //echo lang('menu_interfaces'); ?></a></li>
                             </ul>
                         </li>
-                        <li class="<?=active_link_controller('files')?>">
-                            <a href="<?php echo site_url('admin/files'); ?>">
-                                <i class="fa fa-file"></i> <span><?php echo lang('menu_files'); ?></span>
+<?php endif; ?>
+                        <!--
+                        <li class="<?php //echo active_link_controller('files')?>">
+                            <a href="<?php //echo site_url('admin/files'); ?>">
+                                <i class="fa fa-file"></i> <span><?php //echo lang('menu_files'); ?></span>
                             </a>
                         </li>
-                        <li class="<?=active_link_controller('database')?>">
-                            <a href="<?php echo site_url('admin/database'); ?>">
-                                <i class="fa fa-database"></i> <span><?php echo lang('menu_database_utility'); ?></span>
+                        <li class="<?php //echo active_link_controller('database')?>">
+                            <a href="<?php //echo site_url('admin/database'); ?>">
+                                <i class="fa fa-database"></i> <span><?php //echo lang('menu_database_utility'); ?></span>
                             </a>
                         </li>
-
-
-                        <li class="header text-uppercase"><?php echo $title; ?></li>
-                        <li class="<?=active_link_controller('license')?>">
-                            <a href="<?php echo site_url('admin/license'); ?>">
-                                <i class="fa fa-legal"></i> <span><?php echo lang('menu_license'); ?></span>
+                        <li class="header text-uppercase"><?php //echo $title; ?></li>
+                        <li class="<?php //echo active_link_controller('license')?>">
+                            <a href="<?php //echo site_url('admin/license'); ?>">
+                                <i class="fa fa-legal"></i> <span><?php //echo lang('menu_license'); ?></span>
                             </a>
                         </li>
-                        <li class="<?=active_link_controller('resources')?>">
-                            <a href="<?php echo site_url('admin/resources'); ?>">
-                                <i class="fa fa-cubes"></i> <span><?php echo lang('menu_resources'); ?></span>
+                        <li class="<?php //echo active_link_controller('resources')?>">
+                            <a href="<?php //echo site_url('admin/resources'); ?>">
+                                <i class="fa fa-cubes"></i> <span><?php// echo lang('menu_resources'); ?></span>
                             </a>
                         </li>
+                        -->
                     </ul>
                 </section>
             </aside>

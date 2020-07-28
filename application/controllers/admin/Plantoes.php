@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Plantoes extends Admin_Controller {
-
     private $_permitted_groups = array('admin', 'profissionais');
 
     private $_profissional = null;
@@ -13,7 +12,6 @@ class Plantoes extends Admin_Controller {
 
         /* Load :: Common */
         $this->load->model('cemerge/escala_model');
-        $this->load->model('cemerge/plantao_model');
         $this->load->model('cemerge/profissional_model');
         $this->load->model('cemerge/usuarioprofissional_model');
         $this->load->model('cemerge/unidadehospitalar_model');
@@ -46,15 +44,19 @@ class Plantoes extends Admin_Controller {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
+            // Tipos e status de passagem para exibição
+            $this->data['tipospassagem'] = $this->_get_tipos_passagem();
+            $this->data['statuspassagem'] = $this->_get_status_passagem();
+
             /* Get all data */
             if ($this->ion_auth->is_admin()) {
-                $this->data['plantoes'] = $this->escala_model->get_all();
-                $this->data['passagens'] = $this->plantao_model->get_all();
-                $this->data['recebidos'] = $this->plantao_model->get_all();
+                $this->data['plantoes'] = array();
+                $this->data['passagens'] = array();
+                $this->data['recebidos'] = array();
             } else {
-                $this->data['plantoes'] = $this->escala_model->get_where(['profissional_id' => $this->_profissional->id]);
-                $this->data['passagens'] = $this->plantao_model->get_where(['profissionaltitular_id' => $this->_profissional->id]);
-                $this->data['recebidos'] = $this->plantao_model->get_where(['profissionalsubstituto_id' => $this->_profissional->id]);
+                $this->data['plantoes'] = $this->escala_model->get_escalas(['profissional_id' => $this->_profissional->id]);
+                $this->data['passagens'] = $this->escala_model->get_escalas(['profissional_id' => $this->_profissional->id, 'profissionalsubstituto_id !=' => 0]);
+                $this->data['recebidos'] = $this->escala_model->get_escalas(['profissionalsubstituto_id' => $this->_profissional->id]);
             }
 
             /* Load Template */
@@ -82,14 +84,9 @@ class Plantoes extends Admin_Controller {
         $tipospassagem = $this->_get_tipos_passagem();
 
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
-        //var_dump($profissionais);
-        //exit;
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
 
         /* Validate form input */
-        //$this->form_validation->set_rules('dataplantao', 'lang:plantoes_dataplantao', 'required');
-        //$this->form_validation->set_rules('horainicialplantao', 'lang:plantoes_horainicialplantao', 'required');
-        //$this->form_validation->set_rules('horafinalplantao', 'lang:plantoes_horafinalplantao', 'required');
         $this->form_validation->set_rules('tipopassagem', 'lang:plantoes_tipopassagem', 'required');
         $this->form_validation->set_rules('profissionalsubstituto_id', 'lang:plantoes_profissional_substituto', 'required');
 
@@ -100,17 +97,16 @@ class Plantoes extends Admin_Controller {
 
             if ($this->form_validation->run() == true) {
                 $data = array(
-                    //'dataplantao' => $this->input->post('dataplantao'),
-                    //'horainicialplantao' => $this->input->post('horainicialplantao'),
-                    //'horafinalplantao' => $this->input->post('horafinalplantao'),
                     'tipopassagem' => $this->input->post('tipopassagem'),
-                    'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id')
+                    'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id'),
+                    'datahorapassagem' => date('Y-m-d H:i:s'),
+                    'statuspassagem' => 0,
                 );
 
-                if ($this->plantao_model->update($plantao->id, $data)) {
+                if ($this->escala_model->update($plantao->id, $data)) {
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
 
-                    if ($this->ion_auth->is_admin()) {
+                    if ($this->ion_auth->in_group($this->_permitted_groups)) {
                         redirect('admin/plantoes', 'refresh');
                     } else {
                         redirect('admin', 'refresh');
@@ -118,7 +114,7 @@ class Plantoes extends Admin_Controller {
                 } else {
                     $this->session->set_flashdata('message', $this->ion_auth->errors());
 
-                    if ($this->ion_auth->is_admin()) {
+                    if ($this->ion_auth->in_group($this->_permitted_groups)) {
                         redirect('auth', 'refresh');
                     } else {
                         redirect('/', 'refresh');
@@ -171,18 +167,94 @@ class Plantoes extends Admin_Controller {
             'class' => 'form-control',
             'options' => $profissionais_setor
         );
-        /*
-        $this->data['active'] = array(
-            'name'  => 'active',
-            'id'    => 'active',
-            'type'  => 'checkbox',
-            'class' => 'form-control',
-            'value' => $this->form_validation->set_value('active', $plantao->active)
-        );
-        */
 
         /* Load Template */
         $this->template->admin_render('admin/plantoes/tooffer', $this->data);
+    }
+
+    public function confirm($id)
+    {
+        $id = (int) $id;
+
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
+            redirect('auth', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_plantoes_confirm'), 'admin/plantoes/confirm');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Load Data */
+        $plantao = $this->escala_model->get_by_id($id);
+        $plantao->setor = $this->setor_model->get_by_id($plantao->setor_id);
+        $plantao->setor->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($plantao->setor->unidadehospitalar_id);
+        $plantao->profissional = $this->profissional_model->get_by_id($plantao->profissional_id);
+        $plantao->profissionalsubstituto = $this->profissional_model->get_by_id($plantao->profissionalsubstituto_id);
+        $this->data['tipospassagem'] = $this->_get_tipos_passagem();
+        $this->data['statuspassagem'] = $this->_get_status_passagem();
+
+        if (isset($_POST) && ! empty($_POST)) {
+            if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
+                show_error($this->lang->line('error_csrf'));
+            }
+
+            $data = array(
+                'datahoraconfirmacao' => date('Y-m-d H:i:s'),
+                'statuspassagem' => 1,
+            );
+
+            if ($this->escala_model->update($plantao->id, $data)) {
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
+
+                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                    redirect('admin/plantoes', 'refresh');
+                } else {
+                    redirect('admin', 'refresh');
+                }
+            } else {
+                $this->session->set_flashdata('message', $this->ion_auth->errors());
+
+                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                    redirect('auth', 'refresh');
+                } else {
+                    redirect('/', 'refresh');
+                }
+            }
+        }
+
+        // display the edit user form
+        $this->data['csrf'] = $this->_get_csrf_nonce();
+
+        // set the flash data error message if there is one
+        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+        // pass the plantao to the view
+        $this->data['plantao'] = $plantao;
+
+        $this->data['dataplantao'] = array(
+            'name'  => 'dataplantao',
+            'id'    => 'dataplantao',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('dataplantao', $plantao->dataplantao)
+        );
+        $this->data['horainicialplantao'] = array(
+            'name'  => 'horainicialplantao',
+            'id'    => 'horainicialplantao',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('horainicialplantao', $plantao->horainicialplantao)
+        );
+        $this->data['horafinalplantao'] = array(
+            'name'  => 'horafinalplantao',
+            'id'    => 'horafinalplantao',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('horafinalplantao', $plantao->horafinalplantao)
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/plantoes/confirm', $this->data);
     }
 
     public function create()
@@ -214,7 +286,7 @@ class Plantoes extends Admin_Controller {
 
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true
-            && $this->plantao_model->insert($additional_data)
+            && $this->escala_model->insert($additional_data)
         ) {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             redirect('admin/plantoes', 'refresh');
@@ -270,7 +342,7 @@ class Plantoes extends Admin_Controller {
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Load Data */
-        $plantao = $this->plantao_model->get_by_id($id);
+        $plantao = $this->escala_model->get_by_id($id);
         //$groups        = $this->ion_auth->groups()->result_array();
         //$currentGroups = $this->ion_auth->get_users_groups($id)->result();
 
@@ -294,7 +366,7 @@ class Plantoes extends Admin_Controller {
                     'horafinalplantao' => $this->input->post('horafinalplantao')
                 );
 
-                if ($this->plantao_model->update($plantao->id, $data)) {
+                if ($this->escala_model->update($plantao->id, $data)) {
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
 
                     if ($this->ion_auth->is_admin()) {
@@ -367,14 +439,7 @@ class Plantoes extends Admin_Controller {
         /* Data */
         $id = (int) $id;
 
-        $this->data['plantao'] = $this->plantao_model->get_by_id($id);
-        /*
-        // plantoes
-        foreach ($this->data['user_info'] as $k => $user)
-        {
-            $this->data['user_info'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
-        }
-        */
+        $this->data['plantao'] = $this->escala_model->get_by_id($id);
 
         /* Load Template */
         $this->template->admin_render('admin/plantoes/view', $this->data);
@@ -388,11 +453,19 @@ class Plantoes extends Admin_Controller {
         );
     }
 
+    public function _get_status_passagem()
+    {
+        return array(
+            '0' => 'Sem confirmação',
+            '1' => 'Confirmado',
+        );
+    }
+
     public function _get_profissionais_setor($profissionais)
     {
         $profissionaissetor = array();
         foreach ($profissionais as $profissional) {
-            $profissionaissetor[$profissional->profissional_id] = $profissional->nomeprofissional;
+            $profissionaissetor[$profissional->id] = $profissional->nome;
         }
 
         return $profissionaissetor;

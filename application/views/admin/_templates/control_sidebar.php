@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="tab-content">
                     <!-- Home tab content -->
                     <div class="tab-pane active" id="control-sidebar-home-tab">
-                        <h3 class="control-sidebar-heading">Recent Activity</h3>
+                        <h3 class="control-sidebar-heading"><?php echo lang('global_recent_activity');?></h3>
                         <ul class="control-sidebar-menu">
                             <li>
                                 <a href="#">
