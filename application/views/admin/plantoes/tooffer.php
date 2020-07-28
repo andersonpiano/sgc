@@ -21,31 +21,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                                     <?php echo form_open(uri_string(), array('class' => 'form-horizontal', 'id' => 'form-edit_plantao')); ?>
                                         <div class="form-group">
-                                            <?php echo lang('plantoes_unidadehospitalar', 'unidadehospitalar', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4 pt-7">
-                                                <span class="mb-0 text-left"><?php echo($plantao->setor->unidadehospitalar->razaosocial);?></span>
+                                            <?php echo lang('plantoes_unidadehospitalar', 'unidadehospitalar', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-4 ">
+                                                <?php echo($plantao->setor->unidadehospitalar->razaosocial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('plantoes_setor', 'setor', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('plantoes_setor', 'setor', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo($plantao->setor->nome);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('plantoes_dataplantao', 'dataplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('plantoes_dataplantao', 'dataplantao', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo date('d/m/Y', strtotime($plantao->dataplantao));?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('plantoes_horainicialplantao', 'horainicialplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('plantoes_horainicialplantao', 'horainicialplantao', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo date('H:i:s', strtotime($plantao->horainicialplantao));?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('plantoes_horafinalplantao', 'horafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('plantoes_horafinalplantao', 'horafinalplantao', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo date('H:i:s', strtotime($plantao->horafinalplantao));?>
                                             </div>
@@ -57,7 +57,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('plantoes_profissional', 'profissionaltitular_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('plantoes_profissional', 'profissionaltitular_id', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo($plantao->profissional->nome);?>
                                             </div>

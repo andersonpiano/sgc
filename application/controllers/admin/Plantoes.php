@@ -87,9 +87,9 @@ class Plantoes extends Admin_Controller {
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
 
         /* Validate form input */
-        $this->form_validation->set_rules('dataplantao', 'lang:plantoes_dataplantao', 'required');
-        $this->form_validation->set_rules('horainicialplantao', 'lang:plantoes_horainicialplantao', 'required');
-        $this->form_validation->set_rules('horafinalplantao', 'lang:plantoes_horafinalplantao', 'required');
+        //$this->form_validation->set_rules('dataplantao', 'lang:plantoes_dataplantao', 'required');
+        //$this->form_validation->set_rules('horainicialplantao', 'lang:plantoes_horainicialplantao', 'required');
+        //$this->form_validation->set_rules('horafinalplantao', 'lang:plantoes_horafinalplantao', 'required');
         $this->form_validation->set_rules('tipopassagem', 'lang:plantoes_tipopassagem', 'required');
         $this->form_validation->set_rules('profissionalsubstituto_id', 'lang:plantoes_profissional_substituto', 'required');
 
@@ -100,9 +100,9 @@ class Plantoes extends Admin_Controller {
 
             if ($this->form_validation->run() == true) {
                 $data = array(
-                    'dataplantao' => $this->input->post('dataplantao'),
-                    'horainicialplantao' => $this->input->post('horainicialplantao'),
-                    'horafinalplantao' => $this->input->post('horafinalplantao'),
+                    //'dataplantao' => $this->input->post('dataplantao'),
+                    //'horainicialplantao' => $this->input->post('horainicialplantao'),
+                    //'horafinalplantao' => $this->input->post('horafinalplantao'),
                     'tipopassagem' => $this->input->post('tipopassagem'),
                     'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id')
                 );
@@ -393,7 +393,6 @@ class Plantoes extends Admin_Controller {
         $profissionaissetor = array();
         foreach ($profissionais as $profissional) {
             $profissionaissetor[$profissional->profissional_id] = $profissional->nomeprofissional;
-            // ?????
         }
 
         return $profissionaissetor;
