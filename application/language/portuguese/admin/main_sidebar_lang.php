@@ -10,11 +10,10 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-
 $lang['menu_online'] = 'Online';
 $lang['menu_search'] = 'Pesquisa';
 
-/* * */$lang['menu_access_website']             = 'Acesso ao site';
+/* * */$lang['menu_access_website']             = 'Voltar ao site';
 
 /* * */$lang['menu_main_navigation']            = 'Navegação Principal';
 /* ****** */$lang['menu_dashboard']             = 'Painel principal';

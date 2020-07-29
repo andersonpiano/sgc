@@ -18,7 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-<?php if ($admin_prefs['messages_menu'] == TRUE): ?>
+<?php if ($admin_prefs['messages_menu'] == true) : ?>
                             <!-- Messages -->
                             <li class="dropdown messages-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <?php echo $header_alert_file_install; ?>
 
-<?php if ($admin_prefs['notifications_menu'] == TRUE): ?>
+<?php if ($admin_prefs['notifications_menu'] == true) : ?>
                             <!-- Notifications -->
                             <li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -69,7 +69,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </li>
 
 <?php endif; ?>
-<?php if ($admin_prefs['tasks_menu'] == TRUE): ?>
+<?php if ($admin_prefs['tasks_menu'] == true) : ?>
                             <!-- Tasks -->
                             <li class="dropdown tasks-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -97,7 +97,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </li>
 
 <?php endif; ?>
-<?php if ($admin_prefs['user_menu'] == TRUE): ?>
+<?php if ($admin_prefs['user_menu'] == true) : ?>
                             <!-- User Account -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -107,18 +107,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <ul class="dropdown-menu">
                                     <li class="user-header">
                                         <img src="<?php echo base_url($avatar_dir . '/generic.png'); ?>" class="img-circle" alt="User Image">
-                                        <p><?php echo $user_login['firstname'].$user_login['lastname']; ?><small><?php echo lang('header_member_since'); ?> <?php echo date('d-m-Y', $user_login['created_on']); ?></small></p>
+                                        <p><?php echo $user_login['firstname'].$user_login['lastname']; ?><small><?php echo lang('header_member_since'); ?> <?php echo date('d/m/Y', $user_login['created_on']); ?></small></p>
                                     </li>
                                     <li class="user-body">
                                         <div class="row">
                                             <div class="col-xs-4 text-center">
-                                                <a href="#"><?php echo lang('header_followers'); ?></a>
+                                                <a href="#"><?php //echo lang('header_followers'); ?></a>
                                             </div>
                                             <div class="col-xs-4 text-center">
-                                                <a href="#"><?php echo lang('header_sales'); ?></a>
+                                                <a href="#"><?php //echo lang('header_sales'); ?></a>
                                             </div>
                                             <div class="col-xs-4 text-center">
-                                                <a href="#"><?php echo lang('header_friends'); ?></a>
+                                                <a href="#"><?php //echo lang('header_friends'); ?></a>
                                             </div>
                                         </div>
                                     </li>
@@ -134,7 +134,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </li>
 
 <?php endif; ?>
-<?php if ($admin_prefs['ctrl_sidebar'] == TRUE): ?>
+<?php if ($admin_prefs['ctrl_sidebar'] == true) : ?>
                             <!-- Control Sidebar Toggle Button -->
                             <li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
 <?php endif; ?>

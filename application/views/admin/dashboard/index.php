@@ -78,27 +78,81 @@ if ($url_exist) {
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                                     </div>
                                 </div>
+<?php if ($this->ion_auth->in_group('profissionais')):?>
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <p class="text-center text-uppercase"><strong>Resources</strong></p>
-                                            <div class="progress-group">
-                                                <span class="progress-text">Disk use space</span>
-                                                <span class="progress-number"><strong><?php echo byte_format($disk_usespace, 2); ?></strong>/<?php echo byte_format($disk_totalspace, 2); ?></span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="<?php echo $disk_usepercent; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $disk_usepercent; ?>%"></div>
-                                                </div>
-                                            </div>
-                                            <div class="progress-group">
-                                                <span class="progress-text">Memory usage</span>
-                                                <span class="progress-number"><strong><?php echo byte_format($memory_usage, 2); ?></strong>/<?php echo byte_format($memory_peak_usage, 2); ?></span>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-red" role="progressbar" aria-valuenow="<?php echo $memory_usepercent; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $memory_usepercent; ?>%"></div>
-                                                </div>
-                                            </div>
+                                            <p class="text-left text-uppercase"><strong>Plantões recebidos a confirmar</strong></p>
+    <?php if(sizeof($plantoes_recebidos_confirmar) > 0) :?>
+        <?php foreach($plantoes_recebidos_confirmar as $plantao_recebido) :?>
+                                            <span class="badge badge-success">Importante</span>&nbsp;
+                                            <p class="text-justify"><a href="<?php echo(site_url('admin/plantoes/confirm/'.$plantao_recebido->id));?>">
+            <?php
+                $text = $plantao_recebido->nomeprofissional . ' está oferecendo um plantão no ';
+                $text .= $plantao_recebido->razaosocial . ' - ' . $plantao_recebido->nomesetor;
+                $text .= ' no dia ' . date('d/m/Y', strtotime($plantao_recebido->dataplantao));
+                $text .= ' de ' . date('H:i', strtotime($plantao_recebido->horainicialplantao));
+                $text .= ' &agrave;s ' . date('H:i', strtotime($plantao_recebido->horafinalplantao)) . ' para você.';
+                $text .= ' Clique aqui e confirme.';
+                echo($text);
+            ?>
+                                            </a></p>
+        <?php endforeach;?>
+    <?php else:?>
+                                                <p>Sem novidades por enquanto</p>
+    <?php endif;?>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-left text-uppercase"><strong>Plantões passados sem confirmação</strong></p>
+    <?php if(sizeof($plantoes_passados_confirmar) > 0) :?>
+        <?php foreach($plantoes_passados_confirmar as $plantao_passado) :?>
+                                            <span class="badge badge-success">Importante</span>&nbsp;
+                                            <p class="text-justify">
+            <?php
+                $text = 'O plantão no ' . $plantao_passado->razaosocial . ' - ' . $plantao_passado->nomesetor;
+                $text .= ' do dia ' . date('d/m/Y', strtotime($plantao_passado->dataplantao));
+                $text .= ' de ' . date('H:i', strtotime($plantao_passado->horainicialplantao));
+                $text .= ' &agrave;s ' . date('H:i', strtotime($plantao_passado->horafinalplantao));
+                $text .= ' que você ofertou a ' . $plantao_passado->nomeprofissionalsubstituto;
+                $text .= ' ainda não foi confirmado por. Entre em contato com ele para que efetue a confirmação.';
+                echo($text);
+            ?>
+                                            </p>
+        <?php endforeach;?>
+    <?php else:?>
+                                                <p>Sem novidades por enquanto</p>
+    <?php endif;?>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-left text-uppercase"><strong>Oportunidades</strong></p>
+    <?php if(sizeof($oportunidades) > 0) :?>
+        <?php foreach($oportunidades as $oportunidade) :?>
+                                                <span class="badge badge-success">Importante</span>&nbsp;
+                                                <p class="text-justify"><a href="<?php echo(site_url('###'));?>">
+            <?php
+                $text = $oportunidade->nomeprofissional . ' está oferecendo um plantão no ';
+                $text .= $oportunidade->razaosocial . ' - ' . $oportunidade->nomesetor;
+                $text .= ' no dia ' . date('d/m/Y', strtotime($oportunidade->dataplantao));
+                $text .= ' de ' . date('H:i', strtotime($oportunidade->horainicialplantao));
+                $text .= ' &agrave;s ' . date('H:i', strtotime($oportunidade->horafinalplantao)) . '.';
+                $text .= ' Clique aqui para aceitar, caso seja do seu interesse.';
+                echo($text);
+            ?>
+                                                </a></p>
+        <?php endforeach;?>
+    <?php else:?>
+                                                <p>Sem novidades por enquanto</p>
+    <?php endif;?>
                                         </div>
                                     </div>
                                 </div>
+<?php endif;?>
                             </div>
                         </div>
                     </div>

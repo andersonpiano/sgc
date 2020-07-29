@@ -33,17 +33,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 <?php echo form_close();?>
 
-<?php if ($auth_social_network == TRUE): ?>
+<?php if ($auth_social_network == true) : ?>
                 <div class="social-auth-links text-center">
                     <p>- <?php echo lang('auth_or'); ?> -</p>
                     <?php echo anchor('#', '<i class="fa fa-facebook"></i>' . lang('auth_sign_facebook'), array('class' => 'btn btn-block btn-social btn-facebook btn-flat')); ?>
                     <?php echo anchor('#', '<i class="fa fa-google-plus"></i>' . lang('auth_sign_google'), array('class' => 'btn btn-block btn-social btn-google btn-flat')); ?>
                 </div>
 <?php endif; ?>
-<?php if ($forgot_password == TRUE): ?>
-                <?php echo anchor('#', lang('auth_forgot_password')); ?><br />
+<?php if ($forgot_password == true) : ?>
+                <?php echo anchor('auth/forgotpassword', lang('auth_forgot_password')); ?><br />
 <?php endif; ?>
-<?php if ($new_membership == TRUE): ?>
+<?php if ($new_membership == true) : ?>
                 <?php echo anchor('#', lang('auth_new_member')); ?><br />
 <?php endif; ?>
             </div>

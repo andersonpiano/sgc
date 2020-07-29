@@ -8,4 +8,10 @@ class Setor_model extends MY_Model {
     {
         parent::__construct($this->table);
     }
+
+    public function get_setores_por_profissional($profissional_id) {
+        $query = $this->db->get_where('vw_profissionais_setor', ['id' => $profissional_id]);
+
+        return $query->result();
+    }
 }

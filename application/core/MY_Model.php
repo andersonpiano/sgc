@@ -24,9 +24,16 @@ class MY_model extends CI_Model {
         return $query->row();
     }
 
-    public function get_where($where)
+    public function get_where($where, $where_in = null)
     {
-        $query = $this->db->get_where($this->table, $where);
+        if (!$where_in) {
+            $query = $this->db->get_where($this->table, $where);
+        } else {
+            $this->db->from($this->table);
+            $this->db->where($where);
+            $this->db->where_in($where_in);
+            $query = $this->db->get();
+        }
 
         return $query->result();
     }
