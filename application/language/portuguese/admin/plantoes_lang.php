@@ -13,6 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $lang['plantoes_create']                         = 'Criar plantão';
 $lang['plantoes_edit']                           = 'Editar plantão';
 $lang['plantoes_dataplantao']                    = 'Data';
+$lang['plantoes_horario']                        = 'Horário';
 $lang['plantoes_horainicialplantao']             = 'Hora inicial';
 $lang['plantoes_horafinalplantao']               = 'Hora final';
 $lang['plantoes_duracao']                        = 'Duração';
