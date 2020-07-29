@@ -1,21 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends Admin_Controller {
+class Dashboard extends Admin_Controller
+{
+    private $_permitted_groups = array('admin', 'profissionais');
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct($this->_permitted_groups);
 
         /* Load :: Common */
         $this->load->helper('number');
         $this->load->model('admin/dashboard_model');
     }
 
-
     public function index()
     {
-        if (! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
+        if (! $this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
             redirect('auth/login', 'refresh');
         } else {
             /* Title Page */
@@ -36,9 +37,8 @@ class Dashboard extends Admin_Controller {
             $this->data['memory_peak_usage'] = $this->dashboard_model->memory_peak_usage(TRUE);
             $this->data['memory_usepercent'] = $this->dashboard_model->memory_usepercent(TRUE, FALSE);
 
-
             /* TEST */
-            $this->data['url_exist']    = is_url_exist('http://www.domprojects.com');
+            $this->data['url_exist']    = is_url_exist('http://www.cemerge.com.br'); //http://www.domprojects.com
 
 
             /* Load Template */

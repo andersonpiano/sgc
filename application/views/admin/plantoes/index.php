@@ -66,7 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($recebido->horainicialplantao)) . ' - ' . date('H:i', strtotime($recebido->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($recebido->nomeprofissional, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <span class="badge badge-danger"><?php echo htmlspecialchars($statuspassagem[$recebido->statuspassagem], ENT_QUOTES, 'UTF-8'); ?></span>
+                                                    <span class="badge badge-<?php echo($recebido->statuspassagem==1 ? 'success' : 'danger');?>"><?php echo htmlspecialchars($statuspassagem[$recebido->statuspassagem], ENT_QUOTES, 'UTF-8'); ?></span>
                                                 </td>
                                                 <td>
     <?php if ($recebido->statuspassagem == 0) :?>
@@ -104,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($passagem->nomeprofissional, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($passagem->nomeprofissionalsubstituto, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <span class="badge badge-danger"><?php echo htmlspecialchars($statuspassagem[$passagem->statuspassagem], ENT_QUOTES, 'UTF-8'); ?></span>
+                                                    <span class="badge badge-<?php echo($passagem->statuspassagem==1 ? 'success' : 'danger');?>"><?php echo htmlspecialchars($statuspassagem[$passagem->statuspassagem], ENT_QUOTES, 'UTF-8'); ?></span>
                                                 </td>
                                                 <td>
                                                     <?php echo anchor('admin/plantoes/edit/'.$passagem->id, lang('actions_edit')); ?> &nbsp;

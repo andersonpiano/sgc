@@ -13,14 +13,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php echo $dashboard_alert_file_install; ?>
                     <div class="row">
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-maroon"><i class="fa fa-legal"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Licence</span>
-                                    <span class="info-box-number">Free</span>
+                            <a href="<?php echo(site_url('admin/plantoes'));?>">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-maroon"><i class="fa fa-calendar"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Meus Plantões</span>
+                                        <span class="info-box-number">Acessar</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
+                        <!--
                         <div class="col-md-3 col-sm-6 col-xs-12">
                             <div class="info-box">
                                 <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
@@ -51,6 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                             </div>
                         </div>
+                        -->
                     </div>
 
                     <div class="row">
@@ -69,17 +73,14 @@ if ($url_exist) {
                         <div class="col-md-12">
                             <div class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Title</h3>
+                                    <h3 class="box-title">Notificações</h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                                     </div>
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <p class="text-center"><strong>xxx</strong></p>
-                                        </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <p class="text-center text-uppercase"><strong>Resources</strong></p>
                                             <div class="progress-group">
                                                 <span class="progress-text">Disk use space</span>
