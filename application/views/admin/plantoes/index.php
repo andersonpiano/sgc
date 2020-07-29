@@ -74,7 +74,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($recebido->nomeprofissional, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
     <?php if ($recebido->statuspassagem == 0) :?>
+        <?php if ($recebido->tipopassagem == 0) :?>
                                                     <?php echo anchor('admin/plantoes/confirm/'.$recebido->id, lang('actions_confirm')); ?> &nbsp;
+        <?php elseif ($recebido->tipopassagem == 1) :?>
+                                                    <?php echo anchor('admin/plantoes/confirmexchange/'.$recebido->id, lang('actions_confirm')); ?> &nbsp;
+        <?php endif;?>
     <?php endif;?>
                                                     <?php echo anchor('admin/plantoes/view/'.$recebido->id, lang('actions_see')); ?>
                                                 </td>

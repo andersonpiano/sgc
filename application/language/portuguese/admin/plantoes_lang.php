@@ -21,6 +21,7 @@ $lang['plantoes_setor']                          = 'Setor';
 $lang['plantoes_profissional']                   = 'Médico(a)';
 $lang['plantoes_profissional_titular']           = 'Médico(a) titular';
 $lang['plantoes_profissional_substituto']        = 'Médico(a) substituto(a)';
+$lang['plantoes_escalatroca']                    = 'Plantão de troca';
 $lang['plantoes_action']                         = 'Ações';
 $lang['plantoes_active']                         = 'Ativo';
 $lang['plantoes_created_on']                     = 'Criado em';

@@ -75,6 +75,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('plantoes_escalatroca', 'escalatroca_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-10">
+                                                <?php echo form_dropdown($escalatroca_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <?php echo form_hidden('id', $plantao->id);?>
                                                 <?php echo form_hidden($csrf); ?>
