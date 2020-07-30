@@ -14,14 +14,14 @@ header('Vary: Accept-Encoding');
         <meta charset="<?php echo $charset; ?>">
         <title>HOME</title>
         <meta name="description" content="">
-<?php if ($mobile === FALSE): ?>
+<?php if ($mobile === false): ?>
         <!--[if IE 8]>
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <![endif]-->
 <?php else: ?>
         <meta name="HandheldFriendly" content="true">
 <?php endif; ?>
-<?php if ($mobile == TRUE && $mobile_ie == TRUE): ?>
+<?php if ($mobile == true && $mobile_ie == true): ?>
         <meta http-equiv="cleartype" content="on">
 <?php endif; ?>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -31,9 +31,9 @@ header('Vary: Accept-Encoding');
         <meta property="og:url" content="">
         <meta property="og:site_name" content="domProjects">
     </head>
-    <body>
+    <body class="text-center">
         <article>
-            <h1>HOME</h1>
+            <h1>CEMERGE</h1>
 <?php if ($admin_link): ?>
             <p><a href="<?php echo site_url('admin'); ?>">Acessar o sistema</a></p>
 <?php endif; ?>

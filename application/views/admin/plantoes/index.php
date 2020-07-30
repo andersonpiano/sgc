@@ -14,6 +14,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="col-md-12">
                             <div class="box">
                                 <div class="box-body">
+                                    <span><?php echo lang('plantoes_plantoes');?></span>
+<?php foreach ($plantoes as $plantao):?>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <span class="strong"><?php echo lang('plantoes_setor') . "&nbsp;";?></scpan>
+                                                    <?php echo htmlspecialchars($plantao->razaosocial . " - " . $plantao->nomesetor, ENT_QUOTES, 'UTF-8'); ?>
+                                                </div>
+                                                <div class="col-md-2"><?php echo htmlspecialchars(date('d/m/Y', strtotime($plantao->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></div>
+                                                <div class="col-md-2"><?php echo htmlspecialchars(date('H:i', strtotime($plantao->horainicialplantao)) . ' - ' . date('H:i', strtotime($plantao->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></div>
+                                                <div class="col-md-2">
+    <?php if ($plantao->profissionalsubstituto_id == 0): ?>
+                                                    <?php echo anchor('admin/plantoes/tooffer/'.$plantao->id, lang('actions_to_offer')); ?> &nbsp;
+    <?php endif;?>
+                                                    <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see')); ?>
+                                                </div>
+                                            </div>
+<?php endforeach;?>
                                     <table class="table table-striped table-hover">
                                         <caption><?php echo lang('plantoes_plantoes');?></caption>
                                         <thead>
