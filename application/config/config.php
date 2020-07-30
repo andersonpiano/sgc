@@ -17,7 +17,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://192.168.0.118/sgc';
+$config['base_url'] = 'http://192.168.45.57/sgc';
+//$config['base_url'] = 'http://www.somossolucoes.com.br/sgc';
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,35 @@ $config['base_url'] = 'http://192.168.0.118/sgc';
 |
 */
 $config['index_page'] = 'index.php';
+
+/*
+* Email config
+*
+*/
+$config['mail'] = array (
+    'protocol' => 'smtp',
+    'smtp_host' => 'smtp.somossolucoes.com.br',
+    'smtp_port' => '587',
+    'smtp_timeout' => '7',
+    'smtp_user' => 'cemerge@somossolucoes.com.br',
+    'smtp_pass' => 'drvr2906',
+    'charset' => 'utf-8',
+    'newline' => "\r\n",
+    'mailtype' => 'html',
+    'validation' => true,
+);
+/*
+$config['protocol'] = 'smtp';
+$config['smtp_host'] = 'smtp.somossolucoes.com.br'; //ssl://smtp.gmail.com
+$config['smtp_port'] = '587'; //465
+$config['smtp_timeout'] = '7';
+$config['smtp_user'] = 'cemerge@somossolucoes.com.br';
+$config['smtp_pass'] = 'drvr2906';
+$config['charset'] = 'utf-8';
+$config['newline'] = "\r\n";
+$config['mailtype'] = 'html'; // or text
+$config['validation'] = true; // bool whether to validate email or not
+*/
 
 /*
 |--------------------------------------------------------------------------

@@ -26,10 +26,10 @@ class Plantoes extends Admin_Controller {
 
         /* Profissional */
         $userId = $this->ion_auth->user()->row()->id;
-        if ($this->ion_auth->in_group('profissionais')) {
-            $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId])[0];
+        if ($this->ion_auth->in_group('profissionais') && $userId) {
+            $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
             if ($usuarioProfissional) {
-                $this->_profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional->profissional_id])[0];
+                $this->_profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional[0]->profissional_id])[0];
             }
         }
 

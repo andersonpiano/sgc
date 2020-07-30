@@ -36,29 +36,29 @@ class Dashboard extends Admin_Controller
                 $this->load->model('cemerge/setor_model');
 
                 $userId = $this->ion_auth->user()->row()->id;
-                $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId])[0];
-                if ($usuarioProfissional) {
-                    $profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional->profissional_id])[0];
-                    $setores_profissional = $this->setor_model->get_setores_por_profissional($profissional->id); // Trocar para buscar na tabela associativa o id
-                    $setores_profissional_arr = array();
-                    foreach ($setores_profissional as $setor) {
-                        array_push($setores_profissional_arr, $setor->setor_id);
+                if ($userId) {
+                    $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+                    if ($usuarioProfissional) {
+                        $profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional[0]->profissional_id])[0];
+                        $setores_profissional = $this->setor_model->get_setores_por_profissional($profissional->id); // Trocar para buscar na tabela associativa o id
+                        $setores_profissional_arr = array();
+                        foreach ($setores_profissional as $setor) {
+                            array_push($setores_profissional_arr, $setor->setor_id);
+                        }
+                        $setores_profissional_str = '(' . implode(', ', $setores_profissional_arr) . ')';
                     }
-                    $setores_profissional_str = '(' . implode(', ', $setores_profissional_arr) . ')';
                 }
             }
+
+            /* Reset arrays */
+            $this->data['plantoes_recebidos_confirmar'] = array();
+            $this->data['plantoes_passados_confirmar'] = array();
+            $this->data['oportunidades'] = array();
 
             /* Data */
             if ($this->ion_auth->is_admin()) {
                 $this->data['count_users']       = $this->dashboard_model->get_count_record('users');
                 $this->data['count_groups']      = $this->dashboard_model->get_count_record('groups');
-                $this->data['disk_totalspace']   = $this->dashboard_model->disk_totalspace(DIRECTORY_SEPARATOR);
-                $this->data['disk_freespace']    = $this->dashboard_model->disk_freespace(DIRECTORY_SEPARATOR);
-                $this->data['disk_usespace']     = $this->data['disk_totalspace'] - $this->data['disk_freespace'];
-                $this->data['disk_usepercent']   = $this->dashboard_model->disk_usepercent(DIRECTORY_SEPARATOR, false);
-                $this->data['memory_usage']      = $this->dashboard_model->memory_usage();
-                $this->data['memory_peak_usage'] = $this->dashboard_model->memory_peak_usage(true);
-                $this->data['memory_usepercent'] = $this->dashboard_model->memory_usepercent(true, false);
             } else {
                 $this->data['plantoes_recebidos_confirmar']
                     = $this->escala_model->get_escalas(

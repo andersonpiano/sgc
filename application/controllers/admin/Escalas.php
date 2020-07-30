@@ -302,13 +302,11 @@ class Escalas extends Admin_Controller
 
     public function _valid_csrf_nonce()
     {
-        if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue'))
-        {
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
+        if ($this->input->post($this->session->flashdata('csrfkey')) !== false &&
+            $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue')) {
+            return true;
+        } else {
+            return false;
         }
     }
 

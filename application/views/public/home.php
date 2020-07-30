@@ -35,7 +35,7 @@ header('Vary: Accept-Encoding');
         <article>
             <h1>HOME</h1>
 <?php if ($admin_link): ?>
-            <p><a href="<?php echo site_url('admin'); ?>">Admin</a></p>
+            <p><a href="<?php echo site_url('admin'); ?>">Acessar o sistema</a></p>
 <?php endif; ?>
 
 <?php if ($logout_link): ?>
