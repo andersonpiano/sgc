@@ -10,9 +10,13 @@ class MY_model extends CI_Model {
         $this->table = $table;
     }
 
-    public function get_all()
+    public function get_all($order_by = null)
     {
-        $query = $this->db->get($this->table);
+        $this->db->from($this->table);
+        if ($order_by) {
+            $this->db->from($order_by);
+        }
+        $query = $this->db->get();
 
         return $query->result();
     }
@@ -24,16 +28,17 @@ class MY_model extends CI_Model {
         return $query->row();
     }
 
-    public function get_where($where, $where_in = null)
+    public function get_where($where, $where_in = null, $order_by = null)
     {
-        if (!$where_in) {
-            $query = $this->db->get_where($this->table, $where);
-        } else {
-            $this->db->from($this->table);
-            $this->db->where($where);
+        $this->db->from($this->table);
+        $this->db->where($where);
+        if ($where_in) {
             $this->db->where_in($where_in);
-            $query = $this->db->get();
         }
+        if ($order_by) {
+            $this->db->from($order_by);
+        }
+        $query = $this->db->get();
 
         return $query->result();
     }

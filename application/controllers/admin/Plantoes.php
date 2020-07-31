@@ -341,7 +341,7 @@ class Plantoes extends Admin_Controller {
         /* Data */
         $id = (int) $id;
 
-        $this->data['plantao'] = $this->escala_model->get_by_id($id);
+        $this->data['plantao'] = $this->escala_model->get_escala(['id' => $id]);
 
         /* Load Template */
         $this->template->admin_render('admin/plantoes/view', $this->data);

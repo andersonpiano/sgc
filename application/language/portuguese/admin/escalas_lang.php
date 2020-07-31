@@ -17,6 +17,7 @@ $lang['escalas_setor']               = 'Setor';
 $lang['escalas_dataplantao']         = 'Data';
 $lang['escalas_datainicialplantao']  = 'Data Inicial';
 $lang['escalas_datafinalplantao']    = 'Data Final';
+$lang['escalas_horario']             = 'Horário';
 $lang['escalas_horainicialplantao']  = 'Hora inicial';
 $lang['escalas_horafinalplantao']    = 'Hora final';
 $lang['escalas_profissional']        = 'Médico(a)';

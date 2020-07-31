@@ -25,18 +25,21 @@ class Escalas extends Admin_Controller
 
     public function index()
     {
-        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
-        {
+        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
             redirect('auth/login', 'refresh');
-        }
-        else
-        {
+        } else {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
             /* Get all escalas */
             $where = array();
-            $this->data['escalas'] = $this->escala_model->get_escalas($where);
+            $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
+            
+            $this->data['escalas_consolidadas'] = $this->escala_model->get_escalas_consolidadas($where, null, 'dataplantao, horainicialplantao');
+
+            //TODO: $this->data['passagens_trocas'] = $this->escala_model->get_passagens_trocas($where, null, 'dataplantao, horainicialplantao');
+            
+            //var_dump($this->data['escalas_consolidadas'][11]); exit;
 
             /* Load Template */
             $this->template->admin_render('admin/escalas/index', $this->data);

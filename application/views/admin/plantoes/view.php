@@ -20,20 +20,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <tbody>
                                             <tr>
-                                                <th><?php echo lang('escalas_dataplantao'); ?></th>
-                                                <td><?php echo(date('d/m/Y', strtotime($escala->dataplantao))); ?></td>
+                                                <th><?php echo lang('plantoes_dataplantao'); ?></th>
+                                                <td><?php echo(date('d/m/Y', strtotime($plantao->dataplantao))); ?></td>
                                             </tr>
                                             <tr>
-                                                <th><?php echo lang('escalas_horainicialplantao'); ?></th>
-                                                <td><?php echo htmlspecialchars($escala->horainicialplantao, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <th><?php echo lang('plantoes_horainicialplantao'); ?></th>
+                                                <td><?php echo htmlspecialchars(date('H:i', strtotime($plantao->horainicialplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
                                             <tr>
-                                                <th><?php echo lang('escalas_horafinalplantao'); ?></th>
-                                                <td><?php echo htmlspecialchars($escala->horafinalplantao, ENT_QUOTES, 'UTF-8'); ?></td>
-                                            </tr>
-                                            <tr>
-                                                <th><?php echo lang('escalas_status'); ?></th>
-                                                <td><?php echo ($escala->active) ? '<span class="label label-success">'.lang('escalas_active').'</span>' : '<span class="label label-default">'.lang('escalas_inactive').'</span>'; ?></td>
+                                                <th><?php echo lang('plantoes_horafinalplantao'); ?></th>
+                                                <td><?php echo htmlspecialchars($plantao->horafinalplantao, ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
                                             <!--
                                             <tr>

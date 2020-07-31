@@ -10,6 +10,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
 
                 <section class="content">
+<?php foreach ($plantoes as $plantao):?>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-maroon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">
+                                        <?php echo htmlspecialchars(lang('plantoes_setor') . ": " . $plantao->nomesetor . " - " . $plantao->razaosocial, ENT_QUOTES, 'UTF-8'); ?>
+                                    </span>
+                                    <span class="info-box-text">
+                                        <?php echo htmlspecialchars(lang('plantoes_dataplantao') . ": " . date('d/m/Y', strtotime($plantao->dataplantao)), ENT_QUOTES, 'UTF-8'); ?>
+                                    </span>
+                                    <span class="info-box-text">
+                                        <?php echo htmlspecialchars(lang('plantoes_horario') . ": " . date('H:i', strtotime($plantao->horainicialplantao)) . ' - ' . date('H:i', strtotime($plantao->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?>
+                                    </span>
+                                    <span class="info-box-number">
+    <?php if ($plantao->profissionalsubstituto_id == 0): ?>
+        <?php echo anchor('admin/plantoes/tooffer/'.$plantao->id, lang('actions_to_offer')); ?> &nbsp;
+    <?php endif;?>
+        <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see')); ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<?php endforeach;?>
+                </section>
+
+                <section class="content">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
