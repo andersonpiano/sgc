@@ -40,10 +40,10 @@ class Dashboard extends Admin_Controller
                     $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
                     if ($usuarioProfissional) {
                         $profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional[0]->profissional_id])[0];
-                        $setores_profissional = $this->setor_model->get_setores_por_profissional($profissional->id); // Trocar para buscar na tabela associativa o id
+                        $setores_profissional = $this->setor_model->get_setores_por_profissional($profissional->id);
                         $setores_profissional_arr = array();
                         foreach ($setores_profissional as $setor) {
-                            array_push($setores_profissional_arr, $setor->setor_id);
+                            array_push($setores_profissional_arr, $setor->id);
                         }
                         $setores_profissional_str = '(' . implode(', ', $setores_profissional_arr) . ')';
                     }
@@ -61,23 +61,11 @@ class Dashboard extends Admin_Controller
                 $this->data['count_groups']      = $this->dashboard_model->get_count_record('groups');
             } else {
                 $this->data['plantoes_recebidos_confirmar']
-                    = $this->escala_model->get_escalas(
-                        ['profissionalsubstituto_id' => $profissional->id,
-                         'statuspassagem' => 0]
-                    );
+                    = $this->escala_model->get_plantoes_recebidos_a_confirmar($profissional->id);
                 $this->data['plantoes_passados_confirmar']
-                    = $this->escala_model->get_escalas(
-                        ['profissional_id' => $profissional->id,
-                        'statuspassagem' => 0]
-                    );
+                    = $this->escala_model->get_plantoes_passados_a_confirmar($profissional->id);
                 $this->data['oportunidades']
-                    = $this->escala_model->get_escalas(
-                        ['profissionalsubstituto_id' => 0,
-                        'statuspassagem' => 0],
-                        ['setor_id in' => $setores_profissional_str]
-                    );
-
-                //var_dump($this->data['oportunidades']); exit; 
+                    = $this->escala_model->get_oportunidades($profissional->id);
             }
 
             /* TEST */

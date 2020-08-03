@@ -41,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Users</span>
-                                    <span class="info-box-number"><?php echo $count_users; ?></span>
+                                    <span class="info-box-number"><?php //echo $count_users; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <span class="info-box-icon bg-aqua"><i class="fa fa-shield"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Security groups</span>
-                                    <span class="info-box-number"><?php echo $count_groups; ?></span>
+                                    <span class="info-box-number"><?php //echo $count_groups; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -88,8 +88,8 @@ if ($url_exist) {
                                             <span class="badge badge-success">Importante</span>&nbsp;
                                             <p class="text-justify"><a href="<?php echo(site_url('admin/plantoes/confirm/'.$plantao_recebido->id));?>">
             <?php
-                $text = $plantao_recebido->nomeprofissional . ' está oferecendo um plantão no ';
-                $text .= $plantao_recebido->razaosocial . ' - ' . $plantao_recebido->nomesetor;
+                $text = $plantao_recebido->profissional_passagem_nome . ' está oferecendo um plantão no ';
+                $text .= $plantao_recebido->unidadehospitalar_razaosocial . ' - ' . $plantao_recebido->setor_nome;
                 $text .= ' no dia ' . date('d/m/Y', strtotime($plantao_recebido->dataplantao));
                 $text .= ' de ' . date('H:i', strtotime($plantao_recebido->horainicialplantao));
                 $text .= ' &agrave;s ' . date('H:i', strtotime($plantao_recebido->horafinalplantao)) . ' para você.';
@@ -112,12 +112,44 @@ if ($url_exist) {
                                             <span class="badge badge-success">Importante</span>&nbsp;
                                             <p class="text-justify">
             <?php
-                $text = 'O plantão no ' . $plantao_passado->razaosocial . ' - ' . $plantao_passado->nomesetor;
+                $text = 'O plantão no ' . $plantao_passado->unidadehospitalar_razaosocial . ' - ' . $plantao_passado->setor_nome;
                 $text .= ' do dia ' . date('d/m/Y', strtotime($plantao_passado->dataplantao));
                 $text .= ' de ' . date('H:i', strtotime($plantao_passado->horainicialplantao));
                 $text .= ' &agrave;s ' . date('H:i', strtotime($plantao_passado->horafinalplantao));
-                $text .= ' que você ofertou a ' . $plantao_passado->nomeprofissionalsubstituto;
-                $text .= ' ainda não foi confirmado por. Entre em contato com ele para que efetue a confirmação.';
+                if (isset($plantao_passado->profissional_substituto_nome)) {
+                    $text .= ' que você ofertou a ' . $plantao_passado->profissional_substituto_nome;
+                    $text .= ' ainda não foi confirmado. Entre em contato com ele(a) para que efetue a confirmação.';
+                } else {
+                    $text .= ' que você ofertou ainda não foi confirmado por ninguém do setor.';
+                }                
+                echo($text);
+            ?>
+                                            </p>
+        <?php endforeach;?>
+    <?php else:?>
+                                                <p>Sem novidades por enquanto</p>
+    <?php endif;?>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-left text-uppercase"><strong>Trocas não confirmadas</strong></p>
+    <?php if(sizeof($plantoes_passados_confirmar) > 0) :?>
+        <?php foreach($plantoes_passados_confirmar as $plantao_passado) :?>
+                                            <span class="badge badge-success">Importante</span>&nbsp;
+                                            <p class="text-justify">
+            <?php
+                $text = 'O plantão no ' . $plantao_passado->unidadehospitalar_razaosocial . ' - ' . $plantao_passado->setor_nome;
+                $text .= ' do dia ' . date('d/m/Y', strtotime($plantao_passado->dataplantao));
+                $text .= ' de ' . date('H:i', strtotime($plantao_passado->horainicialplantao));
+                $text .= ' &agrave;s ' . date('H:i', strtotime($plantao_passado->horafinalplantao));
+                if (isset($plantao_passado->profissional_substituto_nome)) {
+                    $text .= ' que você ofertou a ' . $plantao_passado->profissional_substituto_nome;
+                    $text .= ' ainda não foi confirmado. Entre em contato com ele(a) para que efetue a confirmação.';
+                } else {
+                    $text .= ' que você ofertou ainda não foi confirmado por ninguém do setor.';
+                }                
                 echo($text);
             ?>
                                             </p>
@@ -136,8 +168,8 @@ if ($url_exist) {
                                                 <span class="badge badge-success">Importante</span>&nbsp;
                                                 <p class="text-justify"><a href="<?php echo(site_url('###'));?>">
             <?php
-                $text = $oportunidade->nomeprofissional . ' está oferecendo um plantão no ';
-                $text .= $oportunidade->razaosocial . ' - ' . $oportunidade->nomesetor;
+                $text = $oportunidade->profissional_passagem_nome . ' está oferecendo um plantão no ';
+                $text .= $oportunidade->unidadehospitalar_razaosocial . ' - ' . $oportunidade->setor_nome;
                 $text .= ' no dia ' . date('d/m/Y', strtotime($oportunidade->dataplantao));
                 $text .= ' de ' . date('H:i', strtotime($oportunidade->horainicialplantao));
                 $text .= ' &agrave;s ' . date('H:i', strtotime($oportunidade->horafinalplantao)) . '.';

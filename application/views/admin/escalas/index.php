@@ -30,6 +30,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
                                                 <?php echo form_dropdown($setor_id);?>
+                                                <?php //echo form_multiselect($setor_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -77,6 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             array('class' => 'btn btn-block btn-primary btn-flat')); ?>
                                     </h3>
                                 </div>
+<?php if ($tipoescala['value'] == 0) : ?>
                                 <div class="box-body">
                                     <table class="table table-striped table-hover">
                                         <thead>
@@ -90,7 +92,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </tr>
                                         </thead>
                                         <tbody>
-<?php foreach ($escalas as $escala):?>
+    <?php foreach ($escalas as $escala) : ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($escala->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
@@ -102,10 +104,77 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see')); ?>
                                                 </td>
                                             </tr>
-<?php endforeach;?>
+    <?php endforeach;?>
                                         </tbody>
                                     </table>
                                 </div>
+<?php endif; ?>
+<?php if ($tipoescala['value'] == 1) : ?>
+                                <div class="box-body">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th><?php echo lang('escalas_unidadehospitalar');?></th>
+                                                <th><?php echo lang('escalas_setor');?></th>
+                                                <th><?php echo lang('escalas_profissional');?></th>
+                                                <th><?php echo lang('escalas_dataplantao');?></th>
+                                                <th><?php echo lang('escalas_horario');?></th>
+                                                <th><?php echo lang('escalas_action');?></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+    <?php foreach ($escalas as $escala) : ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($escala->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <?php if ($escala->passagenstrocas_id == null) :?>
+                                                <td><?php echo htmlspecialchars($escala->profissional_nome, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <?php else :?>
+                                                <td><?php echo htmlspecialchars($escala->profissional_substituto_nome, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <?php endif;?>
+                                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td>
+                                                    <?php echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see')); ?>
+                                                </td>
+                                            </tr>
+    <?php endforeach;?>
+                                        </tbody>
+                                    </table>
+                                </div>
+<?php endif; ?>
+<?php if ($tipoescala['value'] == 2) : ?>
+                                <div class="box-body">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th><?php echo lang('escalas_unidadehospitalar');?></th>
+                                                <th><?php echo lang('escalas_setor');?></th>
+                                                <th><?php echo lang('escalas_profissional');?></th>
+                                                <th><?php echo lang('escalas_profissional_substituto');?></th>
+                                                <th><?php echo lang('escalas_dataplantao');?></th>
+                                                <th><?php echo lang('escalas_horario');?></th>
+                                                <th><?php echo lang('escalas_action');?></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+    <?php foreach ($escalas as $escala) : ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($escala->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->profissional_nome, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->profissional_substituto_nome, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td>
+                                                    <?php echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see')); ?>
+                                                </td>
+                                            </tr>
+    <?php endforeach;?>
+                                        </tbody>
+                                    </table>
+                                </div>
+<?php endif; ?>
                             </div>
                         </div>
                     </div>

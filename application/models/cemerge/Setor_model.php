@@ -10,7 +10,14 @@ class Setor_model extends MY_Model {
     }
 
     public function get_setores_por_profissional($profissional_id) {
-        $query = $this->db->get_where('vw_profissionais_setor', ['id' => $profissional_id]);
+        $fields = 'setores.*';
+
+        $this->db->select($fields);
+        $this->db->from($this->table);
+        $this->db->join('profissionalsetor', 'setores.id = profissionalsetor.setor_id', 'left');
+        $this->db->join('profissionais', 'profissionais.id = profissionalsetor.profissional_id', 'left');
+        $this->db->where('profissional_id', $profissional_id);
+        $query = $this->db->get();
 
         return $query->result();
     }

@@ -47,15 +47,15 @@ class Escalas extends Admin_Controller
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
                 $tipoescala = $this->input->post('tipoescala');
-            }
 
-            // Realizando a busca
-            if ($this->form_validation->run() == true) {
+                $setores = $this->_get_setores($unidadehospitalar_id);
+
+                // Realizando a busca
                 $where = array(
                     'unidadehospitalar_id' => $unidadehospitalar_id,
                     'escalas.setor_id' => $setor_id,
-                    'dataplantao >=' => $datainicial,
-                    'dataplantao <=' => $datafinal,
+                    'escalas.dataplantao >=' => $datainicial,
+                    'escalas.dataplantao <=' => $datafinal,
                 );
 
                 if ($tipoescala == 0) {
@@ -65,17 +65,15 @@ class Escalas extends Admin_Controller
                 } elseif ($tipoescala == 2) {
                     $this->data['escalas'] = $this->escala_model->get_passagens_trocas($where, null, 'dataplantao, horainicialplantao');
                 }
+            } else {
+                $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
+                $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
+                $setores = array('' => 'Selecione um setor');
             }
 
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
-
-            if ($this->form_validation->run() == true) {
-                $setores = $this->_get_setores($unidadehospitalar_id);
-            } else {
-                $setores = array('' => 'Selecione um setor');
-            }
 
             $tiposescala = $this->_get_tipos_escala();
 
@@ -84,14 +82,14 @@ class Escalas extends Admin_Controller
                 'id'    => 'datainicial',
                 'type'  => 'date',
                 'class' => 'form-control',
-                'value' => date('Y') . "-" . date('m', strtotime("next month")) . "-01",
+                'value' => $datainicial,
             );
             $this->data['datafinal'] = array(
                 'name'  => 'datafinal',
                 'id'    => 'datafinal',
                 'type'  => 'date',
                 'class' => 'form-control',
-                'value' => date('Y') . "-" . date('m-t', strtotime("next month")),
+                'value' => $datafinal,
             );
             $this->data['tipoescala'] = array(
                 'name'  => 'tipoescala',

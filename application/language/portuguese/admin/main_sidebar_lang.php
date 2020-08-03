@@ -37,6 +37,8 @@ $lang['menu_search'] = 'Pesquisa';
 /* ****** */$lang['menu_plantoes']  = 'Meus Plantões';
 /* *********** */$lang['menu_plantoes_create']     = 'Criar';
 /* *********** */$lang['menu_plantoes_edit']       = 'Editar';
+/* *********** */$lang['menu_plantoes_propose']       = 'Proposta';
+/* *********** */$lang['menu_plantoes_confirm']       = 'Confirmação';
 
 /* ****** */$lang['menu_unidadeshospitalares']  = 'Unidades Hospitalares';
 /* *********** */$lang['menu_unidadeshospitalares_create']     = 'Criar';

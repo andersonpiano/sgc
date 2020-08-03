@@ -23,6 +23,7 @@ $lang['escalas_horario']             = 'Horário';
 $lang['escalas_horainicialplantao']  = 'Hora inicial';
 $lang['escalas_horafinalplantao']    = 'Hora final';
 $lang['escalas_profissional']        = 'Médico(a)';
+$lang['escalas_profissional_substituto']        = 'Médico(a) Substituto';
 $lang['escalas_action']              = 'Ação';
 $lang['escalas_active']              = 'Ativo';
 $lang['escalas_created_on']          = 'Criado em';

@@ -11,6 +11,7 @@ class Plantoes extends Admin_Controller {
 
     const STATUS_PASSAGEM_ACONFIRMAR = 0;
     const STATUS_PASSAGEM_CONFIRMADA = 1;
+    const STATUS_PASSAGEM_TROCA_PROPOSTA = 2;
 
     public function __construct()
     {
@@ -18,6 +19,7 @@ class Plantoes extends Admin_Controller {
 
         /* Load :: Common */
         $this->load->model('cemerge/escala_model');
+        $this->load->model('cemerge/passagemtroca_model');
         $this->load->model('cemerge/profissional_model');
         $this->load->model('cemerge/usuarioprofissional_model');
         $this->load->model('cemerge/unidadehospitalar_model');
@@ -41,7 +43,6 @@ class Plantoes extends Admin_Controller {
         $this->breadcrumbs->unshift(1, lang('menu_plantoes'), 'admin/plantoes');
     }
 
-
     public function index()
     {
         if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
@@ -55,14 +56,14 @@ class Plantoes extends Admin_Controller {
             $this->data['statuspassagem'] = $this->_get_status_passagem();
 
             /* Get all data */
-            if ($this->ion_auth->is_admin()) {
-                $this->data['plantoes'] = array();
-                $this->data['passagens'] = array();
-                $this->data['recebidos'] = array();
+            if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                $this->data['meus_plantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional($this->_profissional->id);
+                $this->data['recebidos'] = $this->escala_model->get_plantoes_recebidos_por_profissional($this->_profissional->id);
+                $this->data['passagens'] = $this->escala_model->get_passagens_de_plantao_por_profissional($this->_profissional->id);
             } else {
-                $this->data['plantoes'] = $this->escala_model->get_escalas(['profissional_id' => $this->_profissional->id]);
-                $this->data['passagens'] = $this->escala_model->get_escalas(['profissional_id' => $this->_profissional->id, 'profissionalsubstituto_id !=' => 0]);
-                $this->data['recebidos'] = $this->escala_model->get_escalas(['profissionalsubstituto_id' => $this->_profissional->id]);
+                $this->data['plantoes'] = array();
+                $this->data['recebidos'] = array();
+                $this->data['passagens'] = array();
             }
 
             /* Load Template */
@@ -88,9 +89,11 @@ class Plantoes extends Admin_Controller {
         $plantao->setor->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($plantao->setor->unidadehospitalar_id);
         $plantao->profissional = $this->profissional_model->get_by_id($plantao->profissional_id);
         $tipospassagem = $this->_get_tipos_passagem();
-
+        
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
+        // Removendo o profissional logado
+        unset($profissionais_setor[$plantao->profissional_id]);
 
         /* Validate form input */
         $this->form_validation->set_rules('tipopassagem', 'lang:plantoes_tipopassagem', 'required');
@@ -102,14 +105,17 @@ class Plantoes extends Admin_Controller {
             }
 
             if ($this->form_validation->run() == true) {
+                // escala_id, profissional_id, 
                 $data = array(
+                    'escala_id' => $plantao->id,
+                    'profissional_id' => $plantao->profissional_id,
                     'tipopassagem' => $this->input->post('tipopassagem'),
                     'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id'),
                     'datahorapassagem' => date('Y-m-d H:i:s'),
                     'statuspassagem' => 0,
                 );
 
-                if ($this->escala_model->update($plantao->id, $data)) {
+                if ($this->passagemtroca_model->insert($data)) {
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
 
                     if ($this->ion_auth->in_group($this->_permitted_groups)) {
@@ -178,6 +184,151 @@ class Plantoes extends Admin_Controller {
         $this->template->admin_render('admin/plantoes/tooffer', $this->data);
     }
 
+    /**
+     * Realiza uma proposta à uma troca de plantão
+     */
+    public function propose($id)
+    {
+        $id = (int) $id;
+
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
+            redirect('auth', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_plantoes_propose'), 'admin/plantoes/propose');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Load Data */
+        $plantao = $this->escala_model->get_escala_troca($id);
+        $this->data['tipospassagem'] = $this->_get_tipos_passagem();
+        $this->data['statuspassagem'] = $this->_get_status_passagem();
+
+        // Plantões disponíveis do profissional no mesmo setor
+        $plantoes = $this->escala_model->get_escalas_consolidadas_por_profissional(
+            $plantao->passagenstrocas_profissionalsubstituto_id,
+            $plantao->setor_id
+        );
+
+        $plantoes_profissional = $this->_get_plantoes_profissional($plantoes);
+
+        /* Validate form input */
+        $this->form_validation->set_rules('escalatroca_id', 'lang:plantoes_escalatroca', 'required');
+
+        if (isset($_POST) && ! empty($_POST)) {
+            if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
+                show_error($this->lang->line('error_csrf'));
+            }
+
+            // Dados do plantão de troca a serem atualizados
+            $data_plantao_troca = array();
+
+            $now = date('Y-m-d H:i:s');
+
+            $data = array(
+                'datahoraconfirmacao' => $now,
+                'statuspassagem' => 1
+            );
+            // Trocar pra 1 somente quando confirmar que aceita a data proposta
+            if ($plantao->tipopassagem == 1) {
+                // Adiciona dados do plantão de troca
+                $data['escalatroca_id'] = $this->input->post('escalatroca_id');
+
+                $data_plantao_troca = [
+                    'datahorapassagem' => $now,
+                    'tipopassagem' => $this::TIPO_PASSAGEM_TROCA,
+                    'statuspassagem' => $this::STATUS_PASSAGEM_CONFIRMADA,
+                    'datahoraconfirmacao' => $now,
+                    'profissionalsubstituto_id' => $plantao->profissional_id,
+                    'escalatroca_id' => $plantao->id,
+                ];
+            }
+
+            //$this->escala_model->update($data['escalatroca_id'], $data_plantao_troca)
+            //$this->form_validation->run() == true
+
+            if ($this->form_validation->run() == true
+                && $this->escala_model->update($plantao->id, $data)
+                && $this->escala_model->update($data['escalatroca_id'], $data_plantao_troca)
+            ) {
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
+
+                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                    redirect('admin/plantoes', 'refresh');
+                } else {
+                    redirect('admin', 'refresh');
+                }
+            } else {
+                $this->session->set_flashdata('message', $this->ion_auth->errors());
+
+                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                    redirect('auth', 'refresh');
+                } else {
+                    redirect('/', 'refresh');
+                }
+            }
+
+            if ($this->escala_model->update($plantao->id, $data)) {
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
+
+                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                    redirect('admin/plantoes', 'refresh');
+                } else {
+                    redirect('admin', 'refresh');
+                }
+            } else {
+                $this->session->set_flashdata('message', $this->ion_auth->errors());
+
+                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                    redirect('auth', 'refresh');
+                } else {
+                    redirect('/', 'refresh');
+                }
+            }
+        }
+
+        // display the edit user form
+        $this->data['csrf'] = $this->_get_csrf_nonce();
+
+        // set the flash data error message if there is one
+        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+        // pass the plantao to the view
+        $this->data['plantao'] = $plantao;
+
+        $this->data['dataplantao'] = array(
+            'name'  => 'dataplantao',
+            'id'    => 'dataplantao',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('dataplantao', $plantao->dataplantao)
+        );
+        $this->data['horainicialplantao'] = array(
+            'name'  => 'horainicialplantao',
+            'id'    => 'horainicialplantao',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('horainicialplantao', $plantao->horainicialplantao)
+        );
+        $this->data['horafinalplantao'] = array(
+            'name'  => 'horafinalplantao',
+            'id'    => 'horafinalplantao',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('horafinalplantao', $plantao->horafinalplantao)
+        );
+        $this->data['escalatroca_id'] = array(
+            'name'  => 'escalatroca_id',
+            'id'    => 'escalatroca_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'options' => $plantoes_profissional
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/plantoes/propose', $this->data);
+    }
+
     public function confirm($id)
     {
         $id = (int) $id;
@@ -228,6 +379,7 @@ class Plantoes extends Admin_Controller {
                 'datahoraconfirmacao' => $now,
                 'statuspassagem' => 1
             );
+            // Trocar pra 1 somente quando confirmar que aceita a data proposta
             if ($plantao->tipopassagem == 1) {
                 // Adiciona dados do plantão de troca
                 $data['escalatroca_id'] = $this->input->post('escalatroca_id');
@@ -376,6 +528,7 @@ class Plantoes extends Admin_Controller {
         return array(
             '0' => 'Sem confirmação',
             '1' => 'Confirmado',
+            '2' => 'Troca proposta',
         );
     }
 
