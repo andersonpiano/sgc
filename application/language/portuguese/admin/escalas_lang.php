@@ -12,6 +12,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['escalas_create']              = 'Criar escala';
 $lang['escalas_edit']                = 'Editar escala';
+$lang['escalas_find']                = 'Buscar escala';
+$lang['escalas_tipoescala']          = 'Tipo de escala';
 $lang['escalas_unidadehospitalar']   = 'Unidade hospitalar';
 $lang['escalas_setor']               = 'Setor';
 $lang['escalas_dataplantao']         = 'Data';

@@ -3,26 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?>
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(document).on('change', '#unidadehospitalar_id', function() {
-            var val = $(this).val();
-            var url = 'admin/escalas/setores/' + val;
-            $.ajax({
-                url: "<?php echo(site_url());?>" + url,
-                method: 'get',
-                dataType: 'json',
-                success: function(responseData) {
-                    $('#setor_id').empty();
-                    $.each(responseData, function(i, p) {
-                        $('#setor_id').append($('<option></option>').val(p.id).html(p.nome));
-                    });
-                },
-            });
-        });
-    });
-</script>
-
             <div class="content-wrapper">
                 <section class="content-header">
                     <?php echo $pagetitle; ?>
