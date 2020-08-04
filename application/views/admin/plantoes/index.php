@@ -4,6 +4,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
             <div class="content-wrapper">
+                <?php if (isset($message) or $this->session->flashdata('message')) : ?>
+                <section class="content-header">
+                    <div class="alert bg-warning alert-dismissible" role="alert">
+                        <?php echo(isset($message) ? $message : '');?>
+                        <?php echo($this->session->flashdata('message') ? $this->session->flashdata('message') : '');?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
                 <section class="content-header">
                     <?php echo $pagetitle; ?>
                     <?php echo $breadcrumb; ?>
@@ -129,7 +141,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <?php echo anchor('admin/plantoes/edit/'.$passagem->id, lang('actions_edit')); ?> &nbsp;
+<?php if ($passagem->passagenstrocas_statuspassagem == 2) :?>
+                                                    <?php echo anchor('admin/plantoes/acceptproposal/'.$passagem->id, lang('actions_accept')); ?> &nbsp;
+<?php endif;?>
                                                     <?php echo anchor('admin/plantoes/view/'.$passagem->id, lang('actions_see')); ?>
                                                 </td>
                                             </tr>

@@ -25,6 +25,7 @@ $lang['actions_delete']         = 'Excluir';
 $lang['actions_to_offer']       = 'Oferecer';
 $lang['actions_propose']        = 'Proposta';
 $lang['actions_confirm']        = 'Confirmar';
+$lang['actions_accept']         = 'Aceitar';
 
 $lang['actions_security_error']     = 'Erro de segurança';
 $lang['actions_file_install_exist'] = 'Vecê deve %s dos arquivos de instalação.';

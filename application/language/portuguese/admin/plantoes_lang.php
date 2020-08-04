@@ -35,5 +35,7 @@ $lang['plantoes_passagens']                      = 'Minhas Passagens';
 $lang['plantoes_recebidos']                      = 'Meus Plantões Recebidos';
 $lang['plantoes_trocas']                         = 'Minhas Trocas';
 $lang['plantoes_tooffer']                        = 'Ofertar Plantão';
+$lang['plantoes_propose']                        = 'Propor Plantão';
 $lang['plantoes_tipopassagem']                   = 'Tipo de Passagem';
 $lang['plantoes_statuspassagem']                 = 'Status Passagem';
+$lang['plantoes_sem_plantoes_disponiveis']       = 'Desculpe, mas você não tem plantões disponíveis para troca';

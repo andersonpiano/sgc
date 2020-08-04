@@ -39,6 +39,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_plantoes_edit']       = 'Editar';
 /* *********** */$lang['menu_plantoes_propose']       = 'Proposta';
 /* *********** */$lang['menu_plantoes_confirm']       = 'Confirmação';
+/* *********** */$lang['menu_plantoes_accept']       = 'Aceite de Proposta';
 
 /* ****** */$lang['menu_unidadeshospitalares']  = 'Unidades Hospitalares';
 /* *********** */$lang['menu_unidadeshospitalares_create']     = 'Criar';
