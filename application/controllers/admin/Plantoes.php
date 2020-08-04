@@ -13,6 +13,15 @@ class Plantoes extends Admin_Controller {
     const STATUS_PASSAGEM_CONFIRMADA = 1;
     const STATUS_PASSAGEM_TROCA_PROPOSTA = 2;
 
+    const ACAO_NOTIFICACAO_CESSAO_PLANTAO = 0;
+    const ACAO_NOTIFICACAO_TROCA_PLANTAO = 1;
+    const ACAO_NOTIFICACAO_OPORTUNIDADE = 2;
+    const ACAO_NOTIFICACAO_CONFIRMACAO_CESSAO = 3;
+    const ACAO_NOTIFICACAO_PROPOSTA_TROCA = 4;
+    const ACAO_NOTIFICACAO_ACEITE_PROPOSTA = 5;
+
+    const TIPO_NOTIFICACAO_EMAIL = 0;
+
     public function __construct()
     {
         parent::__construct($this->_permitted_groups);
@@ -24,7 +33,10 @@ class Plantoes extends Admin_Controller {
         $this->load->model('cemerge/usuarioprofissional_model');
         $this->load->model('cemerge/unidadehospitalar_model');
         $this->load->model('cemerge/setor_model');
+
         $this->lang->load('admin/plantoes');
+
+        $this->load->library('email');
 
         /* Profissional */
         $userId = $this->ion_auth->user()->row()->id;
@@ -387,15 +399,9 @@ class Plantoes extends Admin_Controller {
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Load Data */
-        $plantao = $this->escala_model->get_by_id($id);
-        $plantao->setor = $this->setor_model->get_by_id($plantao->setor_id);
-        $plantao->setor->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($plantao->setor->unidadehospitalar_id);
-        $plantao->profissional = $this->profissional_model->get_by_id($plantao->profissional_id);
-        $plantao->profissionalsubstituto = $this->profissional_model->get_by_id($plantao->profissionalsubstituto_id);
+        $plantao = $this->escala_model->get_escala_passada_a_confirmar($id);
         $this->data['tipospassagem'] = $this->_get_tipos_passagem();
         $this->data['statuspassagem'] = $this->_get_status_passagem();
-
-        exit;
 
         if (isset($_POST) && ! empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
@@ -409,8 +415,13 @@ class Plantoes extends Admin_Controller {
                 'statuspassagem' => 1
             );
 
-            if ($this->escala_model->update($plantao->id, $data)) {
+            if ($this->passagemtroca_model->update($plantao->passagenstrocas_id, $data)) {
                 $this->session->set_flashdata('message', $this->ion_auth->messages());
+
+                /* Send notifications */
+                $this->_sendNotifications(
+                    $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CONFIRMACAO_CESSAO
+                );
 
                 if ($this->ion_auth->in_group($this->_permitted_groups)) {
                     redirect('admin/plantoes', 'refresh');
@@ -421,9 +432,9 @@ class Plantoes extends Admin_Controller {
                 $this->session->set_flashdata('message', $this->ion_auth->errors());
 
                 if ($this->ion_auth->in_group($this->_permitted_groups)) {
-                    redirect('auth', 'refresh');
+                    redirect('admin/plantoes', 'refresh');
                 } else {
-                    redirect('/', 'refresh');
+                    redirect('admin', 'refresh');
                 }
             }
         }
@@ -458,16 +469,6 @@ class Plantoes extends Admin_Controller {
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('horafinalplantao', $plantao->horafinalplantao)
         );
-        // Passagem por troca
-        if ($plantao->tipopassagem == 1) {
-            $this->data['escalatroca_id'] = array(
-                'name'  => 'escalatroca_id',
-                'id'    => 'escalatroca_id',
-                'type'  => 'select',
-                'class' => 'form-control',
-                'options' => $plantoes_profissional
-            );
-        }
 
         /* Load Template */
         $this->template->admin_render('admin/plantoes/confirm', $this->data);
@@ -529,6 +530,47 @@ class Plantoes extends Admin_Controller {
         }
 
         return $profissionaissetor;
+    }
+
+    public function _sendNotifications($plantao, $tipo_notificacao, $acao_notificacao)
+    {
+        /* Initialize email */
+        $ci_mail_config = $this->config->item('mail');
+        $this->email->initialize($ci_mail_config);
+
+        if ($acao_notificacao == $this::ACAO_NOTIFICACAO_CONFIRMACAO_CESSAO) {
+            $data = array(
+                'profissional_passagem_nome' => $plantao->profissional_passagem_nome,
+                'profissional_substituto_nome' => $plantao->profissional_substituto_nome,
+                'dataplantao' => $plantao->dataplantao,
+                'horainicialplantao' => $plantao->horainicialplantao,
+                'horafinalplantao' => $plantao->horafinalplantao,
+            );
+            $subject = 'CEMERGE - Aceite de passagem de plantão';
+            $message = $this->load->view(
+                'admin/_templates/email/confirmacao_cessao.tpl.php', $data, true
+            );
+        }
+
+        if ($tipo_notificacao == $this::TIPO_NOTIFICACAO_EMAIL) {
+            $this->email->clear();
+            $this->email->from(
+                $this->config->item('admin_email', 'ion_auth'),
+                $this->config->item('site_title', 'ion_auth')
+            );
+            $this->email->to('dieisonroberto@gmail.com'); // obter o email do profissional cedente
+            //$plantao->profissional_passagem_email
+            $this->email->subject($subject);
+            $this->email->message($message);
+
+            if ($this->email->send()) {
+                $this->session->set_flashdata('message', 'E-mail enviado com sucesso.');
+                return true;
+            } else {
+                $this->session->set_flashdata('message', 'Ocorreu um erro ao enviar o e-mail.');
+                return false;
+            }
+        }
     }
 
     public function _get_csrf_nonce()

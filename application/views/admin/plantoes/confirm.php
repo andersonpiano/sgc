@@ -23,13 +23,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <?php echo lang('plantoes_unidadehospitalar', 'unidadehospitalar', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4 ">
-                                                <?php echo($plantao->setor->unidadehospitalar->razaosocial);?>
+                                                <?php echo($plantao->unidadehospitalar_razaosocial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('plantoes_setor', 'setor', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo($plantao->setor->nome);?>
+                                                <?php echo($plantao->setor_nome);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -59,29 +59,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <?php echo lang('plantoes_tipopassagem', 'tipopassagem', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo $tipospassagem[$plantao->tipopassagem];?>
+                                                <?php echo $tipospassagem[$plantao->passagenstrocas_tipopassagem];?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('plantoes_profissional', 'profissionaltitular_id', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo($plantao->profissional->nome);?>
+                                                <?php echo($plantao->profissional_passagem_nome);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('plantoes_profissional_substituto', 'profissionalsubstituto_id', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo $plantao->profissionalsubstituto->nome;?>
+                                                <?php echo $plantao->profissional_substituto_nome;?>
                                             </div>
                                         </div>
-<?php if($plantao->tipopassagem == 1) :?>
-                                        <div class="form-group">
-                                            <?php echo lang('plantoes_escalatroca', 'escalatroca_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
-                                                <?php echo form_dropdown($escalatroca_id);?>
-                                            </div>
-                                        </div>
-<?php endif;?>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <?php echo form_hidden('id', $plantao->id);?>

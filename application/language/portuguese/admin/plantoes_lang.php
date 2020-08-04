@@ -39,3 +39,4 @@ $lang['plantoes_propose']                        = 'Propor Plantão';
 $lang['plantoes_tipopassagem']                   = 'Tipo de Passagem';
 $lang['plantoes_statuspassagem']                 = 'Status Passagem';
 $lang['plantoes_sem_plantoes_disponiveis']       = 'Desculpe, mas você não tem plantões disponíveis para troca';
+$lang['plantoes_email_confirmacao_cessao']       = 'Confirmação de aceite de cessão de plantão';
