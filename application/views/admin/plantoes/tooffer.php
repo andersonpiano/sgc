@@ -23,13 +23,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <?php echo lang('plantoes_unidadehospitalar', 'unidadehospitalar', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4 ">
-                                                <?php echo($plantao->setor->unidadehospitalar->razaosocial);?>
+                                                <?php echo($plantao->unidadehospitalar_razaosocial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('plantoes_setor', 'setor', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo($plantao->setor->nome);?>
+                                                <?php echo($plantao->setor_nome);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -59,7 +59,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <?php echo lang('plantoes_profissional', 'profissionaltitular_id', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo($plantao->profissional->nome);?>
+                                                <?php
+                                                if (isset($plantao->profissional_substituto_nome)) {
+                                                    echo($plantao->profissional_substituto_nome);
+                                                } else {
+                                                    echo($plantao->profissional_passagem_nome);
+                                                }
+                                                ?>
                                             </div>
                                         </div>
                                         <div class="form-group">

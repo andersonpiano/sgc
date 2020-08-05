@@ -439,8 +439,11 @@ class Escala_model extends MY_Model
         $this->db->join('setores', 'setores.id = escalas.setor_id');
         $this->db->join('unidadeshospitalares', 'unidadeshospitalares.id = setores.unidadehospitalar_id');
         $this->db->where('escalas.id', $escala_id);
-        $this->db->order_by('dataplantao, horainicialplantao');
+        $this->db->order_by('passagenstrocas.datahorapassagem');
+        $this->db->limit('1');
         $query = $this->db->get();
+
+        //var_dump($this->db->get_compiled_select());exit;
 
         return $query->row();
     }
@@ -448,5 +451,38 @@ class Escala_model extends MY_Model
     public function get_escala($where)
     {
         return $this->db->get_where($this->table, $where)->row();
+    }
+
+    public function get_escala_by_id($escala_id)
+    {
+        $fields = 'escalas.*, ';
+        $fields .= 'profissional_passagem.registro as profissional_passagem_registro, ';
+        $fields .= 'profissional_passagem.nome as profissional_passagem_nome, ';
+        $fields .= 'profissional_passagem.email as profissional_passagem_email, ';
+        $fields .= 'profissional_substituto.registro as profissional_substituto_registro, ';
+        $fields .= 'profissional_substituto.nome as profissional_substituto_nome, ';
+        $fields .= 'profissional_substituto.email as profissional_substituto_email, ';
+        $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
+        $fields .= 'passagenstrocas.profissionalsubstituto_id as passagenstrocas_profissionalsubstituto_id, ';
+        $fields .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, ';
+        $fields .= 'setores.nome as setor_nome, ';
+        $fields .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial ';
+        $this->db->select($fields);
+        $this->db->from($this->table);
+        $this->db->join(
+            'passagenstrocas',
+            'passagenstrocas.escala_id = escalas.id and passagenstrocas.statuspassagem = 1',
+            'left'
+        );
+        $this->db->join('profissionais profissional_passagem', 'profissional_passagem.id = escalas.profissional_id');
+        $this->db->join('profissionais profissional_substituto', 'profissional_substituto.id = passagenstrocas.profissionalsubstituto_id', 'left');
+        $this->db->join('setores', 'setores.id = escalas.setor_id');
+        $this->db->join('unidadeshospitalares', 'unidadeshospitalares.id = setores.unidadehospitalar_id');
+        $this->db->where('escalas.id', $escala_id);
+        $this->db->order_by('passagenstrocas.datahorapassagem');
+        $this->db->limit('1');
+        $query = $this->db->get();
+
+        return $query->row();
     }
 }

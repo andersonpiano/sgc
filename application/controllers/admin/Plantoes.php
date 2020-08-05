@@ -96,12 +96,9 @@ class Plantoes extends Admin_Controller {
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Load Data */
-        $plantao = $this->escala_model->get_by_id($id);
-        $plantao->setor = $this->setor_model->get_by_id($plantao->setor_id);
-        $plantao->setor->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($plantao->setor->unidadehospitalar_id);
-        $plantao->profissional = $this->profissional_model->get_by_id($plantao->profissional_id);
+        $plantao = $this->escala_model->get_escala_by_id($id);
         $tipospassagem = $this->_get_tipos_passagem();
-        
+
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
         // Removendo o profissional logado
@@ -117,10 +114,14 @@ class Plantoes extends Admin_Controller {
             }
 
             if ($this->form_validation->run() == true) {
-                // escala_id, profissional_id, 
+                // No caso de plantão já passado por outro profissional
+                $profissional_passagem_id = $plantao->profissional_id;
+                if (isset($plantao->passagenstrocas_profissionalsubstituto_id)) {
+                    $profissional_passagem_id = $plantao->passagenstrocas_profissionalsubstituto_id;
+                }
                 $data = array(
                     'escala_id' => $plantao->id,
-                    'profissional_id' => $plantao->profissional_id,
+                    'profissional_id' => $profissional_passagem_id,
                     'tipopassagem' => $this->input->post('tipopassagem'),
                     'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id'),
                     'datahorapassagem' => date('Y-m-d H:i:s'),
@@ -128,7 +129,16 @@ class Plantoes extends Admin_Controller {
                 );
 
                 if ($this->passagemtroca_model->insert($data)) {
-                    $this->session->set_flashdata('message', $this->ion_auth->messages());
+                    //$this->session->set_flashdata('message', $this->ion_auth->messages());
+                    /* Send notifications */
+                    $notification_send = $this->_sendNotifications(
+                        $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO
+                    );
+                    if ($notification_send) {
+                        $this->session->set_flashdata('message', 'E-mail enviado com sucesso.');
+                    } else {
+                        $this->session->set_flashdata('message', 'Ocorreu um erro ao enviar o e-mail.');
+                    }
 
                     if ($this->ion_auth->in_group($this->_permitted_groups)) {
                         redirect('admin/plantoes', 'refresh');
@@ -419,9 +429,14 @@ class Plantoes extends Admin_Controller {
                 $this->session->set_flashdata('message', $this->ion_auth->messages());
 
                 /* Send notifications */
-                $this->_sendNotifications(
+                $notification_send = $this->_sendNotifications(
                     $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CONFIRMACAO_CESSAO
                 );
+                if ($notification_send) {
+                    $this->session->set_flashdata('message', 'E-mail enviado com sucesso.');
+                } else {
+                    $this->session->set_flashdata('message', 'Ocorreu um erro ao enviar o e-mail.');
+                }
 
                 if ($this->ion_auth->in_group($this->_permitted_groups)) {
                     redirect('admin/plantoes', 'refresh');
@@ -545,11 +560,31 @@ class Plantoes extends Admin_Controller {
                 'dataplantao' => $plantao->dataplantao,
                 'horainicialplantao' => $plantao->horainicialplantao,
                 'horafinalplantao' => $plantao->horafinalplantao,
+                'unidadehospitalar' => $plantao->unidadehospitalar_razaosocial,
+                'setor' => $plantao->setor_nome,
             );
             $subject = 'CEMERGE - Aceite de passagem de plantão';
             $message = $this->load->view(
                 'admin/_templates/email/confirmacao_cessao.tpl.php', $data, true
             );
+            $destinatario = $plantao->profissional_passagem_email;
+        }
+
+        if ($acao_notificacao == $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO) {
+            $data = array(
+                'profissional_passagem_nome' => $plantao->profissional_passagem_nome,
+                'profissional_substituto_nome' => $plantao->profissional_substituto_nome,
+                'dataplantao' => $plantao->dataplantao,
+                'horainicialplantao' => $plantao->horainicialplantao,
+                'horafinalplantao' => $plantao->horafinalplantao,
+                'unidadehospitalar' => $plantao->unidadehospitalar_razaosocial,
+                'setor' => $plantao->setor_nome,
+            );
+            $subject = 'CEMERGE - Oferta de plantão';
+            $message = $this->load->view(
+                'admin/_templates/email/aviso_cessao.tpl.php', $data, true
+            );
+            $destinatario = $plantao->profissional_substituto_email;
         }
 
         if ($tipo_notificacao == $this::TIPO_NOTIFICACAO_EMAIL) {
@@ -558,18 +593,12 @@ class Plantoes extends Admin_Controller {
                 $this->config->item('admin_email', 'ion_auth'),
                 $this->config->item('site_title', 'ion_auth')
             );
-            $this->email->to('dieisonroberto@gmail.com'); // obter o email do profissional cedente
-            //$plantao->profissional_passagem_email
+            $this->email->to($destinatario);
             $this->email->subject($subject);
             $this->email->message($message);
+            $email_enviado = $this->email->send();
 
-            if ($this->email->send()) {
-                $this->session->set_flashdata('message', 'E-mail enviado com sucesso.');
-                return true;
-            } else {
-                $this->session->set_flashdata('message', 'Ocorreu um erro ao enviar o e-mail.');
-                return false;
-            }
+            return $email_enviado;
         }
     }
 
