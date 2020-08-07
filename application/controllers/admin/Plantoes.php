@@ -95,6 +95,7 @@ class Plantoes extends Admin_Controller {
                 $this->data['statuspassagem'] = $this->_get_status_passagem();
 
                 /* Get all data */
+                // Tratar o tipo visualizacao calendário para não executar busca no banco desnecessariamente
                 if ($this->ion_auth->in_group($this->_permitted_groups)) {
                     switch ($tipoescala) {
                     case 0: // Minha escala consolidada
@@ -185,6 +186,12 @@ class Plantoes extends Admin_Controller {
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('setor_id'),
                 'options' => $setores,
+            );
+            $this->data['profissional_id'] = array(
+                'name'  => 'profissional_id',
+                'id'    => 'profissional_id',
+                'type'  => 'hidden',
+                'value' => $this->_profissional->id
             );
 
             /* Load Template */
@@ -696,7 +703,6 @@ class Plantoes extends Admin_Controller {
             '0' => 'Minha escala consolidada',
             '1' => 'Minhas trocas e passagens',
             '2' => 'Consolidada do setor',
-            '3' => 'Original do setor',
         );
 
         return $tipos_escala;
@@ -853,6 +859,27 @@ class Plantoes extends Admin_Controller {
         $mes = (int)$mes;
 
         $plantoes = $this->escala_model->get_escalas_consolidadas_calendario($mes, $this->mobile_detect->isMobile());
+
+        echo(json_encode($plantoes));
+        exit;
+    }
+
+    /**
+     * Busca os plantões para compor o calendário
+     */
+    public function minhaescalaconsolidada()
+    {
+        $mes = (int)$this->uri->segment(5, 0);
+        $setor = (int)$this->uri->segment(7, 0);
+        $profissional = (int)$this->uri->segment(9, 0);
+
+        $plantoes = array();
+
+        if ($mes != 0 and $setor != 0 and $profissional != 0) {
+            $plantoes = $this->escala_model->get_minha_escala_consolidada_calendario(
+                $mes, $setor, $profissional, $this->mobile_detect->isMobile()
+            );
+        }
 
         echo(json_encode($plantoes));
         exit;

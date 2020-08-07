@@ -31,6 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                                 <div class="box-body">
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala')); ?>
+                                        <?php echo form_input($profissional_id);?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
@@ -286,47 +287,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <?php //echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see')); ?>
-                                                </td>
-                                            </tr>
-        <?php endforeach;?>
-                                        </tbody>
-                                    </table>
-                                </div>
-    <?php endif; ?>
-    <?php if ($tipoescala['value'] == 3) : ?>
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">
-                                        <?php
-                                            if (sizeof($escalas) > 0) {
-                                                $unidadehospitalar = $escalas[0]->unidadehospitalar_razaosocial;
-                                                echo(lang('escalas_unidadehospitalar') . ": " . $unidadehospitalar);
-                                            } else {
-                                                echo('A pesquisa não retornou resultados.');
-                                            }
-                                        ?>
-                                    </h3>
-                                </div>
-                                <div class="box-body">
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th><?php echo lang('escalas_setor');?></th>
-                                                <th><?php echo lang('escalas_profissional');?></th>
-                                                <th><?php echo lang('escalas_dataplantao');?></th>
-                                                <th><?php echo lang('escalas_horario');?></th>
-                                                <th><?php //echo lang('escalas_action');?></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-        <?php foreach ($escalas as $escala) : ?>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo htmlspecialchars($escala->profissional_nome, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td>
-                                                    <?php //echo anchor('admin/escalas/edit/'.$escala->id, lang('actions_edit')); ?> &nbsp;
                                                     <?php //echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see')); ?>
                                                 </td>
                                             </tr>

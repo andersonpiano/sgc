@@ -114,6 +114,62 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function get_minha_escala_consolidada_calendario(
+        $mes, $setor, $profissional, $is_mobile
+    ) {
+        $sql = 'select profissionais.nome as title, ';
+        if ($is_mobile) {
+            $sql .= 'escalas.dataplantao as start, ';
+            $sql .= 'escalas.dataplantao as end, ';
+        } else {
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horainicialplantao) as start, ';
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horafinalplantao) as end, ';
+            //$sql .= 'concat(escalas.datafinalplantao, \'T\', escalas.horafinalplantao) as end, ';
+        }
+        $sql .= 'escalas.id, ';
+        $sql .= '\'Original\' as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join profissionais on (escalas.profissional_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        //$sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
+        $sql .= 'where profissionais.id = ' . $profissional . ' ';
+        $sql .= 'and escalas.id not in ';
+        $sql .= '(select escala_id ';
+        $sql .= 'from passagenstrocas ';
+        $sql .= 'where escala_id = escalas.id) ';
+        $sql .= 'and escalas.setor_id = ' . $setor . ' ';
+        $sql .= 'and month(escalas.dataplantao) = ' . $mes . ' ';
+        $sql .= 'union ';
+        $sql .= 'select profissionais.nome as title, ';
+        if ($is_mobile) {
+            $sql .= 'escalas.dataplantao as start, ';
+            $sql .= 'escalas.dataplantao as end, ';
+        } else {
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horainicialplantao) as start, ';
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horafinalplantao) as end, ';
+            //$sql .= 'concat(escalas.datafinalplantao, \'T\', escalas.horafinalplantao) as end, ';
+        }
+        $sql .= 'escalas.id, ';
+        $sql .= 'case ';
+        $sql .= 'when passagenstrocas.tipopassagem=0 then \'Cessão\' ';
+        $sql .= 'when passagenstrocas.tipopassagem=1 then \'Troca\' ';
+        $sql .= 'end as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join passagenstrocas on (escalas.id = passagenstrocas.escala_id) ';
+        $sql .= 'join profissionais on (passagenstrocas.profissionalsubstituto_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        //$sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
+        $sql .= 'where profissionais.id = ' . $profissional . ' ';
+        $sql .= 'and passagenstrocas.statuspassagem = 1 ';
+        $sql .= 'and escalas.setor_id = ' . $setor . ' ';
+        $sql .= 'and month(escalas.dataplantao) = ' . $mes . ' ';
+        $sql .= 'order by start';
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
     public function get_passagens_trocas($where, $where_in = null, $order_by = null)
     {
         $fields = 'escalas.*, profissionais.id as profissional_id, ';
