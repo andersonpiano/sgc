@@ -95,20 +95,38 @@ class Plantoes extends Admin_Controller {
                 $this->data['statuspassagem'] = $this->_get_status_passagem();
 
                 /* Get all data */
-                //if ($tipoescala == 0) {
                 if ($this->ion_auth->in_group($this->_permitted_groups)) {
-                    $this->data['meus_plantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional($this->_profissional->id);
-                    $this->data['recebidos'] = $this->escala_model->get_plantoes_recebidos_por_profissional($this->_profissional->id);
-                    $this->data['passagens'] = $this->escala_model->get_passagens_de_plantao_por_profissional($this->_profissional->id);
+                    switch ($tipoescala) {
+                    case 0: // Minha escala consolidada
+                        $this->data['meus_plantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional($this->_profissional->id);
+                        break;
+                    case 1: // Minhas trocas e passagens
+                        //$this->data['escalas'] = $this->escala_model->get_passagens_trocas($where, null, 'dataplantao, horainicialplantao');
+                        $this->data['recebidos'] = $this->escala_model->get_plantoes_recebidos_por_profissional($this->_profissional->id);
+                        $this->data['passagens'] = $this->escala_model->get_passagens_de_plantao_por_profissional($this->_profissional->id);
+                        break;
+                    case 2: // Consolidada do setor
+                        $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, 'dataplantao, horainicialplantao');
+                        break;
+                    case 3:
+                        // Original do setor
+                        $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
+                        break;
+                    default:
+                        break;
+
+                    }
                 } else {
                     $this->data['meus_plantoes'] = array();
                     $this->data['recebidos'] = array();
                     $this->data['passagens'] = array();
+                    $this->data['escalas'] = array();
                 }
             } else {
                 $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
                 $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
                 $setores = array('' => 'Selecione um setor');
+                $this->data['escalas'] = array();
                 $this->data['meus_plantoes'] = array();
                 $this->data['recebidos'] = array();
                 $this->data['passagens'] = array();
@@ -675,9 +693,10 @@ class Plantoes extends Admin_Controller {
     public function _get_tipos_escala()
     {
         $tipos_escala = array(
-            '0' => 'Original',
-            '1' => 'Consolidada',
-            '2' => 'Trocas e Passagens',
+            '0' => 'Minha escala consolidada',
+            '1' => 'Minhas trocas e passagens',
+            '2' => 'Consolidada do setor',
+            '3' => 'Original do setor',
         );
 
         return $tipos_escala;
