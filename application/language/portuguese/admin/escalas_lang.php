@@ -14,6 +14,7 @@ $lang['escalas_create']              = 'Criar escala';
 $lang['escalas_edit']                = 'Editar escala';
 $lang['escalas_find']                = 'Buscar escala';
 $lang['escalas_tipoescala']          = 'Tipo de escala';
+$lang['escalas_tipovisualizacao']    = 'Tipo de visualização';
 $lang['escalas_unidadehospitalar']   = 'Unidade hospitalar';
 $lang['escalas_setor']               = 'Setor';
 $lang['escalas_dataplantao']         = 'Data';

@@ -1,0 +1,32 @@
+Pendências
+
+Funcionalidades
+- Permitir voltar à página desejada caso redirecione para o login
+- Atribuir plantões aos profissionais
+- Vincular usuários aos profissionais
+- Vincular profissional ao setor
+- Organizar as ordens das listas
+OK - Enviar e-mail com cessões
+OK - Enviar e-mail com trocas
+- Enviar e-mail com oportunidades
+- Adaptar a lista de plantões dos profissionais para mobile retrato
+- Ver possível erro na geração de escalas (estava pulando dias pares o último horário)
+- Corrigir e melhorar a view de plantões
+- Alertar e permitir corrigir uma proposta de troca caso não seja aceita
+OK - Definir uma solução para plantões passados ou trocados várias vezes
+  (Algum indicador que informe que é a passagem ou troca válida)
+- Revisar notificações
+- A cooperativa pode oferecer plantões indicando vários médicos.
+  O primeiro que aceitar, muda o status da oferta e seu profissional_id é gravado.
+- Opção de selecionar mais de um hospital e mais de um setor, na lista de escalas e plantões.
+- Criar visão de calendário com os plantões e seus status.
+- 
+
+Regras
+- Apenas plantões futuros podem ser editados
+- Checar se o plantão ou troca confirmada é realmente do profissional logado
+- Cessões e trocas podem ser feitas até o horário do plantão
+- Não permitir profissional com mesmo horário em plantões diferentes.
+- Não permitir profissional aceitar plantão cedido ou trocado no mesmo
+  horário que ele tenha um plantão ativo.
+- 

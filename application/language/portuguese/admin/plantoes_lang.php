@@ -31,6 +31,7 @@ $lang['plantoes_inactive']                       = 'Inativo';
 $lang['plantoes_status']                         = 'Condição';
 $lang['plantoes_box_title']                      = 'Plantão';
 $lang['plantoes_plantoes']                       = 'Meus Plantões';
+$lang['plantoes_find']                           = 'Buscar Plantões';
 $lang['plantoes_passagens']                      = 'Minhas Passagens';
 $lang['plantoes_recebidos']                      = 'Meus Plantões Recebidos';
 $lang['plantoes_trocas']                         = 'Minhas Trocas';

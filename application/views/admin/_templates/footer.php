@@ -30,6 +30,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php if ($this->router->fetch_class() == 'escalas'): ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/escalas.js'); ?>"></script>
 <?php endif; ?>
+<?php if ($this->router->fetch_class() == 'plantoes'): ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/plantoes.js'); ?>"></script>
+<?php endif; ?>
         <script src="<?php echo base_url($frameworks_dir . '/adminlte/js/adminlte.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/domprojects/js/dp.min.js'); ?>"></script>
     </body>

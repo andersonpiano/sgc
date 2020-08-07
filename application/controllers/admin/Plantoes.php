@@ -35,6 +35,7 @@ class Plantoes extends Admin_Controller {
         $this->load->model('cemerge/setor_model');
 
         $this->lang->load('admin/plantoes');
+        $this->lang->load('admin/escalas');
 
         $this->load->library('email');
 
@@ -63,20 +64,110 @@ class Plantoes extends Admin_Controller {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-            // Tipos e status de passagem para exibição
-            $this->data['tipospassagem'] = $this->_get_tipos_passagem();
-            $this->data['statuspassagem'] = $this->_get_status_passagem();
+            /* Validate form input */
+            $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
+            $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
+            $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
+            $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
+            $this->form_validation->set_rules('tipoescala', 'lang:escalas_tipoescala', 'required');
+            $this->form_validation->set_rules('tipovisualizacao', 'lang:escalas_tipovisualizacao', 'required');
 
-            /* Get all data */
-            if ($this->ion_auth->in_group($this->_permitted_groups)) {
-                $this->data['meus_plantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional($this->_profissional->id);
-                $this->data['recebidos'] = $this->escala_model->get_plantoes_recebidos_por_profissional($this->_profissional->id);
-                $this->data['passagens'] = $this->escala_model->get_passagens_de_plantao_por_profissional($this->_profissional->id);
+            if ($this->form_validation->run() == true) {
+                $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+                $setor_id = $this->input->post('setor_id');
+                $datainicial = $this->input->post('datainicial');
+                $datafinal = $this->input->post('datafinal');
+                $tipoescala = $this->input->post('tipoescala');
+                $tipovisualizacao = $this->input->post('tipovisualizacao');
+
+                $setores = $this->_get_setores($unidadehospitalar_id);
+
+                // Realizando a busca
+                $where = array(
+                    'unidadehospitalar_id' => $unidadehospitalar_id,
+                    'escalas.setor_id' => $setor_id,
+                    'escalas.dataplantao >=' => $datainicial,
+                    'escalas.dataplantao <=' => $datafinal,
+                );
+
+                // Tipos e status de passagem para exibição
+                $this->data['tipospassagem'] = $this->_get_tipos_passagem();
+                $this->data['statuspassagem'] = $this->_get_status_passagem();
+
+                /* Get all data */
+                //if ($tipoescala == 0) {
+                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                    $this->data['meus_plantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional($this->_profissional->id);
+                    $this->data['recebidos'] = $this->escala_model->get_plantoes_recebidos_por_profissional($this->_profissional->id);
+                    $this->data['passagens'] = $this->escala_model->get_passagens_de_plantao_por_profissional($this->_profissional->id);
+                } else {
+                    $this->data['meus_plantoes'] = array();
+                    $this->data['recebidos'] = array();
+                    $this->data['passagens'] = array();
+                }
             } else {
-                $this->data['plantoes'] = array();
+                $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
+                $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
+                $setores = array('' => 'Selecione um setor');
+                $this->data['meus_plantoes'] = array();
                 $this->data['recebidos'] = array();
                 $this->data['passagens'] = array();
+                $this->data['tipovisualizacao'] = 0;
             }
+
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+            $unidadeshospitalares = $this->_get_unidadeshospitalares();
+
+            $tiposescala = $this->_get_tipos_escala();
+            $tiposvisualizacao = $this->_get_tipos_visualizacao();
+
+            $this->data['datainicial'] = array(
+                'name'  => 'datainicial',
+                'id'    => 'datainicial',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datainicial,
+            );
+            $this->data['datafinal'] = array(
+                'name'  => 'datafinal',
+                'id'    => 'datafinal',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datafinal,
+            );
+            $this->data['tipoescala'] = array(
+                'name'  => 'tipoescala',
+                'id'    => 'tipoescala',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipoescala'),
+                'options' => $tiposescala,
+            );
+            $this->data['tipovisualizacao'] = array(
+                'name'  => 'tipovisualizacao',
+                'id'    => 'tipovisualizacao',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipovisualizacao'),
+                'options' => $tiposvisualizacao,
+            );
+            $this->data['unidadehospitalar_id'] = array(
+                'name'  => 'unidadehospitalar_id',
+                'id'    => 'unidadehospitalar_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+                'options' => $unidadeshospitalares,
+            );
+            $this->data['setor_id'] = array(
+                'name'  => 'setor_id',
+                'id'    => 'setor_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('setor_id'),
+                'options' => $setores,
+            );
 
             /* Load Template */
             $this->template->admin_render('admin/plantoes/index', $this->data);
@@ -257,7 +348,17 @@ class Plantoes extends Admin_Controller {
             if ($this->form_validation->run() == true
                 && $this->passagemtroca_model->update($plantao->passagenstrocas_id, $data_proposta)
             ) {
-                $this->session->set_flashdata('message', $this->ion_auth->messages());
+                //$this->session->set_flashdata('message', $this->ion_auth->messages());
+
+                /* Send notifications */
+                $notification_send = $this->_sendNotifications(
+                    $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_PROPOSTA_TROCA
+                );
+                if ($notification_send) {
+                    $this->session->set_flashdata('message', 'E-mail enviado com sucesso.');
+                } else {
+                    $this->session->set_flashdata('message', 'Ocorreu um erro ao enviar o e-mail.');
+                }
 
                 if ($this->ion_auth->in_group($this->_permitted_groups)) {
                     redirect('admin/plantoes', 'refresh');
@@ -365,7 +466,17 @@ class Plantoes extends Admin_Controller {
             if ($this->passagemtroca_model->update($plantao->passagenstrocas_id, $data)
                 && $this->passagemtroca_model->insert($data_plantao_troca)
             ) {
-                $this->session->set_flashdata('message', $this->ion_auth->messages());
+                //$this->session->set_flashdata('message', $this->ion_auth->messages());
+
+                /* Send notifications */
+                $notification_send = $this->_sendNotifications(
+                    $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_ACEITE_PROPOSTA
+                );
+                if ($notification_send) {
+                    $this->session->set_flashdata('message', 'E-mail enviado com sucesso.');
+                } else {
+                    $this->session->set_flashdata('message', 'Ocorreu um erro ao enviar o e-mail.');
+                }
 
                 if ($this->ion_auth->in_group($this->_permitted_groups)) {
                     redirect('admin/plantoes', 'refresh');
@@ -547,11 +658,72 @@ class Plantoes extends Admin_Controller {
         return $profissionaissetor;
     }
 
+    public function _get_unidadeshospitalares()
+    {
+        $unidades = $this->unidadehospitalar_model->get_all();
+
+        $unidadeshospitalares = array(
+            '' => 'Selecione uma unidade hospitalar',
+        );
+        foreach ($unidades as $unidade) {
+            $unidadeshospitalares[$unidade->id] = $unidade->razaosocial;
+        }
+
+        return $unidadeshospitalares;
+    }
+
+    public function _get_tipos_escala()
+    {
+        $tipos_escala = array(
+            '0' => 'Original',
+            '1' => 'Consolidada',
+            '2' => 'Trocas e Passagens',
+        );
+
+        return $tipos_escala;
+    }
+
+    public function _get_tipos_visualizacao()
+    {
+        $tipos_visualizacao = array(
+            '0' => 'Lista',
+            '1' => 'Calendário',
+        );
+
+        return $tipos_visualizacao;
+    }
+
+    public function _get_setores($unidadehospitalar_id)
+    {
+        $setores_por_unidade = $this->setor_model->get_where(['unidadehospitalar_id' => $unidadehospitalar_id]);
+
+        $setores = array(
+            '' => 'Selecione um setor',
+        );
+        foreach ($setores_por_unidade as $setor) {
+            $setores[$setor->id] = $setor->nome;
+        }
+
+        return $setores;
+    }
+
+    public function setores($id)
+    {
+        $id = (int) $id;
+
+        $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id]);
+
+        echo json_encode($setores);
+        exit;
+    }
+
     public function _sendNotifications($plantao, $tipo_notificacao, $acao_notificacao)
     {
         /* Initialize email */
         $ci_mail_config = $this->config->item('mail');
         $this->email->initialize($ci_mail_config);
+
+        $subject = 'CEMERGE - Notificação';
 
         if ($acao_notificacao == $this::ACAO_NOTIFICACAO_CONFIRMACAO_CESSAO) {
             $data = array(
@@ -563,7 +735,6 @@ class Plantoes extends Admin_Controller {
                 'unidadehospitalar' => $plantao->unidadehospitalar_razaosocial,
                 'setor' => $plantao->setor_nome,
             );
-            $subject = 'CEMERGE - Aceite de passagem de plantão';
             $message = $this->load->view(
                 'admin/_templates/email/confirmacao_cessao.tpl.php', $data, true
             );
@@ -580,11 +751,42 @@ class Plantoes extends Admin_Controller {
                 'unidadehospitalar' => $plantao->unidadehospitalar_razaosocial,
                 'setor' => $plantao->setor_nome,
             );
-            $subject = 'CEMERGE - Oferta de plantão';
             $message = $this->load->view(
                 'admin/_templates/email/aviso_cessao.tpl.php', $data, true
             );
             $destinatario = $plantao->profissional_substituto_email;
+        }
+
+        if ($acao_notificacao == $this::ACAO_NOTIFICACAO_ACEITE_PROPOSTA) {
+            $data = array(
+                'profissional_passagem_nome' => $plantao->profissional_passagem_nome,
+                'profissional_substituto_nome' => $plantao->profissional_substituto_nome,
+                'dataplantao' => $plantao->dataplantao,
+                'horainicialplantao' => $plantao->horainicialplantao,
+                'horafinalplantao' => $plantao->horafinalplantao,
+                'unidadehospitalar' => $plantao->unidadehospitalar_razaosocial,
+                'setor' => $plantao->setor_nome,
+            );
+            $message = $this->load->view(
+                'admin/_templates/email/aceite_proposta.tpl.php', $data, true
+            );
+            $destinatario = $plantao->profissional_substituto_email;
+        }
+
+        if ($acao_notificacao == $this::ACAO_NOTIFICACAO_PROPOSTA_TROCA) {
+            $data = array(
+                'profissional_passagem_nome' => $plantao->profissional_passagem_nome,
+                'profissional_substituto_nome' => $plantao->profissional_substituto_nome,
+                'dataplantao' => $plantao->dataplantao,
+                'horainicialplantao' => $plantao->horainicialplantao,
+                'horafinalplantao' => $plantao->horafinalplantao,
+                'unidadehospitalar' => $plantao->unidadehospitalar_razaosocial,
+                'setor' => $plantao->setor_nome,
+            );
+            $message = $this->load->view(
+                'admin/_templates/email/proposta_troca.tpl.php', $data, true
+            );
+            $destinatario = $plantao->profissional_passagem_nome;
         }
 
         if ($tipo_notificacao == $this::TIPO_NOTIFICACAO_EMAIL) {
@@ -622,6 +824,19 @@ class Plantoes extends Admin_Controller {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Busca os plantões para compor o calendário
+     */
+    public function plantoespormes($mes)
+    {
+        $mes = (int)$mes;
+
+        $plantoes = $this->escala_model->get_escalas_consolidadas_calendario($mes, $this->mobile_detect->isMobile());
+
+        echo(json_encode($plantoes));
+        exit;
     }
 
 

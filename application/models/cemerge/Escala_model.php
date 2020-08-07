@@ -83,6 +83,37 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function get_escalas_consolidadas_calendario($mes, $is_mobile)
+    {
+        $fields = 'case ';
+        $fields .= 'when passagenstrocas.id is null then profissionais.nome ';
+        $fields .= 'when passagenstrocas.id is not null then profissional_substituto.nome ';
+        $fields .= 'end as title, ';
+        if ($is_mobile) {
+            $fields .= 'escalas.dataplantao as start, ';
+            $fields .= 'escalas.datafinalplantao as end, ';
+        } else {
+            $fields .= 'concat(escalas.dataplantao, \'T\', escalas.horainicialplantao) as start, ';
+            $fields .= 'concat(escalas.dataplantao, \'T\', escalas.horafinalplantao) as end, ';
+            //$fields .= 'concat(escalas.datafinalplantao, \'T\', escalas.horafinalplantao) as end, ';
+        }
+        $fields .= 'escalas.id ';
+
+        $this->db->select($fields, false);
+        $this->db->from($this->table);
+        $this->db->join('profissionais', 'profissionais.id = escalas.profissional_id');
+        $this->db->join('passagenstrocas', 'passagenstrocas.escala_id = escalas.id and passagenstrocas.statuspassagem = 1', 'left');
+        $this->db->join('profissionais profissional_passagem', 'profissional_passagem.id = passagenstrocas.profissional_id', 'left');
+        $this->db->join('profissionais profissional_substituto', 'profissional_substituto.id = passagenstrocas.profissionalsubstituto_id', 'left');
+        $this->db->join('escalas escala_trocada', 'escala_trocada.id = passagenstrocas.escalatroca_id', 'left');
+        $this->db->where('month(escalas.dataplantao) = ' . $mes);
+        $this->db->order_by('escalas.dataplantao, escalas.horainicialplantao');
+        // Colocar subquery para obter apenas a última passagemtroca caso exista
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
     public function get_passagens_trocas($where, $where_in = null, $order_by = null)
     {
         $fields = 'escalas.*, profissionais.id as profissional_id, ';

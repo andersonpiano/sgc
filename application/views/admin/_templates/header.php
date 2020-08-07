@@ -43,6 +43,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php endif; ?>
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/domprojects/css/dp.min.css'); ?>">
         <script src="<?php echo base_url($frameworks_dir . '/jquery/jquery.min.js'); ?>"></script>
+<?php if (($this->router->fetch_class() == 'plantoes' or $this->router->fetch_class() == 'escalas') && $this->router->fetch_method() == 'index') : ?>
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/fullcalendar/main.min.css'); ?>">
+        <script src="<?php echo base_url($frameworks_dir . '/fullcalendar/main.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/calendar.js'); ?>"></script>
+<?php endif; ?>
 <?php if ($mobile === false) : ?>
         <!--[if lt IE 9]>
             <script src="<?php echo base_url($plugins_dir . '/html5shiv/html5shiv.min.js'); ?>"></script>
