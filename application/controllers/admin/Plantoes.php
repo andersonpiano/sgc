@@ -187,12 +187,21 @@ class Plantoes extends Admin_Controller {
                 'value' => $this->form_validation->set_value('setor_id'),
                 'options' => $setores,
             );
-            $this->data['profissional_id'] = array(
-                'name'  => 'profissional_id',
-                'id'    => 'profissional_id',
-                'type'  => 'hidden',
-                'value' => $this->_profissional->id
-            );
+            if ($this->ion_auth->in_group('profissionais')) {
+                $this->data['profissional_id'] = array(
+                    'name'  => 'profissional_id',
+                    'id'    => 'profissional_id',
+                    'type'  => 'hidden',
+                    'value' => $this->_profissional->id
+                );
+            } else {
+                $this->data['profissional_id'] = array(
+                    'name'  => 'profissional_id',
+                    'id'    => 'profissional_id',
+                    'type'  => 'hidden',
+                    'value' => 0
+                );
+            }
 
             /* Load Template */
             $this->template->admin_render('admin/plantoes/index', $this->data);
