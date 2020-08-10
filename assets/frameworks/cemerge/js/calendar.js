@@ -14,16 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
             url += '/profissional/' + profissional.value;
             break;
         case "1" : // Minhas trocas e passagens
-            url = 'plantoes/plantoespormes/' + month;
+            url = 'plantoes/minhastrocasepassagens/mes/' + month;
+            url += '/setor/' + setor.value;
+            url += '/profissional/' + profissional.value;
             break;
         case "2" : // Consolidada do setor
-            url = 'plantoes/plantoespormes/' + month;
+            url = 'plantoes/escalaconsolidadadosetor/mes/' + month;
+            url += '/setor/' + setor.value;
             break;
         default :
-            url = 'plantoes/plantoespormes/' + month;
             break;
     }
-    if (calendarEl != null) {
+    if (calendarEl != null && url != "") {
         var calendar = new FullCalendar.Calendar(calendarEl, {
             height: 'auto',
             initialView: 'dayGridMonth',

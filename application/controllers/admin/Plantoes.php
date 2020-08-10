@@ -96,7 +96,7 @@ class Plantoes extends Admin_Controller {
 
                 /* Get all data */
                 // Tratar o tipo visualizacao calendário para não executar busca no banco desnecessariamente
-                if ($this->ion_auth->in_group($this->_permitted_groups)) {
+                if ($this->ion_auth->in_group($this->_permitted_groups) and $tipovisualizacao == 0) {
                     switch ($tipoescala) {
                     case 0: // Minha escala consolidada
                         $this->data['meus_plantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional($this->_profissional->id);
@@ -874,6 +874,26 @@ class Plantoes extends Admin_Controller {
     }
 
     /**
+     * Busca os plantões do setor para compor o calendário
+     */
+    public function escalaconsolidadadosetor()
+    {
+        $mes = (int)$this->uri->segment(5, 0);
+        $setor = (int)$this->uri->segment(7, 0);
+
+        $plantoes = array();
+
+        if ($mes != 0 and $setor != 0) {
+            $plantoes = $this->escala_model->get_escala_consolidada_setor_calendario(
+                $mes, $setor, $this->mobile_detect->isMobile()
+            );
+        }
+
+        echo(json_encode($plantoes));
+        exit;
+    }
+
+    /**
      * Busca os plantões para compor o calendário
      */
     public function minhaescalaconsolidada()
@@ -886,6 +906,27 @@ class Plantoes extends Admin_Controller {
 
         if ($mes != 0 and $setor != 0 and $profissional != 0) {
             $plantoes = $this->escala_model->get_minha_escala_consolidada_calendario(
+                $mes, $setor, $profissional, $this->mobile_detect->isMobile()
+            );
+        }
+
+        echo(json_encode($plantoes));
+        exit;
+    }
+
+    /**
+     * Busca as trocas e passagens para compor o calendário
+     */
+    public function minhastrocasepassagens()
+    {
+        $mes = (int)$this->uri->segment(5, 0);
+        $setor = (int)$this->uri->segment(7, 0);
+        $profissional = (int)$this->uri->segment(9, 0);
+
+        $plantoes = array();
+
+        if ($mes != 0 and $setor != 0 and $profissional != 0) {
+            $plantoes = $this->escala_model->get_minhas_trocas_passagens_calendario(
                 $mes, $setor, $profissional, $this->mobile_detect->isMobile()
             );
         }

@@ -19,7 +19,7 @@ OK - Definir uma solução para plantões passados ou trocados várias vezes
 - A cooperativa pode oferecer plantões indicando vários médicos.
   O primeiro que aceitar, muda o status da oferta e seu profissional_id é gravado.
 - Opção de selecionar mais de um hospital e mais de um setor, na lista de escalas e plantões.
-- Criar visão de calendário com os plantões e seus status.
+OK - Criar visão de calendário com os plantões e seus status.
 - 
 
 Regras
