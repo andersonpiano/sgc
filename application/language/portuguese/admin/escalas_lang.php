@@ -16,6 +16,7 @@ $lang['escalas_find']                = 'Buscar escala';
 $lang['escalas_attribute']           = 'Atribuir escala';
 $lang['escalas_tipoescala']          = 'Tipo de escala';
 $lang['escalas_diasdasemana']        = 'Dias da semana';
+$lang['escalas_plantoes']            = 'Plantões';
 $lang['escalas_tipovisualizacao']    = 'Tipo de visualização';
 $lang['escalas_unidadehospitalar']   = 'Unidade hospitalar';
 $lang['escalas_setor']               = 'Setor';

@@ -42,6 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <link rel="stylesheet" href="<?php echo base_url($plugins_dir . '/colorpickersliders/colorpickersliders.min.css'); ?>">
 <?php endif; ?>
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/domprojects/css/dp.min.css'); ?>">
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/cemerge.css'); ?>">
         <script src="<?php echo base_url($frameworks_dir . '/jquery/jquery.min.js'); ?>"></script>
 <?php if (($this->router->fetch_class() == 'plantoes' or $this->router->fetch_class() == 'escalas') && $this->router->fetch_method() == 'index') : ?>
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/fullcalendar/main.min.css'); ?>">

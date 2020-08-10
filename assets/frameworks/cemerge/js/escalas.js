@@ -14,22 +14,30 @@ $(document).ready(function(){
             },
         });
     });
-    $(document).on('change', '#setor_id', function() {
-        var val = $(this).val();
-        var url = '/sgc/admin/escalas/profissionais/' + val;
+    $(document).on('change', '#profissional_id', function() {
+        var profissional = $(this).val();
+        var escala = $(this).next('input').val();
+        var url = '/sgc/admin/escalas/atribuirescala/';
         $.ajax({
             url: url,
-            method: 'get',
-            dataType: 'json',
+            method: 'post',
+            data: {
+                profissional : profissional,
+                escala : escala
+            },
             success: function(responseData) {
-                $('#profissional_id').empty();
-                $.each(responseData, function(i, p) {
-                    $('#profissional_id').append($('<option></option>').val(p.id).html(p.nome));
-                });
+                // Se sucesso, remover ou travar o dropdown
+                $('#row_id_' + escala).fadeOut('slow', 
+                    function(here){ 
+                        $('#row_id_' + escala).remove();
+                    }
+                );
+                console.log(responseData);
             },
-            error: function() {
-                console.log('Ocorreu um erro ao buscar os profissionais do setor');
-            },
+            error: function(responseData) {
+                alert("Ocorreu um erro ao atribuir a escala ao profissional. Por favor, tente novamente mais tarde");
+                console.log(responseData);
+            }
         });
     });
 });

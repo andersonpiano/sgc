@@ -134,14 +134,107 @@ class Escalas extends Admin_Controller
             /* Validate form input */
             $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
             $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
-            $this->form_validation->set_rules('profissional_id', 'lang:escalas_profissional', 'required');
             $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
             $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
 
             if ($this->form_validation->run() == true) {
                 $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
                 $setor_id = $this->input->post('setor_id');
-                $profissional_id = $this->input->post('profissional_id');
+                $datainicial = $this->input->post('datainicial');
+                $datafinal = $this->input->post('datafinal');
+
+                $setores = $this->_get_setores($unidadehospitalar_id);
+                $profissionais = $this->_get_profissionais($setor_id);
+
+                // Realizando a busca
+                $where = array(
+                    'unidadehospitalar_id' => $unidadehospitalar_id,
+                    'escalas.setor_id' => $setor_id,
+                    'escalas.dataplantao >=' => $datainicial,
+                    'escalas.dataplantao <=' => $datafinal,
+                    'escalas.profissional_id' => 0
+                );
+
+                $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
+            } else {
+                $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
+                $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
+                $setores = array('' => 'Selecione um setor');
+                $profissionais = array('' => 'Selecione um profissional');
+            }
+
+            $this->data['message'] = (
+                validation_errors() ? validation_errors() : (
+                    $this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')
+                )
+            );
+
+            $unidadeshospitalares = $this->_get_unidadeshospitalares();
+
+            $this->data['datainicial'] = array(
+                'name'  => 'datainicial',
+                'id'    => 'datainicial',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datainicial,
+            );
+            $this->data['datafinal'] = array(
+                'name'  => 'datafinal',
+                'id'    => 'datafinal',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datafinal,
+            );
+            $this->data['unidadehospitalar_id'] = array(
+                'name'  => 'unidadehospitalar_id',
+                'id'    => 'unidadehospitalar_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+                'options' => $unidadeshospitalares,
+            );
+            $this->data['setor_id'] = array(
+                'name'  => 'setor_id',
+                'id'    => 'setor_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('setor_id'),
+                'options' => $setores,
+            );
+            $this->data['profissional_id'] = array(
+                'name'  => 'profissional_id',
+                'id'    => 'profissional_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('profissional_id'),
+                'options' => $profissionais,
+            );
+
+            /* Load Template */
+            $this->template->admin_render('admin/escalas/atribuir', $this->data);
+        }
+    }
+
+    public function atribuir_v01()
+    {
+        if (!$this->ion_auth->logged_in() OR !$this->ion_auth->is_admin()) {
+            redirect('auth/login', 'refresh');
+        } else {
+            /* Breadcrumbs */
+            $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+            /* Reset */
+            $this->data['escalas'] = array();
+
+            /* Validate form input */
+            $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
+            $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
+            $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
+            $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
+
+            if ($this->form_validation->run() == true) {
+                $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+                $setor_id = $this->input->post('setor_id');
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
                 $tipoescala = $this->input->post('tipoescala');
@@ -164,13 +257,7 @@ class Escalas extends Admin_Controller
                     'escalas.dataplantao <=' => $datafinal,
                 );
 
-                if ($tipoescala == 0) {
-                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
-                } elseif ($tipoescala == 1) {
-                    $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, 'dataplantao, horainicialplantao');
-                } elseif ($tipoescala == 2) {
-                    $this->data['escalas'] = $this->escala_model->get_passagens_trocas($where, null, 'dataplantao, horainicialplantao');
-                }
+                $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
             } else {
                 $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
                 $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
@@ -565,6 +652,22 @@ class Escalas extends Admin_Controller
         $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id]);
 
         echo json_encode($setores);
+        exit;
+    }
+
+    public function atribuirescala()
+    {
+        $profissional = $this->input->post('profissional', 0);
+        $escala = $this->input->post('escala', 0);
+
+        try {
+            $this->escala_model->update($escala, ['profissional_id' => $profissional]);
+        } catch (Exception $ex) {
+            echo(json_encode($ex));
+        }
+
+        echo json_encode($profissional);
+        echo json_encode($escala);
         exit;
     }
 }
