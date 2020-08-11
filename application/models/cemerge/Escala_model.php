@@ -10,7 +10,7 @@ class Escala_model extends MY_Model
         parent::__construct($this->table);
     }
 
-    public function get_escalas_originais($where, $where_in = null, $order_by = null)
+    public function get_escalas_originais($where, $where_in_column = null, $where_in_values = null, $order_by = null)
     {
         $fields = 'escalas.*, profissionais.id as profissional_id, ';
         $fields .= 'profissionais.registro as profissional_registro, ';
@@ -26,8 +26,8 @@ class Escala_model extends MY_Model
         $this->db->join('setores', 'setores.id = escalas.setor_id', 'left');
         $this->db->join('unidadeshospitalares', 'unidadeshospitalares.id = setores.unidadehospitalar_id', 'left');
         $this->db->where($where);
-        if ($where_in) {
-            $this->db->where_in($where_in);
+        if (!is_null($where_in_column) and !empty($where_in_values)) {
+            $this->db->where_in($where_in_column, $where_in_values);
         }
         if ($order_by) {
             $this->db->order_by($order_by);

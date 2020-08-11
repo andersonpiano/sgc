@@ -27,12 +27,14 @@ $(document).ready(function(){
             },
             success: function(responseData) {
                 // Se sucesso, remover ou travar o dropdown
+                /*
                 $('#row_id_' + escala).fadeOut('slow', 
                     function(here){ 
                         $('#row_id_' + escala).remove();
                     }
                 );
                 console.log(responseData);
+                */
             },
             error: function(responseData) {
                 alert("Ocorreu um erro ao atribuir a escala ao profissional. Por favor, tente novamente mais tarde");

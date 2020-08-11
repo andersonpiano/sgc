@@ -58,7 +58,7 @@ class Escalas extends Admin_Controller
                 );
 
                 if ($tipoescala == 0) {
-                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
+                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, null, 'dataplantao, horainicialplantao');
                 } elseif ($tipoescala == 1) {
                     $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, 'dataplantao, horainicialplantao');
                 } elseif ($tipoescala == 2) {
@@ -142,6 +142,14 @@ class Escalas extends Admin_Controller
                 $setor_id = $this->input->post('setor_id');
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
+                $domingo = $this->input->post('domingo');
+                $segunda = $this->input->post('segunda');
+                $terca = $this->input->post('terca');
+                $quarta = $this->input->post('quarta');
+                $quinta = $this->input->post('quinta');
+                $sexta = $this->input->post('sexta');
+                $sabado = $this->input->post('sabado');
+                $turno_id = $this->input->post('turno_id');
 
                 $setores = $this->_get_setores($unidadehospitalar_id);
                 $profissionais = $this->_get_profissionais($setor_id);
@@ -151,16 +159,64 @@ class Escalas extends Admin_Controller
                     'unidadehospitalar_id' => $unidadehospitalar_id,
                     'escalas.setor_id' => $setor_id,
                     'escalas.dataplantao >=' => $datainicial,
-                    'escalas.dataplantao <=' => $datafinal,
-                    'escalas.profissional_id' => 0
+                    'escalas.dataplantao <=' => $datafinal
                 );
 
-                $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
+                // Se escolhido o turno
+                $turno = null;
+                if ($turno_id == 1) {
+                    $turno = '07:00:00';
+                } elseif ($turno_id == 2) {
+                    $turno = '13:00:00';
+                } elseif ($turno_id == 3) {
+                    $turno = '19:00:00';
+                }
+                if (!is_null($turno)) {
+                    $where['escalas.horainicialplantao'] = $turno;
+                }
+
+                // Dias da semana filtrados
+                $dias_semana = array();
+                if ($domingo == 1) {
+                    array_push($dias_semana, $domingo);
+                }
+                if ($segunda == 2) {
+                    array_push($dias_semana, $segunda);
+                }
+                if ($terca == 3) {
+                    array_push($dias_semana, $terca);
+                }
+                if ($quarta == 4) {
+                    array_push($dias_semana, $quarta);
+                }
+                if ($quinta == 5) {
+                    array_push($dias_semana, $quinta);
+                }
+                if ($sexta == 6) {
+                    array_push($dias_semana, $sexta);
+                }
+                if ($sabado == 7) {
+                    array_push($dias_semana, $sabado);
+                }
+                $where_in_column = null;
+                if (!empty($dias_semana)) {
+                    $where_in_column = 'dayofweek(escalas.dataplantao)';
+                }
+
+                $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, $where_in_column, $dias_semana, 'dataplantao, horainicialplantao');
             } else {
                 $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
                 $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
                 $setores = array('' => 'Selecione um setor');
                 $profissionais = array('' => 'Selecione um profissional');
+                $domingo = 1;
+                $segunda = 2;
+                $terca = 3;
+                $quarta = 4;
+                $quinta = 5;
+                $sexta = 6;
+                $sabado = 7;
+                $turno_id = 0;
             }
 
             $this->data['message'] = (
@@ -170,6 +226,12 @@ class Escalas extends Admin_Controller
             );
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $turnos = array(
+                '0' => 'Todos',
+                '1' => 'Manhã',
+                '2' => 'Tarde',
+                '3' => 'Noite',
+            );
 
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
@@ -209,106 +271,21 @@ class Escalas extends Admin_Controller
                 'value' => $this->form_validation->set_value('profissional_id'),
                 'options' => $profissionais,
             );
-
-            /* Load Template */
-            $this->template->admin_render('admin/escalas/atribuir', $this->data);
-        }
-    }
-
-    public function atribuir_v01()
-    {
-        if (!$this->ion_auth->logged_in() OR !$this->ion_auth->is_admin()) {
-            redirect('auth/login', 'refresh');
-        } else {
-            /* Breadcrumbs */
-            $this->data['breadcrumb'] = $this->breadcrumbs->show();
-
-            /* Reset */
-            $this->data['escalas'] = array();
-
-            /* Validate form input */
-            $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
-            $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
-            $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
-            $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
-
-            if ($this->form_validation->run() == true) {
-                $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
-                $setor_id = $this->input->post('setor_id');
-                $datainicial = $this->input->post('datainicial');
-                $datafinal = $this->input->post('datafinal');
-                $tipoescala = $this->input->post('tipoescala');
-                $domingo = $this->input->post('domingo');
-                $segunda = $this->input->post('segunda');
-                $terca = $this->input->post('terca');
-                $quarta = $this->input->post('quarta');
-                $quinta = $this->input->post('quinta');
-                $sexta = $this->input->post('sexta');
-                $sabado = $this->input->post('sabado');
-
-                $setores = $this->_get_setores($unidadehospitalar_id);
-                $profissionais = $this->_get_profissionais($setor_id);
-
-                // Realizando a busca
-                $where = array(
-                    'unidadehospitalar_id' => $unidadehospitalar_id,
-                    'escalas.setor_id' => $setor_id,
-                    'escalas.dataplantao >=' => $datainicial,
-                    'escalas.dataplantao <=' => $datafinal,
-                );
-
-                $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, 'dataplantao, horainicialplantao');
-            } else {
-                $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
-                $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
-                $setores = array('' => 'Selecione um setor');
-                $profissionais = array('' => 'Selecione um profissional');
-            }
-
-            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-
-            $unidadeshospitalares = $this->_get_unidadeshospitalares();
-
-            $tiposescala = $this->_get_tipos_escala();
-
-            $this->data['datainicial'] = array(
-                'name'  => 'datainicial',
-                'id'    => 'datainicial',
-                'type'  => 'date',
-                'class' => 'form-control',
-                'value' => $datainicial,
-            );
-            $this->data['datafinal'] = array(
-                'name'  => 'datafinal',
-                'id'    => 'datafinal',
-                'type'  => 'date',
-                'class' => 'form-control',
-                'value' => $datafinal,
-            );
-            $this->data['unidadehospitalar_id'] = array(
-                'name'  => 'unidadehospitalar_id',
-                'id'    => 'unidadehospitalar_id',
+            $this->data['turno_id'] = array(
+                'name'  => 'turno_id',
+                'id'    => 'turno_id',
                 'type'  => 'select',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
-                'options' => $unidadeshospitalares,
+                'value' => $turno_id,
+                'options' => $turnos,
             );
-            $this->data['setor_id'] = array(
-                'name'  => 'setor_id',
-                'id'    => 'setor_id',
-                'type'  => 'select',
-                'class' => 'form-control',
-                'value' => $this->form_validation->set_value('setor_id'),
-                'options' => $setores,
-            );
-            $this->data['profissional_id'] = array(
-                'name'  => 'profissional_id',
-                'id'    => 'profissional_id',
-                'type'  => 'select',
-                'class' => 'form-control',
-                'value' => $this->form_validation->set_value('profissional_id'),
-                'options' => $profissionais,
-            );
+            $this->data['domingo'] = $domingo;
+            $this->data['segunda'] = $segunda;
+            $this->data['terca'] = $terca;
+            $this->data['quarta'] = $quarta;
+            $this->data['quinta'] = $quinta;
+            $this->data['sexta'] = $sexta;
+            $this->data['sabado'] = $sabado;
 
             /* Load Template */
             $this->template->admin_render('admin/escalas/atribuir', $this->data);

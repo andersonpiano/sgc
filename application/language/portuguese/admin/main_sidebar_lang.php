@@ -33,6 +33,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* ****** */$lang['menu_escalas']  = 'Escalas';
 /* *********** */$lang['menu_escalas_create']     = 'Criar';
 /* *********** */$lang['menu_escalas_edit']       = 'Editar';
+/* *********** */$lang['menu_escalas_atribuir']       = 'Atribuir';
 
 /* ****** */$lang['menu_plantoes']  = 'Meus Plantões';
 /* *********** */$lang['menu_plantoes_create']     = 'Criar';

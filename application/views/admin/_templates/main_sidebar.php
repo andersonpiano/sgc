@@ -70,10 +70,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-user-md"></i> <span><?php echo lang('menu_profissionais'); ?></span>
                             </a>
                         </li>
-                        <li class="<?=active_link_controller('escalas')?>">
-                            <a href="<?php echo site_url('admin/escalas'); ?>">
-                                <i class="fa fa-calendar"></i> <span><?php echo lang('menu_escalas'); ?></span>
+                        <li class="treeview <?=active_link_controller('escalas')?>">
+                            <a href="#">
+                                <i class="fa fa-calendar"></i>
+                                <span><?php echo lang('menu_escalas'); ?></span>
+                                <i class="fa fa-angle-left pull-right"></i>
                             </a>
+                            <ul class="treeview-menu">
+                                <li class="<?=active_link_function('escalas')?>"><a href="<?php echo site_url('admin/escalas'); ?>"><?php echo lang('menu_escalas_create'); ?></a></li>
+                            </ul>
+                            <ul class="treeview-menu">
+                                <li class="<?=active_link_function('atribuir')?>"><a href="<?php echo site_url('admin/escalas/atribuir'); ?>"><?php echo lang('menu_escalas_atribuir'); ?></a></li>
+                            </ul>
                         </li>
 
                         <li class="header text-uppercase"><?php echo lang('menu_security'); ?></li>
