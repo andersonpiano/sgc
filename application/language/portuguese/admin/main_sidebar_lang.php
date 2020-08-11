@@ -27,13 +27,14 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_users_edit']       = 'Editar';
 
 /* ****** */$lang['menu_profissionais']  = 'Médicos(as)';
-/* *********** */$lang['menu_profissionais_create']     = 'Criar';
-/* *********** */$lang['menu_profissionais_edit']       = 'Editar';
+/* *********** */$lang['menu_profissionais_create'] = 'Buscar / Novo';
+/* *********** */$lang['menu_profissionais_edit'] = 'Editar';
+/* *********** */$lang['menu_profissionais_vincular'] = 'Vincular a Setor';
 
 /* ****** */$lang['menu_escalas']  = 'Escalas';
-/* *********** */$lang['menu_escalas_create']     = 'Criar';
+/* *********** */$lang['menu_escalas_create']     = 'Buscar / Nova';
 /* *********** */$lang['menu_escalas_edit']       = 'Editar';
-/* *********** */$lang['menu_escalas_atribuir']       = 'Atribuir';
+/* *********** */$lang['menu_escalas_atribuir']       = 'Atribuir a Médico(a)';
 
 /* ****** */$lang['menu_plantoes']  = 'Meus Plantões';
 /* *********** */$lang['menu_plantoes_create']     = 'Criar';

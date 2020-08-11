@@ -14,22 +14,6 @@ class Auth extends MY_Controller
 
     function index()
     {
-        /* test send email */
-        /*
-        $this->load->library('email');
-
-        $this->email->initialize($this->config->item('mail'));
-
-        $this->email->from('cemerge@somossolucoes.com.br', 'Cemerge');
-        $this->email->to('dieisonroberto@gmail.com');
-        
-        $this->email->subject('Email Test');
-        $this->email->message('Testing the email class.');
-        
-        $this->email->send();
-        */
-
-
         if (!$this->ion_auth->logged_in()) {
             redirect('auth/login', 'refresh');
         } else {
@@ -55,25 +39,41 @@ class Auth extends MY_Controller
             $this->data['forgot_password']     = $this->config->item('forgot_password');
             $this->data['new_membership']      = $this->config->item('new_membership');
 
+            $destino = $this->input->get('destino', null);
+
             if ($this->form_validation->run() == true) {
                 $remember = (bool) $this->input->post('remember');
+                $destino = $this->input->post('destino');
 
                 if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
                     if (!$this->ion_auth->is_admin()) {
                         $this->session->set_flashdata('message', $this->ion_auth->messages());
                         //redirect('/', 'refresh');
-                        redirect('/admin', 'refresh');
+                        if (is_null($destino)) {
+                            redirect('/admin', 'refresh');
+                        } else {
+                            redirect($destino, 'refresh');
+                        }
                     } else {
                         /* Data */
                         $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
                         /* Load Template */
                         //$this->template->auth_render('auth/choice', $this->data);
-                        redirect('/admin', 'refresh');
+                        //redirect('/admin', 'refresh');
+                        if (is_null($destino)) {
+                            redirect('/admin', 'refresh');
+                        } else {
+                            redirect($destino, 'refresh');
+                        }
                     }
                 } else {
                     $this->session->set_flashdata('message', $this->ion_auth->errors());
-                    redirect('auth/login', 'refresh');
+                    if (is_null($destino)) {
+                        redirect('auth/login', 'refresh');
+                    } else {
+                        redirect('auth/login?' . $destino, 'refresh');
+                    }
                 }
             } else {
                 $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
@@ -93,6 +93,7 @@ class Auth extends MY_Controller
                     'class'       => 'form-control',
                     'placeholder' => lang('auth_your_password')
                 );
+                $this->data['destino'] = $destino;
 
                 /* Load Template */
                 $this->template->auth_render('auth/login', $this->data);

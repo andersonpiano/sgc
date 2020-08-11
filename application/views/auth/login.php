@@ -11,6 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <?php echo $message;?>
 
                 <?php echo form_open('auth/login');?>
+                    <?php echo(form_hidden('destino', $destino)); ?>
                     <div class="form-group has-feedback">
                         <?php echo form_input($identity);?>
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

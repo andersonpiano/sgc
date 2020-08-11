@@ -61,7 +61,8 @@ class Admin_Controller extends MY_Controller
         }
 
         if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($permitted_groups)) {
-            redirect('auth/login', 'refresh');
+            //redirect('auth/login', 'refresh');
+            redirect('auth/login?destino=' . $this->uri->uri_string(), 'refresh');
         } else {
             /* Load */
             $this->load->config('admin/dp_config');

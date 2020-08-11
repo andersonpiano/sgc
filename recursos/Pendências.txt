@@ -1,11 +1,11 @@
 Pendências
 
 Funcionalidades
-- Permitir voltar à página desejada caso redirecione para o login
-- Atribuir plantões aos profissionais
+OK - Permitir voltar à página desejada caso redirecione para o login
+OK - Atribuir plantões aos profissionais
 - Vincular usuários aos profissionais
 - Vincular profissional ao setor
-- Organizar as ordens das listas
+OK - Organizar as ordens das listas
 OK - Enviar e-mail com cessões
 OK - Enviar e-mail com trocas
 - Enviar e-mail com oportunidades
@@ -14,13 +14,15 @@ OK - Enviar e-mail com trocas
 - Corrigir e melhorar a view de plantões
 - Alertar e permitir corrigir uma proposta de troca caso não seja aceita
 OK - Definir uma solução para plantões passados ou trocados várias vezes
-  (Algum indicador que informe que é a passagem ou troca válida)
+OK  (Algum indicador que informe que é a passagem ou troca válida)
+  Order by dataconfirmacao desc limit 1 é a última
 - Revisar notificações
 - A cooperativa pode oferecer plantões indicando vários médicos.
   O primeiro que aceitar, muda o status da oferta e seu profissional_id é gravado.
 - Opção de selecionar mais de um hospital e mais de um setor, na lista de escalas e plantões.
 OK - Criar visão de calendário com os plantões e seus status.
-- 
+- Criar campo com nome abreviado do profissional
+- Criar formulários de busca para todas as tabelas
 
 Regras
 - Apenas plantões futuros podem ser editados
