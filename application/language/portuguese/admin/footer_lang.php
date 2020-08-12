@@ -11,4 +11,4 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['footer_copyright']           = 'Cemerge 2020';
-$lang['footer_version']             = 'versão 0.1.20200727';
+$lang['footer_version']             = 'versão 0.1.20200811';

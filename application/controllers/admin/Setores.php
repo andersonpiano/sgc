@@ -29,14 +29,34 @@ class Setores extends Admin_Controller {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-            /* Get all sectors */
-            $this->data['setores'] = $this->setor_model->get_all();
+            /* Validate form input */
+            $this->form_validation->set_rules('unidadehospitalar_id', 'lang:setores_unidadehospitalar', 'required');
 
-            /*  Unidades hospitalares */
-            // Corrigir atributo para unidadehospitalar_id
-            foreach ($this->data['setores'] as $k => $setor) {
-                $this->data['setores'][$k]->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
+            if ($this->form_validation->run() == true) {
+                $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+                
+                /* Setores */
+                $this->data['setores'] = $this->setor_model->get_where(['unidadehospitalar_id' => $unidadehospitalar_id]);
+
+                /*  Unidades hospitalares */
+                // Corrigir atributo para unidadehospitalar_id
+                foreach ($this->data['setores'] as $k => $setor) {
+                    $this->data['setores'][$k]->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
+                }
+            } else {
+                $this->data['setores'] = array();
             }
+
+            $unidadeshospitalares = $this->_get_unidadeshospitalares();
+
+            $this->data['unidadehospitalar_id'] = array(
+                'name'  => 'unidadehospitalar_id',
+                'id'    => 'unidadehospitalar_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+                'options' => $unidadeshospitalares,
+            );
 
             /* Load Template */
             $this->template->admin_render('admin/setores/index', $this->data);
@@ -228,13 +248,10 @@ class Setores extends Admin_Controller {
 
     public function _valid_csrf_nonce()
     {
-        if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue'))
-        {
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
+        if ($this->input->post($this->session->flashdata('csrfkey')) !== false && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue')) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -246,7 +263,6 @@ class Setores extends Admin_Controller {
         $unidadeshospitalares = array();
         foreach ($unidades as $unidade) {
             $unidadeshospitalares[$unidade->id] = $unidade->razaosocial;
-            // ?????
         }
 
         return $unidadeshospitalares;

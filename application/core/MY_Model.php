@@ -14,7 +14,7 @@ class MY_model extends CI_Model {
     {
         $this->db->from($this->table);
         if ($order_by) {
-            $this->db->from($order_by);
+            $this->db->order_by($order_by);
         }
         $query = $this->db->get();
 
@@ -36,7 +36,18 @@ class MY_model extends CI_Model {
             $this->db->where_in($where_in);
         }
         if ($order_by) {
-            $this->db->from($order_by);
+            $this->db->order_by($order_by);
+        }
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
+    public function get_like($field, $value, $order_by = null) {
+        $this->db->from($this->table);
+        $this->db->like($field, $value);
+        if ($order_by) {
+            $this->db->order_by($order_by);
         }
         $query = $this->db->get();
 

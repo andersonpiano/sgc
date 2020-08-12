@@ -15,6 +15,7 @@ $lang['setores_edit']                = 'Editar setor';
 $lang['setores_nome']                = 'Nome';
 $lang['setores_unidadehospitalar']   = 'Unidade Hospitalar';
 $lang['setores_action']              = 'Ação';
+$lang['setores_find']                = 'Buscar setor';
 $lang['setores_active']              = 'Ativo';
 $lang['setores_created_on']          = 'Criado em';
 $lang['setores_deactivate_question'] = 'Tem certeza que deseja desativar o setor %s';

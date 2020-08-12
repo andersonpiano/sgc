@@ -21,17 +21,32 @@ class Profissionais extends Admin_Controller {
 
     public function index()
     {
-        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
-        {
+        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
             redirect('auth/login', 'refresh');
-        }
-        else
-        {
+        } else {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-            /* Get all hospitals */
-            $this->data['profissionais'] = $this->profissional_model->get_all();
+            /* Validate form input */
+            $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
+
+            if ($this->form_validation->run() == true) {
+                $nome = $this->input->post('nome');
+                
+                /* Profissionais */
+                $this->data['profissionais'] = $this->profissional_model->get_like('nome', $nome, 'nome');
+            } else {
+                $this->data['profissionais'] = array();
+                $nome = '';
+            }
+
+            $this->data['nome'] = array(
+                'name'  => 'nome',
+                'id'    => 'nome',
+                'type'  => 'text',
+                'class' => 'form-control',
+                'value' => $nome,
+            );
 
             /* Load Template */
             $this->template->admin_render('admin/profissionais/index', $this->data);
@@ -52,8 +67,7 @@ class Profissionais extends Admin_Controller {
         $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
         $this->form_validation->set_rules('email', 'lang:profissionais_email', 'required|valid_email');
 
-        if ($this->form_validation->run() == TRUE)
-        {
+        if ($this->form_validation->run() == true) {
             $registro = $this->input->post('registro');
             $nome = $this->input->post('nome');
             $email = $this->input->post('email');
@@ -70,13 +84,10 @@ class Profissionais extends Admin_Controller {
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true
             && $this->profissional_model->insert($additional_data)
-        )
-        {
+        ) {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             redirect('admin/profissionais', 'refresh');
-        }
-        else
-        {
+        } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $this->data['registro'] = array(
@@ -117,7 +128,10 @@ class Profissionais extends Admin_Controller {
     {
         $id = (int) $id;
 
-        if ( ! $this->ion_auth->logged_in() OR ( ! $this->ion_auth->is_admin() && ! ($this->ion_auth->user()->row()->id == $id))) {
+        if (!$this->ion_auth->logged_in()
+            or (!$this->ion_auth->is_admin()
+            and !($this->ion_auth->user()->row()->id == $id))
+        ) {
             redirect('auth', 'refresh');
         }
 
@@ -244,16 +258,14 @@ class Profissionais extends Admin_Controller {
         return array($key => $value);
     }
 
-
     public function _valid_csrf_nonce()
     {
-        if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue'))
-        {
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
+        if ($this->input->post($this->session->flashdata('csrfkey')) !== false
+            && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue')
+        ) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
