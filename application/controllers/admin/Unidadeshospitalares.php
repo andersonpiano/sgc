@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Unidadeshospitalares extends Admin_Controller {
+class Unidadeshospitalares extends Admin_Controller
+{
 
     public function __construct()
     {
@@ -22,12 +23,9 @@ class Unidadeshospitalares extends Admin_Controller {
 
     public function index()
     {
-        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
-        {
+        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
             redirect('auth/login', 'refresh');
-        }
-        else
-        {
+        } else {
             /* Breadcrumbs */
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
@@ -71,13 +69,10 @@ class Unidadeshospitalares extends Admin_Controller {
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true
             && $this->unidadehospitalar_model->insert($additional_data)
-        )
-        {
+        ) {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             redirect('admin/unidadeshospitalares', 'refresh');
-        }
-        else
-        {
+        } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $this->data['cnpj'] = array(
@@ -118,7 +113,7 @@ class Unidadeshospitalares extends Admin_Controller {
     {
         $id = (int) $id;
 
-        if ( ! $this->ion_auth->logged_in() OR ( ! $this->ion_auth->is_admin() && ! ($this->ion_auth->user()->row()->id == $id))) {
+        if (!$this->ion_auth->logged_in() OR (!$this->ion_auth->is_admin() && ! ($this->ion_auth->user()->row()->id == $id))) {
             redirect('auth', 'refresh');
         }
 
@@ -245,16 +240,14 @@ class Unidadeshospitalares extends Admin_Controller {
         return array($key => $value);
     }
 
-
     public function _valid_csrf_nonce()
     {
-        if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue'))
-        {
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
+        if ($this->input->post($this->session->flashdata('csrfkey')) !== false
+            && $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue')
+        ) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

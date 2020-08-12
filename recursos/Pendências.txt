@@ -26,7 +26,7 @@ OK - Criar visão de calendário com os plantões e seus status.
 
 Regras
 - Apenas plantões futuros podem ser editados
-- Checar se o plantão ou troca confirmada é realmente do profissional logado
+OK - Checar se o plantão ou troca confirmada é realmente do profissional logado
 - Cessões e trocas podem ser feitas até o horário do plantão
 - Não permitir profissional com mesmo horário em plantões diferentes.
 - Não permitir profissional aceitar plantão cedido ou trocado no mesmo

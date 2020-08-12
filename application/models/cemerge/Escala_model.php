@@ -547,6 +547,7 @@ class Escala_model extends MY_Model
     {
         $fields = 'escalas.*, ';
         $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
+        $fields .= 'passagenstrocas.profissional_id as passagenstrocas_profissional_id, ';
         $fields .= 'passagenstrocas.profissionalsubstituto_id as passagenstrocas_profissionalsubstituto_id, ';
         $fields .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, ';
         $fields .= 'escala_troca.id as escala_troca_id, ';

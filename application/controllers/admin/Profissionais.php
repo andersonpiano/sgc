@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Profissionais extends Admin_Controller {
+class Profissionais extends Admin_Controller
+{
 
     public function __construct()
     {

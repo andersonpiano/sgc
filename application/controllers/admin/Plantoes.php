@@ -222,6 +222,13 @@ class Plantoes extends Admin_Controller {
 
         /* Load Data */
         $plantao = $this->escala_model->get_escala_by_id($id);
+
+        /* Checando se o plantão pertence ao profissional */
+        if (!($plantao->profissional_id == $this->_profissional->id) and !($plantao->passagenstrocas_profissionalsubstituto_id == $this->_profissional->id)) {
+            $this->session->set_flashdata('message', 'Este plantão não pertence ao profissional logado. Favor acessar o sistema com o profissional do plantão.');
+            redirect('admin/plantoes', 'refresh');
+        }
+
         $tipospassagem = $this->_get_tipos_passagem();
 
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
@@ -353,6 +360,12 @@ class Plantoes extends Admin_Controller {
         $this->data['tipospassagem'] = $this->_get_tipos_passagem();
         $this->data['statuspassagem'] = $this->_get_status_passagem();
 
+        /* Checando se o plantão pertence ao profissional */
+        if (!($plantao->passagenstrocas_profissionalsubstituto_id == $this->_profissional->id)) {
+            $this->session->set_flashdata('message', 'Esta troca de plantão não foi oferecido ao profissional logado. Favor acessar o sistema com o profissional do plantão.');
+            redirect('admin/plantoes', 'refresh');
+        }
+
         // Plantões disponíveis do profissional no mesmo setor
         $plantoes = $this->escala_model->get_escalas_consolidadas_por_profissional(
             $plantao->passagenstrocas_profissionalsubstituto_id,
@@ -469,6 +482,12 @@ class Plantoes extends Admin_Controller {
         $this->data['tipospassagem'] = $this->_get_tipos_passagem();
         $this->data['statuspassagem'] = $this->_get_status_passagem();
 
+        /* Checando se o plantão pertence ao profissional */
+        if (!($plantao->profissional_id == $this->_profissional->id) and !($plantao->passagenstrocas_profissional_id == $this->_profissional->id)) {
+            $this->session->set_flashdata('message', 'Este plantão não pertence ao profissional logado. Favor acessar o sistema com o profissional do plantão.');
+            redirect('admin/plantoes', 'refresh');
+        }
+
         if (isset($_POST) && ! empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
                 show_error($this->lang->line('error_csrf'));
@@ -557,6 +576,12 @@ class Plantoes extends Admin_Controller {
         $plantao = $this->escala_model->get_escala_passada_a_confirmar($id);
         $this->data['tipospassagem'] = $this->_get_tipos_passagem();
         $this->data['statuspassagem'] = $this->_get_status_passagem();
+
+        /* Checando se o plantão pertence ao profissional */
+        if (!($plantao->passagenstrocas_profissionalsubstituto_id == $this->_profissional->id)) {
+            $this->session->set_flashdata('message', 'Este plantão não foi passado ao profissional logado. Favor acessar o sistema com o profissional do plantão.');
+            redirect('admin/plantoes', 'refresh');
+        }
 
         if (isset($_POST) && ! empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {

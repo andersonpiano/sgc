@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Users extends Admin_Controller {
+class Users extends Admin_Controller
+{
 
     public function __construct()
     {
@@ -194,7 +195,7 @@ class Users extends Admin_Controller {
                     }
                 }
 
-                if($this->ion_auth->update($user->id, $data)) {
+                if ($this->ion_auth->update($user->id, $data)) {
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
 
                     if ($this->ion_auth->is_admin()) {
@@ -318,7 +319,7 @@ class Users extends Admin_Controller {
             $this->template->admin_render('admin/users/deactivate', $this->data);
         } else {
             if ($this->input->post('confirm') == 'yes') {
-                if ($this->_valid_csrf_nonce() === FALSE OR $id != $this->input->post('id')) {
+                if ($this->_valid_csrf_nonce() === false OR $id != $this->input->post('id')) {
                     show_error($this->lang->line('error_csrf'));
                 }
 
