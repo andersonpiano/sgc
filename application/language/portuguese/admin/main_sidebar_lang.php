@@ -32,8 +32,9 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_profissionais_vincular'] = 'Vincular a Setor';
 
 /* ****** */$lang['menu_escalas']  = 'Escalas';
-/* *********** */$lang['menu_escalas_create']     = 'Buscar / Nova';
-/* *********** */$lang['menu_escalas_edit']       = 'Editar';
+/* *********** */$lang['menu_escalas_create']             = 'Buscar / Nova';
+/* *********** */$lang['menu_escalas_create_fixed']     = 'Nova escala fixa';
+/* *********** */$lang['menu_escalas_edit']               = 'Editar';
 /* *********** */$lang['menu_escalas_atribuir']       = 'Atribuir a Médico(a)';
 
 /* ****** */$lang['menu_plantoes']  = 'Meus Plantões';

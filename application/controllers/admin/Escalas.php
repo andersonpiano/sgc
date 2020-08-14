@@ -415,6 +415,142 @@ class Escalas extends Admin_Controller
         }
     }
 
+    public function createfixed()
+    {
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_escalas_create'), 'admin/escalas/create');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Validate form input */
+        $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
+        $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
+        $this->form_validation->set_rules('datainicialplantao', 'lang:escalas_datainicialplantao', 'required');
+        $this->form_validation->set_rules('datafinalplantao', 'lang:escalas_datafinalplantao', 'required');
+
+        if ($this->form_validation->run() == true) {
+            $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+            $setor_id = $this->input->post('setor_id');
+            $datainicialplantao = $this->input->post('datainicialplantao');
+            $datafinalplantao = $this->input->post('datafinalplantao');
+            //$active = $this->input->post('active');
+
+            $additional_data = array(
+                'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
+                'setor_id' => $this->input->post('setor_id'),
+                'datainicialplantao' => $this->input->post('datainicialplantao'),
+                'datafinalplantao' => $this->input->post('datafinalplantao'),
+            );
+        }
+
+        // Realizar o insert no model
+        if ($this->form_validation->run() == true) {
+            $success = false;
+
+            $datainicial = new DateTime($datainicialplantao);
+            $datafinal = new DateTime($datafinalplantao);
+
+            if ($datafinal >= $datainicial) {
+                $escala_referencia = $this->escala_model->get_escala_referencia($setor_id, $datainicialplantao);
+                $indice_referencia = 0;
+
+                for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {                    
+                    $horaInicialReferencia = $escala_referencia[$indice_referencia]->horainicialplantao;
+                    $horaFinalReferencia = $escala_referencia[$indice_referencia]->horafinalplantao;
+                    //$duracaoReferencia = $escala_referencia[$indice_referencia]->duracao;
+                    $profissionalIdReferencia = $escala_referencia[$indice_referencia]->profissional_id;
+
+                    $duracao = 6;
+                    $dtinicialplantao = $i->format("Y-m-d");
+                    $dtfinalplantao = $dtinicialplantao;
+                    if ((int)$horaInicialReferencia > (int)$horaFinalReferencia) {
+                        $dtfinalplantao = $i->modify('+1 day')->format("Y-m-d");
+                        $duracao = 12;
+                    }
+                    $insert_data = array(
+                        'setor_id' => $additional_data['setor_id'],
+                        'dataplantao' => $dtinicialplantao,
+                        'datafinalplantao' => $dtfinalplantao,
+                        'horainicialplantao' => $horaInicialReferencia,
+                        'horafinalplantao' => $horaFinalReferencia,
+                        'duracao' => $duracao,
+                        'profissional_id' => $profissionalIdReferencia,
+                    );                    
+                    
+                    $indice_referencia++;                    
+
+                    echo('<pre>');
+                    var_dump($insert_data);
+                    echo('</pre>');
+                    
+                    //$success = $this->escala_model->insert($insert_data);
+                }
+                exit;
+            } else {
+                $this->session->set_flashdata('message', 'A data final deve ser menor que a data inicial');
+                redirect('admin/escalas/createfixed', 'refresh');
+            }
+
+            if ($success) {
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
+                redirect('admin/escalas', 'refresh');
+            } else {
+                $this->session->set_flashdata('message', $this->ion_auth->errors());
+                redirect('admin/escalas', 'refresh');
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+            $unidadeshospitalares = $this->_get_unidadeshospitalares();
+
+            $this->data['datainicialplantao'] = array(
+                'name'  => 'datainicialplantao',
+                'id'    => 'datainicialplantao',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => date('Y') . "-" . date('m', strtotime("next month")) . "-01",
+            );
+            $this->data['datafinalplantao'] = array(
+                'name'  => 'datafinalplantao',
+                'id'    => 'datafinalplantao',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => date('Y') . "-" . date('m-t', strtotime("next month")),
+            );
+            $this->data['horainicialplantao'] = array(
+                'name'  => 'horainicialplantao',
+                'id'    => 'horainicialplantao',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('horainicialplantao'),
+            );
+            $this->data['horafinalplantao'] = array(
+                'name'  => 'horafinalplantao',
+                'id'    => 'horafinalplantao',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('horafinalplantao'),
+            );
+            $this->data['unidadehospitalar_id'] = array(
+                'name'  => 'unidadehospitalar_id',
+                'id'    => 'unidadehospitalar_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+                'options' => $unidadeshospitalares,
+            );
+            $this->data['setor_id'] = array(
+                'name'  => 'setor_id',
+                'id'    => 'setor_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('setor_id'),
+            );
+
+            /* Load Template */
+            $this->template->admin_render('admin/escalas/createfixed', $this->data);
+        }
+    }
+
     public function edit($id)
     {
         $id = (int) $id;

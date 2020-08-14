@@ -30,7 +30,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
                                                 <?php echo form_dropdown($setor_id);?>
-                                                <?php //echo form_multiselect($setor_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">

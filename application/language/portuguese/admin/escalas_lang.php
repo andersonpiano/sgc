@@ -10,7 +10,8 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['escalas_create']              = 'Criar escala';
+$lang['escalas_create']              = 'Criar escala variável';
+$lang['escalas_create_fixed']      = 'Criar escala fixa';
 $lang['escalas_edit']                = 'Editar escala';
 $lang['escalas_find']                = 'Buscar escala';
 $lang['escalas_attribute']           = 'Atribuir escala';

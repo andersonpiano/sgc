@@ -88,6 +88,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li class="<?=active_link_function('escalas')?>"><a href="<?php echo site_url('admin/escalas'); ?>"><?php echo lang('menu_escalas_create'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
+                                <li class="<?=active_link_function('escalas')?>"><a href="<?php echo site_url('admin/escalas/createfixed'); ?>"><?php echo lang('menu_escalas_create_fixed'); ?></a></li>
+                            </ul>
+                            <ul class="treeview-menu">
                                 <li class="<?=active_link_function('atribuir')?>"><a href="<?php echo site_url('admin/escalas/atribuir'); ?>"><?php echo lang('menu_escalas_atribuir'); ?></a></li>
                             </ul>
                         </li>

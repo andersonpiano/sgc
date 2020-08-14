@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://192.168.45.57/sgc';
+$config['base_url'] = 'http://192.168.45.76/sgc';
 //$config['base_url'] = 'http://www.somossolucoes.com.br/sgc';
 
 /*
