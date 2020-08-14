@@ -448,41 +448,55 @@ class Escalas extends Admin_Controller
 
             $datainicial = new DateTime($datainicialplantao);
             $datafinal = new DateTime($datafinalplantao);
+            $dias = $datainicial->diff($datafinal)->format('%a') + 1;
+            $indice = 0;
 
             if ($datafinal >= $datainicial) {
                 $escala_referencia = $this->escala_model->get_escala_referencia($setor_id, $datainicialplantao);
-                $indice_referencia = 0;
 
-                for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {                    
-                    $horaInicialReferencia = $escala_referencia[$indice_referencia]->horainicialplantao;
-                    $horaFinalReferencia = $escala_referencia[$indice_referencia]->horafinalplantao;
-                    //$duracaoReferencia = $escala_referencia[$indice_referencia]->duracao;
-                    $profissionalIdReferencia = $escala_referencia[$indice_referencia]->profissional_id;
-
+                for ($data = $datainicial; $data <= $datafinal; ) {
+                    $ref = $escala_referencia[$indice];
+                    
+                    $horaInicialReferencia = $ref->horainicialplantao;
+                    $horaFinalReferencia = $ref->horafinalplantao;
+                    $duracaoReferencia = $ref->duracao;
+                    $profissionalIdReferencia = $ref->profissional_id;
+                    
                     $duracao = 6;
-                    $dtinicialplantao = $i->format("Y-m-d");
+                    $dtinicialplantao = $data->format("Y-m-d");
                     $dtfinalplantao = $dtinicialplantao;
                     if ((int)$horaInicialReferencia > (int)$horaFinalReferencia) {
-                        $dtfinalplantao = $i->modify('+1 day')->format("Y-m-d");
+                        $dtfinalplantao = date('Y-m-d', strtotime($dtfinalplantao . ' +1 day'));
                         $duracao = 12;
                     }
                     $insert_data = array(
-                        'setor_id' => $additional_data['setor_id'],
+                        'setor_id' => $setor_id,
                         'dataplantao' => $dtinicialplantao,
                         'datafinalplantao' => $dtfinalplantao,
                         'horainicialplantao' => $horaInicialReferencia,
                         'horafinalplantao' => $horaFinalReferencia,
                         'duracao' => $duracao,
                         'profissional_id' => $profissionalIdReferencia,
-                    );                    
-                    
-                    $indice_referencia++;                    
+                    );
 
-                    echo('<pre>');
+                    echo($data->format('d/m/Y'));
+                    echo(" => " . $indice);
+                    echo("<br>");
+                    //var_dump($escala_referencia[$indice]);
                     var_dump($insert_data);
-                    echo('</pre>');
-                    
-                    //$success = $this->escala_model->insert($insert_data);
+                    echo("<br>");
+
+                    //$success = $this->escala_model->insertfixed($insert_data);
+
+                    if ($escala_referencia[$indice]->horafinalplantao == '07:00:00') {
+                        $data->modify('+1 day');
+                    }
+
+                    if ($indice == sizeof($escala_referencia)-1) {
+                        $indice = -1;
+                    }
+
+                    $indice++;
                 }
                 exit;
             } else {
