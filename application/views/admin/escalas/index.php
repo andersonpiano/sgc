@@ -9,6 +9,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php echo $breadcrumb; ?>
                 </section>
 
+                <?php if (isset($message) or $this->session->flashdata('message')) : ?>
+                <section class="content-header">
+                    <div class="alert bg-warning alert-dismissible" role="alert">
+                        <?php echo(isset($message) ? $message : '');?>
+                        <?php echo($this->session->flashdata('message') ? $this->session->flashdata('message') : '');?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
                 <section class="content">
                     <div class="row">
                         <div class="col-md-12">
@@ -17,8 +29,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <h3 class="box-title"><?php echo lang('escalas_find'); ?></h3>
                                 </div>
                                 <div class="box-body">
-                                    <?php echo isset($message) ? $message : '';?>
-
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala')); ?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
@@ -51,6 +61,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('escalas_tipovisualizacao', 'tipovisualizacao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-4">
+                                                <?php echo form_dropdown($tipovisualizacao);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_submit'))); ?>
@@ -66,6 +82,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </section>
 
+<?php if ($tipovisualizacao['value'] == 1) : ?>
+    <section class="content">
+        <div id='calendar'></div>
+    </section>
+<?php endif;?>
+<?php if ($tipovisualizacao['value'] == 0) : ?>
                 <section class="content">
                     <div class="row">
                         <div class="col-md-12">
@@ -178,4 +200,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                 </section>
+<?php endif; ?>
             </div>

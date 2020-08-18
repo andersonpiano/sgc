@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    // Teste de geolocalização
+    navigator.geolocation.getCurrentPosition(show_map);
+
     $(document).on('change', '#unidadehospitalar_id', function() {
         var val = $(this).val();
         var url = '/sgc/admin/escalas/setores/' + val;
@@ -49,3 +52,10 @@ $(window).load(function(){
 
 
 });
+
+function show_map(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    console.log(latitude);
+    console.log(longitude);
+  }

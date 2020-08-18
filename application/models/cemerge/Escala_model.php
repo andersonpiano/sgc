@@ -13,6 +13,7 @@ class Escala_model extends MY_Model
     public function get_escala_referencia($setor_id, $datainicial) {
         $fields = 'horainicialplantao, horafinalplantao, duracao, profissional_id';
         $where = 'dataplantao >= \'' . $datainicial . '\' - INTERVAL 28 DAY ';
+        $where .= 'and setor_id = ' . $setor_id . ' ';
         $order_by = 'dataplantao, horainicialplantao';
 
         $this->db->select($fields);

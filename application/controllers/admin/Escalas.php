@@ -39,6 +39,7 @@ class Escalas extends Admin_Controller
             $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
             $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
             $this->form_validation->set_rules('tipoescala', 'lang:escalas_tipoescala', 'required');
+            $this->form_validation->set_rules('tipovisualizacao', 'lang:escalas_tipovisualizacao', 'required');
 
             if ($this->form_validation->run() == true) {
                 $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
@@ -46,6 +47,7 @@ class Escalas extends Admin_Controller
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
                 $tipoescala = $this->input->post('tipoescala');
+                $tipovisualizacao = $this->input->post('tipovisualizacao');
 
                 $setores = $this->_get_setores($unidadehospitalar_id);
 
@@ -57,17 +59,18 @@ class Escalas extends Admin_Controller
                     'escalas.dataplantao <=' => $datafinal,
                 );
 
-                if ($tipoescala == 0) {
+                if ($tipoescala == 0 and $tipovisualizacao == 0) {
                     $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, null, 'dataplantao, horainicialplantao');
-                } elseif ($tipoescala == 1) {
+                } elseif ($tipoescala == 1 and $tipovisualizacao == 0) {
                     $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, 'dataplantao, horainicialplantao');
-                } elseif ($tipoescala == 2) {
+                } elseif ($tipoescala == 2 and $tipovisualizacao == 0) {
                     $this->data['escalas'] = $this->escala_model->get_passagens_trocas($where, null, 'dataplantao, horainicialplantao');
                 }
             } else {
                 $datainicial = date('Y') . "-" . date('m', strtotime("next month")) . "-01";
                 $datafinal = date('Y') . "-" . date('m-t', strtotime("next month"));
                 $setores = array('' => 'Selecione um setor');
+                $this->data['tipovisualizacao'] = 0;
             }
 
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -75,6 +78,7 @@ class Escalas extends Admin_Controller
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
 
             $tiposescala = $this->_get_tipos_escala();
+            $tiposvisualizacao = $this->_get_tipos_visualizacao();
 
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
@@ -97,6 +101,14 @@ class Escalas extends Admin_Controller
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('tipoescala'),
                 'options' => $tiposescala,
+            );
+            $this->data['tipovisualizacao'] = array(
+                'name'  => 'tipovisualizacao',
+                'id'    => 'tipovisualizacao',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipovisualizacao'),
+                'options' => $tiposvisualizacao,
             );
             $this->data['unidadehospitalar_id'] = array(
                 'name'  => 'unidadehospitalar_id',
@@ -454,51 +466,48 @@ class Escalas extends Admin_Controller
             if ($datafinal >= $datainicial) {
                 $escala_referencia = $this->escala_model->get_escala_referencia($setor_id, $datainicialplantao);
 
-                for ($data = $datainicial; $data <= $datafinal; ) {
-                    $ref = $escala_referencia[$indice];
-                    
-                    $horaInicialReferencia = $ref->horainicialplantao;
-                    $horaFinalReferencia = $ref->horafinalplantao;
-                    $duracaoReferencia = $ref->duracao;
-                    $profissionalIdReferencia = $ref->profissional_id;
-                    
-                    $duracao = 6;
-                    $dtinicialplantao = $data->format("Y-m-d");
-                    $dtfinalplantao = $dtinicialplantao;
-                    if ((int)$horaInicialReferencia > (int)$horaFinalReferencia) {
-                        $dtfinalplantao = date('Y-m-d', strtotime($dtfinalplantao . ' +1 day'));
-                        $duracao = 12;
+                if (sizeof($escala_referencia) > 0) {
+                    for ($data = $datainicial; $data <= $datafinal; ) {
+                        $ref = $escala_referencia[$indice];
+                        
+                        $horaInicialReferencia = $ref->horainicialplantao;
+                        $horaFinalReferencia = $ref->horafinalplantao;
+                        $duracaoReferencia = $ref->duracao;
+                        $profissionalIdReferencia = $ref->profissional_id;
+                        
+                        $duracao = 6;
+                        $dtinicialplantao = $data->format("Y-m-d");
+                        $dtfinalplantao = $dtinicialplantao;
+                        if ((int)$horaInicialReferencia > (int)$horaFinalReferencia) {
+                            $dtfinalplantao = date('Y-m-d', strtotime($dtfinalplantao . ' +1 day'));
+                            $duracao = 12;
+                        }
+                        $insert_data = array(
+                            'setor_id' => $setor_id,
+                            'dataplantao' => $dtinicialplantao,
+                            'datafinalplantao' => $dtfinalplantao,
+                            'horainicialplantao' => $horaInicialReferencia,
+                            'horafinalplantao' => $horaFinalReferencia,
+                            'duracao' => $duracao,
+                            'profissional_id' => $profissionalIdReferencia,
+                        );
+
+                        $success = $this->escala_model->insert($insert_data);
+
+                        if ($escala_referencia[$indice]->horafinalplantao == '07:00:00') {
+                            $data->modify('+1 day');
+                        }
+
+                        if ($indice == sizeof($escala_referencia)-1) {
+                            $indice = -1;
+                        }
+
+                        $indice++;
                     }
-                    $insert_data = array(
-                        'setor_id' => $setor_id,
-                        'dataplantao' => $dtinicialplantao,
-                        'datafinalplantao' => $dtfinalplantao,
-                        'horainicialplantao' => $horaInicialReferencia,
-                        'horafinalplantao' => $horaFinalReferencia,
-                        'duracao' => $duracao,
-                        'profissional_id' => $profissionalIdReferencia,
-                    );
-
-                    echo($data->format('d/m/Y'));
-                    echo(" => " . $indice);
-                    echo("<br>");
-                    //var_dump($escala_referencia[$indice]);
-                    var_dump($insert_data);
-                    echo("<br>");
-
-                    //$success = $this->escala_model->insertfixed($insert_data);
-
-                    if ($escala_referencia[$indice]->horafinalplantao == '07:00:00') {
-                        $data->modify('+1 day');
-                    }
-
-                    if ($indice == sizeof($escala_referencia)-1) {
-                        $indice = -1;
-                    }
-
-                    $indice++;
+                } else {
+                    $this->session->set_flashdata('message', 'Não existe escala anterior para este setor. Favor criar uma escala inicial para que sirva de modelo para os próximos meses.');
+                    redirect('admin/escalas/createfixed', 'refresh');
                 }
-                exit;
             } else {
                 $this->session->set_flashdata('message', 'A data final deve ser menor que a data inicial');
                 redirect('admin/escalas/createfixed', 'refresh');
@@ -795,6 +804,76 @@ class Escalas extends Admin_Controller
 
         echo json_encode($profissional);
         echo json_encode($escala);
+        exit;
+    }
+
+    public function _get_tipos_visualizacao()
+    {
+        $tipos_visualizacao = array(
+            '0' => 'Lista',
+            '1' => 'Calendário',
+        );
+
+        return $tipos_visualizacao;
+    }
+
+    /**
+     * Busca os plantões do setor para compor o calendário
+     */
+    public function trocasepassagensdosetor()
+    {
+        $mes = (int)$this->uri->segment(5, 0);
+        $setor = (int)$this->uri->segment(7, 0);
+
+        $escala = array();
+
+        if ($mes != 0 and $setor != 0) {
+            $escala = $this->escala_model->get_escala_consolidada_setor_calendario(
+                $mes, $setor, $this->mobile_detect->isMobile()
+            );
+        }
+
+        echo(json_encode($escala));
+        exit;
+    }
+
+    /**
+     * Busca os plantões do setor para compor o calendário
+     */
+    public function escalaoriginaldosetor()
+    {
+        $mes = (int)$this->uri->segment(5, 0);
+        $setor = (int)$this->uri->segment(7, 0);
+
+        $escala = array();
+
+        if ($mes != 0 and $setor != 0) {
+            $escala = $this->escala_model->get_escala_consolidada_setor_calendario(
+                $mes, $setor, $this->mobile_detect->isMobile()
+            );
+        }
+
+        echo(json_encode($escala));
+        exit;
+    }
+
+    /**
+     * Busca os plantões do setor para compor o calendário
+     */
+    public function escalaconsolidadadosetor()
+    {
+        $mes = (int)$this->uri->segment(5, 0);
+        $setor = (int)$this->uri->segment(7, 0);
+
+        $escala = array();
+
+        if ($mes != 0 and $setor != 0) {
+            $escala = $this->escala_model->get_escala_consolidada_setor_calendario(
+                $mes, $setor, $this->mobile_detect->isMobile()
+            );
+        }
+
+        echo(json_encode($escala));
         exit;
     }
 }

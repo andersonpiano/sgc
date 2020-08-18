@@ -7,23 +7,45 @@ document.addEventListener('DOMContentLoaded', function() {
     var month = dtinicial.getUTCMonth() + 1;
     var url = "";
     var tipoescala = document.getElementById('tipoescala');
-    switch (tipoescala.value) {
-        case "0" : // Minha escala consolidada
-            url = 'plantoes/minhaescalaconsolidada/mes/' + month;
-            url += '/setor/' + setor.value;
-            url += '/profissional/' + profissional.value;
-            break;
-        case "1" : // Minhas trocas e passagens
-            url = 'plantoes/minhastrocasepassagens/mes/' + month;
-            url += '/setor/' + setor.value;
-            url += '/profissional/' + profissional.value;
-            break;
-        case "2" : // Consolidada do setor
-            url = 'plantoes/escalaconsolidadadosetor/mes/' + month;
-            url += '/setor/' + setor.value;
-            break;
-        default :
-            break;
+    var currentPage = window.location.pathname;
+    if (currentPage == '/sgc/admin/plantoes') {
+        switch (tipoescala.value) {
+            case "0" : // Minha escala consolidada
+                url = 'plantoes/minhaescalaconsolidada/mes/' + month;
+                url += '/setor/' + setor.value;
+                url += '/profissional/' + profissional.value;
+                break;
+            case "1" : // Minhas trocas e passagens
+                url = 'plantoes/minhastrocasepassagens/mes/' + month;
+                url += '/setor/' + setor.value;
+                url += '/profissional/' + profissional.value;
+                break;
+            case "2" : // Consolidada do setor
+                url = 'plantoes/escalaconsolidadadosetor/mes/' + month;
+                url += '/setor/' + setor.value;
+                break;
+            default :
+                break;
+        }
+    } else if (currentPage == '/sgc/admin/escalas') {
+        switch (tipoescala.value) {
+            case "0" : // Original
+                // Implementar
+                url = 'escalas/escalaoriginaldosetor/mes/' + month;
+                url += '/setor/' + setor.value;
+                break;
+            case "1" : // Consolidada
+                url = 'escalas/escalaconsolidadadosetor/mes/' + month;
+                url += '/setor/' + setor.value;
+                break;
+            case "2" : // Trocas e Passagens
+                // Implementar
+                url = 'escalas/trocasepassagensdosetor/mes/' + month;
+                url += '/setor/' + setor.value;
+                break;
+            default :
+                break;
+        }
     }
     if (calendarEl != null && url != "") {
         var calendar = new FullCalendar.Calendar(calendarEl, {
