@@ -3,13 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Profissionais extends Admin_Controller
 {
+    private $_permitted_groups = array('admin', 'coordenadorplantao', 'sac');
+    private $_admin_groups = array('admin', 'coordenadorplantao', 'sac');
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct($this->_permitted_groups);
 
         /* Load :: Common */
         $this->load->model('cemerge/profissional_model');
+        $this->load->model('cemerge/vinculo_model');
         $this->lang->load('admin/profissionais');
 
         /* Title Page */
@@ -22,40 +25,54 @@ class Profissionais extends Admin_Controller
 
     public function index()
     {
-        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os profissionais.');
             redirect('auth/login', 'refresh');
-        } else {
-            /* Breadcrumbs */
-            $this->data['breadcrumb'] = $this->breadcrumbs->show();
-
-            /* Validate form input */
-            $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
-
-            if ($this->form_validation->run() == true) {
-                $nome = $this->input->post('nome');
-                
-                /* Profissionais */
-                $this->data['profissionais'] = $this->profissional_model->get_like('nome', $nome, 'nome');
-            } else {
-                $this->data['profissionais'] = array();
-                $nome = '';
-            }
-
-            $this->data['nome'] = array(
-                'name'  => 'nome',
-                'id'    => 'nome',
-                'type'  => 'text',
-                'class' => 'form-control',
-                'value' => $nome,
-            );
-
-            /* Load Template */
-            $this->template->admin_render('admin/profissionais/index', $this->data);
         }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('auth/login', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Validate form input */
+        $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
+
+        if ($this->form_validation->run() == true) {
+            $nome = $this->input->post('nome');
+            
+            /* Profissionais */
+            $this->data['profissionais'] = $this->profissional_model->get_like('nome', $nome, 'nome');
+        } else {
+            $this->data['profissionais'] = array();
+            $nome = '';
+        }
+
+        $this->data['nome'] = array(
+            'name'  => 'nome',
+            'id'    => 'nome',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $nome,
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/profissionais/index', $this->data);
     }
 
     public function create()
     {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_profissionais_create'), 'admin/profissionais/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
@@ -63,21 +80,42 @@ class Profissionais extends Admin_Controller
         /* Variables */
         $tables = $this->config->item('tables', 'ion_auth');
 
+        // Vínculos
+        $vinculos = $this->_get_vinculos();
+
         /* Validate form input */
-        $this->form_validation->set_rules('registro', 'lang:profissionais_registro', 'required');
+        $this->form_validation->set_rules('registro', 'lang:profissionais_registro', 'required|is_unique[profissionais.registro]');
+        $this->form_validation->set_rules('matricula', 'lang:profissionais_matricula', 'required');
         $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
-        $this->form_validation->set_rules('email', 'lang:profissionais_email', 'required|valid_email');
+        $this->form_validation->set_rules('nomecurto', 'lang:profissionais_nomecurto', 'required');
+        $this->form_validation->set_rules('vinculo', 'lang:profissionais_vinculo', 'required');
+        $this->form_validation->set_rules('email', 'lang:profissionais_email', 'required|valid_email|is_unique[profissionais.email]');
+        $this->form_validation->set_rules('cpf', 'lang:profissionais_cpf', 'required|is_unique[profissionais.cpf]');
+        $this->form_validation->set_rules('rg', 'lang:profissionais_rg', 'required');
+        $this->form_validation->set_rules('orgao_expeditor_rg', 'lang:profissionais_orgao_expeditor_rg', 'required');
 
         if ($this->form_validation->run() == true) {
             $registro = $this->input->post('registro');
+            $matricula = $this->input->post('matricula');
             $nome = $this->input->post('nome');
+            $nomecurto = $this->input->post('nomecurto');
+            $vinculo = $this->input->post('vinculo');
             $email = $this->input->post('email');
+            $cpf = $this->input->post('cpf');
+            $rg = $this->input->post('rg');
+            $orgao_expeditor_rg = $this->input->post('orgao_expeditor_rg');
             $active = $this->input->post('active');
 
             $additional_data = array(
                 'registro' => $this->input->post('registro'),
+                'matricula' => $this->input->post('matricula'),
                 'nome' => $this->input->post('nome'),
+                'vinculo_id' => $vinculo,
+                'nomecurto' => $this->input->post('nomecurto'),
                 'email' => $this->input->post('email'),
+                'cpf' => $this->input->post('cpf'),
+                'rg' => $this->input->post('rg'),
+                'orgao_expeditor_rg' => $this->input->post('orgao_expeditor_rg'),
                 'active' => $this->input->post('active')
             );
         }
@@ -98,6 +136,13 @@ class Profissionais extends Admin_Controller
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('registro'),
             );
+            $this->data['matricula'] = array(
+                'name'  => 'matricula',
+                'id'    => 'matricula',
+                'type'  => 'text',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('matricula'),
+            );
             $this->data['nome'] = array(
                 'name'  => 'nome',
                 'id'    => 'nome',
@@ -105,12 +150,48 @@ class Profissionais extends Admin_Controller
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('nome'),
             );
+            $this->data['nomecurto'] = array(
+                'name'  => 'nomecurto',
+                'id'    => 'nomecurto',
+                'type'  => 'text',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('nomecurto'),
+            );
+            $this->data['vinculo'] = array(
+                'name'  => 'vinculo',
+                'id'    => 'vinculo',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'selected' => $this->form_validation->set_value('vinculo'),
+                'options' => $vinculos,
+            );
             $this->data['email'] = array(
                 'name'  => 'email',
                 'id'    => 'email',
                 'type'  => 'text',
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('email'),
+            );
+            $this->data['cpf'] = array(
+                'name'  => 'cpf',
+                'id'    => 'cpf',
+                'type'  => 'text',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('cpf'),
+            );
+            $this->data['rg'] = array(
+                'name'  => 'rg',
+                'id'    => 'rg',
+                'type'  => 'text',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('rg'),
+            );
+            $this->data['orgao_expeditor_rg'] = array(
+                'name'  => 'orgao_expeditor_rg',
+                'id'    => 'orgao_expeditor_rg',
+                'type'  => 'text',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('orgao_expeditor_rg'),
             );
             $this->data['active'] = array(
                 'name'  => 'active',
@@ -127,12 +208,21 @@ class Profissionais extends Admin_Controller
 
     public function createuser($id)
     {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
         $id = (int) $id;
 
         /* Load Data */
         $profissional = $this->profissional_model->get_by_id($id);
 
-        if ($profissional) {
+        if ($profissional and trim($profissional->cpf) != '0' and trim($profissional->cpf) != '') {
             $username = strtolower($profissional->nomecurto);
             $password = $profissional->cpf;
             $email = $profissional->email;
@@ -153,6 +243,12 @@ class Profissionais extends Admin_Controller
                 redirect('admin/profissionais/edit/' . $id, 'refresh');
             }
 
+            // User exists?
+            if ($this->ion_auth->email_check($email)) {
+                $this->session->set_flashdata('message', 'Já existe um usuário criado para este profissional. Favor editá-lo.');
+                redirect('admin/profissionais/edit/' . $id, 'refresh');
+            }
+
             $userCreated = $this->ion_auth->register($username, $password, $email, $additional_data, $group);
 
             if ($userCreated) {
@@ -167,22 +263,26 @@ class Profissionais extends Admin_Controller
             } else {
                 $this->session->set_flashdata('message', 'Houve um erro ao criar o usuário. Tente novamente.');
             }
+        } else {
+            $this->session->set_flashdata('message', 'Não foi encontrado profissional com o código informado ou o profissional não possui CPF cadastrado.');
         }
 
         /* Redirect to edit page */
         redirect('admin/profissionais/edit/' . $id, 'refresh');
     }
 
-    public function edit($id)
+    public function linktosector($id)
     {
-        $id = (int) $id;
-
-        if (!$this->ion_auth->logged_in()
-            or (!$this->ion_auth->is_admin()
-            and !($this->ion_auth->user()->row()->id == $id))
-        ) {
-            redirect('auth', 'refresh');
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
         }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $id = (int) $id;
 
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_profissionais_edit'), 'admin/profissionais/edit');
@@ -190,6 +290,116 @@ class Profissionais extends Admin_Controller
 
         /* Load Data */
         $profissional = $this->profissional_model->get_by_id($id);
+        $unidadeshospitalares = $this->_get_unidadeshospitalares();
+        $setores = array();
+
+        /* Validate form input */
+        $this->form_validation->set_rules('unidadehospitalar_id', 'lang:profissionais_unidadehospitalar', 'required');
+        $this->form_validation->set_rules('setor_id', 'lang:profissionais_setor', 'required');
+
+        if (isset($_POST) && !empty($_POST)) {
+            if ($this->form_validation->run() == true) {
+                $setor_id = $this->input->post('setor_id');
+                $data = array(
+                    'setor_id' => $setor_id,
+                    'profissional_id' => $id,
+                );
+
+                $this->load->model('cemerge/profissionalsetor_model');
+
+                if (empty($this->profissionalsetor_model->get_where(array('setor_id' => $setor_id, 'profissional_id' =>$id)))) {
+                    if ($this->profissionalsetor_model->insert($data)) {
+                        $this->session->set_flashdata('message', 'Profissional vinculado ao setor com sucesso.');
+                    } else {
+                        $this->session->set_flashdata('message', 'Houve um erro ao vincular o profissional ao setor.');
+                    }
+                } else {
+                    $this->session->set_flashdata('message', 'O profissional já é vinculado a este setor.');
+                }
+                redirect('admin/profissionais', 'refresh');
+            }
+        }
+
+        // display the edit user form
+        $this->data['csrf'] = $this->_get_csrf_nonce();
+
+        // set the flash data error message if there is one
+        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+        // pass the profissional to the view
+        $this->data['profissional'] = $profissional;
+
+        $this->data['unidadehospitalar_id'] = array(
+            'name'  => 'unidadehospitalar_id',
+            'id'    => 'unidadehospitalar_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+            'options' => $unidadeshospitalares,
+        );
+        $this->data['setor_id'] = array(
+            'name'  => 'setor_id',
+            'id'    => 'setor_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('setor_id'),
+            'options' => $setores,
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/profissionais/linktosector', $this->data);
+    }
+
+    public function unlinkfromsector($profissional_id, $setor_id)
+    {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $profissional_id = (int) $profissional_id;
+        $setor_id = (int) $setor_id;
+
+        // Checar se o profissional possui plantões ativos no setor
+
+        $this->load->model('cemerge/profissionalsetor_model');
+        $success = $this->profissionalsetor_model->delete(array('profissional_id' => $profissional_id, 'setor_id' => $setor_id));
+
+        if ($success != false) {
+            $this->session->set_flashdata('message', 'Profissional desvinculado do setor com sucesso.');
+        } else {
+            $this->session->set_flashdata('message', 'Houve um problema ao desvincular o profissional do setor.');
+        }
+
+        /* Redirect */
+        redirect('admin/setores/view/'.$setor_id, 'refresh');
+    }
+
+    public function edit($id)
+    {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $id = (int) $id;
+
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_profissionais_edit'), 'admin/profissionais/edit');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Load Data */
+        $profissional = $this->profissional_model->get_by_id($id);
+        // Vínculos
+        $vinculos = $this->_get_vinculos();
         //$groups        = $this->ion_auth->groups()->result_array();
         //$currentGroups = $this->ion_auth->get_users_groups($id)->result();
 
@@ -197,40 +407,54 @@ class Profissionais extends Admin_Controller
         $this->form_validation->set_rules('registro', 'lang:profissionais_registro', 'required');
         $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
         $this->form_validation->set_rules('nomecurto', 'lang:profissionais_nomecurto', 'required');
+        $this->form_validation->set_rules('matricula', 'lang:profissionais_matricula', 'required');
+        $this->form_validation->set_rules('vinculo', 'lang:profissionais_vinculo', 'required');
         $this->form_validation->set_rules('email', 'lang:profissionais_email', 'required|valid_email');
+        $this->form_validation->set_rules('cpf', 'lang:profissionais_cpf', 'required');
+        $this->form_validation->set_rules('rg', 'lang:profissionais_rg', 'required');
+        $this->form_validation->set_rules('orgao_expeditor_rg', 'lang:orgao_expeditor_rg', 'required');
         //$this->form_validation->set_rules('active', 'lang:edit_user_validation_company_label', 'required');
 
-        if (isset($_POST) && ! empty($_POST)) {
-            if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
-                show_error($this->lang->line('error_csrf'));
-            }
+        if (isset($_POST) and !empty($_POST)) {
+            if ($this->ion_auth->is_admin()) {
+                if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
+                    show_error($this->lang->line('error_csrf'));
+                }
 
-            if ($this->form_validation->run() == true) {
-                $data = array(
-                    'registro' => $this->input->post('registro'),
-                    'nome' => $this->input->post('nome'),
-                    'nomecurto' => $this->input->post('nomecurto'),
-                    'email' => $this->input->post('email'),
-                    'active' => $this->input->post('active')
-                );
+                if ($this->form_validation->run() == true) {
+                    $data = array(
+                        'registro' => $this->input->post('registro'),
+                        'matricula' => $this->input->post('matricula'),
+                        'nome' => $this->input->post('nome'),
+                        'nomecurto' => $this->input->post('nomecurto'),
+                        'vinculo_id' => $this->input->post('vinculo'),
+                        'email' => $this->input->post('email'),
+                        'cpf' => $this->input->post('cpf'),
+                        'rg' => $this->input->post('rg'),
+                        'orgao_expeditor_rg' => $this->input->post('orgao_expeditor_rg'),
+                        'active' => $this->input->post('active')
+                    );
 
-                if ($this->profissional_model->update($profissional->id, $data)) {
-                    $this->session->set_flashdata('message', $this->ion_auth->messages());
+                    if ($this->profissional_model->update($profissional->id, $data)) {
+                        $this->session->set_flashdata('message', 'Profissional atualizado com sucesso.');
 
-                    if ($this->ion_auth->is_admin()) {
-                        redirect('admin/profissionais', 'refresh');
+                        if ($this->ion_auth->is_admin()) {
+                            redirect('admin/profissionais', 'refresh');
+                        } else {
+                            redirect('admin', 'refresh');
+                        }
                     } else {
-                        redirect('admin', 'refresh');
-                    }
-                } else {
-                    $this->session->set_flashdata('message', $this->ion_auth->errors());
+                        $this->session->set_flashdata('message', $this->ion_auth->errors());
 
-                    if ($this->ion_auth->is_admin()) {
-                        redirect('auth', 'refresh');
-                    } else {
-                        redirect('/', 'refresh');
+                        if ($this->ion_auth->is_admin()) {
+                            redirect('admin/profissionais', 'refresh');
+                        } else {
+                            redirect('admin', 'refresh');
+                        }
                     }
                 }
+            } else {
+                $this->session->set_flashdata('message', 'Somente administradores podem alterar dados de profissionais.');
             }
         }
 
@@ -250,6 +474,13 @@ class Profissionais extends Admin_Controller
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('registro', $profissional->registro)
         );
+        $this->data['matricula'] = array(
+            'name'  => 'matricula',
+            'id'    => 'matricula',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('matricula', $profissional->matricula)
+        );
         $this->data['nome'] = array(
             'name'  => 'nome',
             'id'    => 'nome',
@@ -264,12 +495,41 @@ class Profissionais extends Admin_Controller
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('nomecurto', $profissional->nomecurto)
         );
+        $this->data['vinculo'] = array(
+            'name'  => 'vinculo',
+            'id'    => 'vinculo',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'selected' => $this->form_validation->set_value('vinculo', $profissional->vinculo_id),
+            'options' => $vinculos,
+        );
         $this->data['email'] = array(
             'name'  => 'email',
             'id'    => 'email',
             'type'  => 'text',
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('email', $profissional->email)
+        );
+        $this->data['cpf'] = array(
+            'name'  => 'cpf',
+            'id'    => 'cpf',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('cpf', $profissional->cpf)
+        );
+        $this->data['rg'] = array(
+            'name'  => 'rg',
+            'id'    => 'rg',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('rg', $profissional->rg)
+        );
+        $this->data['orgao_expeditor_rg'] = array(
+            'name'  => 'orgao_expeditor_rg',
+            'id'    => 'orgao_expeditor_rg',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('orgao_expeditor_rg', $profissional->orgao_expeditor_rg)
         );
         $this->data['active'] = array(
             'name'  => 'active',
@@ -285,6 +545,19 @@ class Profissionais extends Admin_Controller
 
     public function view($id)
     {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        /* Load aditional models */
+        $this->load->model('cemerge/setor_model');
+        $this->load->model('cemerge/usuarioprofissional_model');
+
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_users_profile'), 'admin/profissionais/view');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
@@ -293,16 +566,68 @@ class Profissionais extends Admin_Controller
         $id = (int) $id;
 
         $this->data['profissional'] = $this->profissional_model->get_by_id($id);
-        /*
-        // Setores
-        foreach ($this->data['user_info'] as $k => $user)
-        {
-            $this->data['user_info'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+        $this->data['profissional']->usuario = array();
+        $usuario_profissional = $this->usuarioprofissional_model->get_where(array('profissional_id' => $id));
+        if (!empty($usuario_profissional)) {
+            $this->data['profissional']->usuario = $usuario_profissional[0];
+            if (sizeof($usuario_profissional) > 1) {
+                // O profissional está vinculado a mais de um usuário
+                $this->session->set_flashdata('message', 'O profissional está vinculado a mais de um usuário. Isso pode causar erros. Favor solicitar a correção ao SAC.');
+            }
+        } else {
+            // Não há vínculo entre profissional e usuário
+            $this->session->set_flashdata('message', 'O profissional não está vinculado a nenhum usuário. Favor corrigir, caso seja necessário.');
         }
-        */
+        $this->data['profissional']->setores = $this->setor_model->get_setores_por_profissional($id);
+        $this->data['profissional']->setorescoordena = $this->setor_model->get_setores_coordenados_por_profissional($id);
+
+        $this->data['coordenador'] = new stdClass();
+        $this->data['coordenador']->setorescoordena = $this->setor_model->get_setores_coordenados_por_usuario($this->ion_auth->user()->row()->id);
+
+        //var_dump($this->data['coordenador']->setorescoordena);exit;
 
         /* Load Template */
         $this->template->admin_render('admin/profissionais/view', $this->data);
+    }
+
+    public function profissionaisporunidade($unidadehospitalar_id)
+    {
+        $unidadehospitalar_id = (int) $unidadehospitalar_id;
+        
+        if ($unidadehospitalar_id and $unidadehospitalar_id != 0) {
+            $profissionais = $this->profissional_model->get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
+        }
+        array_unshift($profissionais, ['id' => '', 'nome' => 'Selecione um profissional']);
+
+        echo json_encode($profissionais);
+        exit;
+    }
+
+    public function _get_unidadeshospitalares()
+    {
+        $this->load->model('cemerge/unidadehospitalar_model');
+        $unidades = $this->unidadehospitalar_model->get_all();
+
+        $unidadeshospitalares = array(
+            '' => 'Selecione uma unidade hospitalar',
+        );
+        foreach ($unidades as $unidade) {
+            $unidadeshospitalares[$unidade->id] = $unidade->razaosocial;
+        }
+
+        return $unidadeshospitalares;
+    }
+
+    public function _get_vinculos()
+    {
+        $vinculos = $this->vinculo_model->get_all();
+
+        $v = array();
+        foreach ($vinculos as $vinculo) {
+            $v[$vinculo->id] = $vinculo->nome;
+        }
+
+        return $v;
     }
 
     public function _get_csrf_nonce()

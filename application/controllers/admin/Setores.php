@@ -3,7 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Setores extends Admin_Controller {
 
-    private $_permitted_groups = array('admin', 'profissionais');
+    private $_permitted_groups = array('admin', 'profissionais', 'coordenadorplantao', 'sac');
+    private $_admin_groups = array('admin');
 
     public function __construct()
     {
@@ -22,51 +23,64 @@ class Setores extends Admin_Controller {
         $this->breadcrumbs->unshift(1, lang('menu_setores'), 'admin/setores');
     }
 
-
     public function index()
     {
-        if (! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
             redirect('auth/login', 'refresh');
-        } else {
-            /* Breadcrumbs */
-            $this->data['breadcrumb'] = $this->breadcrumbs->show();
-
-            /* Validate form input */
-            $this->form_validation->set_rules('unidadehospitalar_id', 'lang:setores_unidadehospitalar', 'required');
-
-            if ($this->form_validation->run() == true) {
-                $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
-                
-                /* Setores */
-                $this->data['setores'] = $this->setor_model->get_where(['unidadehospitalar_id' => $unidadehospitalar_id]);
-
-                /*  Unidades hospitalares */
-                // Corrigir atributo para unidadehospitalar_id
-                foreach ($this->data['setores'] as $k => $setor) {
-                    $this->data['setores'][$k]->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
-                }
-            } else {
-                $this->data['setores'] = array();
-            }
-
-            $unidadeshospitalares = $this->_get_unidadeshospitalares();
-
-            $this->data['unidadehospitalar_id'] = array(
-                'name'  => 'unidadehospitalar_id',
-                'id'    => 'unidadehospitalar_id',
-                'type'  => 'select',
-                'class' => 'form-control',
-                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
-                'options' => $unidadeshospitalares,
-            );
-
-            /* Load Template */
-            $this->template->admin_render('admin/setores/index', $this->data);
         }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('auth/login', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Validate form input */
+        $this->form_validation->set_rules('unidadehospitalar_id', 'lang:setores_unidadehospitalar', 'required');
+
+        if ($this->form_validation->run() == true) {
+            $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+            
+            /* Setores */
+            $this->data['setores'] = $this->setor_model->get_where(['unidadehospitalar_id' => $unidadehospitalar_id]);
+
+            /*  Unidades hospitalares */
+            // Corrigir atributo para unidadehospitalar_id
+            foreach ($this->data['setores'] as $k => $setor) {
+                $this->data['setores'][$k]->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
+            }
+        } else {
+            $this->data['setores'] = array();
+        }
+
+        $unidadeshospitalares = $this->_get_unidadeshospitalares();
+
+        $this->data['unidadehospitalar_id'] = array(
+            'name'  => 'unidadehospitalar_id',
+            'id'    => 'unidadehospitalar_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+            'options' => $unidadeshospitalares,
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/setores/index', $this->data);
     }
 
     public function create()
     {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_setores_create'), 'admin/setores/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
@@ -77,15 +91,18 @@ class Setores extends Admin_Controller {
         /* Validate form input */
         $this->form_validation->set_rules('nome', 'lang:setores_nome', 'required');
         $this->form_validation->set_rules('unidadehospitalar_id', 'lang:setores_unidadehospitalar', 'required');
+        $this->form_validation->set_rules('maximoprofissionais', 'lang:setores_maximoprofissionais', 'required|greater_than[0]|integer');
 
         if ($this->form_validation->run() == true) {
             $nome = $this->input->post('nome');
             $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+            $maximoprofissionais = $this->input->post('maximoprofissionais');
             $active = $this->input->post('active');
 
             $additional_data = array(
                 'nome' => $this->input->post('nome'),
                 'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
+                'maximoprofissionais' => $this->input->post('maximoprofissionais'),
                 'active' => $this->input->post('active')
             );
         }
@@ -116,6 +133,13 @@ class Setores extends Admin_Controller {
                 'value' => $this->form_validation->set_value('unidadehospitalar_id'),
                 'options' => $unidadeshospitalares
             );
+            $this->data['maximoprofissionais'] = array(
+                'name'  => 'maximoprofissionais',
+                'id'    => 'maximoprofissionais',
+                'type'  => 'number',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('maximoprofissionais'),
+            );
             $this->data['active'] = array(
                 'name'  => 'active',
                 'id'    => 'active',
@@ -131,11 +155,16 @@ class Setores extends Admin_Controller {
 
     public function edit($id)
     {
-        $id = (int) $id;
-
-        if (!$this->ion_auth->logged_in() or !$this->ion_auth->is_admin()) {
-            redirect('auth', 'refresh');
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
         }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $id = (int) $id;
 
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_setores_edit'), 'admin/setores/edit');
@@ -149,6 +178,7 @@ class Setores extends Admin_Controller {
         /* Validate form input */
         $this->form_validation->set_rules('nome', 'lang:setores_nome', 'required');
         $this->form_validation->set_rules('unidadehospitalar_id', 'lang:setores_unidadehospitalar', 'required');
+        $this->form_validation->set_rules('maximoprofissionais', 'lang:setores_maximoprofissionais', 'required|greater_than[0]|integer');
 
         if (isset($_POST) && ! empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
@@ -158,7 +188,8 @@ class Setores extends Admin_Controller {
             if ($this->form_validation->run() == true) {
                 $data = array(
                     'nome' => $this->input->post('nome'),
-                    'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id')
+                    'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
+                    'maximoprofissionais' => $this->input->post('maximoprofissionais'),
                 );
 
                 if ($this->setor_model->update($setor->id, $data)) {
@@ -173,9 +204,9 @@ class Setores extends Admin_Controller {
                     $this->session->set_flashdata('message', $this->ion_auth->errors());
 
                     if ($this->ion_auth->is_admin()) {
-                        redirect('auth', 'refresh');
+                        redirect('admin/setores', 'refresh');
                     } else {
-                        redirect('/', 'refresh');
+                        redirect('admin', 'refresh');
                     }
                 }
             }
@@ -209,6 +240,13 @@ class Setores extends Admin_Controller {
             'options' => $unidadeshospitalares,
             'selected' => $setor->unidadehospitalar_id
         );
+        $this->data['maximoprofissionais'] = array(
+            'name'  => 'maximoprofissionais',
+            'id'    => 'maximoprofissionais',
+            'type'  => 'number',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('maximoprofissionais', $setor->maximoprofissionais),
+        );
         $this->data['active'] = array(
             'name'  => 'active',
             'id'    => 'active',
@@ -223,6 +261,15 @@ class Setores extends Admin_Controller {
 
     public function view($id)
     {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
+            redirect('auth/login', 'refresh');
+        }
+
+        /* Load aditional models */
+        $this->load->model('cemerge/profissional_model');
+        $this->load->model('cemerge/usuariosetor_model');
+
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_setores'), 'admin/setores/view');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
@@ -232,6 +279,8 @@ class Setores extends Admin_Controller {
 
         $this->data['setor'] = $this->setor_model->get_by_id($id);
         $this->data['setor']->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($this->data['setor']->unidadehospitalar_id);
+        $this->data['setor']->profissionais = $this->profissional_model->get_profissionais_por_setor($id);
+        $this->data['setor']->usuarios = $this->usuariosetor_model->get_usuarios_por_setor($id);
 
         /* Load Template */
         $this->template->admin_render('admin/setores/view', $this->data);
@@ -270,11 +319,30 @@ class Setores extends Admin_Controller {
         return $unidadeshospitalares;
     }
 
-    public function setores($id)
+    public function setores($id, $profissional_id = null, $user_id = null)
     {
         $id = (int) $id;
+        
+        if ($profissional_id and $profissional_id != 0) {
+            $setores = $this->setor_model->get_by_unidade_profissional($id, $profissional_id);
+        } elseif ($user_id and $user_id != 0) {
+            $setores = $this->setor_model->get_by_unidade_usuario($id, $user_id);
+        } else {
+            $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id], null, 'nome');
+        }
+        array_unshift($setores, ['id' => '', 'nome' => 'Selecione um setor']);
 
-        $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id]);
+        echo json_encode($setores);
+        exit;
+    }
+
+    public function setores_assessus($cd_pes_jur)
+    {
+        $cd_pes_jur = (int) $cd_pes_jur;
+
+        $this->load->model('cemerge/setor_model');
+        $setores = $this->setor_model->get_setores_assessus_por_cd_pes_jur($cd_pes_jur);
+        array_unshift($setores, ['cd_set' => '', 'nm_set' => 'Selecione um setor']);
 
         echo json_encode($setores);
         exit;

@@ -58,19 +58,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo(date('d/m/Y', strtotime($justificativa->data_plantao))); ?></td>
                                             </tr>
                                             <tr>
-                                                <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
+                                                <th><?php echo(lang('justificativas_hora_entrada')); ?></th>
                                                 <td><?php echo($justificativa->hora_entrada ? date('H:i', strtotime($justificativa->hora_entrada)) : "-"); ?></td>
                                             </tr>
                                             <tr>
-                                                <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
-                                                <td><?php echo($justificativa->hora_saida ? date('H:i', strtotime($justificativa->hora_saida)) : "-"); ?></td>
-                                            </tr>
-                                            <tr>
-                                                <th><?php echo(lang('justificativas_hora_entrada').' Justificada'); ?></th>
-                                                <td><?php echo($justificativa->hora_entrada ? date('H:i', strtotime($justificativa->hora_entrada)) : "-"); ?></td>
-                                            </tr>
-                                            <tr>
-                                                <th><?php echo(lang('justificativas_hora_saida').' Justificada'); ?></th>
+                                                <th><?php echo(lang('justificativas_hora_saida')); ?></th>
                                                 <td><?php echo($justificativa->hora_saida ? date('H:i', strtotime($justificativa->hora_saida)) : "-"); ?></td>
                                             </tr>
                                             <tr>

@@ -9,20 +9,127 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php echo $breadcrumb; ?>
                 </section>
 
+                <?php if ($this->session->flashdata('message')) : ?>
+                <section class="content-header">
+                    <div class="alert bg-warning alert-dismissible" role="alert">
+                        <?php echo($this->session->flashdata('message') ? $this->session->flashdata('message') : '');?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
                 <section class="content">
                     <?php echo $dashboard_alert_file_install; ?>
                     <?php if ($this->ion_auth->in_group('profissionais')):?>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 col-xs-12">
-                            <a href="<?php echo(site_url('admin/plantoes'));?>">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-maroon"><i class="fa fa-calendar"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Meus Plantões</span>
-                                        <span class="info-box-number">Acessar</span>
+                    <div class="scrollmenu">
+                        <div class="row">
+                            <div class="col-md-3 col-xs-10">
+                                <div class="w3-card-2 w3-white w3-margin-bottom w3-round-large">
+                                    <header class="w3-container w3-white">
+                                        <h5><span class="fa fa-lg fa-refresh"></span> Cessões e Trocas</h5>
+                                    </header>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-share"></span> Cessões</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p><?php echo(anchor(site_url('admin/profissional/plantoes/cessoestrocas'), $cessoes)); ?></p>
+                                    </div>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-exchange"></span> Trocas</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p><?php echo(anchor(site_url('admin/profissional/plantoes/cessoestrocas'), $trocas)); ?></p>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
+                            <div class="col-md-3 col-xs-10">
+                                <div class="w3-card-2 w3-white w3-margin-bottom w3-round-large">
+                                    <header class="w3-container w3-white">
+                                        <h5><span class="fa fa-lg fa-medkit"></span> Meus Plantões</h5>
+                                    </header>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-calendar"></span> Próximos plantões</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p><?php echo(anchor(site_url('admin/profissional/plantoes/proximosplantoes'), $proximosplantoes)); ?></p>
+                                    </div>
+                                    <!--
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-plus-square"></span> Escala por Setor</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p>Você tem 3 trocas propostas</p>
+                                    </div>
+                                    -->
+                                </div>
+                            </div>
+                            <!--
+                            <div class="col-md-3 col-xs-10">
+                                <div class="w3-card-2 w3-white w3-margin-bottom w3-round-large">
+                                    <header class="w3-container w3-white">
+                                        <h5><span class="fa fa-lg fa-medkit"></span> Oportunidades</h5>
+                                    </header>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-hourglass-3"></span> Urgentes</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p>Você tem 1 oportunidade urgente</p>
+                                    </div>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-user-md"></span> Para você</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p>Você tem 3 oportunidades que combinam com seu perfil</p>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                    <?php endif;?>
+                    <?php if ($this->ion_auth->in_group('admin')):?>
+                    <div class="scrollmenu">
+                        <div class="row">
+                            <div class="col-md-3 col-xs-10">
+                                <div class="w3-card-2 w3-white w3-margin-bottom w3-round-large">
+                                    <header class="w3-container w3-white">
+                                        <h5><span class="fa fa-lg fa-area-chart"></span> Estatísticas</h5>
+                                    </header>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-medkit"></span> Profissionais</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p><?php echo($count_professionals . ' profissionais cadastrados.'); ?></p>
+                                    </div>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-users"></span> Usuários</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p><?php echo($count_users . ' usuários cadastrados.'); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-10">
+                                <div class="w3-card-2 w3-white w3-margin-bottom w3-round-large">
+                                    <header class="w3-container w3-white">
+                                        <h5><span class="fa fa-lg fa-area-chart"></span> Estatísticas</h5>
+                                    </header>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-building"></span> Hospitais</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p><?php echo($count_hospitals . ' hospitais cadastrados.'); ?></p>
+                                    </div>
+                                    <header class="w3-container w3-white">
+                                        <h6><span class="fa fa-cubes"></span> Setores</h6>
+                                    </header>
+                                    <div class="w3-container">
+                                        <p><?php echo($count_sectors . ' setores cadastrados.'); ?></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <?php endif;?>

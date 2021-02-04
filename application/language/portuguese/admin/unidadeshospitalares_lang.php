@@ -22,3 +22,4 @@ $lang['unidadeshospitalares_deactivate_question'] = 'Tem certeza que deseja desa
 $lang['unidadeshospitalares_inactive']            = 'Inativo';
 $lang['unidadeshospitalares_status']              = 'Condição';
 $lang['unidadeshospitalares_box_title']           = 'Unidade Hospitalar';
+$lang['unidadeshospitalares_setores']           = 'Setores';

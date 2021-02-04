@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
-                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_submit'))); ?>
+                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_find'))); ?>
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/setores', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
@@ -67,8 +67,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($setor->nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($setor->unidadehospitalar->razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <?php echo anchor('admin/setores/edit/'.$setor->id, lang('actions_edit')); ?> &nbsp;
-                                                    <?php echo anchor('admin/setores/view/'.$setor->id, lang('actions_see')); ?>
+                                                    <?php echo anchor('admin/setores/edit/'.$setor->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
+                                                    <?php echo anchor('admin/setores/view/'.$setor->id, lang('actions_see'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </td>
                                             </tr>
 <?php endforeach;?>

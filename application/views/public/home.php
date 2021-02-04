@@ -56,8 +56,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
                 <nav id="nav-menu-container">
                     <ul class="nav-menu">
-                        <li class="menu-active"><a href="#">Início</a></li>
-                        <!--<li><a href="#">Ajuda</a></li>-->
+                        <li class="menu-active"><a href="/sgc/">Início</a></li>
+                        <li><a href="/sgc/home/help">Ajuda</a></li>
                         <!--<li><a href="suporte.html">Suporte</a></li>-->
                         <li><a href="http://www.cemerge.com.br">Acessar o site</a></li>
                         <li><a href="/sgc/auth/login">Acessar o sistema</a></li>

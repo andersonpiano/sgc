@@ -9,16 +9,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php echo $breadcrumb; ?>
                 </section>
 
+                <?php if (isset($message) or $this->session->flashdata('message')) : ?>
+                <section class="content-header">
+                    <div class="alert bg-warning alert-dismissible" role="alert">
+                        <?php echo(isset($message) ? $message : '');?>
+                        <?php echo($this->session->flashdata('message') ? $this->session->flashdata('message') : '');?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
                 <section class="content">
                     <div class="row">
                         <div class="col-md-12">
                              <div class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title"><?php echo lang('profisisonais_find'); ?></h3>
+                                    <h3 class="box-title"><?php echo lang('profissionais_find'); ?></h3>
                                 </div>
                                 <div class="box-body">
-                                    <?php echo isset($message) ? $message : '';?>
-
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-find_profissional')); ?>
                                         <div class="form-group">
                                             <?php echo lang('profissionais_nome', 'nome', array('class' => 'col-sm-2 control-label')); ?>
@@ -29,7 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
-                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_submit'))); ?>
+                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_find'))); ?>
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/profissionais', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
@@ -58,7 +68,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <thead>
                                             <tr>
                                                 <th><?php echo lang('profissionais_registro');?></th>
+                                                <th><?php echo lang('profissionais_matricula');?></th>
                                                 <th><?php echo lang('profissionais_nome');?></th>
+                                                <th><?php echo lang('profissionais_nomecurto');?></th>
                                                 <th><?php echo lang('profissionais_email');?></th>
                                                 <th><?php echo lang('profissionais_action');?></th>
                                             </tr>
@@ -67,11 +79,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php foreach ($profissionais as $prof):?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($prof->registro, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($prof->matricula, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($prof->nome, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($prof->nomecurto, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($prof->email, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <?php echo anchor('admin/profissionais/edit/'.$prof->id, lang('actions_edit')); ?> &nbsp;
-                                                    <?php echo anchor('admin/profissionais/view/'.$prof->id, lang('actions_see')); ?>
+                                                    <?php echo anchor('admin/profissionais/view/'.$prof->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
+                                                    <?php echo anchor('admin/profissionais/edit/'.$prof->id, lang('actions_edit'), array('class' => 'btn btn-default btn-flat')); ?> &nbsp;
+                                                    <?php echo anchor('admin/profissionais/linktosector/'.$prof->id, lang('actions_link_user_sector'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </td>
                                             </tr>
 <?php endforeach;?>

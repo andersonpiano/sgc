@@ -9,6 +9,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php echo $breadcrumb; ?>
                 </section>
 
+                <?php if (isset($message)) : ?>
+                <section class="content-header">
+                    <div class="alert bg-warning alert-dismissible" role="alert">
+                        <?php echo(isset($message) ? $message : '');?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
                 <section class="content">
                     <div class="row">
                         <div class="col-md-12">
@@ -17,36 +28,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <h3 class="box-title"><?php echo lang('users_edit_user'); ?></h3>
                                 </div>
                                 <div class="box-body">
-                                    <?php echo $message;?>
 
                                     <?php echo form_open(uri_string(), array('class' => 'form-horizontal', 'id' => 'form-edit_user')); ?>
                                         <div class="form-group">
                                             <?php echo lang('users_firstname', 'first_name', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-6">
                                                 <?php echo form_input($first_name);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('users_lastname', 'last_name', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-6">
                                                 <?php echo form_input($last_name);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('users_company', 'company', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
-                                                <?php echo form_input($company);?>
+                                            <?php echo lang('users_email', 'email', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-6">
+                                                <?php echo form_input($email);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('users_phone', 'phone', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <?php echo form_input($phone);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('users_password', 'password', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <?php echo form_input($password);?>
                                                 <div class="progress" style="margin:0">
                                                     <div class="pwstrength_viewport_progress"></div>
@@ -55,11 +65,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('users_password_confirm', 'password_confirm', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <?php echo form_input($password_confirm);?>
                                             </div>
                                         </div>
-
 <?php if ($this->ion_auth->is_admin()): ?>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label"><?php echo lang('users_member_of_groups');?></label>
@@ -92,9 +101,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_hidden('id', $user->id);?>
                                                 <?php echo form_hidden($csrf); ?>
                                                 <div class="btn-group">
-                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_submit'))); ?>
-                                                    <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
-                                                    <?php echo anchor('admin/users', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_save'))); ?> &nbsp;
+                                                    <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?> &nbsp;
+                                                    <?php echo anchor('admin/users', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?> &nbsp;
+                                                    <?php echo anchor('admin/users/linktosector/' . $user->id, lang('actions_link_user_sector'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                    <?php echo anchor('admin/users/sendmail/' . $user->id, lang('actions_sendmail'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
                                             </div>
                                         </div>

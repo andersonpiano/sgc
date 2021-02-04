@@ -30,12 +30,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php endif; ?>
         <link rel="shortcut icon" href="<?php echo base_url($frameworks_dir . '/medino/assets/images/logo/favicon.png'); ?>" type="image/x-icon">
         <link rel="icon" href="<?php echo base_url($frameworks_dir . '/medino/assets/images/logo/favicon.png'); ?>">
-        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,700italic">
+        <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic,700italic">-->
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/googlefonts-sourcesanspro.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/bootstrap/css/bootstrap.min.css'); ?>">
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/w3/w3.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/font-awesome/css/font-awesome.min.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/ionicons/css/ionicons.min.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/adminlte/css/adminlte.min.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/adminlte/css/skins/skin-green.min.css'); ?>">
+
 <?php if ($mobile === false && $admin_prefs['transition_page'] == true) : ?>
         <link rel="stylesheet" href="<?php echo base_url($plugins_dir . '/animsition/animsition.min.css'); ?>">
 <?php endif; ?>
@@ -44,12 +47,51 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php endif; ?>
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/domprojects/css/dp.min.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/cemerge.css'); ?>">
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/hint.min.css'); ?>">
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/calendar.css'); ?>">
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/calendario.css'); ?>">
         <script src="<?php echo base_url($frameworks_dir . '/jquery/jquery.min.js'); ?>"></script>
-<?php if (($this->router->fetch_class() == 'plantoes' or $this->router->fetch_class() == 'escalas') && $this->router->fetch_method() == 'index') : ?>
-        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/fullcalendar/main.min.css'); ?>">
-        <script src="<?php echo base_url($frameworks_dir . '/fullcalendar/main.min.js'); ?>"></script>
-        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/calendar.js'); ?>"></script>
+<?php if ($this->router->fetch_class() == 'plantoes' && in_array($this->router->fetch_method(), ['index', 'cessoestrocas'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/cessoestrocas.js'); ?>"></script>
 <?php endif; ?>
+<?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['index'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/html2canvas/html2canvas.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/jsPDF/jspdf.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/export2pdf.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'plantoes' && in_array($this->router->fetch_method(), ['cederplantaoeprocessar'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/frequencias_por_profissional.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['create'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/justificativa.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['editarfrequencia', 'buscarfrequencias'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_assessus_por_unidade.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['buscarfrequenciaporprofissional'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/profissionais_por_unidade.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['buscarescalaporprofissional'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/profissionais_por_unidade.js'); ?>"></script>
+<?php endif; ?>
+
+<?php if ($this->router->fetch_class() == 'faltas' && in_array($this->router->fetch_method(), ['index'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/faltas__profissionais_por_unidade_hospitalar.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'residentes' && $this->router->fetch_method() == 'register') : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/gps.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/clock.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'especializacoes') : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/modal.js'); ?>"></script>
+<?php endif; ?>
+<script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pace.min.js'); ?>"></script>
+<script src="<?php echo base_url($frameworks_dir . '/moment/moment.min.js'); ?>"></script>
+<script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery.blockUI.js'); ?>"></script>
 <?php if ($mobile === false) : ?>
         <!--[if lt IE 9]>
             <script src="<?php echo base_url($plugins_dir . '/html5shiv/html5shiv.min.js'); ?>"></script>

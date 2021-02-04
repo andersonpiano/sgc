@@ -14,6 +14,7 @@ $lang['setores_create']              = 'Criar setor';
 $lang['setores_edit']                = 'Editar setor';
 $lang['setores_nome']                = 'Nome';
 $lang['setores_unidadehospitalar']   = 'Unidade Hospitalar';
+$lang['setores_maximoprofissionais']   = 'Máximo de profissionais por turno';
 $lang['setores_action']              = 'Ação';
 $lang['setores_find']                = 'Buscar setor';
 $lang['setores_active']              = 'Ativo';

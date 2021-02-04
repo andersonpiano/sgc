@@ -32,7 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($values->name, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($values->description, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><i class="fa fa-stop" style="color:<?php echo $values->bgcolor; ?>"></i></td>
-                                                <td><?php echo anchor("admin/groups/edit/".$values->id, lang('actions_edit')); ?></td>
+                                                <td><?php echo anchor("admin/groups/edit/".$values->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat')); ?></td>
                                             </tr>
 <?php endforeach;?>
                                         </tbody>

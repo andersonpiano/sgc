@@ -33,7 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_hidden($csrf); ?>
                                                 <?php echo form_hidden(array('id'=>$id)); ?>
                                                 <div class="btn-group">
-                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_submit'))); ?>
+                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_save'))); ?>
                                                     <?php echo anchor('admin/users', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
                                             </div>

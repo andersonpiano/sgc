@@ -3,10 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Unidadeshospitalares extends Admin_Controller
 {
+    private $_permitted_groups = array('admin', 'sac', 'sad');
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct($this->_permitted_groups);
 
         /* Load :: Common */
         $this->load->model('cemerge/unidadehospitalar_model');
@@ -20,10 +21,9 @@ class Unidadeshospitalares extends Admin_Controller
         $this->breadcrumbs->unshift(1, lang('menu_unidadeshospitalares'), 'admin/unidadeshospitalares');
     }
 
-
     public function index()
     {
-        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
             redirect('auth/login', 'refresh');
         } else {
             /* Breadcrumbs */
@@ -51,8 +51,7 @@ class Unidadeshospitalares extends Admin_Controller
         $this->form_validation->set_rules('razaosocial', 'lang:unidadeshospitalares_razaosocial', 'required');
         $this->form_validation->set_rules('nomefantasia', 'lang:unidadeshospitalares_nomefantasia', 'required');
 
-        if ($this->form_validation->run() == TRUE)
-        {
+        if ($this->form_validation->run() == true) {
             $cnpj = $this->input->post('cnpj');
             $razaosocial = $this->input->post('razaosocial');
             $nomefantasia = $this->input->post('nomefantasia');
@@ -217,13 +216,10 @@ class Unidadeshospitalares extends Admin_Controller
         $id = (int) $id;
 
         $this->data['unidadehospitalar'] = $this->unidadehospitalar_model->get_by_id($id);
-        /*
+
         // Setores
-        foreach ($this->data['user_info'] as $k => $user)
-        {
-            $this->data['user_info'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
-        }
-        */
+        $this->load->model('cemerge/setor_model');
+        $this->data['setores'] = $this->setor_model->get_by_unidadehospitalar($id);
 
         /* Load Template */
         $this->template->admin_render('admin/unidadeshospitalares/view', $this->data);

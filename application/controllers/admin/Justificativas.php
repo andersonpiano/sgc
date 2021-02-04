@@ -44,32 +44,7 @@ class Justificativas extends Admin_Controller
         $this->form_validation->set_rules('data_plantao_inicio', 'lang:justificativas_data_inicio', 'required');
         $this->form_validation->set_rules('data_plantao_fim', 'lang:justificativas_data_fim', 'required');
         $this->form_validation->set_rules('status', 'lang:justificativas_status', 'required');
-        /*
 
-        
-        foreach ($this->data['justificativa'] as $ct) {
-            $ct->turno = '';
-            if ((int)$ct->horainicialplantao >= 5 && (int)$ct->horainicialplantao < 13) {
-                $ct->turno = 'Manhã';
-            } else if ((int)$ct->horainicialplantao >= 13 && (int)$ct->horainicialplantao < 19) {
-                $ct->turno = 'Tarde';
-            } else if ((int)$ct->horainicialplantao >= 19 && (int)$ct->horainicialplantao <= 23) {
-                $ct->turno = 'Noite';
-            }
-            $ct->status_oportunidade = '';
-            switch ($ct->statuspassagem) {
-            case $this::STATUS_JUSTIFICATIVA_APROVADA:
-                $ct->status_justificativa = 'Aprovadas';
-                break;
-            case $this::STATUS_JUSTIFICATIVA_NEGADA:
-                $ct->status_justificativa = 'Recusadas';
-                break;
-            case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
-                $ct->status_justificativa = 'Aguardando Aprovação';
-                break;
-            }}
-
-*/
         $tipos_status = array (
         $this::STATUS_JUSTIFICATIVA_APROVADA => 'Aprovadas',
         $this::STATUS_JUSTIFICATIVA_NEGADA => 'Negadas',
@@ -522,7 +497,6 @@ class Justificativas extends Admin_Controller
         /* Load aditional models */
         $this->load->model('cemerge/profissional_model');
         $this->load->model('cemerge/setor_model');
-        $this->load->model('cemerge/frequenciaassessus_model');
 
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_justificativas_view'), 'admin/justificativas/view');
@@ -534,9 +508,7 @@ class Justificativas extends Admin_Controller
         $this->data['justificativa'] = $this->justificativa_model->get_by_id($id);
         $this->data['profissional'] = $this->profissional_model->get_by_id($this->data['justificativa']->profissional_id);
         $this->data['setor'] = $this->setor_model->get_by_id($this->data['justificativa']->setor_id);
-        $this->data['entrada'] = $this->frequenciaassessus_model->get_batida_profissional($this->data['justificativa']->data_plantao, $this->data['justificativa']->profissional_id, 1, '12:00:00', '20:00:00');
-        $this->data['saida'] = $this->frequenciaassessus_model->get_batida_profissional($this->data['justificativa']->data_plantao, $this->data['justificativa']->profissional_id, 2, '12:00:00', '20:00:00');
-        
+
         /* Load Template */
         $this->template->admin_render('admin/justificativas/view', $this->data);
     }

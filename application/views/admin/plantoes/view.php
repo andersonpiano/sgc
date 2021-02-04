@@ -29,7 +29,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </tr>
                                             <tr>
                                                 <th><?php echo lang('plantoes_horafinalplantao'); ?></th>
-                                                <td><?php echo htmlspecialchars($plantao->horafinalplantao, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars(date('H:i', strtotime($plantao->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th><?php echo lang('plantoes_duracao'); ?></th>
+                                                <td><?php echo htmlspecialchars($plantao->duracao . ' horas', ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
                                         </tbody>
                                     </table>

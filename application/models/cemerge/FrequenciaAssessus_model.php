@@ -32,14 +32,14 @@ class FrequenciaAssessus_model extends MY_Model
     }
 
     public function get_batida_profissional($data_plantao, $profissional_id, $tipo_batida, $entrada, $saida){
-        $sql  = "SELECT HR_FRQ " ;
-        $sql .= "FROM tb_ctl_frq as f ";
-        $sql .= "left JOIN profissionais p on (f.cd_pes_fis = p.cd_pes_fis) ";
+        $sql  = "SELECT HR_FRQ";
+        $sql .= "FROM `tb_ctl_frq` ";
         $sql .= "WHERE date(dt_frq) = '$data_plantao' ";
-        $sql .= "AND p.id = '$profissional_id' ";
+        $sql .= "AND CD_PES_FIS = '$profissional_id' ";
         $sql .= "AND tipo_batida = '$tipo_batida' ";
-        $sql .= "AND time(hr_frq) between '".$entrada."' and '".$saida."' ";
-        $sql .= "ORDER by HR_FRQ DESC ";
+        $sql .= "AND time(hr_frq) between $entrada and $saida";
+        $sql .= "ORDER by HR_FRQ DESC";
+        $sql .= "LIMIT 1";
         
         $query = $this->db->query($sql);
         

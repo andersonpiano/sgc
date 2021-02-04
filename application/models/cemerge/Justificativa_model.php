@@ -22,11 +22,11 @@ class Justificativa_model extends MY_Model
         $fields .= "j.status as status ";
 
         $sql = "SELECT $fields FROM justificativas as j ";
-        $sql .= "JOIN  escalas e on (j.escala_id = e.id) ";
+        $sql .= "JOIN  escalas  e on (j.escala_id = e.id) ";
         $sql .= "JOIN profissionais p on (j.profissional_id = p.id) ";
         $sql .= "JOIN setores s on (j.setor_id = s.id) ";
         $sql .= "WHERE ";
-        $sql .= "j.data_plantao BETWEEN '".$datainicial."' and '".$datafinal."' ";
+        $sql .= "j.data_plantao BETWEEN '$datainicial' and '$datafinal'";
         $sql .= "AND j.status = $status";
 
         $query = $this->db->query($sql);

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends Admin_Controller
 {
-    private $_permitted_groups = array('admin', 'profissionais');
+    private $_permitted_groups = array('admin', 'profissionais', 'residentes', 'sac', 'sad');
 
     public function __construct()
     {
@@ -56,12 +56,23 @@ class Dashboard extends Admin_Controller
             $this->data['trocas_propostas_confirmar'] = array();
             $this->data['trocas_recebidas_confirmar'] = array();
             $this->data['oportunidades'] = array();
+            $this->data['cessoes'] = array();
+            $this->data['trocas'] = array();
+            $this->data['proximosplantoes'] = array();
+            $this->data['count_users'] = 0;
+            $this->data['count_professionals'] = 0;
+            $this->data['count_hospitals'] = 0;
+            $this->data['count_sectors'] = 0;
 
             /* Data */
-            if ($this->ion_auth->is_admin() and !$this->ion_auth->in_group('profissionais')) {
+            if ($this->ion_auth->is_admin()) {
                 $this->data['count_users'] = $this->dashboard_model->get_count_record('users');
-                $this->data['count_groups'] = $this->dashboard_model->get_count_record('groups');
-            } else {
+                $this->data['count_professionals'] = $this->dashboard_model->get_count_record('profissionais');
+                $this->data['count_hospitals'] = $this->dashboard_model->get_count_record('unidadeshospitalares');
+                $this->data['count_sectors'] = $this->dashboard_model->get_count_record('setores');
+            }
+            
+            if ($this->ion_auth->in_group('profissionais')) {
                 $this->data['plantoes_recebidos_confirmar']
                     = $this->escala_model->get_plantoes_recebidos_a_confirmar($profissional->id);
                 $this->data['plantoes_passados_confirmar']
@@ -72,14 +83,35 @@ class Dashboard extends Admin_Controller
                     = $this->escala_model->get_trocas_recebidas_a_confirmar($profissional->id);
                 $this->data['oportunidades']
                     = $this->escala_model->get_oportunidades($profissional->id);
+
+                $this->data['cessoes'] = $this->getCessoes($profissional->id);
+                $this->data['trocas'] = $this->getTrocas($profissional->id);
+                $this->data['proximosplantoes'] = $this->getProximosPlantoes($profissional->id);
             }
 
             /* TEST */
-            $this->data['url_exist']    = is_url_exist('http://www.cemerge.com.br'); //http://www.domprojects.com
-
+            $this->data['url_exist'] = is_url_exist('http://www.cemerge.com.br'); //http://www.domprojects.com
 
             /* Load Template */
             $this->template->admin_render('admin/dashboard/index', $this->data);
         }
+    }
+
+    public function getCessoes($profissional_id)
+    {
+        //Você tem 1 cessão não confirmada
+        return "Clique aqui para ver os plant&otilde;es cedidos &agrave; voc&ecirc;";
+    }
+
+    public function getTrocas($profissional_id)
+    {
+        //Você tem 3 trocas propostas
+        return "Clique aqui para ver os plant&otilde;es ofertados como troca &agrave; voc&ecirc;";
+    }
+
+    public function getProximosPlantoes($profissional_id)
+    {
+        //Setor em 12/09 das 13h às 19h
+        return "Clique aqui para ver seus pr&oacute;ximos plant&otilde;es";
     }
 }

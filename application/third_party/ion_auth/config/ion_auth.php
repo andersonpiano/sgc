@@ -92,7 +92,7 @@ $config['max_password_length']        = 20;                  // Maximum Allowed 
 $config['email_activation']           = false;               // Email Activation for registration
 $config['manual_activation']          = false;               // Manual Activation for registration
 $config['remember_users']             = true;                // Allow users to be remembered and enable auto-login
-$config['user_expire']                = 86400;               // How long to remember the user (seconds). Set to zero for no expiration
+$config['user_expire']                = 86500;               // How long to remember the user (seconds). Set to zero for no expiration
 $config['user_extend_on_login']       = true;               // Extend the users cookies every time they auto-login
 $config['track_login_attempts']       = true;                // Track the number of failed login attempts for each user or ip.
 $config['track_login_ip_address']     = true;                // Track login attempts by IP Address, if FALSE will track based on identity. (Default: TRUE)
@@ -124,7 +124,7 @@ $config['identity_cookie_name'] = 'identity';
  */
 $config['use_ci_email'] = true; // Send Email using the builtin CI email class, if false it will return the code and the identity
 $config['email_config'] = array(
-    'mailtype' => 'html',
+	'mailtype' => 'html',
 );
 
 /*

@@ -3,9 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Feriados extends Admin_Controller
 {
+    private $_permitted_groups = array('admin', 'sad', 'sac');
+    private $_admin_groups = array('admin', 'sad', 'sac');
+
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct($this->_permitted_groups);
 
         /* Load :: Common */
         $this->load->model('cemerge/feriado_model');
@@ -21,62 +24,73 @@ class Feriados extends Admin_Controller
 
     public function index()
     {
-        if (!$this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin()) {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Para listar feriados, você precisa estar logado no sistema.');
             redirect('auth/login', 'refresh');
-        } else {
-            /* Breadcrumbs */
-            $this->data['breadcrumb'] = $this->breadcrumbs->show();
-
-            /* Default values */
-            $datainicial = date('Y-m-d');
-            $datafinal = date('Y-m-d');
-
-            /* Validate form input */
-            $this->form_validation->set_rules('datainicial', 'lang:feriados_datainicial', 'required');
-            $this->form_validation->set_rules('datafinal', 'lang:feriados_datafinal', 'required');
-
-            if ($this->form_validation->run() == true) {
-                $datainicial = $this->input->post('datainicial');
-                $datafinal = $this->input->post('datafinal');
-
-                /* Valores */
-                $where = array(
-                    'data >=' => $datainicial,
-                    'data <=' => $datafinal,
-                );
-                $this->data['feriados'] = $this->feriado_model->get_where($where, null, null, 'data');
-            } else {
-                $this->data['feriados'] = array();
-            }
-
-            $this->data['datainicial'] = array(
-                'name'  => 'datainicial',
-                'id'    => 'datainicial',
-                'type'  => 'date',
-                'class' => 'form-control',
-                'value' => $datainicial
-            );
-            $this->data['datafinal'] = array(
-                'name'  => 'datafinal',
-                'id'    => 'datafinal',
-                'type'  => 'date',
-                'class' => 'form-control',
-                'value' => $datafinal
-            );
-
-            /* Load Template */
-            $this->template->admin_render('admin/feriados/index', $this->data);
         }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Default values */
+        $datainicial = date('Y-m-d');
+        $datafinal = date('Y-m-d');
+
+        /* Validate form input */
+        $this->form_validation->set_rules('datainicial', 'lang:feriados_datainicial', 'required');
+        $this->form_validation->set_rules('datafinal', 'lang:feriados_datafinal', 'required');
+
+        if ($this->form_validation->run() == true) {
+            $datainicial = $this->input->post('datainicial');
+            $datafinal = $this->input->post('datafinal');
+
+            /* Valores */
+            $where = array(
+                'data >=' => $datainicial,
+                'data <=' => $datafinal,
+            );
+            $this->data['feriados'] = $this->feriado_model->get_where($where, null, 'data');
+        } else {
+            $this->data['feriados'] = array();
+        }
+
+        $this->data['datainicial'] = array(
+            'name'  => 'datainicial',
+            'id'    => 'datainicial',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $datainicial
+        );
+        $this->data['datafinal'] = array(
+            'name'  => 'datafinal',
+            'id'    => 'datafinal',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $datafinal
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/feriados/index', $this->data);
     }
 
     public function create()
     {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para utilizar esta funcionalidade.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_feriados_create'), 'admin/feriados/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
-
-        /* Variables */
-        //$tables = $this->config->item('tables', 'ion_auth');
 
         /* Validate form input */
         $this->form_validation->set_rules('data', 'lang:feriados_data', 'required');
@@ -135,11 +149,16 @@ class Feriados extends Admin_Controller
 
     public function edit($id)
     {
-        $id = (int) $id;
-
-        if (!$this->ion_auth->logged_in() or !$this->ion_auth->is_admin()) {
-            redirect('auth', 'refresh');
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para utilizar esta funcionalidade.');
+            redirect('auth/login', 'refresh');
         }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $id = (int) $id;
 
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_feriados_edit'), 'admin/feriados/edit');
@@ -210,6 +229,15 @@ class Feriados extends Admin_Controller
 
     public function view($id)
     {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para utilizar esta funcionalidade.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_feriados'), 'admin/feriados/view');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();

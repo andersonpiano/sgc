@@ -11,6 +11,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['users_action']              = 'Ação';
+$lang['users_box_title']           = 'Usuário';
 $lang['users_active']              = 'Ativo';
 $lang['users_company']             = 'Companhia';
 $lang['users_create_user']         = 'Criar usuário';
@@ -19,14 +20,20 @@ $lang['users_deactivate_question'] = 'Tem certeza que deseja desativar o usuári
 $lang['users_edit_user']           = 'Editar usuário';
 $lang['users_email']               = 'E-mail';
 $lang['users_firstname']           = 'Primeiro nome';
+$lang['users_name']                = 'Nome';
 $lang['users_groups']              = 'Grupos';
 $lang['users_inactive']            = 'Inativo';
 $lang['users_ip_address']          = 'Endereço de IP';
 $lang['users_last_login']          = 'Último login';
 $lang['users_lastname']            = 'Último nome';
 $lang['users_member_of_groups']    = 'Membro dos grupos';
+$lang['users_member_of_sectors']   = 'Vinculado aos setores';
 $lang['users_password']            = 'Senha';
 $lang['users_password_confirm']    = 'Confirme a senha';
 $lang['users_phone']               = 'Telefone';
 $lang['users_status']              = 'Condição';
 $lang['users_username']            = 'Nome de usuário / Apelido';
+$lang['users_unidadehospitalar']   = 'Unidade hospitalar';
+$lang['users_setor']               = 'Setor';
+$lang['users_coordenador']         = 'Coordenador';
+$lang['users_linktosector']        = 'Vínculo com setor';

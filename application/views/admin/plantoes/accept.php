@@ -9,6 +9,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php echo $breadcrumb; ?>
                 </section>
 
+                <?php if (isset($message) or $this->session->flashdata('message')) : ?>
+                <section class="content-header">
+                    <div class="alert bg-warning alert-dismissible" role="alert">
+                        <?php echo(isset($message) ? $message : '');?>
+                        <?php echo($this->session->flashdata('message') ? $this->session->flashdata('message') : '');?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
                 <section class="content">
                     <div class="row">
                         <div class="col-md-12">
@@ -17,8 +29,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <h3 class="box-title"><?php echo lang('plantoes_accept'); ?></h3>
                                 </div>
                                 <div class="box-body">
-                                    <?php echo $message;?>
-
                                     <?php echo form_open(uri_string(), array('class' => 'form-horizontal', 'id' => 'form-edit_plantao')); ?>
                                         <div class="form-group">
                                             <?php echo lang('plantoes_unidadehospitalar', 'unidadehospitalar', array('class' => 'col-sm-2 text-right')); ?>
@@ -35,19 +45,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <?php echo lang('plantoes_dataplantao', 'dataplantao', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo date('d/m/Y', strtotime($plantao->dataplantao));?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('plantoes_horainicialplantao', 'horainicialplantao', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-4">
-                                                <?php echo date('H:i:s', strtotime($plantao->horainicialplantao));?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('plantoes_horafinalplantao', 'horafinalplantao', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-4">
-                                                <?php echo date('H:i:s', strtotime($plantao->horafinalplantao));?>
+                                                <?php
+                                                    $plantao_original = date('d/m/Y', strtotime($plantao->dataplantao)) . ' - ';
+                                                    $plantao_original .= $diasdasemana[date('w', strtotime($plantao->horainicialplantao))] . ' - ';
+                                                    $plantao_original .= date('H:i', strtotime($plantao->horainicialplantao)) . ' - ';
+                                                    $plantao_original .= date('H:i', strtotime($plantao->horafinalplantao));
+                                                    echo($plantao_original);
+                                                ?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -79,6 +83,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-10">
                                                 <?php
                                                     $plantao_proposto = date('d/m/Y', strtotime($plantao->escala_troca_dataplantao)) . ' - ';
+                                                    $plantao_proposto .= $diasdasemana[date('w', strtotime($plantao->escala_troca_dataplantao))] . ' - ';
                                                     $plantao_proposto .= date('H:i', strtotime($plantao->escala_troca_horainicialplantao)) . ' - ';
                                                     $plantao_proposto .= date('H:i', strtotime($plantao->escala_troca_horafinalplantao));
                                                     echo $plantao_proposto;

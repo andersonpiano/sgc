@@ -48,3 +48,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <?php echo anchor('#', lang('auth_new_member')); ?><br />
 <?php endif; ?>
             </div>
+
+            <section class="content-header">
+                <div class="alert bg-warning alert-dismissible" role="alert">
+                Utilizamos cookies e tecnologias semelhantes de acordo com a nossa Política de Privacidade e, ao efetuar logon no sistema, você concorda com estas condições.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </section>

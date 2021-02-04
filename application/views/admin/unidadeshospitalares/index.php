@@ -37,8 +37,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($unid->razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($unid->nomefantasia, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <?php echo anchor('admin/unidadeshospitalares/edit/'.$unid->id, lang('actions_edit')); ?> &nbsp;
-                                                    <?php echo anchor('admin/unidadeshospitalares/view/'.$unid->id, lang('actions_see')); ?>
+                                                    <?php echo anchor('admin/unidadeshospitalares/view/'.$unid->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
+                                                    <?php echo anchor('admin/unidadeshospitalares/edit/'.$unid->id, lang('actions_edit'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </td>
                                             </tr>
 <?php endforeach;?>

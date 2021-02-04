@@ -45,7 +45,51 @@ class Auth extends MY_Controller
                 $remember = (bool) $this->input->post('remember');
                 $destino = $this->input->post('destino');
 
-                if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
+                $identity = $this->input->post('identity');
+                $password = $this->input->post('password');
+
+                $last_login = $this->ion_auth->get_last_login($identity, $password);
+
+                if ($this->ion_auth->login($identity, $password, $remember)) {
+                    // get profissional
+                    if ($this->ion_auth->in_group('profissionais')) {
+                        $userId = $this->ion_auth->user()->row()->id;
+                        $this->load->model('cemerge/profissional_model');
+                        $profissional = $this->profissional_model->get_by_user_id($userId);
+                        if ($profissional) {
+                            $session_data = array(
+                                'profissional_id' => $profissional->id,
+                                'registro' => $profissional->registro,
+                                'nome' => $profissional->nome,
+                                'nomecurto' => $profissional->nomecurto,
+                                'email' => $profissional->email,
+                            );
+
+                            $this->session->set_userdata($session_data);
+                        }
+                    }
+                    // get residente
+                    if ($this->ion_auth->in_group('residentes')) {
+                        $userId = $this->ion_auth->user()->row()->id;
+                        $this->load->model('cemerge/residente_model');
+                        $residente = $this->residente_model->get_by_user_id($userId);
+                        if ($residente) {
+                            $session_data = array(
+                                'residente_id' => $residente->id,
+                                'registro' => $residente->registro,
+                                'nome' => $residente->nome,
+                                'nomecurto' => $residente->nomecurto,
+                                'email' => $residente->email,
+                            );
+                    
+                            $this->session->set_userdata($session_data);
+                        }
+                    }
+                    // Primeiro login
+                    if (is_null($last_login)) {
+                        $this->session->set_flashdata('message', 'Como é seu primeiro login, você precisa alterar a sua senha.');
+                        redirect('/auth/changepassword', 'refresh');
+                    }
                     if (!$this->ion_auth->is_admin()) {
                         $this->session->set_flashdata('message', $this->ion_auth->messages());
                         if (is_null($destino) or empty($destino)) {
@@ -81,6 +125,7 @@ class Auth extends MY_Controller
                     'type'        => 'email',
                     'value'       => $this->form_validation->set_value('identity'),
                     'class'       => 'form-control',
+                    'autofocus'   => '',
                     'placeholder' => lang('auth_your_email')
                 );
                 $this->data['password'] = array(
@@ -103,6 +148,10 @@ class Auth extends MY_Controller
     function logout($src = null)
     {
         $logout = $this->ion_auth->logout();
+
+        if ($this->ion_auth->in_group('profissionais')) {
+            $this->session->unset_userdata(array('profissional_id', 'registro', 'nome', 'nomecurto', 'email'));
+        }
 
         $this->session->set_flashdata('message', $this->ion_auth->messages());
 
