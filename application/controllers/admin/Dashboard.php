@@ -38,7 +38,7 @@ class Dashboard extends Admin_Controller
                 $userId = $this->ion_auth->user()->row()->id;
                 if ($userId) {
                     $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
-                    if ($usuarioProfissional) {
+                    if (!empty($usuarioProfissional)) {
                         $profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional[0]->profissional_id])[0];
                         $setores_profissional = $this->setor_model->get_setores_por_profissional($profissional->id);
                         $setores_profissional_arr = array();
@@ -53,17 +53,23 @@ class Dashboard extends Admin_Controller
             /* Reset arrays */
             $this->data['plantoes_recebidos_confirmar'] = array();
             $this->data['plantoes_passados_confirmar'] = array();
+            $this->data['trocas_propostas_confirmar'] = array();
+            $this->data['trocas_recebidas_confirmar'] = array();
             $this->data['oportunidades'] = array();
 
             /* Data */
-            if ($this->ion_auth->is_admin()) {
-                $this->data['count_users']       = $this->dashboard_model->get_count_record('users');
-                $this->data['count_groups']      = $this->dashboard_model->get_count_record('groups');
+            if ($this->ion_auth->is_admin() and !$this->ion_auth->in_group('profissionais')) {
+                $this->data['count_users'] = $this->dashboard_model->get_count_record('users');
+                $this->data['count_groups'] = $this->dashboard_model->get_count_record('groups');
             } else {
                 $this->data['plantoes_recebidos_confirmar']
                     = $this->escala_model->get_plantoes_recebidos_a_confirmar($profissional->id);
                 $this->data['plantoes_passados_confirmar']
                     = $this->escala_model->get_plantoes_passados_a_confirmar($profissional->id);
+                $this->data['trocas_propostas_confirmar']
+                    = $this->escala_model->get_trocas_propostas_a_confirmar($profissional->id);
+                $this->data['trocas_recebidas_confirmar']
+                    = $this->escala_model->get_trocas_recebidas_a_confirmar($profissional->id);
                 $this->data['oportunidades']
                     = $this->escala_model->get_oportunidades($profissional->id);
             }

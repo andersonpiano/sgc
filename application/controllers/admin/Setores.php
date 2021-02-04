@@ -3,9 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Setores extends Admin_Controller {
 
+    private $_permitted_groups = array('admin', 'profissionais');
+
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct($this->_permitted_groups);
 
         /* Load :: Common */
         $this->load->model('cemerge/setor_model');
@@ -266,5 +268,15 @@ class Setores extends Admin_Controller {
         }
 
         return $unidadeshospitalares;
+    }
+
+    public function setores($id)
+    {
+        $id = (int) $id;
+
+        $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id]);
+
+        echo json_encode($setores);
+        exit;
     }
 }

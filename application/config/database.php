@@ -44,25 +44,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |			'mysql' (deprecated), 'sqlsrv' and 'pdo/sqlsrv' drivers accept TRUE/FALSE
 |			'mysqli' and 'pdo/mysql' drivers accept an array with the following options:
 |
-|				'ssl_key'    - Path to the private key file
-|				'ssl_cert'   - Path to the public key certificate file
-|				'ssl_ca'     - Path to the certificate authority file
-|				'ssl_capath' - Path to a directory containing trusted CA certificats in PEM format
-|				'ssl_cipher' - List of *allowed* ciphers to be used for the encryption, separated by colons (':')
-|				'ssl_verify' - TRUE/FALSE; Whether verify the server certificate or not ('mysqli' only)
+|               'ssl_key'    - Path to the private key file
+|               'ssl_cert'   - Path to the public key certificate file
+|               'ssl_ca'     - Path to the certificate authority file
+|               'ssl_capath' - Path to a directory containing trusted CA certificats in PEM format
+|               'ssl_cipher' - List of *allowed* ciphers to be used for the encryption, separated by colons (':')
+|               'ssl_verify' - TRUE/FALSE; Whether verify the server certificate or not ('mysqli' only)
 |
-|	['compress'] Whether or not to use client compression (MySQL only)
-|	['stricton'] TRUE/FALSE - forces 'Strict Mode' connections
-|							- good for ensuring strict SQL while developing
-|	['ssl_options']	Used to set various SSL options that can be used when making SSL connections.
-|	['failover'] array - A array with 0 or more data for connections if the main should fail.
-|	['save_queries'] TRUE/FALSE - Whether to "save" all executed queries.
-| 				NOTE: Disabling this will also effectively disable both
-| 				$this->db->last_query() and profiling of DB queries.
-| 				When you run a query, with this setting set to TRUE (default),
-| 				CodeIgniter will store the SQL statement for debugging purposes.
-| 				However, this may cause high memory usage, especially if you run
-| 				a lot of SQL queries ... disable this to avoid that problem.
+|   ['compress'] Whether or not to use client compression (MySQL only)
+|   ['stricton'] TRUE/FALSE - forces 'Strict Mode' connections
+|                           - good for ensuring strict SQL while developing
+|   ['ssl_options']	Used to set various SSL options that can be used when making SSL connections.
+|   ['failover'] array - A array with 0 or more data for connections if the main should fail.
+|   ['save_queries'] TRUE/FALSE - Whether to "save" all executed queries.
+|               NOTE: Disabling this will also effectively disable both
+|               $this->db->last_query() and profiling of DB queries.
+|               When you run a query, with this setting set to TRUE (default),
+|               CodeIgniter will store the SQL statement for debugging purposes.
+|               However, this may cause high memory usage, especially if you run
+|               a lot of SQL queries ... disable this to avoid that problem.
 |
 | The $active_group variable lets you choose which connection group to
 | make active.  By default there is only one group (the 'default' group).
@@ -70,15 +70,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$active_group = 'default';
+$active_group = 'simulado'; //default, simulado, prod
 $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn'	=> '',
     'hostname' => 'localhost',
-    'username' => 'cemerge',
+    'username' => 'root',
     'password' => 'Cemerge@2020',
     'database' => 'cemerge',
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => (ENVIRONMENT !== 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+
+$db['simulado'] = array(
+    'dsn'	=> '',
+    'hostname' => 'localhost',
+    'username' => 'root',
+    'password' => 'Cemerge@2020',
+    'database' => 'somossolucoes02',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,
@@ -99,9 +121,31 @@ $db['prod'] = array(
     'dsn'	=> '',
     'hostname' => 'mysql.somossolucoes.com.br',
     'username' => 'somossolucoes02',
-    'password' => 'Drvr2906',
+    'password' => '',
     'database' => 'somossolucoes02',
     'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => (ENVIRONMENT == 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+
+$db['cemerge_assesus'] = array(
+    'dsn'	=> 'Cemerge',
+    'hostname' => '',
+    'username' => 'cemergelet',
+    'password' => 'bU16ri=3sp-2L2ljOko!',
+    'database' => 'CEMERGE',
+    'dbdriver' => 'odbc',
     'dbprefix' => '',
     'pconnect' => FALSE,
     'db_debug' => (ENVIRONMENT == 'production'),

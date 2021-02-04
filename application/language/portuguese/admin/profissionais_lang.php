@@ -12,9 +12,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['profissionais_create']              = 'Criar médico';
 $lang['profissionais_edit']                = 'Editar médico';
-$lang['profisisonais_find']                = 'Buscar médico';
+$lang['profissionais_find']                = 'Buscar médico';
 $lang['profissionais_registro']            = 'CRM';
 $lang['profissionais_nome']                = 'Nome';
+$lang['profissionais_nomecurto']                = 'Nome curto';
 $lang['profissionais_email']               = 'E-mail';
 $lang['profissionais_action']              = 'Ação';
 $lang['profissionais_active']              = 'Ativo';

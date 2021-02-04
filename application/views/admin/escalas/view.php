@@ -32,21 +32,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($escala->horafinalplantao, ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
                                             <tr>
-                                                <th><?php echo lang('escalas_status'); ?></th>
-                                                <td><?php echo ($escala->active) ? '<span class="label label-success">'.lang('escalas_active').'</span>' : '<span class="label label-default">'.lang('escalas_inactive').'</span>'; ?></td>
+                                                <th><?php echo lang('escalas_duracao'); ?></th>
+                                                <td><?php echo htmlspecialchars($escala->duracao . ' horas', ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
-                                            <!--
-                                            <tr>
-                                                <th><?php //echo lang('users_groups'); ?></th>
-                                                <td>
-                                            -->
-<?php //foreach ($user->groups as $group):?>
-                                                    <?php // Disabled temporary !!! ?>
-                                                    <?php //echo '<span class="label" style="background:'.$group->bgcolor.'">'.htmlspecialchars($group->name, ENT_QUOTES, 'UTF-8').'</span>'; ?>
-                                                    <?php //echo '<span class="label label-default">'.htmlspecialchars($group->name, ENT_QUOTES, 'UTF-8').'</span>'; ?>
-<?php //endforeach?>
-                                                <!--</td>
-                                            </tr>-->
                                         </tbody>
                                     </table>
                                 </div>

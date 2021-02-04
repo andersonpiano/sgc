@@ -31,18 +31,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('plantoes_horafinalplantao'); ?></th>
                                                 <td><?php echo htmlspecialchars($plantao->horafinalplantao, ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
-                                            <!--
-                                            <tr>
-                                                <th><?php //echo lang('users_groups'); ?></th>
-                                                <td>
-                                            -->
-<?php //foreach ($user->groups as $group):?>
-                                                    <?php // Disabled temporary !!! ?>
-                                                    <?php //echo '<span class="label" style="background:'.$group->bgcolor.'">'.htmlspecialchars($group->name, ENT_QUOTES, 'UTF-8').'</span>'; ?>
-                                                    <?php //echo '<span class="label label-default">'.htmlspecialchars($group->name, ENT_QUOTES, 'UTF-8').'</span>'; ?>
-<?php //endforeach?>
-                                                <!--</td>
-                                            </tr>-->
                                         </tbody>
                                     </table>
                                 </div>

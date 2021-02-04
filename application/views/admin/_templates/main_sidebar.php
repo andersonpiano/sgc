@@ -75,7 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li class="<?=active_link_function('profissionais')?>"><a href="<?php echo site_url('admin/profissionais'); ?>"><?php echo lang('menu_profissionais_create'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
-                                <li class="<?=active_link_function('vincular')?>"><a href="<?php echo site_url('admin/profissionais/vincular'); ?>"><?php echo lang('menu_profissionais_vincular'); ?></a></li>
+                                <li class="<?=active_link_function('vincular')?>"><a href="<?php echo site_url('admin/dashboard'); //admin/profissionais/vincular ?>"><?php echo lang('menu_profissionais_vincular'); ?></a></li>
                             </ul>
                         </li>
                         <li class="treeview <?=active_link_controller('escalas')?>">
@@ -93,6 +93,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('atribuir')?>"><a href="<?php echo site_url('admin/escalas/atribuir'); ?>"><?php echo lang('menu_escalas_atribuir'); ?></a></li>
                             </ul>
+                        </li>
+                        <li class="<?=active_link_controller('valoresplantoes')?>">
+                            <a href="<?php echo site_url('admin/dashboard'); //admin/valoresplantoes ?>">
+                                <i class="fa fa-money"></i> <span><?php echo lang('menu_valoresplantoes'); ?></span>
+                            </a>
+                        </li>
+                        <li class="<?=active_link_controller('feriados')?>">
+                            <a href="<?php echo site_url('admin/feriados'); ?>">
+                                <i class="fa fa-calendar-times-o"></i> <span><?php echo lang('menu_feriados'); ?></span>
+                            </a>
                         </li>
 
                         <li class="header text-uppercase"><?php echo lang('menu_security'); ?></li>

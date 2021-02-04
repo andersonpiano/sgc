@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class MY_model extends CI_Model {
+class MY_model extends CI_Model
+{
     protected $table = '';
 
     public function __construct($table)
@@ -19,6 +20,15 @@ class MY_model extends CI_Model {
         $query = $this->db->get();
 
         return $query->result();
+    }
+
+    /**
+     * Count all
+     */
+    public function count_all()
+    {
+        $this->db->from($this->table);
+        return $this->db->count_all_results();
     }
 
     public function get_by_id($id)
@@ -61,10 +71,20 @@ class MY_model extends CI_Model {
         return $this->db->update($this->table, $data, $where);
     }
 
+    public function update_where($where, $data)
+    {
+        return $this->db->update($this->table, $data, $where);
+    }
+
     public function insert($data)
     {
         $this->db->insert($this->table, $data);
 
         return $this->db->insert_id();
+    }
+
+    public function delete($where)
+    {
+        return $this->db->delete($this->table, $where);
     }
 }

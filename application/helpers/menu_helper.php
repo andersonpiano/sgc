@@ -12,11 +12,11 @@ if (!function_exists('active_link_controller')) {
 }
 
 if (!function_exists('active_link_function')) {
-    function active_link_function($controller)
+    function active_link_function($method)
     {
         $CI    =& get_instance();
-        $class = $CI->router->fetch_method();
+        $class_method = $CI->router->fetch_method();
 
-        return ($class == $controller) ? 'active' : null;
+        return ($class_method == $method) ? 'active' : null;
     }
 }

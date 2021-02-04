@@ -104,22 +104,46 @@ if ($url_exist) {
                                     <br/>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <p class="text-left text-uppercase"><strong>Trocas não confirmadas</strong></p>
-    <?php if(sizeof($plantoes_passados_confirmar) > 0) :?>
-        <?php foreach($plantoes_passados_confirmar as $plantao_passado) :?>
+                                            <p class="text-left text-uppercase"><strong>Trocas propostas não confirmadas</strong></p>
+    <?php if(sizeof($trocas_propostas_confirmar) > 0) :?>
+        <?php foreach($trocas_propostas_confirmar as $troca_proposta) :?>
                                             <span class="badge badge-success">Importante</span>&nbsp;
                                             <p class="text-justify">
             <?php
-                $text = 'O plantão no ' . $plantao_passado->unidadehospitalar_razaosocial . ' - ' . $plantao_passado->setor_nome;
-                $text .= ' do dia ' . date('d/m/Y', strtotime($plantao_passado->dataplantao));
-                $text .= ' de ' . date('H:i', strtotime($plantao_passado->horainicialplantao));
-                $text .= ' &agrave;s ' . date('H:i', strtotime($plantao_passado->horafinalplantao));
-                if (isset($plantao_passado->profissional_substituto_nome)) {
-                    $text .= ' que você ofertou a ' . $plantao_passado->profissional_substituto_nome;
+                $text = 'O plantão no ' . $troca_proposta->unidadehospitalar_razaosocial . ' - ' . $troca_proposta->setor_nome;
+                $text .= ' do dia ' . date('d/m/Y', strtotime($troca_proposta->dataplantao));
+                $text .= ' de ' . date('H:i', strtotime($troca_proposta->horainicialplantao));
+                $text .= ' &agrave;s ' . date('H:i', strtotime($troca_proposta->horafinalplantao));
+                if (isset($troca_proposta->profissional_substituto_nome)) {
+                    $text .= ' que você ofertou a ' . $troca_proposta->profissional_substituto_nome;
                     $text .= ' ainda não foi confirmado. Entre em contato com ele(a) para que efetue a confirmação.';
                 } else {
                     $text .= ' que você ofertou ainda não foi confirmado por ninguém do setor.';
                 }                
+                echo($text);
+            ?>
+                                            </p>
+        <?php endforeach;?>
+    <?php else:?>
+                                                <p>Sem novidades por enquanto</p>
+    <?php endif;?>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-left text-uppercase"><strong>Trocas recebidas não confirmadas</strong></p>
+    <?php if(sizeof($trocas_recebidas_confirmar) > 0) :?>
+        <?php foreach($trocas_recebidas_confirmar as $troca_recebida) :?>
+                                            <span class="badge badge-success">Importante</span>&nbsp;
+                                            <p class="text-justify">
+            <?php
+                $text = 'A troca do plantão no ' . $troca_recebida->unidadehospitalar_razaosocial . ' - ' . $troca_recebida->setor_nome;
+                $text .= ' do dia ' . date('d/m/Y', strtotime($troca_recebida->dataplantao));
+                $text .= ' de ' . date('H:i', strtotime($troca_recebida->horainicialplantao));
+                $text .= ' &agrave;s ' . date('H:i', strtotime($troca_recebida->horafinalplantao));
+                $text .= ' que você recebeu de ' . $troca_recebida->profissional_passagem_nome;
+                $text .= ' ainda não foi confirmado.';
                 echo($text);
             ?>
                                             </p>

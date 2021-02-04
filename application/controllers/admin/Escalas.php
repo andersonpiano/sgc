@@ -828,7 +828,7 @@ class Escalas extends Admin_Controller
         $escala = array();
 
         if ($mes != 0 and $setor != 0) {
-            $escala = $this->escala_model->get_escala_consolidada_setor_calendario(
+            $escala = $this->escala_model->get_trocas_passagens_setor_calendario(
                 $mes, $setor, $this->mobile_detect->isMobile()
             );
         }
@@ -848,7 +848,7 @@ class Escalas extends Admin_Controller
         $escala = array();
 
         if ($mes != 0 and $setor != 0) {
-            $escala = $this->escala_model->get_escala_consolidada_setor_calendario(
+            $escala = $this->escala_model->get_escala_original_setor_calendario(
                 $mes, $setor, $this->mobile_detect->isMobile()
             );
         }

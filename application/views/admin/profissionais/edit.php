@@ -9,6 +9,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php echo $breadcrumb; ?>
                 </section>
 
+                <?php if (isset($message)) : ?>
+                <section class="content-header">
+                    <div class="alert bg-warning alert-dismissible" role="alert">
+                        <?php echo(isset($message) ? $message : '');?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
                 <section class="content">
                     <div class="row">
                         <div class="col-md-12">
@@ -17,8 +28,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <h3 class="box-title"><?php echo lang('profissionais_edit'); ?></h3>
                                 </div>
                                 <div class="box-body">
-                                    <?php echo $message;?>
-
                                     <?php echo form_open(uri_string(), array('class' => 'form-horizontal', 'id' => 'form-edit_profissionais')); ?>
                                         <div class="form-group">
                                             <?php echo lang('profissionais_registro', 'registro', array('class' => 'col-sm-2 control-label')); ?>
@@ -30,6 +39,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <?php echo lang('profissionais_nome', 'nome', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
                                                 <?php echo form_input($nome);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('profissionais_nomecurto', 'nomecurto', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-10">
+                                                <?php echo form_input($nomecurto);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -60,7 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_submit'))); ?>
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/profissionais', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
-                                                    <?php echo anchor('admin/profissionais/criarusuario', lang('actions_create_user'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                    <?php echo anchor('admin/profissionais/createuser/' . $profissional->id, lang('actions_create_user'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
                                             </div>
                                         </div>

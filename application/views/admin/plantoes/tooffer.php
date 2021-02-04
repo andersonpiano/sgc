@@ -74,20 +74,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_dropdown($profissionalsubstituto_id);?>
                                             </div>
                                         </div>
-<?php if ($this->ion_auth->is_admin()): ?>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"><?php echo lang('plantoes_active');?></label>
-                                            <div class="col-sm-10">
-                                                <div class="checkbox">
-                                                    <label>
-    <?php $checked = ($plantao->active == 1) ? 'checked' : '';?>
-                                                        <input type="checkbox" name="active" value="1" <?php echo $checked; ?>>
-                                                        <?php echo htmlspecialchars(lang('plantoes_active'), ENT_QUOTES, 'UTF-8'); ?>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-<?php endif ?>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <?php echo form_hidden('id', $plantao->id);?>

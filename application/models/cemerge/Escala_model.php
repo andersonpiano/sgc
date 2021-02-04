@@ -269,6 +269,61 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function get_escala_original_setor_calendario(
+        $mes, $setor, $is_mobile
+    ) {
+        $sql = 'select profissionais.nome as title, ';
+        if ($is_mobile) {
+            $sql .= 'escalas.dataplantao as start, ';
+            $sql .= 'escalas.dataplantao as end, ';
+        } else {
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horainicialplantao) as start, ';
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horafinalplantao) as end, ';
+        }
+        $sql .= 'escalas.id, ';
+        $sql .= '\'Original\' as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join profissionais on (escalas.profissional_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        $sql .= 'where escalas.setor_id = ' . $setor . ' ';
+        $sql .= 'and month(escalas.dataplantao) = ' . $mes . ' ';
+        $sql .= 'order by start';
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    public function get_trocas_passagens_setor_calendario(
+        $mes, $setor, $is_mobile
+    ) {
+        $sql = 'select profissionais.nome as title, ';
+        if ($is_mobile) {
+            $sql .= 'escalas.dataplantao as start, ';
+            $sql .= 'escalas.dataplantao as end, ';
+        } else {
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horainicialplantao) as start, ';
+            $sql .= 'concat(escalas.dataplantao, \'T\', escalas.horafinalplantao) as end, ';
+        }
+        $sql .= 'escalas.id, ';
+        $sql .= 'case ';
+        $sql .= 'when passagenstrocas.tipopassagem=0 then \'Cessão\' ';
+        $sql .= 'when passagenstrocas.tipopassagem=1 then \'Troca\' ';
+        $sql .= 'end as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join passagenstrocas on (escalas.id = passagenstrocas.escala_id) ';
+        $sql .= 'join profissionais on (passagenstrocas.profissionalsubstituto_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        $sql .= 'where passagenstrocas.statuspassagem = 1 ';
+        $sql .= 'and escalas.setor_id = ' . $setor . ' ';
+        $sql .= 'and month(escalas.dataplantao) = ' . $mes . ' ';
+        $sql .= 'order by start';
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
     public function get_passagens_trocas($where, $where_in = null, $order_by = null)
     {
         $fields = 'escalas.*, profissionais.id as profissional_id, ';
@@ -367,7 +422,33 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_trocas_a_confirmar($profissional_id)
+    public function get_trocas_propostas_a_confirmar($profissional_id)
+    {
+        $fields = 'escalas.*, ';
+        $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
+        $fields .= 'profissional_substituto.registro as profissional_substituto_registro, ';
+        $fields .= 'profissional_substituto.nome as profissional_substituto_nome, ';
+        $fields .= 'setores.nome as setor_nome, ';
+        $fields .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial ';
+        $this->db->select($fields);
+        $this->db->from($this->table);
+        $this->db->join(
+            'passagenstrocas',
+            'passagenstrocas.escala_id = escalas.id
+            and passagenstrocas.statuspassagem in (0, 2)
+            and passagenstrocas.tipopassagem = 1
+            and passagenstrocas.profissional_id = ' . $profissional_id
+        );
+        $this->db->join('profissionais profissional_substituto', 'profissional_substituto.id = passagenstrocas.profissionalsubstituto_id');
+        $this->db->join('setores', 'setores.id = escalas.setor_id');
+        $this->db->join('unidadeshospitalares', 'unidadeshospitalares.id = setores.unidadehospitalar_id');
+        $this->db->order_by('dataplantao, horainicialplantao');
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
+    public function get_trocas_recebidas_a_confirmar($profissional_id)
     {
         $fields = 'escalas.*, ';
         $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
@@ -380,9 +461,9 @@ class Escala_model extends MY_Model
         $this->db->join(
             'passagenstrocas',
             'passagenstrocas.escala_id = escalas.id
-            and passagenstrocas.statuspassagem = 2
+            and passagenstrocas.statuspassagem in (0, 2)
             and passagenstrocas.tipopassagem = 1
-            and passagenstrocas.profissional_id = ' . $profissional_id
+            and passagenstrocas.profissionalsubstituto_id = ' . $profissional_id
         );
         $this->db->join('profissionais profissional_passagem', 'profissional_passagem.id = passagenstrocas.profissional_id');
         $this->db->join('setores', 'setores.id = escalas.setor_id');
@@ -426,7 +507,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escalas_consolidadas_por_profissional($profissional_id, $setor_id = null)
+    public function get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, $setor_id)
     {
         $sql = 'select escalas.id, escalas.dataplantao, escalas.datafinalplantao, ';
         $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
@@ -445,9 +526,8 @@ class Escala_model extends MY_Model
         $sql .= '(select escala_id ';
         $sql .= 'from passagenstrocas ';
         $sql .= 'where escala_id = escalas.id) ';
-        if ($setor_id) {
-            $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
-        }
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
+        $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
         $sql .= 'union ';
         $sql .= 'select escalas.id, escalas.dataplantao, escalas.datafinalplantao, ';
         $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
@@ -466,10 +546,9 @@ class Escala_model extends MY_Model
         $sql .= 'join setores on (escalas.setor_id = setores.id) ';
         $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
         $sql .= 'where profissionais.id = ? ';
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
         $sql .= 'and passagenstrocas.statuspassagem = 1 ';
-        if ($setor_id) {
-            $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
-        }
+        $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
         $sql .= 'order by dataplantao, horainicialplantao';
 
         $query = $this->db->query($sql, array($profissional_id, $profissional_id));
@@ -477,54 +556,54 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_plantoes_recebidos_por_profissional($profissional_id)
+    public function get_plantoes_recebidos_por_profissional($profissional_id, $datainicial, $datafinal, $setor_id)
     {
-        $fields = 'escalas.*, ';
-        $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
-        $fields .= 'passagenstrocas.statuspassagem as passagenstrocas_statuspassagem, ';
-        $fields .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, ';
-        $fields .= 'profissional_passagem.registro as profissional_passagem_registro, ';
-        $fields .= 'profissional_passagem.nome as profissional_passagem_nome, ';
-        $fields .= 'setores.nome as setor_nome, ';
-        $fields .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial ';
-        $this->db->select($fields);
-        $this->db->from($this->table);
-        $this->db->join(
-            'passagenstrocas',
-            'passagenstrocas.escala_id = escalas.id
-            and passagenstrocas.profissionalsubstituto_id = ' . $profissional_id
-        );
-        $this->db->join('profissionais profissional_passagem', 'profissional_passagem.id = passagenstrocas.profissional_id');
-        $this->db->join('setores', 'setores.id = escalas.setor_id');
-        $this->db->join('unidadeshospitalares', 'unidadeshospitalares.id = setores.unidadehospitalar_id');
-        $this->db->order_by('dataplantao, horainicialplantao');
-        $query = $this->db->get();
+        $sql = 'select escalas.*, ';
+        $sql .= 'passagenstrocas.id as passagenstrocas_id, ';
+        $sql .= 'passagenstrocas.statuspassagem as passagenstrocas_statuspassagem, ';
+        $sql .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, ';
+        $sql .= 'profissional_passagem.registro as profissional_passagem_registro, ';
+        $sql .= 'profissional_passagem.nome as profissional_passagem_nome, ';
+        $sql .= 'setores.nome as setor_nome, ';
+        $sql .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial ';
+        $sql .= 'from escalas ';
+        $sql .= 'join passagenstrocas on (passagenstrocas.escala_id = escalas.id ';
+        $sql .= 'and passagenstrocas.profissionalsubstituto_id = ' . $profissional_id . ') ';
+        $sql .= 'join profissionais profissional_passagem on (profissional_passagem.id = passagenstrocas.profissional_id) ';
+        $sql .= 'join setores on (setores.id = escalas.setor_id) ';
+        $sql .= 'join unidadeshospitalares on (unidadeshospitalares.id = setores.unidadehospitalar_id) ';
+        $sql .= 'where passagenstrocas.statuspassagem in (0, 1, 2, 3) '; // Definir quais status devem aparecer
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial . '\' and \'' . $datafinal . '\' ';
+        $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
+        $sql .= 'order by dataplantao, horainicialplantao';
+
+        $query = $this->db->query($sql);
 
         return $query->result();
     }
 
-    public function get_passagens_de_plantao_por_profissional($profissional_id)
+    public function get_passagens_de_plantao_por_profissional($profissional_id, $datainicial, $datafinal, $setor_id)
     {
-        $fields = 'escalas.*, ';
-        $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
-        $fields .= 'passagenstrocas.statuspassagem as passagenstrocas_statuspassagem, ';
-        $fields .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, ';
-        $fields .= 'profissional_substituto.registro as profissional_substituto_registro, ';
-        $fields .= 'profissional_substituto.nome as profissional_substituto_nome, ';
-        $fields .= 'setores.nome as setor_nome, ';
-        $fields .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial ';
-        $this->db->select($fields);
-        $this->db->from($this->table);
-        $this->db->join(
-            'passagenstrocas',
-            'passagenstrocas.escala_id = escalas.id
-            and passagenstrocas.profissional_id = ' . $profissional_id
-        );
-        $this->db->join('profissionais profissional_substituto', 'profissional_substituto.id = passagenstrocas.profissionalsubstituto_id', 'left');
-        $this->db->join('setores', 'setores.id = escalas.setor_id');
-        $this->db->join('unidadeshospitalares', 'unidadeshospitalares.id = setores.unidadehospitalar_id');
-        $this->db->order_by('dataplantao, horainicialplantao');
-        $query = $this->db->get();
+        $sql = 'select escalas.*, ';
+        $sql .= 'passagenstrocas.id as passagenstrocas_id, ';
+        $sql .= 'passagenstrocas.statuspassagem as passagenstrocas_statuspassagem, ';
+        $sql .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, ';
+        $sql .= 'profissional_substituto.registro as profissional_substituto_registro, ';
+        $sql .= 'profissional_substituto.nome as profissional_substituto_nome, ';
+        $sql .= 'setores.nome as setor_nome, ';
+        $sql .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial ';
+        $sql .= 'from escalas ';
+        $sql .= 'join passagenstrocas on (passagenstrocas.escala_id = escalas.id ';
+        $sql .= 'and passagenstrocas.profissional_id = ' . $profissional_id . ') ';
+        $sql .= 'join profissionais profissional_substituto on (profissional_substituto.id = passagenstrocas.profissionalsubstituto_id) ';
+        $sql .= 'join setores on (setores.id = escalas.setor_id) ';
+        $sql .= 'join unidadeshospitalares on (unidadeshospitalares.id = setores.unidadehospitalar_id) ';
+        $sql .= 'where passagenstrocas.statuspassagem in (0, 1, 2, 3) '; // Definir quais status devem aparecer
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial . '\' and \'' . $datafinal . '\' ';
+        $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
+        $sql .= 'order by dataplantao, horainicialplantao';
+
+        $query = $this->db->query($sql);
 
         return $query->result();
     }
@@ -666,7 +745,7 @@ class Escala_model extends MY_Model
         $this->db->join('setores', 'setores.id = escalas.setor_id');
         $this->db->join('unidadeshospitalares', 'unidadeshospitalares.id = setores.unidadehospitalar_id');
         $this->db->where('escalas.id', $escala_id);
-        $this->db->order_by('passagenstrocas.datahorapassagem');
+        $this->db->order_by('passagenstrocas.datahorapassagem', 'desc');
         $this->db->limit('1');
         $query = $this->db->get();
 

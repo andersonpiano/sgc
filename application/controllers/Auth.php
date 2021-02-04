@@ -48,7 +48,6 @@ class Auth extends MY_Controller
                 if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
                     if (!$this->ion_auth->is_admin()) {
                         $this->session->set_flashdata('message', $this->ion_auth->messages());
-                        //redirect('/', 'refresh');
                         if (is_null($destino) or empty($destino)) {
                             redirect('/admin/dashboard', 'refresh');
                         } else {
@@ -59,8 +58,6 @@ class Auth extends MY_Controller
                         $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
                         /* Load Template */
-                        //$this->template->auth_render('auth/choice', $this->data);
-                        //redirect('/admin', 'refresh');
                         if (is_null($destino) or empty($destino)) {
                             redirect('/admin/dashboard', 'refresh');
                         } else {
@@ -99,7 +96,7 @@ class Auth extends MY_Controller
                 $this->template->auth_render('auth/login', $this->data);
             }
         } else {
-            redirect('/', 'refresh');
+            redirect('/admin/dashboard', 'refresh');
         }
     }
 
@@ -109,11 +106,7 @@ class Auth extends MY_Controller
 
         $this->session->set_flashdata('message', $this->ion_auth->messages());
 
-        if ($src == 'admin') {
-            redirect('auth/login', 'refresh');
-        } else {
-            redirect('/', 'refresh');
-        }
+        redirect('auth/login', 'refresh');
     }
 
     /**

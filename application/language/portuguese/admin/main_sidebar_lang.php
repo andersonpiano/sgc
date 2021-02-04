@@ -37,6 +37,14 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_escalas_edit']               = 'Editar';
 /* *********** */$lang['menu_escalas_atribuir']       = 'Atribuir a Médico(a)';
 
+/* ****** */$lang['menu_valoresplantoes']  = 'Valores dos Plantões';
+/* *********** */$lang['menu_valoresplantoes_create'] = 'Buscar / Novo';
+/* *********** */$lang['menu_valoresplantoes_edit'] = 'Editar';
+
+/* ****** */$lang['menu_feriados']  = 'Feriados';
+/* *********** */$lang['menu_feriados_create'] = 'Buscar / Novo';
+/* *********** */$lang['menu_feriados_edit'] = 'Editar';
+
 /* ****** */$lang['menu_plantoes']  = 'Meus Plantões';
 /* *********** */$lang['menu_plantoes_create']     = 'Criar';
 /* *********** */$lang['menu_plantoes_edit']       = 'Editar';

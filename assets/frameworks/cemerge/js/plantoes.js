@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    /*
     $(document).on('change', '#unidadehospitalar_id', function() {
         var val = $(this).val();
         var url = '/sgc/admin/plantoes/setores/' + val;
@@ -14,6 +15,7 @@ $(document).ready(function(){
             },
         });
     });
+    */
 });
 
 

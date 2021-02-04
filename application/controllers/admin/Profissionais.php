@@ -125,6 +125,54 @@ class Profissionais extends Admin_Controller
         }
     }
 
+    public function createuser($id)
+    {
+        $id = (int) $id;
+
+        /* Load Data */
+        $profissional = $this->profissional_model->get_by_id($id);
+
+        if ($profissional) {
+            $username = strtolower($profissional->nomecurto);
+            $password = $profissional->cpf;
+            $email = $profissional->email;
+            $additional_data = array(
+                        'first_name' => $profissional->nome,
+                        );
+            $group = array('3'); // Sets user to profissional group
+
+            // Validate status
+            if ($profissional->active == 0) {
+                $this->session->set_flashdata('message', 'O profissional está inativo. Ative-o primeiro e depois crie seu usuário.');
+                redirect('admin/profissionais/edit/' . $id, 'refresh');
+            }
+
+            // Validate email
+            if (trim($profissional->email) == "@") {
+                $this->session->set_flashdata('message', 'O profissional não possui um e-mail válido cadastrado.');
+                redirect('admin/profissionais/edit/' . $id, 'refresh');
+            }
+
+            $userCreated = $this->ion_auth->register($username, $password, $email, $additional_data, $group);
+
+            if ($userCreated) {
+                // Vincular usuário ao profissional
+                $this->load->model('cemerge/usuarioprofissional_model');
+                $usuarioprofissional = $this->usuarioprofissional_model->insert(array('profissional_id' => $id, 'user_id' => $userCreated));
+                if ($usuarioprofissional) {
+                    $this->session->set_flashdata('message', 'Usuarío criado e vinculado ao profissional com sucesso.');
+                } else {
+                    $this->session->set_flashdata('message', 'Houve um erro ao vincular o usuário ao profissional. Tente novamente.');
+                }
+            } else {
+                $this->session->set_flashdata('message', 'Houve um erro ao criar o usuário. Tente novamente.');
+            }
+        }
+
+        /* Redirect to edit page */
+        redirect('admin/profissionais/edit/' . $id, 'refresh');
+    }
+
     public function edit($id)
     {
         $id = (int) $id;
@@ -148,6 +196,7 @@ class Profissionais extends Admin_Controller
         /* Validate form input */
         $this->form_validation->set_rules('registro', 'lang:profissionais_registro', 'required');
         $this->form_validation->set_rules('nome', 'lang:profissionais_nome', 'required');
+        $this->form_validation->set_rules('nomecurto', 'lang:profissionais_nomecurto', 'required');
         $this->form_validation->set_rules('email', 'lang:profissionais_email', 'required|valid_email');
         //$this->form_validation->set_rules('active', 'lang:edit_user_validation_company_label', 'required');
 
@@ -160,6 +209,7 @@ class Profissionais extends Admin_Controller
                 $data = array(
                     'registro' => $this->input->post('registro'),
                     'nome' => $this->input->post('nome'),
+                    'nomecurto' => $this->input->post('nomecurto'),
                     'email' => $this->input->post('email'),
                     'active' => $this->input->post('active')
                 );
@@ -206,6 +256,13 @@ class Profissionais extends Admin_Controller
             'type'  => 'text',
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('nome', $profissional->nome)
+        );
+        $this->data['nomecurto'] = array(
+            'name'  => 'nomecurto',
+            'id'    => 'nomecurto',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('nomecurto', $profissional->nomecurto)
         );
         $this->data['email'] = array(
             'name'  => 'email',

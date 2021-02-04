@@ -8,20 +8,35 @@ document.addEventListener('DOMContentLoaded', function() {
     var url = "";
     var tipoescala = document.getElementById('tipoescala');
     var currentPage = window.location.pathname;
-    if (currentPage == '/sgc/admin/plantoes') {
+    if (currentPage == '/sgc/admin/plantoes' ||
+        currentPage == '/sgc/admin/coordenador/plantoes' ||
+        currentPage == '/sgc/admin/profissional/plantoes'
+    ) {
         switch (tipoescala.value) {
             case "0" : // Minha escala consolidada
-                url = 'plantoes/minhaescalaconsolidada/mes/' + month;
+                url = '/sgc/admin/plantoes/minhaescalaconsolidada/mes/' + month;
                 url += '/setor/' + setor.value;
                 url += '/profissional/' + profissional.value;
                 break;
             case "1" : // Minhas trocas e passagens
-                url = 'plantoes/minhastrocasepassagens/mes/' + month;
+                url = '/sgc/admin/plantoes/minhastrocasepassagens/mes/' + month;
                 url += '/setor/' + setor.value;
                 url += '/profissional/' + profissional.value;
                 break;
-            case "2" : // Consolidada do setor
-                url = 'plantoes/escalaconsolidadadosetor/mes/' + month;
+            case "2" : // Consolidada do setor para o profissional
+                url = '/sgc/admin/plantoes/escalaconsolidadadosetor/mes/' + month;
+                url += '/setor/' + setor.value;
+                break;
+            case "3" : // Original do setor
+                url = '/sgc/admin/plantoes/escalaoriginaldosetor/mes/' + month;
+                url += '/setor/' + setor.value;
+                break;
+            case "4" : // Consolidada do setor para o coordenador
+                url = '/sgc/admin/plantoes/escalaconsolidadadosetor/mes/' + month;
+                url += '/setor/' + setor.value;
+                break;
+            case "5" : // Trocas e passagens do setor // Corrigir
+                url = '/sgc/admin/plantoes/trocasepassagensdosetor/mes/' + month;
                 url += '/setor/' + setor.value;
                 break;
             default :
@@ -72,3 +87,42 @@ document.addEventListener('DOMContentLoaded', function() {
         calendar.render();
     }
 });
+
+/*
+extendedProps -> objeto json dentro de evento que pode trazer mais informações sobre o evento.
+eventContent: { html: '<i>some html</i>' }
+Após events
+viewRender: function( view, element ) {
+        if (view.name !== 'agendaDay' && view.name !== 'basicDay') {
+            return false;
+      }
+   
+        var $container = $(".fc-body").find(".fc-widget-content:first");
+
+            var html = '<div class="fc-day-grid fc-unselectable">' +
+            '<div class="fc-row fc-week fc-widget-content" style="border-right-width: 1px; margin-right: 16px;">' +
+                '<div class="fc-bg">' +
+                    '<table>' +
+                        '<tbody>' +
+                            '<tr>' +
+                                '<td class="fc-axis fc-widget-content" style="width: 45px;"><span>Time</span></td>' +
+                                '<td class="fc-day fc-widget-content fc-mon fc-state-highlight events-label">Event</td>' +
+                            '</tr>' +
+                        '</tbody>' +
+                    '</table>' +
+                '</div>' +
+                '<div class="fc-content-skeleton">' +
+                    '<table>' +
+                        '<tbody>' +
+                            '<tr>' +
+                                '<td class="fc-axis" style="width:45px"></td>' +
+                                '<td></td>' +
+                            '</tr>' +
+                        '</tbody>' +
+                    '</table>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+
+            $container.prepend(html);
+*/
