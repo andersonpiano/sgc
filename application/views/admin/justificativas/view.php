@@ -58,12 +58,20 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo(date('d/m/Y', strtotime($justificativa->data_plantao))); ?></td>
                                             </tr>
                                             <tr>
-                                                <th><?php echo(lang('justificativas_hora_entrada')); ?></th>
-                                                <td><?php echo($justificativa->hora_entrada ? date('H:i', strtotime($justificativa->hora_entrada)) : "-"); ?></td>
+                                                <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
+                                                <td><?php echo((isset($batida_entrada->entrada)) ? date('H:i', strtotime($batida_entrada->entrada)) : "Sem Registro"); ?></td>
                                             </tr>
                                             <tr>
-                                                <th><?php echo(lang('justificativas_hora_saida')); ?></th>
-                                                <td><?php echo($justificativa->hora_saida ? date('H:i', strtotime($justificativa->hora_saida)) : "-"); ?></td>
+                                                <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
+                                                <td><?php echo((isset($batida_saida->saida)) ? date('H:i', strtotime($batida_saida->saida)) : "Sem Registro"); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>
+                                                <td><?php echo($justificativa->hora_entrada ? date('H:i', strtotime($justificativa->hora_entrada)) : " - "); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th><?php echo(lang('justificativas_hora_saida'). " Justificada"); ?></th>
+                                                <td><?php echo($justificativa->hora_saida ? date('H:i', strtotime($justificativa->hora_saida)) : " - "); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_descricao')); ?></th>

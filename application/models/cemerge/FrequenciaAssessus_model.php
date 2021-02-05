@@ -31,15 +31,39 @@ class FrequenciaAssessus_model extends MY_Model
         return $query->row();
     }
 
-    public function get_batida_profissional($data_plantao, $profissional_id, $tipo_batida, $entrada, $saida){
-        $sql  = "SELECT HR_FRQ";
-        $sql .= "FROM `tb_ctl_frq` ";
-        $sql .= "WHERE date(dt_frq) = '$data_plantao' ";
-        $sql .= "AND CD_PES_FIS = '$profissional_id' ";
-        $sql .= "AND tipo_batida = '$tipo_batida' ";
-        $sql .= "AND time(hr_frq) between $entrada and $saida";
-        $sql .= "ORDER by HR_FRQ DESC";
-        $sql .= "LIMIT 1";
+    public function get_batida_profissional_entrada($data_plantao, $profissional_id, $entrada, $saida){
+        
+        $entrada_m = date('H:i:s', strtotime("-1 hour", strtotime($entrada)));
+        $saida_m = date('H:i:s', strtotime("-2 hour", strtotime($saida)));
+        
+        $sql = "SELECT p.nome, f.dt_frq as entrada, f.tipo_batida ";
+        $sql .= "FROM `tb_ctl_frq` as f ";
+        $sql .= "left join profissionais p on (f.cd_pes_fis = p.cd_pes_fis) ";
+        $sql .= "WHERE date(f.dt_frq) = '".$data_plantao."' ";
+        $sql .= "and time(f.dt_frq) ";
+        $sql .= "BETWEEN time('".$entrada_m."') and time('".$saida_m."') ";
+        $sql .= "and p.id = $profissional_id ";
+        $sql .= "ORDER BY f.dt_frq ";
+        $sql .= "LIMIT 1 ";
+        
+        $query = $this->db->query($sql);
+        
+        return $query->row();
+    }
+    public function get_batida_profissional_saida($data_plantao, $profissional_id, $entrada, $saida){
+        
+        $entrada_m = date('H:i:s', strtotime("+3 hour", strtotime($entrada)));
+        $saida_m = date('H:i:s', strtotime("+1 hour", strtotime($saida)));
+        
+        $sql = "SELECT p.nome, f.dt_frq as saida , f.tipo_batida ";
+        $sql .= "FROM `tb_ctl_frq` as f ";
+        $sql .= "left join profissionais p on (f.cd_pes_fis = p.cd_pes_fis) ";
+        $sql .= "WHERE date(f.dt_frq) = '".$data_plantao."' ";
+        $sql .= "and time(f.dt_frq) ";
+        $sql .= "BETWEEN time('".$entrada_m."') and time('".$saida_m."') ";
+        $sql .= "and p.id = $profissional_id ";
+        $sql .= "ORDER BY f.dt_frq DESC ";
+        $sql .= "LIMIT 1 ";
         
         $query = $this->db->query($sql);
         

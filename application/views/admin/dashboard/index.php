@@ -267,7 +267,7 @@ if ($url_exist) {
     <?php if(sizeof($oportunidades) > 0) :?>
         <?php foreach($oportunidades as $oportunidade) :?>
                                                 <span class="badge badge-success">Importante</span>&nbsp;
-                                                <p class="text-justify"><a href="<?php echo(site_url('###'));?>">
+                                                <p class="text-justify"><a href="<?php echo(site_url('admin/escalas/confirmaroportunidade/'.$oportunidade->id));?>" onClick="alert(\'Deseja aceitar esse plantão?\')">
             <?php
                 $text = $oportunidade->profissional_passagem_nome . ' está oferecendo um plantão no ';
                 $text .= $oportunidade->unidadehospitalar_razaosocial . ' - ' . $oportunidade->setor_nome;

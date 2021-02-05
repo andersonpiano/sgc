@@ -399,9 +399,10 @@ class Justificativas extends Admin_Controller
         $profissional = $this->profissional_model->get_by_id($justificativa->profissional_id);
         $this->load->model('cemerge/setor_model');
         $setor = $this->setor_model->get_by_id($justificativa->setor_id);
-
+        $this->load->model('cemerge/frequenciaassessus_model');
         /* Variables */
         $setores_profissional = $this->_get_setores_profissional($profissional->id);
+
 
         /* Validate form input */
         $this->form_validation->set_rules('data_plantao', 'lang:justificativas_data_plantao', 'required');
@@ -497,6 +498,8 @@ class Justificativas extends Admin_Controller
         /* Load aditional models */
         $this->load->model('cemerge/profissional_model');
         $this->load->model('cemerge/setor_model');
+        $this->load->model('cemerge/FrequenciaAssessus_model');
+        $this->load->model('cemerge/Escala_model');
 
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_justificativas_view'), 'admin/justificativas/view');
@@ -508,6 +511,16 @@ class Justificativas extends Admin_Controller
         $this->data['justificativa'] = $this->justificativa_model->get_by_id($id);
         $this->data['profissional'] = $this->profissional_model->get_by_id($this->data['justificativa']->profissional_id);
         $this->data['setor'] = $this->setor_model->get_by_id($this->data['justificativa']->setor_id);
+
+        $data_plantao = $this->data['justificativa']->data_plantao;
+        $profissional_id = $this->data['justificativa']->profissional_id;
+        $plantao_entrada = $this->data['justificativa']->hora_entrada;
+        $plantao_saida = $this->data['justificativa']->hora_saida;
+
+        $this->data['batida_entrada'] = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+        $this->data['batida_saida'] = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+
+        //var_dump($this->data); exit;
 
         /* Load Template */
         $this->template->admin_render('admin/justificativas/view', $this->data);

@@ -13,6 +13,7 @@ class Dashboard extends Admin_Controller
         $this->load->helper('number');
         $this->load->model('admin/dashboard_model');
         $this->load->model('cemerge/escala_model');
+        $this->load->model('cemerge/passagemtroca_model');
     }
 
     public function index()
@@ -82,7 +83,9 @@ class Dashboard extends Admin_Controller
                 $this->data['trocas_recebidas_confirmar']
                     = $this->escala_model->get_trocas_recebidas_a_confirmar($profissional->id);
                 $this->data['oportunidades']
-                    = $this->escala_model->get_oportunidades($profissional->id);
+                    = $this->passagemtroca_model->get_sessoes_from_limbo(date('Y-m-d'), date('Y-m-d', strtotime('+30 days')), 0, $profissional->id);
+                                        /*= $this->escala_model->get_oportunidades($profissional->id);*/
+                                       // var_dump($this->data['oportunidades']); exit;
 
                 $this->data['cessoes'] = $this->getCessoes($profissional->id);
                 $this->data['trocas'] = $this->getTrocas($profissional->id);

@@ -59,10 +59,11 @@ class Passagemtroca_model extends MY_Model
         $sql .= "p_passagem.id as profissional_passagem_id, p_passagem.registro as profissional_passagem_registro, ";
         $sql .= "p_passagem.nome as profissional_passagem_nome, p_passagem.nomecurto as p_passagem_nomecurto, ";
         $sql .= "p_substituto.id as profissional_substituto_id, p_substituto.registro as profissional_substituto_registro, ";
-        $sql .= "p_substituto.nome as profissional_substituto_nome, p_substituto.nomecurto as p_substituto_nomecurto ";
+        $sql .= "p_substituto.nome as profissional_substituto_nome, p_substituto.nomecurto as p_substituto_nomecurto, un.razaosocial as unidadehospitalar_razaosocial ";
         $sql .= "from passagenstrocas pt ";
         $sql .= "join escalas e on (pt.escala_id = e.id) ";
         $sql .= "join setores s on (e.setor_id = s.id) ";
+        $sql .= "join unidadeshospitalares un on (s.unidadehospitalar_id = un.id) ";
         $sql .= "join profissionais p_passagem on (pt.profissional_id = p_passagem.id) ";
         $sql .= "left join profissionais p_substituto on (pt.profissionalsubstituto_id = p_substituto.id) ";
         $sql .= "join profissionalsetor setor on (setor.profissional_id = pt.profissional_id)";
