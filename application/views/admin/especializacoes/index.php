@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="container-fluid">
                 <h2 class="text-center"><strong>Gerenciar Especializações</strong></h2>
                 <a id="btn_add_especializacao" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Especialização</i></a>
-                <table id="especializacao" class="table table-striped table-bordered">
+                <table id="dt_especializacao" class="table table-striped table-bordered">
                     <thead>
                         <tr class="tableheader">
                             <th class="dt-center" >Código</th>
@@ -79,7 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div class="modal-body">
 			<form id="form_categoria">
 
-				<input id="categoria_nome" name="categoria_nome" hidden>
+				<input id="categoria_id" name="categoria_id" hidden>
 
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Nome</label>
@@ -110,7 +110,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 		<div class="modal-body">
 			<form id="form_especializacao">
-				<input id="especializacao_nome" name="especializacao_nome" hidden>
+				<input id="especializacao_id" name="especializacao_id" hidden>
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Nome</label>
 					<div class="col-lg-10">

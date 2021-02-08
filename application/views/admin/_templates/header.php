@@ -84,8 +84,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'especializacoes') : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
-        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/modal.js'); ?>"></script>
 <?php endif; ?>

@@ -26,20 +26,24 @@ $(function() {
 
 	$("#form_categoria").submit(function() {
 
+		var categoria_nome = $(this).val();
+		var url = 'cadastrar_categoria/';
 		$.ajax({
 			type: "POST",
-			url: BASE_URL + "admin/categorias/cadastro",
+			url: url,
 			dataType: "json",
-			data: $(this).serialize(),
+			data: {
+				categoria_nome : categoria_nome
+			},
 			beforeSend: function() {
 				clearErrors();
-				$("#btn_save_categoria").siblings(".help-block").html(loadingImg("Verificando..."));
+				$("#btn_save_categoria").siblings(".help-block").html(loadingImg("Cadastrando..."));
 			},
 			success: function(response) {
 				clearErrors();
 				if (response["status"]) {
 					$("#modal_categoria").modal("hide");
-					swal("Sucesso!","Curso salvo com sucesso!", "success");
+					swal("Sucesso!","Categoria salva com sucesso!", "success");
 					dt_categoria.ajax.reload();
 				} else {
 					showErrorsModal(response["error_list"])
@@ -81,7 +85,7 @@ $(function() {
 		$(".btn-edit-categoria").click(function(){
 			$.ajax({
 				type: "POST",
-				url: BASE_URL + "restrict/ajax_get_categoria_data",
+				url: "admin/especializacoes/edit_cat",
 				dataType: "json",
 				data: {"categoria_id": $(this).attr("categoria_id")},
 				success: function(response) {
@@ -90,7 +94,6 @@ $(function() {
 					$.each(response["input"], function(id, value) {
 						$("#"+id).val(value);
 					});
-					$("#categoria_img_path").attr("src", response["img"]["categoria_img_path"]);
 					$("#modal_categoria").modal();
 				}
 			})
@@ -101,7 +104,7 @@ $(function() {
 			categoria_id = $(this);
 			swal({
 				title: "Atenção!",
-				text: "Deseja deletar esse curso?",
+				text: "Deseja deletar essa Categoria?",
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#d9534f",
@@ -113,7 +116,7 @@ $(function() {
 				if (result.value) {
 					$.ajax({
 						type: "POST",
-						url: BASE_URL + "restrict/ajax_delete_categoria_data",
+						url: "admin/especializacoes/del_cat/".categoria_id,
 						dataType: "json",
 						data: {"categoria_id": categoria_id.attr("categoria_id")},
 						success: function(response) {
@@ -127,14 +130,15 @@ $(function() {
 		});
 	}
 
-	/*var dt_categoria = $("#dt_categorias").DataTable({
-		//"oLanguage": DATATABLE_PTBR,
+	var dt_categoria = $("#dt_categoria").DataTable({
+		"oLanguage": DATATABLE_PTBR,
 		"autoWidth": false,
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
-			"url": BASE_URL + "restrict/ajax_list_categoria",
-			"type": "POST",
+			"url": "ajax_listar_categorias",
+			"method": "POST",
+			"dataType": "json",
 		},
 		"columnDefs": [
 			{ targets: "no-sort", orderable: false },
@@ -143,7 +147,7 @@ $(function() {
 		"drawCallback": function() {
 			active_btn_categoria();
 		}
-	});*/
+	});
 	
 	function active_btn_especializacao() {
 		
@@ -159,7 +163,6 @@ $(function() {
 					$.each(response["input"], function(id, value) {
 						$("#"+id).val(value);
 					});
-					$("#especializacao_photo_path").attr("src", response["img"]["especializacao_photo_path"]);
 					$("#modal_especializacao").modal();
 				}
 			})
@@ -195,14 +198,14 @@ $(function() {
 
 		});
 	}
-/*
-	var dt_especializacao = $("#dt_especializacao").DataTable({
+
+	/*var dt_especializacao = $("#dt_especializacao").DataTable({
 		"oLanguage": DATATABLE_PTBR,
 		"autoWidth": false,
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
-			"url": BASE_URL + "restrict/ajax_list_especializacao",
+			"url": "restrict/ajax_list_especializacao",
 			"type": "POST",
 		},
 		"columnDefs": [

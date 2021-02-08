@@ -158,7 +158,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li class="fa fa-user-md"><a href="<?php echo site_url('admin/profissionais'); ?>"><?php echo lang('menu_profissionais_create'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
-                                <li class="<?=active_link_function('especializacao')?>"><a href="<?php echo site_url('admin/especializacoes'); ?>"><?php echo lang('menu_especializacoes'); ?></a></li>
+                                <li class="<?=active_link_function('especializacao')?>"><a href="<?php echo site_url('admin/especializacoes/'); ?>"><?php echo lang('menu_especializacoes'); ?></a></li>
                             </ul>
                         </li>
                         <li class="treeview <?=active_link_controller('residentes')?>">

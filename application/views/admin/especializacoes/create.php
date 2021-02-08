@@ -19,8 +19,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <div class="box-body">
                                     <?php echo $message;?>
 
-                                    <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_justificativa')); ?>
-                                        <?php echo(form_hidden('profissional_id', $profissional_id)); ?>
+                                    <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_categoria')); ?>
+                                        <?php echo(form_hidden('categoria_id', $categoria_id)); ?>
                                         <div class="form-group">
                                             <?php echo lang('justificativas_profissional', 'profissional_nome', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
