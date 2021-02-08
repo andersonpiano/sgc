@@ -87,7 +87,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
-        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/modal.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/categoria.js'); ?>"></script>
 <?php endif; ?>
 <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pace.min.js'); ?>"></script>
 <script src="<?php echo base_url($frameworks_dir . '/moment/moment.min.js'); ?>"></script>

@@ -14,7 +14,7 @@ class Categoria_model extends MY_Model
         if (!empty($id)) {
             $this->db->where("categoria_id <>", $id);
         }
-        $this->db->from("Categoria_model");
+        $this->db->from($this->table);
         $this->db->where($field, $value);
         return $this->db->get()->num_rows() > 0;
     }
@@ -36,7 +36,7 @@ class Categoria_model extends MY_Model
             $order_dir = $order[0]["dir"];
         }
 
-        $this->db->from("categoria_especializacao");
+        $this->db->from($this->table);
         if (isset($search)) {
             $first = TRUE;
             foreach ($this->column_search as $field) {

@@ -20,51 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php echo $message;?>
 
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_categoria')); ?>
-                                        <?php echo(form_hidden('categoria_id', $categoria_id)); ?>
-                                        <div class="form-group">
-                                            <?php echo lang('justificativas_profissional', 'profissional_nome', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-4">
-                                                <?php echo($profissional_nome);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('justificativas_cooperativa', 'cooperativa', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-4">
-                                                <?php echo('CEMERGE');?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('justificativas_setor', 'setor_id', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-4">
-                                                <?php echo(form_dropdown($setor_id));?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('justificativas_data_plantao', 'data_plantao', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-3">
-                                                <?php echo(form_input($data_plantao));?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('justificativas_hora_entrada', 'hora_entrada', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-3">
-                                                <?php echo(form_input($hora_entrada));?>
-                                            </div>
-                                            <span><cite><?php echo('Preencha caso esteja justificando o horário de entrada.'); ?></cite></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('justificativas_hora_saida', 'hora_saida', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-3">
-                                                <?php echo(form_input($hora_saida));?>
-                                            </div>
-                                            <span><cite><?php echo('Preencha caso esteja justificando o horário de saída.'); ?></cite></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('justificativas_descricao', 'descricao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-6">
-                                                <?php echo(form_textarea($descricao));?>
-                                            </div>
-                                        </div>
+                                        <?php echo(form_hidden('categoria_nome', $categoria_nome)); ?>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">

@@ -51,7 +51,7 @@ class Especializacoes extends Admin_Controller
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/dashboard', 'refresh');
         }
-
+        $this->load->model("cemerge/Categoria_model");
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_categorias_create'), 'admin/especializacoes/cadastro/');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
@@ -59,26 +59,21 @@ class Especializacoes extends Admin_Controller
         /* Variables */
         $categoria_nome = $this->input->post('categoria_nome');
 
-        $this->form_validation->set_rules('categoria_nome', 'lang:categorias_descricao', 'required');
-
+        $this->form_validation->set_rules('categoria_nome', 'lang:categoria_nome', 'required');
 
         if ($this->form_validation->run() == true) {
-            $justificativa_id = $this->Categoria_model->insert($this->data);
-            if ($justificativa_id) {
-                $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
-                redirect('admin/justificativas', 'refresh');
+            $categoria_id = $this->Categoria_model->insert(['categoria_nome'=>$categoria_nome]);
+            if ($categoria_id) {
+                $this->session->set_flashdata('message', 'Categoria inserida com sucesso.');
+                redirect('admin/especializacoes/', 'refresh');
             } else {
-                $this->session->set_flashdata('message', 'Houve um erro ao inserir a justificativa. Tente novamente.');
-                redirect('admin/justificativa/create', 'refresh');
+                $this->session->set_flashdata('message', 'Houve um erro ao inserir a Categoria. Tente novamente.');
+                redirect('admin/especializacoes/', 'refresh');
             }
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-
             $this->data['categoria_nome'] = $categoria_nome;
-
-
-            /* Load Template */
-            $this->template->admin_render('admin/especializacoes/create', $this->data);
+            redirect('admin/especializacoes/', 'refresh');
         }
     }
 

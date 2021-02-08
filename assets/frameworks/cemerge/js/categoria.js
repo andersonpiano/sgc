@@ -4,29 +4,18 @@ $(function() {
 	$("#btn_add_categoria").click(function(){
 		clearErrors();
 		$("#form_categoria")[0].reset();
-		$("#categoria_img_path").attr("src", "");
 		$("#modal_categoria").modal();
 	});
 
 	$("#btn_add_especializacao").click(function(){
 		clearErrors();
 		$("#form_especializacao")[0].reset();
-		swal("Novo estilo de alerta!");
-		$("#especializacao_photo_path").attr("src", "");
 		$("#modal_especializacao").modal();
-	});
-
-	$("#btn_upload_categoria_img").change(function() {
-		uploadImg($(this), $("#categoria_img_path"), $("#categoria_img"));
-	});
-
-	$("#btn_upload_especializacao_photo").change(function() {
-		uploadImg($(this), $("#especializacao_photo_path"), $("#especializacao_photo"));
 	});
 
 	$("#form_categoria").submit(function() {
 
-		var categoria_nome = $(this).val();
+		var categoria_nome = document.getElementById('categoria_nome').value;
 		var url = 'cadastrar_categoria/';
 		$.ajax({
 			type: "POST",
@@ -48,6 +37,9 @@ $(function() {
 				} else {
 					showErrorsModal(response["error_list"])
 				}
+			},
+			afterSend: function() {
+				swal("teste");
 			}
 		})
 
@@ -58,7 +50,7 @@ $(function() {
 
 		$.ajax({
 			type: "POST",
-			url: BASE_URL + "restrict/ajax_save_especializacao",
+			url: "restrict/ajax_save_especializacao",
 			dataType: "json",
 			data: $(this).serialize(),
 			beforeSend: function() {
@@ -116,7 +108,7 @@ $(function() {
 				if (result.value) {
 					$.ajax({
 						type: "POST",
-						url: "admin/especializacoes/del_cat/".categoria_id,
+						url: "del_cat/".categoria_id,
 						dataType: "json",
 						data: {"categoria_id": categoria_id.attr("categoria_id")},
 						success: function(response) {
