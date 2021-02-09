@@ -93,7 +93,7 @@ $(function() {
 
 		$(".btn-del-categoria").click(function(){
 			
-			categoria_id = $(this);
+			categoria_id = $(this).categoria_id;
 			swal({
 				title: "Atenção!",
 				text: "Deseja deletar essa Categoria?",

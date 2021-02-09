@@ -224,14 +224,14 @@ public function cadastrar_especializacao(){
     exit;
     }
 
-    public function deletar_categoria() {
+    public function deletar_categoria($categoria_id) {
 
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
         }
 
     	$json = array();
-		$json["status"] = 1;
+		$json["success"] = 1;
 
 		$this->load->model("Categoria_model");
 		$categoria_id = $this->input->post("categoria_id");
@@ -240,14 +240,14 @@ public function cadastrar_especializacao(){
         echo json_encode($json);
 	}
 
-	public function deletar_especializacao() {
+	public function deletar_especializacao($especializacao_id) {
 
 		if (!$this->input->is_ajax_request()) {
 			exit("Nenhum acesso de script direto permitido!");
         }
         
 		$json = array();
-        $json["status"] = 1;
+        $json["success"] = 1;
         
 		$especializacao_id = $this->input->post("especializacao_id");
 		$this->Especializacao_model->delete(['especializacao_id' => $especializacao_id]);

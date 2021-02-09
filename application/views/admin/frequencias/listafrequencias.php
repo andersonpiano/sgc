@@ -120,7 +120,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->dt_frq)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars(date('H:i:s', strtotime($freq->dt_frq)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center <?php echo($freq->escala_id ? 'bg-success' : 'bg-danger'); ?>"><?php echo($tipo_batida_escala); ?></td>
-                                                <td class="dontprint">
+                                                <td class="dontprint text-center">
                                                     <?php echo anchor('admin/frequencias/editarfrequencia/'.$freq->cd_ctl_frq, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); ?>
                                                 </td>
                                             </tr>
