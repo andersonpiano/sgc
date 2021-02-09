@@ -36,9 +36,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <table id="dt_categoria" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
-                                <th class="dt-center">Código</th>
-                                <th class="dt-center">Nome</th>
-                                <th class="dt-center no-sort">Ações</th>
+                                <th class="dt-center text-center">Código</th>
+                                <th width="85%" class="dt-center">Nome</th>
+                                <th width="09%" class="dt-center text-center no-sort">Ações</th>
                             </tr> 
                         </thead>
                         <tbody>

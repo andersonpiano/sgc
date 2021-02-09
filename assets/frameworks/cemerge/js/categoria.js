@@ -50,18 +50,18 @@ $(function() {
 
 		$.ajax({
 			type: "POST",
-			url: "restrict/ajax_save_especializacao",
+			url: "cadastrar_especializacao",
 			dataType: "json",
 			data: $(this).serialize(),
 			beforeSend: function() {
 				clearErrors();
-				$("#btn_save_especializacao").siblings(".help-block").html(loadingImg("Verificando..."));
+				$("#btn_save_especializacao").siblings(".help-block").html(loadingImg("Cadastrando..."));
 			},
 			success: function(response) {
 				clearErrors();
 				if (response["status"]) {
 					$("#modal_especializacao").modal("hide");
-					swal("Sucesso!","Membro salvo com sucesso!", "success");
+					swal("Sucesso!","Especialização salva com sucesso!", "success");
 					dt_especializacao.ajax.reload();
 				} else {
 					showErrorsModal(response["error_list"])
@@ -77,7 +77,7 @@ $(function() {
 		$(".btn-edit-categoria").click(function(){
 			$.ajax({
 				type: "POST",
-				url: "admin/especializacoes/edit_cat",
+				url: "editar_categoria/".categoria_id,
 				dataType: "json",
 				data: {"categoria_id": $(this).attr("categoria_id")},
 				success: function(response) {
@@ -108,7 +108,7 @@ $(function() {
 				if (result.value) {
 					$.ajax({
 						type: "POST",
-						url: "del_cat/".categoria_id,
+						url: "deletar_categoria/".categoria_id,
 						dataType: "json",
 						data: {"categoria_id": categoria_id.attr("categoria_id")},
 						success: function(response) {
@@ -146,7 +146,7 @@ $(function() {
 		$(".btn-edit-especializacao").click(function(){
 			$.ajax({
 				type: "POST",
-				url: BASE_URL + "restrict/ajax_get_especializacao_data",
+				url: BASE_URL + "editar_especializacao",
 				dataType: "json",
 				data: {"especializacao_id": $(this).attr("especializacao_id")},
 				success: function(response) {
@@ -177,7 +177,7 @@ $(function() {
 				if (result.value) {
 					$.ajax({
 						type: "POST",
-						url: BASE_URL + "restrict/ajax_delete_especializacao_data",
+						url: "deletar_especializacao".especializacao_id,
 						dataType: "json",
 						data: {"especializacao_id": especializacao_id.attr("especializacao_id")},
 						success: function(response) {
@@ -191,14 +191,15 @@ $(function() {
 		});
 	}
 
-	/*var dt_especializacao = $("#dt_especializacao").DataTable({
+	var dt_especializacao = $("#dt_especializacao").DataTable({
 		"oLanguage": DATATABLE_PTBR,
 		"autoWidth": false,
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
-			"url": "restrict/ajax_list_especializacao",
+			"url": "ajax_listar_especializacoes",
 			"type": "POST",
+			"dataType": "json",
 		},
 		"columnDefs": [
 			{ targets: "no-sort", orderable: false },
@@ -207,6 +208,6 @@ $(function() {
 		"drawCallback": function() {
 			active_btn_especializacao();
 		}
-	});*/
+	});
 
 })

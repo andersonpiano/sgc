@@ -20,7 +20,7 @@ class Categoria_model extends MY_Model
     }
 
     var $column_search = array("categoria_nome");
-    var $column_order = array("categoria_id");
+    var $column_order = array("categoria_id", "categoria_nome");
 
     private function _get_datatable() {
 
@@ -78,9 +78,18 @@ class Categoria_model extends MY_Model
 
     public function records_total() {
 
-        $this->db->from("categoria_especializacao");
+        $this->db->from($this->table);
         return $this->db->count_all_results();
 
+    }
+
+    public function get_categoria(){
+
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $query = $this->db->get();
+
+        return $query;
     }
 
 }
