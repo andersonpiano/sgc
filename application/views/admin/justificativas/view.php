@@ -77,6 +77,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <th><?php echo(lang('justificativas_descricao')); ?></th>
                                                 <td><?php echo(htmlspecialchars(nl2br($justificativa->descricao), ENT_QUOTES, 'UTF-8')); ?></td>
                                             </tr>
+                                            <?php if($justificativa->status == '2') {?> 
+                                            <tr>
+                                                <th><?php echo(lang('justificativas_recusa')); ?></th>
+                                                <td><?php echo(htmlspecialchars(nl2br($justificativa->motivo_recusa), ENT_QUOTES, 'UTF-8')); ?></td>
+                                            </tr><?php }; ?>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_status')); ?></th>
                                                 <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>
@@ -88,7 +93,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td colspan='2' class="text-center"><a href="#" onclick="window.print();" class="btn btn-primary btn-flat dontprint">Imprimir</a>&nbsp;
                                                 <?php echo anchor('admin/justificativas/edit/'.$justificativa->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat dontprint')); ?>&nbsp;
                                                 <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Aprovar', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
-                                                <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/negar/'.$justificativa->id, 'Rejeitar', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Aprovar', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;</td>
+                                                <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Rejeitar', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Aprovar', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;</td>
                                             </tr>
                                         </tbody>
                                     </table>

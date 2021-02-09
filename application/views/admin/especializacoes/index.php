@@ -55,8 +55,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <thead>
                         <tr class="tableheader">
                             <th class="dt-center" >Código</th>
-                            <th class="dt-center">Nome</th>
-                            <th class="dt-center no-sort">Ações</th>
+                            <th width="85%" class="dt-center">Nome</th>
+                            <th width="09%" class="dt-center no-sort">Ações</th>
                         </tr> 
                     </thead>
                     <tbody>
@@ -119,15 +119,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="form-group">
                     <label class="col-lg-2 control-label">Categoria</label>
+                    <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-lg-10">
-                        <select name="categoria_select" class="form-control">
-                            <option value="#" selected>Sem especialização</option>
-                            <option value="#">Residência Médica</option>
-                            <option value="#">Mestrado</option>
-                            <option value="#">Doutorado</option>
-                            <option value="#">Supervisor de PRM ESP-CE</option>
-                        </select>
-                        <span class="help-block"></span>
+                        <?php echo form_dropdown($categoria_select);?>
                     </div>
                     </div>
 				</div>

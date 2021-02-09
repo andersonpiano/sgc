@@ -38,20 +38,35 @@ class Especializacoes extends Admin_Controller
         
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-        $this->load->model('cemerge/Categoria_model');
-
-        $categoria_select = $this->Categoria_model->get_categoria();
+        $categoria_select = $this->_get_categorias();
 
         $this->data['categoria_select'] = array(
             'name'  => 'categoria_select',
             'id'    => 'categoria_select',
             'type'  => 'select',
             'class' => 'form-control',
-            'options' => $categoria_select
+            'value' => $this->form_validation->set_value('categoria_select'),
+            'options' => $categoria_select,
         );
 
-
         $this->template->admin_render('admin/especializacoes/index', $this->data);
+    }
+
+    private function _get_categorias()
+    {
+        
+        $this->load->model('cemerge/Categoria_model');
+
+        $categorias = $this->Categoria_model->get_all();
+
+        $categoria_select = array(
+            '' => 'Selecione uma categoria',
+        );
+        foreach ($categorias as $categoria) {
+            $categoria_select[$categoria->categoria_id] = $categoria->categoria_nome;
+        }
+        //var_dump($categorias); exit;
+        return $categoria_select;
     }
     
     public function cadastrar_categoria(){
@@ -147,13 +162,13 @@ public function cadastrar_especializacao(){
 
     /* Variables */
     $especializacao_nome = $this->input->post('especializacao_nome');
-    $especializacao_categoria = $this->select->value('categoria_select');
+    $especializacao_categoria = $this->input->post('categoria_select');
 
     $this->form_validation->set_rules('especializacao_nome', 'lang:especializacao_nome', 'required');
     $this->form_validation->set_rules('categoria_select', 'lang:especializacao_categoria', 'required');
 
     if ($this->form_validation->run() == true) {
-        $especializacao_id = $this->especializacao_model->insert(['especializacao_nome'=>$especializacao_nome, 'especializacao_categoria'=>$especializacao_categoria]);
+        $especializacao_id = $this->Especializacao_model->insert(['especializacao_nome'=>$especializacao_nome, 'especializacao_categoria'=>$especializacao_categoria]);
         if ($especializacao_id) {
             $this->session->set_flashdata('message', 'Especialização inserida com sucesso.');
             redirect('admin/especializacoes/', 'refresh');

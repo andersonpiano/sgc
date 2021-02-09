@@ -71,9 +71,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <span><cite><?php echo('Preencha caso esteja justificando o horário de saída.'); ?></cite></span>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('justificativas_motivo_recusa', 'motivo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('justificativas_descricao', 'descricao', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-6">
-                                                <?php echo(form_textarea($motivo));?>
+                                                <?php echo(form_textarea($descricao));?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_recusa', 'motivo_recusa', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-6">
+                                                <?php echo(form_textarea($motivo_recusa));?>
                                             </div>
                                         </div>
                                         <div class="form-group">

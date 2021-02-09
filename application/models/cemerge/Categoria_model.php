@@ -83,9 +83,9 @@ class Categoria_model extends MY_Model
 
     }
 
-    public function get_categoria(){
+    public function get_categorias(){
 
-        $this->db->select('*');
+        $this->db->select('categoria_id, categoria_nome');
         $this->db->from($this->table);
         $query = $this->db->get();
 

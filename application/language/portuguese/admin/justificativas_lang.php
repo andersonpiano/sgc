@@ -21,6 +21,7 @@ $lang['justificativas_data_plantao']        = 'Data do Plantão';
 $lang['justificativas_hora_entrada']        = 'Hora de Entrada';
 $lang['justificativas_hora_saida']          = 'Hora de Saída';
 $lang['justificativas_descricao']           = 'Justificativa';
+$lang['justificativas_recusa']           = 'Motivo do Indeferimento';
 $lang['justificativas_action']              = 'Ação';
 $lang['justificativas_active']              = 'Ativo';
 $lang['justificativas_created_on']          = 'Criado em';

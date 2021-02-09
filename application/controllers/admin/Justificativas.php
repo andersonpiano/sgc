@@ -484,6 +484,125 @@ class Justificativas extends Admin_Controller
         $this->template->admin_render('admin/justificativas/edit', $this->data);
     }
 
+    public function edit_recusa($id)
+    {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $id = (int) $id;
+
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_justificativas_edit'), 'admin/justificativas/edit_recusa');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Load Data */
+        $justificativa = $this->justificativa_model->get_by_id($id);
+        $this->load->model('cemerge/profissional_model');
+        $profissional = $this->profissional_model->get_by_id($justificativa->profissional_id);
+        $this->load->model('cemerge/setor_model');
+        $setor = $this->setor_model->get_by_id($justificativa->setor_id);
+        $this->load->model('cemerge/frequenciaassessus_model');
+        /* Variables */
+        $setores_profissional = $this->_get_setores_profissional($profissional->id);
+
+
+        /* Validate form input */
+        $this->form_validation->set_rules('data_plantao', 'lang:justificativas_data_plantao', 'required');
+        $this->form_validation->set_rules('descricao', 'lang:justificativas_descricao', 'required');
+        $this->form_validation->set_rules('motivo_recusa', 'lang:justificativas_recusa', 'required');
+
+        if (isset($_POST) and !empty($_POST)) {
+            if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
+                show_error($this->lang->line('error_csrf'));
+            }
+
+            if ($this->form_validation->run() == true) {
+                $data = array(
+                    'profissional_id' => $this->input->post('profissional_id'),
+                    'setor_id' => $this->input->post('setor_id'),
+                    'data_plantao' => $this->input->post('data_plantao'),
+                    'hora_entrada' => $this->input->post('hora_entrada'),
+                    'hora_saida' => $this->input->post('hora_saida'),
+                    'descricao' => $this->input->post('descricao'),
+                    'motivo_recusa' => $this->input->post('motivo_recusa'),
+                    'status' => 2,
+                );
+
+                if ($this->justificativa_model->update($justificativa->id, $data)) {
+                    $this->session->set_flashdata('message', 'Justificativa atualizada com sucesso.');
+                } else {
+                    $this->session->set_flashdata('message', $this->ion_auth->errors());
+                }
+                redirect('admin/justificativas', 'refresh');
+            }
+        }
+
+        // display the edit user form
+        $this->data['csrf'] = $this->_get_csrf_nonce();
+
+        // set the flash data error message if there is one
+        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+        // pass the justificativa to the view
+        $this->data['justificativa'] = $justificativa;
+        $this->data['profissional_id'] = $justificativa->profissional_id;
+        $this->data['profissional_nome'] = $profissional->nome;
+        $this->data['setor_id'] = array(
+            'name'  => 'setor_id',
+            'id'    => 'setor_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'options' => $setores_profissional,
+            'selected' => $justificativa->setor_id,
+        );
+        $this->data['descricao'] = array(
+            'name'  => 'descricao',
+            'id'    => 'descricao',
+            'type'  => 'textarea',
+            'class' => 'form-control',
+            'rows'  => '10',
+            'value' => $this->form_validation->set_value('descricao', $justificativa->descricao),
+        );
+        $this->data['motivo_recusa'] = array(
+            'name'  => 'motivo_recusa',
+            'id'    => 'motivo_recusa',
+            'type'  => 'textarea',
+            'class' => 'form-control',
+            'rows'  => '10',
+            'value' => $this->form_validation->set_value('motivo_recusa', $justificativa->motivo_recusa),
+        );
+        $this->data['data_plantao'] = array(
+            'name'  => 'data_plantao',
+            'id'    => 'data_plantao',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('data_plantao', $justificativa->data_plantao),
+        );
+        $this->data['hora_entrada'] = array(
+            'name'  => 'hora_entrada',
+            'id'    => 'hora_entrada',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('hora_entrada', $justificativa->hora_entrada),
+        );
+        $this->data['hora_saida'] = array(
+            'name'  => 'hora_saida',
+            'id'    => 'hora_saida',
+            'type'  => 'time',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('hora_saida', $justificativa->hora_saida),
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/justificativas/recusar', $this->data);
+    }
+
     public function view($id)
     {
         if (!$this->ion_auth->logged_in()) {
