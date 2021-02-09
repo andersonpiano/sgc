@@ -20,7 +20,7 @@ $(function() {
 		$.ajax({
 			type: "POST",
 			url: url,
-			dataType: "json",
+			dataType: "JSON",
 			data: {
 				categoria_nome : categoria_nome
 			},
@@ -51,7 +51,7 @@ $(function() {
 		$.ajax({
 			type: "POST",
 			url: "cadastrar_especializacao",
-			dataType: "json",
+			dataType: "JSON",
 			data: $(this).serialize(),
 			beforeSend: function() {
 				clearErrors();
@@ -78,7 +78,7 @@ $(function() {
 			$.ajax({
 				type: "POST",
 				url: "editar_categoria/".categoria_id,
-				dataType: "json",
+				dataType: "JSON",
 				data: {"categoria_id": $(this).attr("categoria_id")},
 				success: function(response) {
 					clearErrors();
@@ -109,7 +109,7 @@ $(function() {
 					$.ajax({
 						type: "POST",
 						url: "deletar_categoria/".categoria_id,
-						dataType: "json",
+						dataType: "JSON",
 						data: {"categoria_id": categoria_id.attr("categoria_id")},
 						success: function(response) {
 							swal("Sucesso!", "Ação executada com sucesso", "success");
@@ -130,7 +130,7 @@ $(function() {
 		"ajax": {
 			"url": "ajax_listar_categorias",
 			"method": "POST",
-			"dataType": "json",
+			"dataType": "JSON",
 		},
 		"columnDefs": [
 			{ targets: "no-sort", orderable: false },
@@ -147,7 +147,7 @@ $(function() {
 			$.ajax({
 				type: "POST",
 				url: BASE_URL + "editar_especializacao",
-				dataType: "json",
+				dataType: "JSON",
 				data: {"especializacao_id": $(this).attr("especializacao_id")},
 				success: function(response) {
 					clearErrors();
@@ -178,7 +178,7 @@ $(function() {
 					$.ajax({
 						type: "POST",
 						url: "deletar_especializacao".especializacao_id,
-						dataType: "json",
+						dataType: "JSON",
 						data: {"especializacao_id": especializacao_id.attr("especializacao_id")},
 						success: function(response) {
 							swal("Sucesso!", "Ação executada com sucesso", "success");
@@ -199,7 +199,7 @@ $(function() {
 		"ajax": {
 			"url": "ajax_listar_especializacoes",
 			"type": "POST",
-			"dataType": "json",
+			"dataType": "JSON",
 		},
 		"columnDefs": [
 			{ targets: "no-sort", orderable: false },
