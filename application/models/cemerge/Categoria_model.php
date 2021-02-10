@@ -92,4 +92,20 @@ class Categoria_model extends MY_Model
         return $query;
     }
 
+    public function get_data($id, $select = NULL) {
+		if (!empty($select)) {
+			$this->db->select($select);
+		}
+		$this->db->from($this->table);
+		$this->db->where("categoria_id", $id);
+		return $this->db->get();
+    }
+    
+    public function update($id, $data)
+    {
+        $where = "categoria_id = $id";
+
+        return $this->db->update($this->table, $data, $where);
+    }
+
 }

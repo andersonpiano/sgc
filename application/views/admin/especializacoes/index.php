@@ -78,6 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<div class="modal-body">
 			<form id="form_categoria">
+            <input id="categoria_id" name="categoria_id" hidden>
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Nome</label>
 					<div class="col-lg-10">

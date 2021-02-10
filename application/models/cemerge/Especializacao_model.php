@@ -81,4 +81,20 @@ class Especializacao_model extends MY_Model
         return $this->db->count_all_results();
 
     }
+
+    public function get_data($id, $select = NULL) {
+		if (!empty($select)) {
+			$this->db->select($select);
+		}
+		$this->db->from($this->table);
+		$this->db->where("especializacao_id", $id);
+		return $this->db->get();
+    }
+
+    public function update($id, $data)
+    {
+        $where = "especializacao_id = $id";
+
+        return $this->db->update($this->table, $data, $where);
+    }
 }

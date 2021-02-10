@@ -98,13 +98,13 @@ class Especializacoes extends Admin_Controller
         $this->form_validation->set_rules('categoria_nome', 'lang:categoria_nome', 'required');
 
         if ($this->form_validation->run() == true) {
-            $categoria_id = $this->Categoria_model->insert(['categoria_nome'=>$categoria_nome, 'categoria_status' => 1]);
-            if ($categoria_id) {
-                $this->session->set_flashdata('message', 'Categoria inserida com sucesso.');
-
+            $data = $this->input->post();
+            if(empty($data['categoria_id'])) {
+                $this->Categoria_model->insert(['categoria_nome'=>$categoria_nome, 'categoria_status' => 1]);
             } else {
-                $this->session->set_flashdata('message', 'Houve um erro ao inserir a Categoria. Tente novamente.');
-                
+                $categoria_id = $data["categoria_id"];
+                unset($data['categoria_id']);
+                $this->Categoria_model->update($categoria_id, ['categoria_nome' => $categoria_nome]);
             }
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -154,43 +154,45 @@ class Especializacoes extends Admin_Controller
     exit;
 }
 
-public function cadastrar_especializacao(){
-        
-    if (!$this->ion_auth->logged_in()) {
-        $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
-        redirect('auth/login', 'refresh');
-    }
-    if (!$this->ion_auth->in_group($this->_permitted_groups)) {
-        $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
-        redirect('admin/dashboard', 'refresh');
-    }
-    /* Breadcrumbs */
-    $this->breadcrumbs->unshift(2, lang('menu_especializacoes_create'), 'admin/especializacoes/');
-    $this->data['breadcrumb'] = $this->breadcrumbs->show();
-
-    /* Variables */
-    $especializacao_nome = $this->input->post('especializacao_nome');
-    $especializacao_categoria = $this->input->post('categoria_select');
-
-    $this->form_validation->set_rules('especializacao_nome', 'lang:especializacao_nome', 'required');
-    $this->form_validation->set_rules('categoria_select', 'lang:especializacao_categoria', 'required');
-
-    if ($this->form_validation->run() == true) {
-        $especializacao_id = $this->Especializacao_model->insert(['especializacao_nome'=>$especializacao_nome, 'especializacao_categoria'=>$especializacao_categoria]);
-        if ($especializacao_id) {
-            $this->session->set_flashdata('message', 'Especialização inserida com sucesso.');
-            redirect('admin/especializacoes/', 'refresh');
-        } else {
-            $this->session->set_flashdata('message', 'Houve um erro ao inserir a especialização. Tente novamente.');
-            redirect('admin/especializacoes/', 'refresh');
+    public function cadastrar_especializacao(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
         }
-    } else {
-        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-        $this->data['especializacao_nome'] = $especializacao_nome;
-        redirect('admin/especializacoes/', 'refresh');
-    } 
-        exit;
-}
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_especializacoes_create'), 'admin/especializacoes/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $especializacao_nome = $this->input->post('especializacao_nome');
+        $especializacao_categoria = $this->input->post('categoria_select');
+
+        $this->form_validation->set_rules('especializacao_nome', 'lang:especializacao_nome', 'required');
+        $this->form_validation->set_rules('categoria_select', 'lang:especializacao_categoria', 'required');
+
+        $json = array();
+
+        if ($this->form_validation->run() == true) {
+            $data = $this->input->post();
+            if(empty($data['especializacao_id'])) {
+                $this->Especializacao_model->insert(['especializacao_nome'=>$especializacao_nome, 'especializacao_categoria'=>$especializacao_categoria]);
+            } else {
+                $especializacao_id = $data["especializacao_id"];
+                unset($data['categoria_id']);
+                $this->Especializacao_model->update($especializacao_id, ['especializacao_nome' => $especializacao_nome, 'especializacao_categoria'=>$especializacao_categoria]);
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+            $this->data['especializacao_nome'] = $especializacao_nome;
+        } 
+            json_encode($json);
+            exit;
+    }
 
     public function ajax_listar_especializacoes() {
 
@@ -249,5 +251,47 @@ public function cadastrar_especializacao(){
             $especializacao_id = $this->input->post("especializacao_id");
             $this->Especializacao_model->delete(['especializacao_id' => $especializacao_id]);
 
+    }
+
+
+    public function ajax_get_categoria_data() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+        $json = array();
+        $json["status"] = 1;
+        $json["input"] = array();
+
+        $this->load->model("cemerge/Categoria_model");
+        
+        $categoria_id = $this->input->post("categoria_id");
+        $data = $this->Categoria_model->get_data($categoria_id)->result_array()[0];
+        $json["input"]["categoria_id"] = $data["categoria_id"];
+        $json["input"]["categoria_nome"] = $data["categoria_nome"];
+
+        echo json_encode($json);
+        exit;
+    }
+
+    public function ajax_get_especializacao_data() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+        $json = array();
+        $json["status"] = 1;
+        $json["input"] = array();
+
+        $this->load->model("cemerge/Especializacao_model");
+        
+        $especializacao_id = $this->input->post("especializacao_id");
+        $data = $this->Especializacao_model->get_data($especializacao_id)->result_array()[0];
+        $json["input"]["especializacao_id"] = $data["especializacao_id"];
+        $json["input"]["especializacao_nome"] = $data["especializacao_nome"];
+        $json["input"]["categoria_select"] =$data["especializacao_categoria"];
+
+        echo json_encode($json);
+        exit;
     }
 }

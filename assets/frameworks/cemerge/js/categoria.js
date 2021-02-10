@@ -70,7 +70,6 @@ $(function() {
 				dt_especializacao.ajax.reload();
 			}
 		})
-
 		return false;
 	});
 
@@ -79,20 +78,20 @@ $(function() {
 		$(".btn-edit-categoria").click(function(){
 			$.ajax({
 				type: "POST",
-				url: "editar_categoria/".categoria_id,
-				dataType: "JSON",
-				data: {"categoria_id": $(this).attr("categoria_id")},
+				url: "ajax_get_categoria_data",
+				dataType: 'json',
+				data: {"categoria_id": $(this).attr('categoria_id')},
 				success: function(response) {
 					clearErrors();
 					$("#form_categoria")[0].reset();
-					$.each(response["input"], function(id, value) {
+					$.each(response["input"], 
+					function(id, value) {
 						$("#"+id).val(value);
 					});
 					$("#modal_categoria").modal();
 				},
-				error: function(responseData){
-					swal("Erro!", 'Ocorreu um erro ao executar essa ação');
-					swal(responseData);
+				error: function(response){
+					swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
 				}
 			})
 		});
@@ -153,7 +152,7 @@ $(function() {
 		$(".btn-edit-especializacao").click(function(){
 			$.ajax({
 				type: "POST",
-				url: BASE_URL + "editar_especializacao",
+				url: "ajax_get_especializacao_data",
 				dataType: "JSON",
 				data: {"especializacao_id": $(this).attr("especializacao_id")},
 				success: function(response) {
