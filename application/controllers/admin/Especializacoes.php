@@ -79,30 +79,38 @@ class Especializacoes extends Admin_Controller
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/dashboard', 'refresh');
         }
+
+        if (!$this->input->is_ajax_request()) {
+			exit("Nenhum acesso de script direto permitido!");
+        }
+        
         $this->load->model("cemerge/Categoria_model");
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_categorias_create'), 'admin/especializacoes/');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Variables */
+            $json = array();
+            $json["status"] = 1;
+        
         $categoria_nome = $this->input->post('categoria_nome');
 
         $this->form_validation->set_rules('categoria_nome', 'lang:categoria_nome', 'required');
 
         if ($this->form_validation->run() == true) {
-            $categoria_id = $this->Categoria_model->insert(['categoria_nome'=>$categoria_nome]);
+            $categoria_id = $this->Categoria_model->insert(['categoria_nome'=>$categoria_nome, 'categoria_status' => 1]);
             if ($categoria_id) {
                 $this->session->set_flashdata('message', 'Categoria inserida com sucesso.');
-                redirect('admin/especializacoes/', 'refresh');
+
             } else {
                 $this->session->set_flashdata('message', 'Houve um erro ao inserir a Categoria. Tente novamente.');
-                redirect('admin/especializacoes/', 'refresh');
+                
             }
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
             $this->data['categoria_nome'] = $categoria_nome;
-            redirect('admin/especializacoes/', 'refresh');
-        }
+        } 
+        echo json_encode($json);
     }
 
     public function ajax_listar_categorias() {
@@ -123,11 +131,11 @@ class Especializacoes extends Admin_Controller
 
         $row[] = '<div style="display: inline-block;">
                     <button class="btn btn-primary btn-edit-categoria" 
-                        categoria_id="'.$categoria->categoria_id.'">
+                        categoria_id='.$categoria->categoria_id.'>
                         <i class="fa fa-edit"></i>
                     </button>
                     <button class="btn btn-danger btn-del-categoria" 
-                        categoria_id="'.$categoria->categoria_id.'">
+                        categoria_id='.$categoria->categoria_id.'>
                         <i class="fa fa-times"></i>
                     </button>
                 </div>';
@@ -214,45 +222,32 @@ public function cadastrar_especializacao(){
 
     }
 
-    $json = array(
-        "draw" => $this->input->post("draw"),
-        "recordsTotal" => $this->Especializacao_model->records_total(),
-        "recordsFiltered" => $this->Especializacao_model->records_filtered(),
-        "data" => $data,
-    );
-    echo json_encode($json);
-    exit;
-    }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" => $this->Especializacao_model->records_total(),
+            "recordsFiltered" => $this->Especializacao_model->records_filtered(),
+            "data" => $data,
+        );
+        echo json_encode($json);
+        exit;
+        }
 
     public function deletar_categoria($categoria_id) {
 
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
         }
+            $this->load->model("cemerge/Categoria_model");
+            $this->Categoria_model->delete(['categoria_id' => $categoria_id]);
+    }
 
-    	$json = array();
-		$json["success"] = 1;
+    public function deletar_especializacao($especializacao_id) {
 
-		$this->load->model("Categoria_model");
-		$categoria_id = $this->input->post("categoria_id");
-		$this->Categoria_model->delete(['categoria_id' => $categoria_id]);
-
-        echo json_encode($json);
-	}
-
-	public function deletar_especializacao($especializacao_id) {
-
-		if (!$this->input->is_ajax_request()) {
-			exit("Nenhum acesso de script direto permitido!");
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
         }
-        
-		$json = array();
-        $json["success"] = 1;
-        
-		$especializacao_id = $this->input->post("especializacao_id");
-		$this->Especializacao_model->delete(['especializacao_id' => $especializacao_id]);
+            $especializacao_id = $this->input->post("especializacao_id");
+            $this->Especializacao_model->delete(['especializacao_id' => $especializacao_id]);
 
-        echo json_encode($json);
-	}
-
+    }
 }

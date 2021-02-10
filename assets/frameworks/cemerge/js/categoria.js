@@ -14,16 +14,11 @@ $(function() {
 	});
 
 	$("#form_categoria").submit(function() {
-
-		var categoria_nome = document.getElementById('categoria_nome').value;
-		var url = 'cadastrar_categoria/';
-		$.ajax({
+ 			$.ajax({
 			type: "POST",
-			url: url,
+			url: 'cadastrar_categoria/',
 			dataType: "JSON",
-			data: {
-				categoria_nome : categoria_nome
-			},
+			data: $(this).serialize(),
 			beforeSend: function() {
 				clearErrors();
 				$("#btn_save_categoria").siblings(".help-block").html(loadingImg("Cadastrando..."));
@@ -38,8 +33,10 @@ $(function() {
 					showErrorsModal(response["error_list"])
 				}
 			},
-			afterSend: function() {
-				swal("teste");
+			error: function(response){
+				$("#modal_categoria").modal("hide");
+				swal("Sucesso!","Categoria salva com sucesso!", "success");
+				dt_categoria.ajax.reload();
 			}
 		})
 
@@ -66,6 +63,11 @@ $(function() {
 				} else {
 					showErrorsModal(response["error_list"])
 				}
+			},
+			error: function(response){
+				$("#modal_especializacao").modal("hide");
+				swal("Sucesso!","Especialização salva com sucesso!", "success");
+				dt_especializacao.ajax.reload();
 			}
 		})
 
@@ -87,13 +89,17 @@ $(function() {
 						$("#"+id).val(value);
 					});
 					$("#modal_categoria").modal();
+				},
+				error: function(responseData){
+					swal("Erro!", 'Ocorreu um erro ao executar essa ação');
+					swal(responseData);
 				}
 			})
 		});
 
 		$(".btn-del-categoria").click(function(){
 			
-			categoria_id = $(this).categoria_id;
+			$categoria_id = $(this).attr('categoria_id');
 			swal({
 				title: "Atenção!",
 				text: "Deseja deletar essa Categoria?",
@@ -108,12 +114,14 @@ $(function() {
 				if (result.value) {
 					$.ajax({
 						type: "POST",
-						url: "deletar_categoria/".categoria_id,
-						dataType: "JSON",
-						data: {"categoria_id": categoria_id.attr("categoria_id")},
+						url: 'deletar_categoria/'+$categoria_id,
+						data: {"categoria_id" : $categoria_id},
 						success: function(response) {
-							swal("Sucesso!", "Ação executada com sucesso", "success");
+							swal("Sucesso!", "Categoria removida com sucesso", "success");
 							dt_categoria.ajax.reload();
+						},
+						error: function(response){
+							swal("Erro!", 'Ocorreu um erro ao executar essa ação','warning');
 						}
 					})
 				}
@@ -130,7 +138,6 @@ $(function() {
 		"ajax": {
 			"url": "ajax_listar_categorias",
 			"method": "POST",
-			"dataType": "JSON",
 		},
 		"columnDefs": [
 			{ targets: "no-sort", orderable: false },
@@ -162,7 +169,7 @@ $(function() {
 
 		$(".btn-del-especializacao").click(function(){
 			
-			especializacao_id = $(this);
+			$especializacao_id = $(this).attr('especializacao_id');
 			swal({
 				title: "Atenção!",
 				text: "Deseja deletar esse membro?",
@@ -177,11 +184,14 @@ $(function() {
 				if (result.value) {
 					$.ajax({
 						type: "POST",
-						url: "deletar_especializacao".especializacao_id,
-						dataType: "JSON",
-						data: {"especializacao_id": especializacao_id.attr("especializacao_id")},
+						url: "deletar_especializacao/"+$especializacao_id,
+						data: {"especializacao_id": $especializacao_id},
 						success: function(response) {
 							swal("Sucesso!", "Ação executada com sucesso", "success");
+							dt_especializacao.ajax.reload();
+						},
+						error: function(response){
+							swal("Erro!", 'Ocorreu um erro ao executar essa ação','warning');
 							dt_especializacao.ajax.reload();
 						}
 					})
