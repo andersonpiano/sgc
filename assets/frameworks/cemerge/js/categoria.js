@@ -146,6 +146,24 @@ $(function() {
 			active_btn_categoria();
 		}
 	});
+
+	var dt_profissionais = $("#dt_profissionais").DataTable({
+		"oLanguage": DATATABLE_PTBR,
+		"autoWidth": false,
+		"processing": true,
+		"serverSide": true,
+		"ajax": {
+			"url": "ajax_listar_profissionais",
+			"method": "POST",
+		},
+		"columnDefs": [
+			{ targets: "no-sort", orderable: false },
+			{ targets: "dt-center", className: "dt-center" },
+		],
+		"drawCallback": function() {
+			active_btn_categoria();
+		}
+	});
 	
 	function active_btn_especializacao() {
 		
@@ -218,5 +236,43 @@ $(function() {
 			active_btn_especializacao();
 		}
 	});
-
 })
+
+	$(document).on('change', '#especializacao_select', function() {
+
+        var profissional = $(this).val();
+        var escala = $(this).next('input').val();
+        var url = '/sgc/admin/escalas/atribuirescala/';
+        var sucess = false;
+        $.ajax({
+            url: url,
+            method: 'post',
+            data: {
+                profissional : profissional,
+                escala : escala
+            },
+            success: function(responseData) {
+                // Se sucesso, remover ou travar o dropdown
+
+                $sucess = JSON.parse(responseData).sucess;
+
+                if ($sucess == true){
+                    /*$('#row_id_' + escala).fadeOut('slow', 
+                    function(here){ 
+                        $('#row_id_' + escala).remove();
+                    }*/
+                    alert("Troca realizada com sucesso");
+                } else {
+                    alert("Este plantão já foi repassado a outro profissional e não pode ser trocado aqui.");
+                    //document.getElementById('profissional_id').value = JSON.parse(responseData).profissional;
+                    //console.log($('[name="escala_id_' + escala + '"]').prev('select').val());
+                    selectProfissional = $('[name="escala_id_' + escala + '"]').prev('select');
+                    selectProfissional.val(JSON.parse(responseData).profissional);
+                };
+            },
+            error: function(responseData) {
+                alert("Ocorreu um erro ao atribuir a escala ao profissional. Por favor, tente novamente mais tarde");
+                console.log(responseData);
+            }
+	});
+});

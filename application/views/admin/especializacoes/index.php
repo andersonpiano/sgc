@@ -26,6 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab_categoria" role="tab" data-toggle="tab">Categorias</a></li>
             <li><a href="#tab_especializacao" role="tab" data-toggle="tab">Especialidades</a></li>
+            <li><a href="#tab_profissionais" role="tab" data-toggle="tab">Associar a Profissionais</a></li>
         </ul>
 
         <div class="tab-content">
@@ -64,6 +65,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </table>
             </div>
         </div>
+
+            <div id="tab_profissionais" class="tab-pane">
+                <div class="container-fluid">
+                    <h2 class="text-center"><strong>Gerenciar Profissionais</strong></h2>
+                    <table id="dt_profissionais" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th width="10%" class="dt-center text-center">ID</th>
+                                <th width="60%" class="dt-center text-center">Profissional</th>
+                                <th width="30%" class="dt-center text-center no-sort">Especialidade</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
     </div>
 </section>
 

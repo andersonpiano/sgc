@@ -126,7 +126,7 @@ class Especializacoes extends Admin_Controller
     foreach ($categorias as $categoria) {
 
         $row = array();
-        $row[] = $categoria->categoria_id;
+        $row[] = '<center>'.$categoria->categoria_id.'</center>';
         $row[] = $categoria->categoria_nome;
 
         $row[] = '<div style="display: inline-block;">
@@ -206,10 +206,10 @@ class Especializacoes extends Admin_Controller
     foreach ($especializacoes as $especializacao) {
 
         $row = array();
-        $row[] = $especializacao->especializacao_id;
+        $row[] = '<center>'.$especializacao->especializacao_id.'</center>';
         $row[] = $especializacao->especializacao_nome;
 
-        $row[] = '<div style="display: inline-block;">
+        $row[] = '<div style="display: inline-block;" >
                     <button class="btn btn-primary btn-edit-especializacao" 
                         especializacao_id="'.$especializacao->especializacao_id.'">
                         <i class="fa fa-edit"></i>
@@ -294,4 +294,46 @@ class Especializacoes extends Admin_Controller
         echo json_encode($json);
         exit;
     }
+    public function ajax_listar_profissionais() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/Profissional_model");
+        $profissionais = $this->Profissional_model->get_datatable();
+        $especializacoes = $this->Especializacao_model->get_especializacoes();
+
+        $data = array();
+        $this->data['especializacao_select'] = array(
+            'name'  => 'especializacao_select',
+            'id'    => 'especializacao_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $especializacoes->especializacao_id,
+            'options' => $especializacoes->especializacao_nome,
+        );
+    
+        foreach ($profissionais as $profissional) {
+
+            $row = array();
+            $row[] = '<center>'.$profissional->id.'<center>';
+            $row[] = $profissional->nome;
+    
+            //$row[] = '<span class="text-center">'.$this->Especializacao_model->get_especializacao_by_id($profissional->especializacao)->especializacao_nome.'</span>';
+
+            $row[] = '<center>'.form_dropdown($this->data['especializacao_select']).'</center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" => $this->Profissional_model->records_total(),
+            "recordsFiltered" => $this->Profissional_model->records_filtered(),
+            "data" => $data,
+        );
+        echo json_encode($json);
+        exit;
+        }
 }

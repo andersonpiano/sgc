@@ -20,7 +20,16 @@ class Especializacao_model extends MY_Model
 
     var $column_search = array("especializacao_nome");
     var $column_order = array("especializacao_id", "especializacao_nome");
+    
+    public function get_especializacao_by_id($id) {
+        
+        $this->db->select('especializacao_nome');
+        $this->db->from($this->table);
+        $this->db->where('especializacao_id', $id);
+        $query = $this->db->get();
 
+        return $query->row();   
+    }
     private function _get_datatable() {
 
         $search = NULL;
@@ -80,6 +89,15 @@ class Especializacao_model extends MY_Model
         $this->db->from($this->table);
         return $this->db->count_all_results();
 
+    }
+
+    public function get_especializacoes(){
+
+        $this->db->select('especializacao_id, especializacao_nome');
+        $this->db->from($this->table);
+        $query = $this->db->get();
+
+        return $query->row();
     }
 
     public function get_data($id, $select = NULL) {
