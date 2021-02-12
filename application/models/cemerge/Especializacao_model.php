@@ -97,7 +97,7 @@ class Especializacao_model extends MY_Model
         $this->db->from($this->table);
         $query = $this->db->get();
 
-        return $query->row();
+        return $query;
     }
 
     public function get_data($id, $select = NULL) {

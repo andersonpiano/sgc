@@ -68,6 +68,23 @@ class Especializacoes extends Admin_Controller
         //var_dump($categorias); exit;
         return $categoria_select;
     }
+
+    private function _get_especializacoes()
+    {
+        
+        $this->load->model('cemerge/Especializacao_model');
+
+        $especializacoes = $this->Especializacao_model->get_all();
+
+        $especializacoes_select = array(
+            '' => 'Selecione uma especializade',
+        );
+        foreach ($especializacoes as $especializacao) {
+            $especializacoes_select[$especializacao->especializacao_id] = $especializacao->especializacao_nome;
+        }
+        //var_dump($categorias); exit;
+        return $especializacoes_select;
+    }
     
     public function cadastrar_categoria(){
         
@@ -302,7 +319,7 @@ class Especializacoes extends Admin_Controller
             
         $this->load->model("cemerge/Profissional_model");
         $profissionais = $this->Profissional_model->get_datatable();
-        $especializacoes = $this->Especializacao_model->get_especializacoes();
+        $especializacoes = $this->_get_especializacoes();
 
         $data = array();
         $this->data['especializacao_select'] = array(
@@ -310,8 +327,8 @@ class Especializacoes extends Admin_Controller
             'id'    => 'especializacao_select',
             'type'  => 'select',
             'class' => 'form-control',
-            'value' => $especializacoes->especializacao_id,
-            'options' => $especializacoes->especializacao_nome,
+            'value' => $this->form_validation->set_value('especializacoes_select'),
+            'options' => $especializacoes,
         );
     
         foreach ($profissionais as $profissional) {
