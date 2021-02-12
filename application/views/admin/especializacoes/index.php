@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="container">
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_categoria" role="tab" data-toggle="tab">Categorias</a></li>
+            <li class="active"><a href="#tab_categoria" role="tab" data-toggle="tab">Níveis de Formação</a></li>
             <li><a href="#tab_especializacao" role="tab" data-toggle="tab">Especialidades</a></li>
             <li><a href="#tab_profissionais" role="tab" data-toggle="tab">Associar a Profissionais</a></li>
         </ul>
@@ -32,8 +32,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="tab-content">
             <div id="tab_categoria" class="tab-pane active">
                 <div class="container-fluid">
-                    <h2 class="text-center"><strong>Gerenciar Categorias</strong></h2>
-                    <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Categoria</i></a>
+                    <h2 class="text-center"><strong>Gerenciar Niveis de Formação</strong></h2>
+                    <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Nível</i></a>
                     <table id="dt_categoria" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
@@ -55,9 +55,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <table id="dt_especializacao" class="table table-striped table-bordered">
                     <thead>
                         <tr class="tableheader">
-                            <th class="dt-center" >Código</th>
+                            <th class="dt-center text-center" >Código</th>
                             <th width="85%" class="dt-center">Nome</th>
-                            <th width="09%" class="dt-center no-sort">Ações</th>
+                            <th width="09%" class="dt-center no-sort text-center">Ações</th>
                         </tr> 
                     </thead>
                     <tbody>
@@ -74,7 +74,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <tr class="tableheader">
                                 <th width="10%" class="dt-center text-center">ID</th>
                                 <th width="60%" class="dt-center text-center">Profissional</th>
-                                <th width="30%" class="dt-center text-center no-sort">Especialidade</th>
+                                <th width="15%" class="dt-center text-center no-sort">Nível de Formação</th>
+                                <th width="15%" class="dt-center text-center no-sort">Especialidade</th>
                             </tr> 
                         </thead>
                         <tbody>
@@ -91,7 +92,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">X</button>
-			<h4 class="modal-title">Categorias</h4>
+			<h4 class="modal-title">Nível de Formação</h4>
 		</div>
 
 		<div class="modal-body">
@@ -134,7 +135,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <span class="help-block"></span>
                     </div>
                     <div class="form-group">
-                    <label class="col-lg-2 control-label">Categoria</label>
+                    <label class="col-lg-2 control-label">Formação</label>
                     <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-lg-10">
                         <?php echo form_dropdown($categoria_select);?>

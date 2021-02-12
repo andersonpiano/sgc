@@ -60,7 +60,7 @@ class Especializacoes extends Admin_Controller
         $categorias = $this->Categoria_model->get_all();
 
         $categoria_select = array(
-            '' => 'Selecione uma categoria',
+            '' => 'Selecione um Nivel de Formação',
         );
         foreach ($categorias as $categoria) {
             $categoria_select[$categoria->categoria_id] = $categoria->categoria_nome;
@@ -319,6 +319,7 @@ class Especializacoes extends Admin_Controller
             
         $this->load->model("cemerge/Profissional_model");
         $profissionais = $this->Profissional_model->get_datatable();
+
         $especializacoes = $this->_get_especializacoes();
 
         $data = array();
@@ -330,12 +331,24 @@ class Especializacoes extends Admin_Controller
             'value' => $this->form_validation->set_value('especializacoes_select'),
             'options' => $especializacoes,
         );
+
+        $categoria_select = $this->_get_categorias();
+
+        $this->data['categoria_select'] = array(
+            'name'  => 'categoria_select',
+            'id'    => 'categoria_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('categoria_select'),
+            'options' => $categoria_select,
+        );
     
         foreach ($profissionais as $profissional) {
 
             $row = array();
             $row[] = '<center>'.$profissional->id.'<center>';
             $row[] = $profissional->nome;
+            $row[] = '<center>'.form_dropdown($this->data['categoria_select']).'</center>';
     
             //$row[] = '<span class="text-center">'.$this->Especializacao_model->get_especializacao_by_id($profissional->especializacao)->especializacao_nome.'</span>';
 
