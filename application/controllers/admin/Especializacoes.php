@@ -77,7 +77,7 @@ class Especializacoes extends Admin_Controller
         $especializacoes = $this->Especializacao_model->get_all();
 
         $especializacoes_select = array(
-            '' => 'Selecione uma especializade',
+            '' => 'Selecione uma especialidade',
         );
         foreach ($especializacoes as $especializacao) {
             $especializacoes_select[$especializacao->especializacao_id] = $especializacao->especializacao_nome;
@@ -311,6 +311,26 @@ class Especializacoes extends Admin_Controller
         echo json_encode($json);
         exit;
     }
+
+    public function troca_categoria($id){
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+        $this->load->model("cemerge/Profissional_model");
+        $categoria = $this->input->get_post('nivel_especializacao');
+        $this->Profissional_model->update($id, ['nivel_especializacao'=>$categoria]);
+    }
+
+    public function troca_especializacao($id){
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+        $this->load->model("cemerge/Profissional_model");
+
+        $especializacao = $this->input->get_post('especializacao');
+        $this->Profissional_model->update($id, ['especializacao' => $especializacao]);
+    }
+
     public function ajax_listar_profissionais() {
 
         if (!$this->input->is_ajax_request()) {
@@ -320,39 +340,19 @@ class Especializacoes extends Admin_Controller
         $this->load->model("cemerge/Profissional_model");
         $profissionais = $this->Profissional_model->get_datatable();
 
-        $especializacoes = $this->_get_especializacoes();
-
-        $data = array();
-        $this->data['especializacao_select'] = array(
-            'name'  => 'especializacao_select',
-            'id'    => 'especializacao_select',
-            'type'  => 'select',
-            'class' => 'form-control',
-            'value' => $this->form_validation->set_value('especializacoes_select'),
-            'options' => $especializacoes,
-        );
-
+        $especializacoes_select = $this->_get_especializacoes();
         $categoria_select = $this->_get_categorias();
-
-        $this->data['categoria_select'] = array(
-            'name'  => 'categoria_select',
-            'id'    => 'categoria_select',
-            'type'  => 'select',
-            'class' => 'form-control',
-            'value' => $this->form_validation->set_value('categoria_select'),
-            'options' => $categoria_select,
-        );
     
         foreach ($profissionais as $profissional) {
 
             $row = array();
             $row[] = '<center>'.$profissional->id.'<center>';
             $row[] = $profissional->nome;
-            $row[] = '<center>'.form_dropdown($this->data['categoria_select']).'</center>';
+            $row[] = '<center>'.form_dropdown('categoria_select', $categoria_select, $profissional->nivel_especializacao, 'class="form-control" id="categoria_select" profissional_id="'.$profissional->id.'"').'</center>';
     
             //$row[] = '<span class="text-center">'.$this->Especializacao_model->get_especializacao_by_id($profissional->especializacao)->especializacao_nome.'</span>';
 
-            $row[] = '<center>'.form_dropdown($this->data['especializacao_select']).'</center>';
+            $row[] = '<center>'.form_dropdown('especializacao_select', $especializacoes_select, $profissional->especializacao, 'class="form-control" id="especializacao_select" profissional_id="'.$profissional->id.'"').'</center>';
     
             $data[] = $row;
     
