@@ -55,6 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_find'))); ?>
+                                                    <a href="<?php echo(current_url()); ?>" onclick="window.print(); return false;" class="btn btn-default btn-flat">Imprimir</a>&nbsp;
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/escalas/listafrequenciasemescala', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
