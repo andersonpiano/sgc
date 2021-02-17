@@ -68,10 +68,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
 
                 <section class="content">
+                <div class="print-header row">
+                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Frequência sem escalas</h3></div>
+                </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
-                                <div class="box-header with-border">
+                                <div class="box-header with-border dontprint">
                                     <h3 class="box-title">
                                         <?php echo anchor('admin/escalas/create', '<i class="fa fa-plus"></i> '. 
                                             lang('escalas_create'), 

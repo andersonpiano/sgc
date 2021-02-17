@@ -79,6 +79,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
 
                 <section class="content">
+                <div class="print-header row">
+                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista de Frequência</h3></div>
+                </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
@@ -96,7 +100,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th class="text-center w-10"><?php echo lang('frequencias_dataplantao');?></th>
                                                 <th class="text-center w-10"><?php echo lang('frequencias_horafrequencia');?></th>
                                                 <th class="text-center w-10"><?php echo('Status / Tipo');?></th>
-                                                <th class="text-center w-20"><?php echo lang('frequencias_action');?></th>
+                                                <th class="text-center w-20 dontprint"><?php echo lang('frequencias_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
