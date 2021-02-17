@@ -20,7 +20,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
                 <?php endif; ?>
 
-                <section class="content">
+                <section class="content">                
+                <div class="print-header row">
+                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Create Escala Fixa</h3></div>
+                </div>
+
                     <div class="row">
                         <div class="col-md-12">
                              <div class="box">
