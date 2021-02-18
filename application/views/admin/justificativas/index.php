@@ -27,11 +27,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                     </div>
                 </section>
                 <?php endif; ?>
-                <div class="print-header">
-                        <img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/>
-                    </div>
-                <section class="content dontprint">
-
+                <div class="print-header row">
+                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Justificativas ".isset($status)); ?></h3></div>
+                </div>
+                    <section class="content dontprint">
                     <div class="row dontprint">
                         <div class="col-md-12 dontprint">
                              <div class="box dontprint">
@@ -94,6 +94,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <th><?php echo lang('justificativas_turno');?></th>
                                                 <th><?php echo lang('justificativas_setor');?></th>
                                                 <th><?php echo lang('justificativas_profissional');?></th>
+                                                <th><?php echo lang('justificativas_entrada');?></th>
+                                                <th><?php echo lang('justificativas_saida');?></th>
                                                 <th><?php echo lang('justificativas_status');?></th>
                                                 <th class="dontprint"><?php echo lang('justificativas_action');?></th>
                                             </tr>
@@ -105,6 +107,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo htmlspecialchars($justificativa->turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php //echo date('H:i', strtotime($justificativa->batida_entrada));?></td>
+                                                <td><?php //echo date('H:i', strtotime($justificativa->batida_saida));?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;

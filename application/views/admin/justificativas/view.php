@@ -30,9 +30,10 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                 <?php endif; ?>
 
                 <section class="content">
-                    <div class="print-header">
-                        <img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/>
-                    </div>
+                <div class="print-header row">
+                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Justificativas ".$justificativa->status); ?></h3></div>
+                </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
@@ -85,15 +86,15 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             <tr>
                                                 <th><?php echo(lang('justificativas_status')); ?></th>
                                                 <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Aprovada'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Rejeitada'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
                                                 </td>
                                             </tr>
                                             <tr  class="dontprint">
                                                 <td colspan='2' class="text-center"><a href="#" onclick="window.print();" class="btn btn-primary btn-flat dontprint">Imprimir</a>&nbsp;
                                                 <?php echo anchor('admin/justificativas/edit/'.$justificativa->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat dontprint')); ?>&nbsp;
-                                                <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Aprovar', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
-                                                <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Rejeitar', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Aprovar', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;</td>
+                                                <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
+                                                <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Indeferir', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;</td>
                                             </tr>
                                         </tbody>
                                     </table>

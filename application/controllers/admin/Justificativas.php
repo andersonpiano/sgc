@@ -38,7 +38,9 @@ class Justificativas extends Admin_Controller
         }
 
         /* Breadcrumbs */
-        $this->data['breadcrumb'] = $this->breadcrumbs->show();    
+        $this->data['breadcrumb'] = $this->breadcrumbs->show(); 
+        // Modulos Carregados  
+        $this->load->model('cemerge/FrequenciaAssessus_model');
 
         /* Validate form input */
         $this->form_validation->set_rules('data_plantao_inicio', 'lang:justificativas_data_inicio', 'required');
@@ -46,11 +48,11 @@ class Justificativas extends Admin_Controller
         $this->form_validation->set_rules('status', 'lang:justificativas_status', 'required');
 
         $tipos_status = array (
-        $this::STATUS_JUSTIFICATIVA_APROVADA => 'Aprovadas',
-        $this::STATUS_JUSTIFICATIVA_NEGADA => 'Negadas',
-        $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
+            $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
+            $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
+            $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
         );
-
+        $status = $this->input->post('status');
         if ($this->form_validation->run() == true) {
             $data_plantao_inicio = $this->input->post('data_plantao_inicio');
             $data_plantao_fim = $this->input->post('data_plantao_fim');
@@ -74,15 +76,25 @@ class Justificativas extends Admin_Controller
                 $ct->status_oportunidade = '';
                 switch ($ct->status) {
                 case $this::STATUS_JUSTIFICATIVA_APROVADA:
-                    $ct->status = 'Aprovada';
+                    $ct->status = 'Deferidas';
                     break;
                 case $this::STATUS_JUSTIFICATIVA_NEGADA:
-                    $ct->status = 'Negada';
+                    $ct->status = 'Indeferidas';
                     break;
                 case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
                     $ct->status = 'Aguardando Aprovação';
                     break;
                 }
+                $data_plantao = $ct->data_inicial_plantao;
+                $profissional_id = $ct->id;
+                $plantao_entrada = $ct->hora_entrada;
+                $plantao_saida = $ct->hora_saida;
+
+                //$ct->batida_entrada = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida)[0];
+                //$ct->batida_saida = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida)[0];
+
+                //var_dump($this->data['justificativas']); exit;
+
             }
 
         } else {
@@ -635,6 +647,7 @@ class Justificativas extends Admin_Controller
         $profissional_id = $this->data['justificativa']->profissional_id;
         $plantao_entrada = $this->data['justificativa']->hora_entrada;
         $plantao_saida = $this->data['justificativa']->hora_saida;
+  
 
         $this->data['batida_entrada'] = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
         $this->data['batida_saida'] = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
