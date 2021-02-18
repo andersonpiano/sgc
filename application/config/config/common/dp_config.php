@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // Possible hosts locally. You can add some if needed.
-$config['host_dev'] = array('192.168.45.76', 'localhost', '127.0.0.1', '::1');
+$config['host_dev'] = array('teste.cemerge.com.br', 'localhost', '127.0.0.1', '::1');
 
 // Fill in the file of your project here when you develop locally.
 $host_dev = 'sgc';
@@ -16,7 +16,7 @@ $host_dev = 'sgc';
 // Fill in the domain name here when your project is online.
 // Example : www.johndoe.com
 //           johndoe.com
-$host_prod = ''; //www.somossolucoes.com.br/sgc
+$host_prod = 'www.cemerge.com.br/sgc'; //www.somossolucoes.com.br/sgc
 
 // WARNING: Do not modify the lines below
 $domain = (in_array($_SERVER['HTTP_HOST'], $config['host_dev'], TRUE)) ? $_SERVER['HTTP_HOST'] . '/' . $host_dev : $host_prod;
