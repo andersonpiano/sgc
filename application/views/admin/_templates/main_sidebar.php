@@ -148,6 +148,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-plus-square"></i> <span><?php echo lang('menu_setores'); ?></span>
                             </a>
                         </li>
+                        <li class="<?=active_link_controller('estoque')?>">
+                            <a href="<?php echo site_url('admin/estoque'); ?>">
+                                <i class="fa fa-truck"></i> <span><?php echo lang('menu_estoque'); ?></span>
+                            </a>
+                        </li>
                         <li class="<?=active_link_controller('profissionais')?>">
                         <a href="#">
                                 <i class="fa fa-user-md"></i>

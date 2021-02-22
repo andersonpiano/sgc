@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://192.168.45.76/sgc';
+$config['base_url'] = 'http://teste.cemerge.com.br/sgc';
 //$config['base_url'] = 'http://www.somossolucoes.com.br/sgc';
 
 /*
@@ -38,11 +38,11 @@ $config['index_page'] = 'index.php';
 */
 $config['mail'] = array (
     'protocol' => 'smtp',
-    'smtp_host' => 'smtp.somossolucoes.com.br',
+    'smtp_host' => 'smtp.cemerge.com.br',
     'smtp_port' => '587',
     'smtp_timeout' => '7',
-    'smtp_user' => 'cemerge@somossolucoes.com.br',
-    'smtp_pass' => 'drvr2906',
+    'smtp_user' => 'cemerge@cemerge.com.br',
+    'smtp_pass' => 'sk2nhk1@2021',
     'charset' => 'utf-8',
     'newline' => "\r\n",
     'mailtype' => 'html',

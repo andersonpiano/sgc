@@ -24,22 +24,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="container">
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_categoria" role="tab" data-toggle="tab">Níveis de Formação</a></li>
-            <li><a href="#tab_especializacao" role="tab" data-toggle="tab">Especialidades</a></li>
-            <li><a href="#tab_profissionais" role="tab" data-toggle="tab">Associar a Profissionais</a></li>
+            <li class="active"><a href="#tab_nf" role="tab" data-toggle="tab">Nota Fiscal</a></li>
+            <li><a href="#tab_categorias" role="tab" data-toggle="tab">Categorias</a></li>
+            <li><a href="#tab_produtos" role="tab" data-toggle="tab">Produtos</a></li>
+            <li><a href="#tab_estoque" role="tab" data-toggle="tab">Estoque</a></li>
+            <li><a href="#tab_entrada" role="tab" data-toggle="tab">Entrada</a></li>
+            <li><a href="#tab_saida" role="tab" data-toggle="tab">Saida</a></li>
+            <li><a href="#tab_responsaveis" role="tab" data-toggle="tab">Responsaveis</a></li>
+            <li><a href="#tab_relatorios" role="tab" data-toggle="tab">Relatórios</a></li>
         </ul>
 
         <div class="tab-content">
             <div id="tab_categoria" class="tab-pane active">
                 <div class="container-fluid">
-                    <h2 class="text-center"><strong>Gerenciar Niveis de Formação</strong></h2>
-                    <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Nível</i></a>
+                    <h2 class="text-center"><strong>Gerenciar Categorias</strong></h2>
+                    <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Categoria</i></a>
                     <table id="dt_categoria" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
-                                <th width="10%" class="dt-center text-center">Código</th>
-                                <th width="80%" class="dt-center">Nome</th>
-                                <th width="10%" class="dt-center text-center no-sort">Ações</th>
+                                <th class="dt-center">Código</th>
+                                <th class="dt-center">Nome</th>
+                                <th class="dt-center no-sort">Ações</th>
                             </tr> 
                         </thead>
                         <tbody>
@@ -52,12 +57,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="container-fluid">
                 <h2 class="text-center"><strong>Gerenciar Especializações</strong></h2>
                 <a id="btn_add_especializacao" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Especialização</i></a>
-                <table id="dt_especializacao" class="table table-striped table-bordered">
+                <table id="especializacao" class="table table-striped table-bordered">
                     <thead>
                         <tr class="tableheader">
-                            <th width="10%" class="dt-center text-center" >Código</th>
-                            <th width="80%" class="dt-center">Nome</th>
-                            <th width="10%" class="dt-center no-sort text-center">Ações</th>
+                            <th class="dt-center" >Código</th>
+                            <th class="dt-center">Nome</th>
+                            <th class="dt-center no-sort">Ações</th>
                         </tr> 
                     </thead>
                     <tbody>
@@ -65,24 +70,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </table>
             </div>
         </div>
-
-            <div id="tab_profissionais" class="tab-pane">
-                <div class="container-fluid">
-                    <h2 class="text-center"><strong>Gerenciar Profissionais</strong></h2>
-                    <table id="dt_profissionais" class="table table-striped table-bordered">
-                        <thead>
-                            <tr class="tableheader">
-                                <th width="10%" class="dt-center text-center">ID</th>
-                                <th width="60%" class="dt-center text-center">Profissional</th>
-                                <th width="15%" class="dt-center text-center no-sort">Nível de Formação</th>
-                                <th width="15%" class="dt-center text-center no-sort">Especialidade</th>
-                            </tr> 
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
     </div>
 </section>
 
@@ -92,12 +79,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">X</button>
-			<h4 class="modal-title">Nível de Formação</h4>
+			<h4 class="modal-title">Categorias</h4>
 		</div>
 
 		<div class="modal-body">
 			<form id="form_categoria">
-            <input id="categoria_id" name="categoria_id" hidden>
+
+				<input id="categoria_nome" name="categoria_nome" hidden>
+
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Nome</label>
 					<div class="col-lg-10">
@@ -127,7 +116,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 		<div class="modal-body">
 			<form id="form_especializacao">
-				<input id="especializacao_id" name="especializacao_id" hidden>
+				<input id="especializacao_nome" name="especializacao_nome" hidden>
 				<div class="form-group">
 					<label class="col-lg-2 control-label">Nome</label>
 					<div class="col-lg-10">
@@ -135,10 +124,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <span class="help-block"></span>
                     </div>
                     <div class="form-group">
-                    <label class="col-lg-2 control-label">Formação</label>
-                    <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
+                    <label class="col-lg-2 control-label">Categoria</label>
                     <div class="col-lg-10">
-                        <?php echo form_dropdown($categoria_select);?>
+                        <select name="categoria_select" class="form-control">
+                            <option value="#" selected>Sem especialização</option>
+                            <option value="#">Residência Médica</option>
+                            <option value="#">Mestrado</option>
+                            <option value="#">Doutorado</option>
+                            <option value="#">Supervisor de PRM ESP-CE</option>
+                        </select>
+                        <span class="help-block"></span>
                     </div>
                     </div>
 				</div>

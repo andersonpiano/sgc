@@ -113,6 +113,11 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_categorias_edit'] = 'Editar';
 /* *********** */$lang['menu_categorias_view'] = 'Visualizar';
 
+/* ****** */$lang['menu_estoque']  = 'Estoque';
+/* *********** */$lang['menu_estoque_create'] = 'Buscar / Nova';
+/* *********** */$lang['menu_estoque_edit'] = 'Editar';
+/* *********** */$lang['menu_estoque_view'] = 'Visualizar';
+
 /* ****** */$lang['menu_plantoes']  = 'Meus Plantões';
 /* *********** */$lang['menu_plantoes_create']     = 'Criar';
 /* *********** */$lang['menu_plantoes_edit']       = 'Editar';

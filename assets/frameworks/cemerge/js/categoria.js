@@ -12,6 +12,7 @@ $(function() {
 		$("#form_especializacao")[0].reset();
 		$("#modal_especializacao").modal();
 	});
+	
 
 	$("#form_categoria").submit(function() {
  			$.ajax({
