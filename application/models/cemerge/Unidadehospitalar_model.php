@@ -72,4 +72,13 @@ class Unidadehospitalar_model extends MY_Model {
 
         return $query->result();
     }
+    
+    public function get_by_id($id)
+    {
+        $query = $this->db->get_where($this->table, array('id' => $id));
+
+        $query = $query->row();
+
+        return $query;
+    }
 }

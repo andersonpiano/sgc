@@ -94,8 +94,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <th><?php echo lang('justificativas_turno');?></th>
                                                 <th><?php echo lang('justificativas_setor');?></th>
                                                 <th><?php echo lang('justificativas_profissional');?></th>
-                                                <th><?php echo lang('justificativas_entrada');?></th>
-                                                <th><?php echo lang('justificativas_saida');?></th>
+                                                <th><?php echo lang('justificativas_hora_entrada');?></th>
+                                                <th><?php echo lang('justificativas_hora_saida');?></th>
                                                 <th><?php echo lang('justificativas_status');?></th>
                                                 <th class="dontprint"><?php echo lang('justificativas_action');?></th>
                                             </tr>
@@ -107,8 +107,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo htmlspecialchars($justificativa->turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php //echo date('H:i', strtotime($justificativa->batida_entrada));?></td>
-                                                <td><?php //echo date('H:i', strtotime($justificativa->batida_saida));?></td>
+                                                <td><?php echo((isset($justificativa->batida_entrada) && $justificativa->batida_entrada != null) ? date('H:i', strtotime($justificativa->batida_entrada)) : "Sem Registro"); ?></td> 
+                                                <td><?php echo((isset($justificativa->batida_saida) && $justificativa->batida_saida != null) ? date('H:i', strtotime($justificativa->batida_saida)) : "Sem Registro"); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
