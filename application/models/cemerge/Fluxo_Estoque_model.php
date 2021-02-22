@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Fornecedor_model extends MY_Model
+class Fluxo_Estoque_model extends MY_Model
 {
-    protected $table = 'fornecedor';
+    protected $table = 'fluxo_estoque';
 
     public function __construct()
     {
@@ -19,8 +19,8 @@ class Fornecedor_model extends MY_Model
         return $this->db->get()->num_rows() > 0;
     }
 
-    var $column_search = array("nome");
-    var $column_order = array("id", "nome");
+    var $column_search = array("cod_produto");
+    var $column_order = array("id", "cod_produto");
 
     private function _get_datatable() {
 
@@ -83,9 +83,9 @@ class Fornecedor_model extends MY_Model
 
     }
 
-    public function get_fornecedors(){
+    public function get_categorias(){
 
-        $this->db->select('id, nome');
+        $this->db->select('id, cod_produto');
         $this->db->from($this->table);
         $query = $this->db->get();
 

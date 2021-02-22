@@ -19,4 +19,4 @@ $lang['estoque_action']              = 'Ação';
 $lang['estoque_active']              = 'Ativo';
 $lang['estoque_created_on']          = 'Criado em';
 $lang['estoque_status']              = 'Condição';
-$lang['estoque_box_title']           = 'Estoque';
+$lang['estoque_box_title']           = 'Controle de Estoque';

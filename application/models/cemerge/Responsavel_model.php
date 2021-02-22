@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Fornecedor_model extends MY_Model
+class Responsavel_model extends MY_Model
 {
-    protected $table = 'fornecedor';
+    protected $table = 'responsavel';
 
     public function __construct()
     {

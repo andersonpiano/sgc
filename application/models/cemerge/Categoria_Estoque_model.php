@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Fornecedor_model extends MY_Model
+class Categoria_Estoque_model extends MY_Model
 {
-    protected $table = 'fornecedor';
+    protected $table = 'categoria_produto';
 
     public function __construct()
     {
@@ -83,7 +83,7 @@ class Fornecedor_model extends MY_Model
 
     }
 
-    public function get_fornecedors(){
+    public function get_categorias(){
 
         $this->db->select('id, nome');
         $this->db->from($this->table);
