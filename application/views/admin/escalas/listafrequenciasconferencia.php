@@ -175,12 +175,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-bordered table-hover table-sm">
                                         <thead>
                                             <tr>
-                                                <th scope="col" class="w-15"><?php echo lang('escalas_profissional');?></th>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_dataplantao');?></th>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_turno');?></th>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_horaentrada');?></th>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_horasaida');?></th>
-                                                <th scope="col" class="text-center w-5"><?php echo('Status');?></th>
+                                                <th scope="col" class="w-15"><?php echo lang('escalas_profissional');?></th>
+                                                <th scope="col" class="text-center w-5 dontprint"><?php echo('Status');?></th>
                                                 <th scope="col" class="text-center w-15 dontprint"><?php echo lang('escalas_frequencias_sem_escala');?></th>
                                                 <th scope="col" class="text-center w-20 dontprint"><?php echo lang('escalas_action');?></th>
                                             </tr>
@@ -260,8 +260,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             }
                                         }
                                         ?>
-                                            <tr>
-                                                <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>"><?php echo(htmlspecialchars($freq->nome_profissional ? $freq->nome_profissional : '-', ENT_QUOTES, 'UTF-8')); ?></span></td>
+                                            <tr>                                                
                                                 <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars($turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center" <?php echo($freq->escala_id_entrada ? 'bg-success' : 'bg-danger'); ?>>
@@ -283,7 +282,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     }
                                                     ?>
                                                 </td>
-                                                <td class="text-center" <?php echo($freq->escala_id_saida ? 'bg-success' : 'bg-danger'); ?>>
+                                                <td class="text-center dontprint" <?php echo($freq->escala_id_saida ? 'bg-success' : 'bg-danger'); ?>>
                                                     <?php
                                                     if (!is_null($freq->dt_frq_saida)) {
                                                         echo(htmlspecialchars(date('H:i:s', strtotime($freq->dt_frq_saida))));
@@ -302,6 +301,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     }
                                                     ?>
                                                 </td>
+                                                <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>"><?php echo(htmlspecialchars($freq->nome_profissional ? $freq->nome_profissional : '-', ENT_QUOTES, 'UTF-8')); ?></span></td>
                                                 <td title="<?php echo($freq->falta ? $tipo_falta : ''); ?>" class="text-center <?php echo($tipo_batida_escala == "OK" ? 'bg-success' : 'bg-danger'); ?><?php echo($freq->falta ? ' title_help ' : ''); ?>">
                                                     <?php echo($tipo_batida_escala); ?>
                                                 </td>

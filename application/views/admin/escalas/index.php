@@ -229,7 +229,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <section class="content">
                 <div class="print-header row">
                     <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Escalas Processadas</h3></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Unidade Hospitalar: ".$this->data['unidade_nome']); ?></h3></div>
                 </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -246,7 +246,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="dontprint"><?php echo lang('escalas_unidadehospitalar');?></th>
                                                 <th><?php echo lang('escalas_setor');?></th>
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
@@ -258,9 +257,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <tbody>
     <?php foreach ($escalas as $escala) : ?>
                                             <tr>
-                                                <td class="dontprint">
-                                                    <?php echo htmlspecialchars($escala->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8'); ?>
-                                                </td>
                                                 <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->profissional_nome ? $escala->profissional_nome : '-', ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
@@ -281,10 +277,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="dontprint"><?php echo lang('escalas_unidadehospitalar');?></th>
                                                 <th><?php echo lang('escalas_setor');?></th>
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
+                                                <th><?php echo lang('escalas_diadasemana');?></th>
                                                 <th><?php echo lang('escalas_horario');?></th>
                                                 <th class="dontprint"><?php echo lang('escalas_action');?></th>
                                             </tr>
@@ -292,16 +288,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <tbody>
     <?php foreach ($escalas as $escala) : ?>
                                             <tr>
-                                                <td class="dontprint">
-                                                    <?php echo htmlspecialchars($escala->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8'); ?>
-                                                </td>
                                                 <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <?php if ($escala->passagenstrocas_id == null) :?>
-                                                <td><?php echo htmlspecialchars($escala->profissional_nome ? $escala->profissional_nome : '-', ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->profissional_nome ? $escala->profissional_nome : $escala->profissional_nome.' > '.$escala->profissional_substituto_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <?php else :?>
-                                                <td><?php echo htmlspecialchars($escala->profissional_substituto_nome ? $escala->profissional_substituto_nome : '-', ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->profissional_substituto_nome ? $escala->profissional_nome.' > '.$escala->profissional_substituto_nome : '-', ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <?php endif;?>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($diasdasemana[date('w', strtotime($escala->dataplantao))], ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?>
@@ -317,11 +311,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="dontprint"><?php echo lang('escalas_unidadehospitalar');?></th>
                                                 <th><?php echo lang('escalas_setor');?></th>
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th><?php echo lang('escalas_profissional_substituto');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
+                                                <th><?php echo lang('escalas_diadasemana');?></th>
                                                 <th><?php echo lang('escalas_horario');?></th>
                                                 <th class="dontprint"><?php echo lang('escalas_action');?></th>
                                             </tr>
@@ -329,15 +323,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <tbody>
     <?php foreach ($escalas as $escala) : ?>
                                             <tr>
-                                                <td class="dontprint">
-                                                    <?php echo htmlspecialchars($escala->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8'); ?>
-                                                </td>
                                                 <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->profissional_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->profissional_substituto_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($diasdasemana[date('w', strtotime($escala->dataplantao))], ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td>
+                                                <td class="dontprint">
                                                     <?php echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?>
                                                 </td>
                                             </tr>

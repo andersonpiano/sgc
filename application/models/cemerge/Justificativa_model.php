@@ -17,6 +17,7 @@ class Justificativa_model extends MY_Model
         $fields .= "e.dataplantao as data_inicial_plantao, ";
         $fields .= "e.horainicialplantao as hora_entrada, ";
         $fields .= "e.horafinalplantao as hora_saida, ";
+        $fields .= "p.id as profissional_id, ";
         $fields .= "s.nome as setor_nome, ";
         $fields .= "p.nome as nome_profissional, ";
         $fields .= "j.status as status ";

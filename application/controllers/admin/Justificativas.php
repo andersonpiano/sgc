@@ -86,12 +86,19 @@ class Justificativas extends Admin_Controller
                     break;
                 }
                 $data_plantao = $ct->data_inicial_plantao;
-                $profissional_id = $ct->id;
+                $profissional_id = $ct->profissional_id;
                 $plantao_entrada = $ct->hora_entrada;
                 $plantao_saida = $ct->hora_saida;
-
-                //$ct->batida_entrada = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida)[0];
-                //$ct->batida_saida = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida)[0];
+                try { 
+                    $ct->batida_entrada = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
+                } catch (Exception $e) {
+                    alert('Erro!','Erro ao coletar a batida de entrada '.$e);
+                }
+                try { 
+                    $ct->batida_saida = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
+                } catch (Exception $e) {
+                    alert('Erro!','Erro ao coletar a batida de entrada '.$e);
+                }
 
                 //var_dump($this->data['justificativas']); exit;
 
