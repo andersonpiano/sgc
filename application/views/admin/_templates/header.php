@@ -63,7 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/frequencias_por_profissional.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['create'])) : ?>
-        <!--<script src="<?php //echo base_url($frameworks_dir . '/cemerge/js/justificativa.js'); ?>"></script>-->
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/justificativa.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['editarfrequencia', 'buscarfrequencias'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_assessus_por_unidade.js'); ?>"></script>
