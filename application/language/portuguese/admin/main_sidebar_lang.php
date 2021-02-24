@@ -108,7 +108,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_especializacoes_edit'] = 'Editar';
 /* *********** */$lang['menu_especializacoes_view'] = 'Visualizar';
 
-/* ****** */$lang['menu_categorias']  = 'Especializações';
+/* ****** */$lang['menu_categorias']  = 'Categorias';
 /* *********** */$lang['menu_categorias_create'] = 'Buscar / Nova';
 /* *********** */$lang['menu_categorias_edit'] = 'Editar';
 /* *********** */$lang['menu_categorias_view'] = 'Visualizar';

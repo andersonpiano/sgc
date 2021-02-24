@@ -46,6 +46,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('justificativas_hora_entrada_registrada', 'hora_entrada_registrada', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-3">
+                                                <?php echo(form_input($batida_entrada));?>
+                                            </div>
+                                            <span><cite><?php echo('Horário registrado pelo sistema.'); ?></cite></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_hora_saida_registrada', 'hora_saida_registrada', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-3">
+                                                <?php echo(form_input($batida_saida));?>
+                                            </div>
+                                            <span><cite><?php echo('Horário registrado pelo sistema.'); ?></cite></span>
+                                        </div>
+                                        <div class="form-group">
                                             <?php echo lang('justificativas_hora_entrada', 'hora_entrada', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-3">
                                                 <?php echo(form_input($hora_entrada));?>

@@ -63,7 +63,7 @@ class Justificativas extends Admin_Controller
             //$this->data['justificativas'] = $this->justificativa_model->get_where(array('profissional_id' => $profissional_id, 'data_plantao >='=>$data_plantao_inicio, 'data_plantao <='=>$data_plantao_fim));
             $this->data['justificativas'] = $this->justificativa_model->get_justificativas_profissional($data_plantao_inicio, $data_plantao_fim, $status);
             //$this->data['justificativas'] = $this->justificativa_model->get_where(array('data_plantao >='=>$data_plantao_inicio, 'data_plantao <='=>$data_plantao_fim));
-            
+
             foreach ($this->data['justificativas'] as $ct) {
                 $ct->turno = '';
                 if ((int)$ct->hora_entrada >= 5 && (int)$ct->hora_entrada < 13) {
@@ -85,23 +85,14 @@ class Justificativas extends Admin_Controller
                     $ct->status = 'Aguardando Aprovação';
                     break;
                 }
+
                 $data_plantao = $ct->data_inicial_plantao;
                 $profissional_id = $ct->profissional_id;
                 $plantao_entrada = $ct->hora_entrada;
                 $plantao_saida = $ct->hora_saida;
-                try { 
-                    $ct->batida_entrada = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
-                } catch (Exception $e) {
-                    alert('Erro!','Erro ao coletar a batida de entrada '.$e);
-                }
-                try { 
-                    $ct->batida_saida = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
-                } catch (Exception $e) {
-                    alert('Erro!','Erro ao coletar a batida de entrada '.$e);
-                }
-
-                //var_dump($this->data['justificativas']); exit;
-
+        
+                $ct->entrada = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+                $ct->saida = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
             }
 
         } else {
@@ -136,8 +127,9 @@ class Justificativas extends Admin_Controller
             'selected' => $status,
             'options' => $tipos_status,
         );
+
         // Anderson
-        //var_dump($this->data);
+        //var_dump($this->data['justificativas']);exit;
         //exit;
 
         /* Load Template */
@@ -158,11 +150,29 @@ class Justificativas extends Admin_Controller
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_justificativas_create'), 'admin/justificativas/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        $this->load->model('cemerge/FrequenciaAssessus_model');
 
         /* Variables */
         $profissional_id = $this->session->userdata('profissional_id');
         $profissional_nome = $this->session->userdata('nome');
         $setores_profissional = $this->_get_setores_profissional($profissional_id);
+        $escala_id = $this->input->get_post('plantao_id');
+        $setor_id = $this->input->get_post('setor_id');
+        $data_plantao_inicio = $this->input->get_post("data_plantao");
+        $hora_entrada =  $this->input->post("hora_entrada");
+        $hora_saida =  $this->input->post("hora_saida");
+        $descricao =  $this->input->post("descricao");
+
+        $insert_data = array(
+            'profissional_id' => $profissional_id,
+            'escala_id' => $escala_id,
+            'setor_id' => $setor_id,
+            'data_plantao' => $data_plantao_inicio,
+            'hora_entrada' => $hora_entrada,
+            'hora_saida' => $hora_saida,
+            'descricao' => $descricao,
+            'status' => 0
+        );
 
 
         //Coletar dados da batida - Anderson
@@ -170,7 +180,7 @@ class Justificativas extends Admin_Controller
         //$this->data['saida'] = $this->frequenciaassessus_model->get_batida($this->data['data_plantao'], $this->data['profissional_id'], 1, $this->data['hora_entrada'], $this->data['hora_saida' ]);
 
         /* Validate form input */
-        //$this->form_validation->set_rules('descricao', 'lang:justificativas_descricao', 'required');
+        $this->form_validation->set_rules('descricao', 'lang:justificativas_descricao', 'required');
 
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true) {
@@ -223,7 +233,26 @@ class Justificativas extends Admin_Controller
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('hora_saida'),
             );
+
+            $this->data['batida_entrada'] = array(
+                'name'  => 'batida_entrada',
+                'id'    => 'batida_entrada',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => ''
+            );
+            
+            $this->data['batida_saida'] = array(
+                'name'  => 'batida_saida',
+                'id'    => 'batida_saida',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => ''
+            );
+
             /* Load Template */
+
+            //var_dump($insert_data); exit;
             $this->template->admin_render('admin/justificativas/create', $this->data);
         }
     }    

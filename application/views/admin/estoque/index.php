@@ -19,12 +19,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
         </section>
         <?php endif; ?>
-
+        <br>
 <section style="min-height: calc(100vh - 83px);" class="light-bg">
     <div class="container">
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_nf" role="tab" data-toggle="tab">Nota Fiscal</a></li>
+            <li class="active"><a href="#tab_fornecedores" role="tab" data-toggle="tab">Fornecedores</a></li>
+            <li><a href="#tab_nf" role="tab" data-toggle="tab">Nota Fiscal</a></li>
             <li><a href="#tab_categorias" role="tab" data-toggle="tab">Categorias</a></li>
             <li><a href="#tab_produtos" role="tab" data-toggle="tab">Produtos</a></li>
             <li><a href="#tab_estoque" role="tab" data-toggle="tab">Estoque</a></li>
@@ -35,16 +36,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </ul>
 
         <div class="tab-content">
-            <div id="tab_categoria" class="tab-pane active">
+            
+            <div id="tab_fornecedores" class="tab-pane active">
                 <div class="container-fluid">
-                    <h2 class="text-center"><strong>Gerenciar Categorias</strong></h2>
-                    <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Categoria</i></a>
-                    <table id="dt_categoria" class="table table-striped table-bordered">
+                    <h2 class="text-center"><strong>Gerenciar Fornecedores</strong></h2>
+                    <a id="btn_add_fornecedor" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Cadastrar Fornecedor</i></a>
+                    <table id="dt_fornecedor" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
-                                <th class="dt-center">Código</th>
-                                <th class="dt-center">Nome</th>
-                                <th class="dt-center no-sort">Ações</th>
+                                <th class="dt-center text-center" >Código</th>
+                                <th class="dt-center text-center" >Nome</th>
+                                <th class="dt-center text-center">CNPJ</th>
+                                <th class="dt-center text-center">Contato</th>
+                                <th class="dt-center no-sort text-center">Ações</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="tab_nf" class="tab-pane">
+                <div class="container-fluid">
+                    <h2 class="text-center"><strong>Gerenciar Notas Fiscais</strong></h2>
+                    <a id="btn_add_nf" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar NF</i></a>
+                    <table id="dt_nf" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th class="dt-center text-center">Data</th>
+                                <th class="dt-center text-center">Código</th>
+                                <th class="dt-center text-center">Fornecedor</th>
+                                <th class="dt-center text-center">Valor</th>
+                                <th class="dt-center text-center">Anexo</th>
+                                <th class="dt-center no-sort text-center">Ações</th>
                             </tr> 
                         </thead>
                         <tbody>
@@ -53,16 +77,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </div>
             
-        <div id="tab_especializacao" class="tab-pane">
+        <div id="tab_categorias" class="tab-pane">
             <div class="container-fluid">
-                <h2 class="text-center"><strong>Gerenciar Especializações</strong></h2>
-                <a id="btn_add_especializacao" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Especialização</i></a>
-                <table id="especializacao" class="table table-striped table-bordered">
+                <h2 class="text-center"><strong>Gerenciar Categorias</strong></h2>
+                <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Categoria</i></a>
+                <table id="dt_categoria" class="table table-striped table-bordered">
                     <thead>
                         <tr class="tableheader">
-                            <th class="dt-center" >Código</th>
-                            <th class="dt-center">Nome</th>
-                            <th class="dt-center no-sort">Ações</th>
+                            <th class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Nome</th>
+                            <th class="dt-center text-center">Tipo</th>
+                            <th class="dt-center no-sort text-center">Ações</th>
                         </tr> 
                     </thead>
                     <tbody>
@@ -70,82 +95,526 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </table>
             </div>
         </div>
+
+        <div id="tab_produtos" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Produtos</strong></h2>
+                <a id="btn_add_produto" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Produto</i></a>
+                <table id="dt_produtos" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th width="10%" class="dt-center text-center" >Código</th>
+                            <th width="30%" class="dt-center text-center" >Nome</th>
+                            <th width="10%" class="dt-center text-center">Marca</th>
+                            <th width="10%" class="dt-center text-center">Setor</th>
+                            <th width="10%" class="dt-center text-center">Categoria</th>
+                            <th width="10%" class="dt-center text-center" >Tombamento</th>
+                            <th width="10%" class="dt-center text-center">Responsavel</th>
+                            <th width="10%" class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_estoque" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Estoque</strong></h2>
+                <table id="dt_estoque" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th width="10%" class="dt-center text-center" >Código</th>
+                            <th width="60%" class="dt-center text-center" >Produto</th>
+                            <th width="20%" class="dt-center text-center">Quantidade</th>
+                            <th width="10%" class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_entrada" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Entrada de Produtos</strong></h2>
+                <a id="btn_add_entrada" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Registrar Entrada</i></a>
+                <table id="dt_entrada" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Produto</th>
+                            <th class="dt-center text-center">Quantidade</th>
+                            <th class="dt-center text-center">Data</th>
+                            <th class="dt-center text-center">Setor</th>
+                            <th class="dt-center text-center">Usuário</th>
+                            <th class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_saida" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Saida de Produtos</strong></h2>
+                <a id="btn_add_saida" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Registrar Saída</i></a>
+                <table id="dt_saida" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Nome</th>
+                            <th class="dt-center text-center">Tipo</th>
+                            <th class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_responsaveis" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Responsaveis</strong></h2>
+                <a id="btn_add_responsavel" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Cadastrar Responsável</i></a>
+                <table id="dt_responsaveis" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Nome</th>
+                            <th class="dt-center text-center">Tipo</th>
+                            <th class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_relatorios" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Relatórios</strong></h2>
+            </div>
+        </div>
     </div>
 </section>
 
-<div id="modal_categoria" class="modal fade">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
+        <div id="modal_categoria" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
 
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">X</button>
-			<h4 class="modal-title">Categorias</h4>
-		</div>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Nova Categoria</h4>
+                </div>
 
-		<div class="modal-body">
-			<form id="form_categoria">
+                <div class="modal-body">
+                    <form id="form_categoria">
 
-				<input id="categoria_nome" name="categoria_nome" hidden>
+                        <input id="categoria_nome" name="categoria_nome" hidden>
 
-				<div class="form-group">
-					<label class="col-lg-2 control-label">Nome</label>
-					<div class="col-lg-10">
-						<input id="categoria_nome" name="categoria_nome" class="form-control" maxlength="100">
-						<span class="help-block"></span>
-					</div>
-				</div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Nome</label>
+                            <div class="col-lg-10">
+                                <input id="categoria_nome" name="categoria_nome" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
 
-				<div class="form-group text-center">
-            		<button type="submit" id="btn_save_categoria" class="btn btn-primary">
-              		<i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
-            		<span class="help-block"></span>
-          		</div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_save_categoria" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
 
-			</form>
-		</div>
-	</div>
-</div>
-</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
 
-<div id="modal_especializacao" class="modal fade">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">X</button>
-			<h4 class="modal-title">Nova Especialização</h4>
-		</div>
-		<div class="modal-body">
-			<form id="form_especializacao">
-				<input id="especializacao_nome" name="especializacao_nome" hidden>
-				<div class="form-group">
-					<label class="col-lg-2 control-label">Nome</label>
-					<div class="col-lg-10">
-						<input id="especializacao_nome" name="especializacao_nome" class="form-control" maxlength="100">
-                        <span class="help-block"></span>
+        <div id="modal_nf" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Nova Nota Fiscal</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="form_nf">
+
+                        <input id="nf_id" name="nf_id" hidden>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Código</label>
+                            <div class="col-lg-10">
+                                <input id="nf_codigo" name="nf_codigo" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Fornecedor</label>
+                            <div class="col-lg-10">
+                                <input id="nf_fornecedor" name="nf_fornecedor" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Valor</label>
+                            <div class="col-lg-10">
+                                <input id="nf_valor" name="nf_valor" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Data</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_save_nf" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div id="modal_produto" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Novo Produto</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="form_produto">
+
+                        <input id="nf_id" name="nf_id" hidden>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Nome</label>
+                            <div class="col-lg-10">
+                                <input id="nf_codigo" name="nf_codigo" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Descrição</label>
+                            <div class="col-lg-10">
+                                <input id="nf_fornecedor" name="nf_fornecedor" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Marca</label>
+                            <div class="col-lg-10">
+                                <input id="nf_valor" name="nf_valor" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Fornecedor</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Tombamento</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Número de Série</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Setor</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Responsavel</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Data de Aquisição</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Nota Fiscal</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Data de Tombamento</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Data de Validade</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Data de Aquisição</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Valor de Compra</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Valor Atual</label>
+                            <div class="col-lg-10">
+                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_save_nf" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div id="modal_fornecedor" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">X</button>
+                        <h4 class="modal-title">Novo Fornecedor</h4>
                     </div>
-                    <div class="form-group">
-                    <label class="col-lg-2 control-label">Categoria</label>
-                    <div class="col-lg-10">
-                        <select name="categoria_select" class="form-control">
-                            <option value="#" selected>Sem especialização</option>
-                            <option value="#">Residência Médica</option>
-                            <option value="#">Mestrado</option>
-                            <option value="#">Doutorado</option>
-                            <option value="#">Supervisor de PRM ESP-CE</option>
-                        </select>
-                        <span class="help-block"></span>
+                <div class="modal-body">
+                    <form id="form_fornecedor">
+                        <input id="fornecedor_nome" name="fornecedor_nome" hidden>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Nome</label>
+                            <div class="col-lg-10">
+                                <input id="fornecedor_nome" name="fornecedor_nome" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">CNPJ</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_cnpj" name="fornecedor_cnpj" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Endereço</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_endereco" name="fornecedor_endereco" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">E-mail</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_email" name="fornecedor_email" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Contato</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_contato" name="fornecedor_contato" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_salvar_fornecedor" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal_entrada" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">X</button>
+                        <h4 class="modal-title">Registrar Entrada</h4>
                     </div>
+                <div class="modal-body">
+                    <form id="form_entrada">
+                        <input id="fornecedor_nome" name="fornecedor_nome" hidden>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Tipo</label>
+                            <div class="col-lg-10">
+                                <input id="fornecedor_nome" name="fornecedor_nome" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Produto</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_cnpj" name="fornecedor_cnpj" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Quantidade</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_endereco" name="fornecedor_endereco" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Data</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_email" name="fornecedor_email" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Setor</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_contato" name="fornecedor_contato" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_salvar_fornecedor" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal_saida" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">X</button>
+                        <h4 class="modal-title">Registrar Saída</h4>
                     </div>
-				</div>
-				<div class="form-group text-center">
-            		<button type="submit" id="btn_salvar_especializacao" class="btn btn-primary">
-              		<i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
-            		<span class="help-block"></span>
-          		</div>
-			</form>
-		</div>
-	</div>
-</div>
-</div>
-</div>
+                <div class="modal-body">
+                    <form id="form_saida">
+                        <input id="fornecedor_nome" name="fornecedor_nome" hidden>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Tipo</label>
+                            <div class="col-lg-10">
+                                <input id="fornecedor_nome" name="fornecedor_nome" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Produto</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_cnpj" name="fornecedor_cnpj" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Quantidade</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_endereco" name="fornecedor_endereco" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Data</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_email" name="fornecedor_email" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Setor</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_contato" name="fornecedor_contato" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_salvar_fornecedor" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
