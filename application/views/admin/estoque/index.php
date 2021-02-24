@@ -616,5 +616,122 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </div>
         </div>
+
+
+        <div id="modal_responsavel" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">X</button>
+                        <h4 class="modal-title">Cadastrar Responsável</h4>
+                    </div>
+                <div class="modal-body">
+                    <form id="form_responsavel">
+                        <input id="fornecedor_nome" name="fornecedor_nome" hidden>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Tipo</label>
+                            <div class="col-lg-10">
+                                <input id="fornecedor_nome" name="fornecedor_nome" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Produto</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_cnpj" name="fornecedor_cnpj" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Quantidade</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_endereco" name="fornecedor_endereco" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Data</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_email" name="fornecedor_email" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Setor</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_contato" name="fornecedor_contato" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_salvar_fornecedor" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal_relatorios" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">X</button>
+                        <h4 class="modal-title">Cadastrar Responsável</h4>
+                    </div>
+                <div class="modal-body">
+                    <form id="form_relatorios">
+                        <input id="fornecedor_nome" name="fornecedor_nome" hidden>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Tipo</label>
+                            <div class="col-lg-10">
+                                <input id="fornecedor_nome" name="fornecedor_nome" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Produto</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_cnpj" name="fornecedor_cnpj" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Quantidade</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_endereco" name="fornecedor_endereco" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Data</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_email" name="fornecedor_email" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-lg-2 control-label">Setor</label>
+                                <div class="col-lg-10">
+                                    <input id="fornecedor_contato" name="fornecedor_contato" class="form-control" maxlength="100">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="btn_salvar_fornecedor" class="btn btn-primary">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

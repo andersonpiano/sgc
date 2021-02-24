@@ -36,7 +36,18 @@ $(function() {
 		$("#form_saida")[0].reset();
 		$("#modal_saida").modal();
 	});
+
+	$("#btn_add_responsavel").click(function(){
+		clearErrors();
+		$("#form_responsavel")[0].reset();
+		$("#modal_responsavel").modal();
+	});
 	
+	$("#btn_add_responsavel").click(function(){
+		clearErrors();
+		$("#form_responsavel")[0].reset();
+		$("#modal_responsavel").modal();
+	});
 
 	$("#form_categoria").submit(function() {
  			$.ajax({
