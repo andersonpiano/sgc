@@ -107,11 +107,11 @@ class Escalas extends Admin_Controller
 
                 // Lista
                 if ($tipoescala == 0 and $tipovisualizacao == 0) {
-                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, null, 'profissional_nome'); // dataplantao, horainicialplantao');
+                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, null, 'profissional_nome, dataplantao'); // dataplantao, horainicialplantao');
                 } elseif ($tipoescala == 1 and $tipovisualizacao == 0) {
-                    $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, 'profissional_nome'); //, dataplantao, horainicialplantao');
+                    $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, 'profissional_nome, dataplantao'); //, dataplantao, horainicialplantao');
                 } elseif ($tipoescala == 2 and $tipovisualizacao == 0) {
-                    $this->data['escalas'] = $this->escala_model->get_passagens_trocas($where, null, 'profissional_nome'); //, dataplantao, horainicialplantao');
+                    $this->data['escalas'] = $this->escala_model->get_passagens_trocas($where, null, 'profissional_nome, dataplantao'); //, dataplantao, horainicialplantao');
                 }
 
                 // Calendário
