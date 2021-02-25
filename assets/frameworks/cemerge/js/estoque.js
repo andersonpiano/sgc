@@ -412,7 +412,7 @@ $(function() {
 				type: "POST",
 				url: "estoque/ajax_get_fornecedor_data",
 				dataType: "JSON",
-				data: {"fornecedor_id": $(this).attr("fornecedor_id")},
+				data: {"id": $(this).attr("id")},
 				success: function(response) {
 					clearErrors();
 					$("#form_fornecedor")[0].reset();
@@ -426,10 +426,10 @@ $(function() {
 
 		$(".btn-del-fornecedor").click(function(){
 			
-			$fornecedor_id = $(this).attr('fornecedor_id');
+			$fornecedor_id = $(this).attr('id');
 			swal({
 				title: "Atenção!",
-				text: "Deseja deletar esse membro?",
+				text: "Deseja deletar esse Fornecedor?",
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#d9534f",
@@ -442,7 +442,7 @@ $(function() {
 					$.ajax({
 						type: "POST",
 						url: "estoque/deletar_fornecedor/"+$fornecedor_id,
-						data: {"fornecedor_id": $fornecedor_id},
+						data: {"id": $fornecedor_id},
 						success: function(response) {
 							swal("Sucesso!", "Ação executada com sucesso", "success");
 							dt_fornecedor.ajax.reload();

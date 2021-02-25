@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // Possible hosts locally. You can add some if needed.
-$config['host_dev'] = array('192.168.45.76', 'localhost', '127.0.0.1', '::1');
+$config['host_dev'] = array('192.168.45.76', 'teste.cemerge.com.br', 'localhost', '127.0.0.1', '::1');
 
 // Fill in the file of your project here when you develop locally.
 $host_dev = 'sgc';

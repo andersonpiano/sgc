@@ -78,7 +78,7 @@ class Estoque extends Admin_Controller
         $fornecedores = $this->Fornecedor_model->get_all();
 
         $fornecedores_select = array(
-            '' => 'Selecione uma especialidade',
+            '' => 'Selecione um Fornecedor',
         );
         foreach ($fornecedores as $fornecedor) {
             $fornecedores_select[$fornecedor->id] = $fornecedor->nome;
@@ -145,6 +145,8 @@ class Estoque extends Admin_Controller
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/dashboard', 'refresh');
         }
+
+        $this->load->model("cemerge/Fornecedor_model");
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/estoque/');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
@@ -176,8 +178,57 @@ class Estoque extends Admin_Controller
             }
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-            $this->data['nome'] = $nome;
         } 
+
+        //var_dump($data); exit;
+            json_encode($json);
+            exit;
+    }
+
+    public function cadastrar_nf(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->load->model("cemerge/NF_model");
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/estoque/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $codigo = $this->input->post('nf_codigo');
+        $fornecedor = $this->input->post('nf_fornecedor');
+        $valor = $this->input->post('nf_valor');
+        $data = $this->input->post('nf_data');
+
+        $this->form_validation->set_rules('nf_codigo', 'lang:fornecedores_nome', 'required');
+        $this->form_validation->set_rules('nf_fornecedor', 'lang:fornecedores_cnpj', 'required');
+        $this->form_validation->set_rules('nf_valor', 'lang:fornecedores_endereco', 'required');
+        $this->form_validation->set_rules('nf_data', 'lang:fornecedores_email', 'required');
+
+
+        $json = array();
+
+        if ($this->form_validation->run() == true) {
+            $data = $this->input->post();
+            if(empty($data['nf_id'])) {
+                $this->NF_model->insert(['codigo'=>$codigo, 'cod_fornecedor'=>$fornecedor, 'valor'=>$valor, 'data'=>$data]);
+            } else {
+                $id = $data["nf_id"];
+                unset($data['nf_id']);
+                $this->NF_model->update($id, ['codigo'=>$codigo, 'cod_fornecedor'=>$fornecedor, 'valor'=>$valor, 'data'=>$data]);
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        } 
+
+        //var_dump($data); exit;
             json_encode($json);
             exit;
     }
@@ -245,8 +296,11 @@ class Estoque extends Admin_Controller
         foreach ($nfs as $nf) {
     
             $row = array();
-            $row[] = '<center>'.$nf->id.'</center>';
+            $row[] = '<center>'.$nf->data.'</center>';
             $row[] = $nf->codigo;
+            $row[] = $nf->cod_fornecedor;
+            $row[] = $nf->valor;
+            $row[] = $nf->img;
     
             $row[] = '<div style="display: inline-block;">
                         <button class="btn btn-primary btn-edit-categoria" 
@@ -494,13 +548,15 @@ class Estoque extends Admin_Controller
         $row = array();
         $row[] = '<center>'.$fornecedor->id.'</center>';
         $row[] = $fornecedor->nome;
+        $row[] = '<center>'.$fornecedor->cnpj.'</center>';
+        $row[] = '<center>'.$fornecedor->contato.'</center>';
 
         $row[] = '<div style="display: inline-block;" >
-                    <button class="btn btn-primary btn-edit-estoque" 
+                    <button class="btn btn-primary btn-edit-fornecedor" 
                         id="'.$fornecedor->id.'">
                         <i class="fa fa-edit"></i>
                     </button>
-                    <button class="btn btn-danger btn-del-estoque" 
+                    <button class="btn btn-danger btn-del-fornecedor" 
                         id="'.$fornecedor->id.'">
                         <i class="fa fa-times"></i>
                     </button>
@@ -527,6 +583,16 @@ class Estoque extends Admin_Controller
         }
             $this->load->model("cemerge/Categoria_Estoque_model");
             $this->Categoria_Estoque_model->delete(['id' => $id]);
+        exit;
+    }
+
+    public function deletar_fornecedor($id) {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            $this->load->model("cemerge/Fornecedor_model");
+            $this->Fornecedor_model->delete(['id' => $id]);
         exit;
     }
 
@@ -562,7 +628,7 @@ class Estoque extends Admin_Controller
         exit;
     }
 
-    public function ajax_get_estoque_data() {
+    public function ajax_get_fornecedor_data() {
 
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
@@ -575,9 +641,12 @@ class Estoque extends Admin_Controller
         
         $id = $this->input->post("id");
         $data = $this->Fornecedor_model->get_data($id)->result_array()[0];
-        $json["input"]["id"] = $data["id"];
-        $json["input"]["nome"] = $data["nome"];
-        $json["input"]["categoria_select"] =$data["estoque_categoria"];
+        $json["input"]["fornecedor_id"] = $data["id"];
+        $json["input"]["fornecedor_nome"] = $data["nome"];
+        $json["input"]["fornecedor_cnpj"] =$data["cnpj"];
+        $json["input"]["fornecedor_endereco"] =$data["endereco"];
+        $json["input"]["fornecedor_email"] =$data["email"];
+        $json["input"]["fornecedor_contato"] =$data["contato"];
 
         echo json_encode($json);
         exit;
