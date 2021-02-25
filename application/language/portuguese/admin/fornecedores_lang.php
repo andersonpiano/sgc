@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['fornecedores_create']              = 'Nova Fornecedor';
+$lang['fornecedores_create']              = 'Novo Fornecedor';
 $lang['fornecedores_validar']              = 'Validar Fornecedor';
 $lang['fornecedores_edit']                = 'Editar Fornecedor';
 $lang['fornecedores_find']                = 'Buscar Fornecedor';
@@ -20,3 +20,9 @@ $lang['fornecedores_active']              = 'Ativo';
 $lang['fornecedores_created_on']          = 'Criado em';
 $lang['fornecedores_status']              = 'Condição';
 $lang['fornecedores_box_title']           = 'Fornecedor';
+$lang['fornecedores_nome']           = 'Nome';
+$lang['fornecedores_cnpj']           = 'CNPJ';
+$lang['fornecedores_endereco']           = 'Endereço';
+$lang['fornecedores_email']           = 'E-mail';
+$lang['fornecedores_contato']           = 'Contato';
+

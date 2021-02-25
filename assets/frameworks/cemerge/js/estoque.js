@@ -71,7 +71,7 @@ $(function() {
 			},
 			error: function(response){
 				$("#modal_categoria").modal("hide");
-				swal("Sucesso!","Categoria salva com sucesso!", "success");
+				swal("Erro!","Erro ao Salvar Categoria!", "warning");
 				dt_categoria.ajax.reload();
 			}
 		})
@@ -696,7 +696,7 @@ $(function() {
 	})
 
 	
-
+/*
 	$(document).on('change', '#categoria_select', function() {
 
         var categoria = $(this).val();
@@ -737,4 +737,4 @@ $(document).on('change', '#fornecedor_select', function() {
 			swal("Erro","Ocorreu um erro ao realizar a troca.",'warning');
 		}
 });
-});
+});*/

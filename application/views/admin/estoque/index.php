@@ -84,10 +84,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <table id="dt_categoria" class="table table-striped table-bordered">
                     <thead>
                         <tr class="tableheader">
-                            <th class="dt-center text-center" >Código</th>
+                            <th width="10%" class="dt-center text-center" >Código</th>
                             <th class="dt-center text-center" >Nome</th>
-                            <th class="dt-center text-center">Tipo</th>
-                            <th class="dt-center no-sort text-center">Ações</th>
+                            <th width="20%" class="dt-center text-center">Tipo</th>
+                            <th width="07%" class="dt-center no-sort text-center">Ações</th>
                         </tr> 
                     </thead>
                     <tbody>
@@ -199,7 +199,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         <div id="tab_relatorios" class="tab-pane">
             <div class="container-fluid">
-                <h2 class="text-center"><strong>Relatórios</strong></h2>
+                <center><table style="margin: 100px; border: 1px solid black;">
+                    <tr>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                    </tr>
+                    <tr>
+                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                    </tr>
+                    <tr>
+                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                    </tr>
+                    <tr>
+                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                    </tr>
+                    <tr>
+                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                    </tr>
+                </table></center>
             </div>
         </div>
     </div>
@@ -217,7 +253,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="modal-body">
                     <form id="form_categoria">
 
-                        <input id="categoria_nome" name="categoria_nome" hidden>
+                        <input id="categoria_id" name="categoria_id" hidden>
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Nome</label>
@@ -226,6 +262,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <span class="help-block"></span>
                             </div>
                         </div>
+                        <div class="form-group">
+                    <label class="col-lg-2 control-label">Tipo</label>
+                    <?php echo lang('escalas_unidadehospitalar', 'categoria_select', array('class' => 'col-sm-2 control-label')); ?>
+                    <div class="col-lg-10">
+                        <?php echo form_dropdown($categoria_select);?>
+                    </div>
+                    </div>
 
                         <div class="form-group text-center">
                             <button type="submit" id="btn_save_categoria" class="btn btn-primary">
@@ -452,7 +495,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 <div class="modal-body">
                     <form id="form_fornecedor">
-                        <input id="fornecedor_nome" name="fornecedor_nome" hidden>
+                        <input id="fornecedor_id" name="fornecedor_id" hidden>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Nome</label>
                             <div class="col-lg-10">

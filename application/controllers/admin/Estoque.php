@@ -14,6 +14,7 @@ class Estoque extends Admin_Controller
 
        $this->load->model('cemerge/Estoque_model');
        $this->lang->load('admin/estoque');
+       $this->lang->load('admin/fornecedores');
 
        /* Title Page */
        
@@ -39,6 +40,7 @@ class Estoque extends Admin_Controller
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         $categoria_select = $this->_get_categorias();
+            
 
         $this->data['categoria_select'] = array(
             'name'  => 'categoria_select',
@@ -49,6 +51,7 @@ class Estoque extends Admin_Controller
             'options' => $categoria_select,
         );
 
+
         $this->template->admin_render('admin/estoque/index', $this->data);
     }
 
@@ -57,14 +60,12 @@ class Estoque extends Admin_Controller
         
         $this->load->model('cemerge/Categoria_Estoque_model');
 
-        $categorias = $this->Categoria_Estoque_model->get_all();
-
         $categoria_select = array(
-            '' => 'Selecione um Nivel de Formação',
+            '' => 'Selecione o tipo de Categoria',
+            '1' => 'Bens de Consumo',
+            '2' => 'Bens Móveis',
         );
-        foreach ($categorias as $categoria) {
-            $categoria_select[$categoria->id] = $categoria->nome;
-        }
+
         //var_dump($categorias); exit;
         return $categoria_select;
     }
@@ -72,9 +73,9 @@ class Estoque extends Admin_Controller
     private function _get_fornecedores()
     {
         
-        $this->load->model('cemerge/Fornecedores_model');
+        $this->load->model('cemerge/Fornecedor_model');
 
-        $fornecedores = $this->Fornecedores_model->get_all();
+        $fornecedores = $this->Fornecedor_model->get_all();
 
         $fornecedores_select = array(
             '' => 'Selecione uma especialidade',
@@ -103,32 +104,82 @@ class Estoque extends Admin_Controller
         
         $this->load->model("cemerge/Categoria_Estoque_model");
         /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_categorias_create'), 'admin/fornecedores/');
+        $this->breadcrumbs->unshift(2, lang('menu_categorias_create'), 'admin/estoque/');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Variables */
             $json = array();
             $json["status"] = 1;
         
-        $nome = $this->input->post('nome');
-        $tipo = $this->input->post('tipo');
+        $nome = $this->input->post('categoria_nome');
+        $tipo = $this->input->post('categoria_select');
 
-        $this->form_validation->set_rules('nome', 'lang:nome', 'required');
+        $this->form_validation->set_rules('categoria_nome', 'lang:nome', 'required');
+        $this->form_validation->set_rules('categoria_select', 'lang:nome', 'required');
 
         if ($this->form_validation->run() == true) {
             $data = $this->input->post();
-            if(empty($data['id'])) {
-                $this->Categoria_Estoque_model->insert(['nome'=>$nome, 'tipo' =>$tipo ]);
+            if(empty($data['categoria_id'])) {
+                $this->Categoria_Estoque_model->insert(['nome'=>$nome, 'tipo' => $tipo ]);
             } else {
-                $id = $data["id"];
-                unset($data['id']);
-                $this->Categoria_Estoque_model->update($id, ['nome' => $nome]);
+                $id = $data["categoria_id"];
+                unset($data['categoria_id']);
+                $this->Categoria_Estoque_model->update($id, ['nome' => $nome, 'tipo' => $tipo]);
             }
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
             $this->data['nome'] = $nome;
         } 
+
+        var_dump($data); exit;
         echo json_encode($json);
+    }
+
+    public function cadastrar_fornecedor(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/estoque/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $nome = $this->input->post('fornecedor_nome');
+        $cnpj = $this->input->post('fornecedor_cnpj');
+        $endereco = $this->input->post('fornecedor_endereco');
+        $email = $this->input->post('fornecedor_email');
+        $contato = $this->input->post('fornecedor_contato');
+
+        $this->form_validation->set_rules('fornecedor_nome', 'lang:fornecedores_nome', 'required');
+        $this->form_validation->set_rules('fornecedor_cnpj', 'lang:fornecedores_cnpj', 'required');
+        $this->form_validation->set_rules('fornecedor_endereco', 'lang:fornecedores_endereco', 'required');
+        $this->form_validation->set_rules('fornecedor_email', 'lang:fornecedores_email', 'required');
+        $this->form_validation->set_rules('fornecedor_contato', 'lang:fornecedores_contato', 'required');
+
+
+        $json = array();
+
+        if ($this->form_validation->run() == true) {
+            $data = $this->input->post();
+            if(empty($data['fornecedor_id'])) {
+                $this->Fornecedor_model->insert(['nome'=>$nome, 'cnpj'=>$cnpj, 'endereco'=>$endereco, 'email'=>$email, 'contato'=>$contato]);
+            } else {
+                $id = $data["fornecedor_id"];
+                unset($data['fornecedor_id']);
+                $this->Fornecedor_model->update($id, ['nome'=>$nome, 'cnpj'=>$cnpj, 'endereco'=>$endereco, 'email'=>$email, 'contato'=>$contato]);
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+            $this->data['nome'] = $nome;
+        } 
+            json_encode($json);
+            exit;
     }
 
     public function ajax_listar_categorias() {
@@ -143,9 +194,19 @@ class Estoque extends Admin_Controller
     $data = array();
     foreach ($categorias as $categoria) {
 
+        switch ($categoria->tipo) {
+            case 1:
+                $categoria->tipo = 'Bens de Consumo';
+                break;
+            case 2:
+                $categoria->tipo = 'Bens Móveis';
+                break;
+        }
+
         $row = array();
         $row[] = '<center>'.$categoria->id.'</center>';
         $row[] = $categoria->nome;
+        $row[] = '<center>'.$categoria->tipo.'</center>';
 
         $row[] = '<div style="display: inline-block;">
                     <button class="btn btn-primary btn-edit-categoria" 
@@ -417,45 +478,7 @@ class Estoque extends Admin_Controller
     echo json_encode($json);
     exit;
     }
-    public function cadastrar_estoque(){
-            
-        if (!$this->ion_auth->logged_in()) {
-            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
-            redirect('auth/login', 'refresh');
-        }
-        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
-            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
-            redirect('admin/dashboard', 'refresh');
-        }
-        /* Breadcrumbs */
-        $this->breadcrumbs->unshift(2, lang('menu_fornecedores_create'), 'admin/fornecedores/');
-        $this->data['breadcrumb'] = $this->breadcrumbs->show();
-
-        /* Variables */
-        $nome = $this->input->post('nome');
-        $estoque_categoria = $this->input->post('categoria_select');
-
-        $this->form_validation->set_rules('nome', 'lang:nome', 'required');
-        $this->form_validation->set_rules('categoria_select', 'lang:estoque_categoria', 'required');
-
-        $json = array();
-
-        if ($this->form_validation->run() == true) {
-            $data = $this->input->post();
-            if(empty($data['id'])) {
-                $this->Fornecedor_model->insert(['nome'=>$nome, 'estoque_categoria'=>$estoque_categoria]);
-            } else {
-                $id = $data["id"];
-                unset($data['id']);
-                $this->Fornecedor_model->update($id, ['nome' => $nome, 'estoque_categoria'=>$estoque_categoria]);
-            }
-        } else {
-            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-            $this->data['nome'] = $nome;
-        } 
-            json_encode($json);
-            exit;
-    }
+    
 
     public function ajax_listar_fornecedores() {
 
@@ -504,6 +527,7 @@ class Estoque extends Admin_Controller
         }
             $this->load->model("cemerge/Categoria_Estoque_model");
             $this->Categoria_Estoque_model->delete(['id' => $id]);
+        exit;
     }
 
     public function deletar_estoque($id) {
@@ -513,7 +537,7 @@ class Estoque extends Admin_Controller
         }
             $id = $this->input->post("id");
             $this->Fornecedor_model->delete(['id' => $id]);
-
+        exit;
     }
 
 
@@ -529,10 +553,11 @@ class Estoque extends Admin_Controller
         $this->load->model("cemerge/Categoria_Estoque_model");
         
         $id = $this->input->post("id");
-        $data = $this->Categoria_Estoque_model->get_data($id)->result_array();
-        $json["input"]["id"] = $data["id"];
-        $json["input"]["nome"] = $data["nome"];
-
+        $data = $this->Categoria_Estoque_model->get_data($id)->result_array()[0];
+        $json["input"]["categoria_id"] = $data["id"];
+        $json["input"]["categoria_nome"] = $data['nome'];
+        $json["input"]["categoria_select"] = $data['tipo'];
+        //var_dump($data); exit;
         echo json_encode($json);
         exit;
     }

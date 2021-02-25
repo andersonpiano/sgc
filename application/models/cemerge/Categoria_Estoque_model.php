@@ -20,7 +20,7 @@ class Categoria_Estoque_model extends MY_Model
     }
 
     var $column_search = array("nome");
-    var $column_order = array("id", "nome");
+    var $column_order = array("id", "nome", "tipo");
 
     private function _get_datatable() {
 
@@ -85,7 +85,7 @@ class Categoria_Estoque_model extends MY_Model
 
     public function get_categorias(){
 
-        $this->db->select('id, nome');
+        $this->db->select('id, nome, tipo');
         $this->db->from($this->table);
         $query = $this->db->get();
 
@@ -93,12 +93,12 @@ class Categoria_Estoque_model extends MY_Model
     }
 
     public function get_data($id, $select = NULL) {
-		if (!empty($select)) {
-			$this->db->select($select);
-		}
-		$this->db->from($this->table);
-		$this->db->where("id", $id);
-		return $this->db->get();
+        if (!empty($select)) {
+            $this->db->select($select);
+        }
+            $this->db->from($this->table);
+            $this->db->where("id", $id);
+            return $this->db->get();
     }
     
     public function update($id, $data)
