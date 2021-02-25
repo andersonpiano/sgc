@@ -201,7 +201,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="container-fluid">
                 <center><table style="margin: 100px; border: 1px solid black;">
                     <tr>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid #7FFFD4;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
                         <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
                         <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
                         <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>

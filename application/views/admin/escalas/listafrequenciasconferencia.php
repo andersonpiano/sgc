@@ -282,7 +282,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     }
                                                     ?>
                                                 </td>
-                                                <td class="text-center dontprint" <?php echo($freq->escala_id_saida ? 'bg-success' : 'bg-danger'); ?>>
+                                                <td class="text-center" <?php echo($freq->escala_id_saida ? 'bg-success' : 'bg-danger'); ?>>
                                                     <?php
                                                     if (!is_null($freq->dt_frq_saida)) {
                                                         echo(htmlspecialchars(date('H:i:s', strtotime($freq->dt_frq_saida))));
@@ -302,7 +302,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     ?>
                                                 </td>
                                                 <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>"><?php echo(htmlspecialchars($freq->nome_profissional ? $freq->nome_profissional : '-', ENT_QUOTES, 'UTF-8')); ?></span></td>
-                                                <td title="<?php echo($freq->falta ? $tipo_falta : ''); ?>" class="text-center <?php echo($tipo_batida_escala == "OK" ? 'bg-success' : 'bg-danger'); ?><?php echo($freq->falta ? ' title_help ' : ''); ?>">
+                                                <td title="<?php echo($freq->falta ? $tipo_falta : ''); ?>" class="text-center dontprint" <?php echo($tipo_batida_escala == "OK" ? 'bg-success' : 'bg-danger'); ?><?php echo($freq->falta ? ' title_help ' : ''); ?>">
                                                     <?php echo($tipo_batida_escala); ?>
                                                 </td>
                                                 <td class="dontprint">

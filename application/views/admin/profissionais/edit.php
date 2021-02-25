@@ -83,6 +83,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($orgao_expeditor_rg);?>
                                             </div>
                                         </div>
+
 <?php if ($this->ion_auth->is_admin()): ?>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label"><?php echo lang('profissionais_active');?></label>
