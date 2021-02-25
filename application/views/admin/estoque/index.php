@@ -201,39 +201,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="container-fluid">
                 <center><table style="margin: 100px; border: 1px solid black;">
                     <tr>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
                     </tr>
                     <tr>
-                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
                     </tr>
                     <tr>
-                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
                     </tr>
                     <tr>
-                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
                     </tr>
                     <tr>
-                    <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-telegram fa-5x" aria-hidden="true"></center></i></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i><br>Lista de Fornecedores</center></td>
                     </tr>
                 </table></center>
             </div>
