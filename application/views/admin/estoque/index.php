@@ -199,41 +199,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         <div id="tab_relatorios" class="tab-pane">
             <div class="container-fluid">
-                <center><table style="margin: 100px; border: 1px solid black;">
+                <center><table style="margin: 100px; border: 6px solid #ecf0f5;">
                     <tr>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td></td>
+                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-user fa-5x" aria-hidden="true"></i><br>Lista de Fornecedores</center></td>
+                        <td style="color: white; background-color: Orange; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-barcode fa-5x" aria-hidden="true"></i><br>Notas Fiscais</center></td>
+                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-exchange fa-5x" aria-hidden="true"></i><br>Movimentação </center></td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-address-card fa-5x" aria-hidden="true"></i><br>Produtos por categoria</center></td>
+                        <td style="color: white; background-color: firebrick; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-battery-quarter fa-5x" aria-hidden="true"></i><br>Produtos Sem Estoque</center></td>
+                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-battery-half fa-5x" aria-hidden="true"></i><br>Produtos a vencer</center></td>
+                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-id-badge fa-5x" aria-hidden="true"></i><br>Equip. por profissional</center></td>
+                        <td style="color: white; background-color: orange; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-building fa-5x" aria-hidden="true"></i><br>Equip. por setor</center></td>
                     </tr>
                     <tr>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
+                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i><br>Bens Móveis</center></td>
+                        <td style="color: white; background-color: orange; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-tasks fa-5x" aria-hidden="true"></i><br>Bens de Consumo</center></td>
+                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-reply fa-5x" aria-hidden="true"></i><br>Entrada de Produtos</center></td>
+                        <td style="color: white; background-color: firebrick; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-share fa-5x" aria-hidden="true"></i><br>Saída de Produtos</center></td>
+                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-plus-square fa-5x" aria-hidden="true"></i><br>Materiais médicos</center></td>
                     </tr>
                     <tr>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i></center></td>
-                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 1px solid black;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i><br>Lista de Fornecedores</center></td>
+                        <td></td>
+                        <td style="color: white; background-color: firebrick; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-laptop fa-5x" aria-hidden="true"></i><br>Materiais Informatica</center></td>
+                        <td style="color: white; background-color: royalBlue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-shopping-cart fa-5x" aria-hidden="true"></i><br>Compras recentes</center></td>
+                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-recycle fa-5x" aria-hidden="true"></i><br>Materiais Doação</center></td>                        
+                        
+                        <td></td>
                     </tr>
                 </table></center>
             </div>
