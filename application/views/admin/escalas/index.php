@@ -84,7 +84,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <section class="content">
     <div class="print-header row">
         <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-        <div class="col-lg-10 col-xs-10 pull-right"><h3>Escalas Processadas</h3></div>
+        <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Unidade Hospitalar: ".$this->data['unidade_nome']); ?></h3></div>
     </div>
         <?php
         if (isset($calendario)) {
@@ -97,7 +97,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <section class="content">
     <div class="print-header row">
         <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-        <div class="col-lg-10 col-xs-10 pull-right"><h3>Escalas Processadas</h3></div>
+        <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Unidade Hospitalar: ".$this->data['unidade_nome']); ?></h3></div>
     </div>
         <div id="container" class="container border grade-frequencia">
             <div class="row border-bottom">
