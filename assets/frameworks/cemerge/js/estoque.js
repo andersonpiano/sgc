@@ -43,10 +43,10 @@ $(function() {
 		$("#modal_responsavel").modal();
 	});
 	
-	$("#btn_add_responsavel").click(function(){
+	$("#btn_add_estoque").click(function(){
 		clearErrors();
-		$("#form_responsavel")[0].reset();
-		$("#modal_responsavel").modal();
+		$("#form_estoque")[0].reset();
+		$("#modal_estoque").modal();
 	});
 
 	$("#form_categoria").submit(function() {
@@ -102,8 +102,68 @@ $(function() {
 			},
 			error: function(response){
 				$("#modal_fornecedor").modal("hide");
-				swal("Sucesso!","Especialização salva com sucesso!", "success");
+				swal("Erro!","Especialização salva com sucesso!", "warning");
 				dt_fornecedor.ajax.reload();
+			}
+		})
+		return false;
+	});
+
+	$("#form_nf").submit(function() {
+
+		$.ajax({
+			type: "POST",
+			url: "estoque/cadastrar_nf",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function() {
+				clearErrors();
+				$("#btn_save_nf").siblings(".help-block").html(loadingImg("Cadastrando..."));
+			},
+			success: function(response) {
+				clearErrors();
+				if (response["status"]) {
+					$("#modal_nf").modal("hide");
+					swal("Sucesso!","Especialização salva com sucesso!", "success");
+					dt_nf.ajax.reload();
+				} else {
+					showErrorsModal(response["error_list"])
+				}
+			},
+			error: function(response){
+				$("#modal_nf").modal("hide");
+				swal("Erro!","Erro ao salvar NF!", "warning");
+				dt_nf.ajax.reload();
+			}
+		})
+		return false;
+	});
+
+	$("#form_produto").submit(function() {
+
+		$.ajax({
+			type: "POST",
+			url: "estoque/cadastrar_produto",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function() {
+				clearErrors();
+				$("#btn_save_produto").siblings(".help-block").html(loadingImg("Cadastrando..."));
+			},
+			success: function(response) {
+				clearErrors();
+				if (response["status"]) {
+					$("#modal_produto").modal("hide");
+					swal("Sucesso!","Produto salvo com sucesso!", "success");
+					dt_produtos.ajax.reload();
+				} else {
+					showErrorsModal(response["error_list"])
+				}
+			},
+			error: function(response){
+				$("#modal_produto").modal("hide");
+				swal("Erro!","Erro ao salvar Produto!", "warning");
+				dt_produtos.ajax.reload();
 			}
 		})
 		return false;
@@ -231,6 +291,7 @@ $(function() {
 						},
 						error: function(response){
 							swal("Erro!", 'Ocorreu um erro ao executar essa ação','warning');
+							dt_nf.ajax.reload();
 						}
 					})
 				}
@@ -301,10 +362,11 @@ $(function() {
 						data: {"id" : $id},
 						success: function(response) {
 							swal("Sucesso!", "Categoria removida com sucesso", "success");
-							dt_nf.ajax.reload();
+							dt_produtos.ajax.reload();
 						},
 						error: function(response){
 							swal("Erro!", 'Ocorreu um erro ao executar essa ação','warning');
+							dt_produtos.ajax.reload();
 						}
 					})
 				}
@@ -313,7 +375,7 @@ $(function() {
 		});
 	}
 
-	var dt_nf = $("#dt_produtos").DataTable({
+	var dt_produtos = $("#dt_produtos").DataTable({
 		"oLanguage": DATATABLE_PTBR,
 		"autoWidth": false,
 		"processing": true,
@@ -387,7 +449,7 @@ $(function() {
 		});
 	}
 
-	var dt_nf = $("#dt_estoque").DataTable({
+	var dt_estoque = $("#dt_estoque").DataTable({
 		"oLanguage": DATATABLE_PTBR,
 		"autoWidth": false,
 		"processing": true,

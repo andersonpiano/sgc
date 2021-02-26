@@ -323,7 +323,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Data</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="nf_data" type="date" name="nf_data" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -352,12 +352,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="modal-body">
                     <form id="form_produto">
 
-                        <input id="nf_id" name="nf_id" hidden>
+                        <input id="produto_id" name="produto_id" hidden>
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Nome</label>
                             <div class="col-lg-10">
-                                <input id="nf_codigo" name="nf_codigo" class="form-control" maxlength="100">
+                                <input id="produto_nome" name="produto_nome" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -365,7 +365,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Descrição</label>
                             <div class="col-lg-10">
-                                <input id="nf_fornecedor" name="nf_fornecedor" class="form-control" maxlength="100">
+                                <input id="produto_descricao" name="produto_descricao" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -373,7 +373,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Marca</label>
                             <div class="col-lg-10">
-                                <input id="nf_valor" name="nf_valor" class="form-control" maxlength="100">
+                                <input id="produto_marca" name="produto_marca" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -381,7 +381,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Fornecedor</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_fornecedor" name="produto_fornecedor" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -389,7 +389,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Tombamento</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_tombamento" name="produto_tombamento" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -397,15 +397,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Número de Série</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_n_serie" name="produto_n_serie" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         
                         <div class="form-group">
+                            <label class="col-lg-2 control-label">Unidade Hospitalar</label>
+                            <div class="col-lg-10">
+                                <input id="produto_unidade" name="produto_unidade" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="col-lg-2 control-label">Setor</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_setor" name="produto_setor" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -413,15 +421,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Responsavel</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Data de Aquisição</label>
-                            <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_responsavel" name="produto_responsavel" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -429,7 +429,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Nota Fiscal</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_nf" name="produto_nf" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -437,7 +437,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Data de Tombamento</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_data_tombamento" name="produto_data_tombamento" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -445,7 +445,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Data de Validade</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_data_validade" name="produto_data_validade" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -453,7 +453,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Data de Aquisição</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_data_aquisicao" name="produto_data_aquisicao" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -461,7 +461,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Valor de Compra</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_valor_compra" name="produto_valor_compra" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -469,13 +469,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Valor Atual</label>
                             <div class="col-lg-10">
-                                <input id="nf_data" name="nf_data" class="form-control" maxlength="100">
+                                <input id="produto_valor_atual" name="produto_valor_atual" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
 
                         <div class="form-group text-center">
-                            <button type="submit" id="btn_save_nf" class="btn btn-primary">
+                            <button type="submit" id="btn_save_produto" class="btn btn-primary">
                             <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
                             <span class="help-block"></span>
                         </div>
