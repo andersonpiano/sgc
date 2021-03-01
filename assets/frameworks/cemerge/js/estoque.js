@@ -163,6 +163,7 @@ $(function() {
 			error: function(response){
 				$("#modal_produto").modal("hide");
 				swal("Erro!","Erro ao salvar Produto!", "warning");
+				showErrorsModal(response["error_list"])
 				dt_produtos.ajax.reload();
 			}
 		})

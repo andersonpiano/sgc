@@ -202,30 +202,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <center><table style="margin: 100px; border: 6px solid #ecf0f5;">
                     <tr>
                         <td></td>
-                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-user fa-5x" aria-hidden="true"></i><br>Lista de Fornecedores</center></td>
-                        <td style="color: white; background-color: Orange; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-barcode fa-5x" aria-hidden="true"></i><br>Notas Fiscais</center></td>
-                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-exchange fa-5x" aria-hidden="true"></i><br>Movimentação </center></td>
+                        <td style="color: white; background-color: green; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-user fa-5x" aria-hidden="true"></i><br>Lista de Fornecedores</center></td>
+                        <td style="color: white; background-color: Orange; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-barcode fa-5x" aria-hidden="true"></i><br>Notas Fiscais</center></td>
+                        <td style="color: white; background-color: royalblue; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-exchange fa-5x" aria-hidden="true"></i><br>Movimentação </center></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-address-card fa-5x" aria-hidden="true"></i><br>Produtos por categoria</center></td>
-                        <td style="color: white; background-color: firebrick; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-battery-quarter fa-5x" aria-hidden="true"></i><br>Produtos Sem Estoque</center></td>
-                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-battery-half fa-5x" aria-hidden="true"></i><br>Produtos a vencer</center></td>
-                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-id-badge fa-5x" aria-hidden="true"></i><br>Equip. por profissional</center></td>
-                        <td style="color: white; background-color: orange; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-building fa-5x" aria-hidden="true"></i><br>Equip. por setor</center></td>
+                        <td style="color: white; background-color: green; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-address-card fa-5x" aria-hidden="true"></i><br>Produtos por categoria</center></td>
+                        <td style="color: white; background-color: firebrick; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-battery-quarter fa-5x" aria-hidden="true"></i><br>Produtos Sem Estoque</center></td>
+                        <td style="color: white; background-color: royalblue; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-battery-half fa-5x" aria-hidden="true"></i><br>Produtos a vencer</center></td>
+                        <td style="color: white; background-color: green; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-id-badge fa-5x" aria-hidden="true"></i><br>Equip. por profissional</center></td>
+                        <td style="color: white; background-color: orange; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-building fa-5x" aria-hidden="true"></i><br>Equip. por setor</center></td>
                     </tr>
                     <tr>
-                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i><br>Bens Móveis</center></td>
-                        <td style="color: white; background-color: orange; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-tasks fa-5x" aria-hidden="true"></i><br>Bens de Consumo</center></td>
-                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-reply fa-5x" aria-hidden="true"></i><br>Entrada de Produtos</center></td>
-                        <td style="color: white; background-color: firebrick; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-share fa-5x" aria-hidden="true"></i><br>Saída de Produtos</center></td>
-                        <td style="color: white; background-color: royalblue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-plus-square fa-5x" aria-hidden="true"></i><br>Materiais médicos</center></td>
+                        <td style="color: white; background-color: royalblue; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-truck fa-5x" aria-hidden="true"></i><br>Bens Móveis</center></td>
+                        <td style="color: white; background-color: orange; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-tasks fa-5x" aria-hidden="true"></i><br>Bens de Consumo</center></td>
+                        <td style="color: white; background-color: green; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-reply fa-5x" aria-hidden="true"></i><br>Entrada de Produtos</center></td>
+                        <td style="color: white; background-color: firebrick; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-share fa-5x" aria-hidden="true"></i><br>Saída de Produtos</center></td>
+                        <td style="color: white; background-color: royalblue; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-plus-square fa-5x" aria-hidden="true"></i><br>Materiais médicos</center></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td style="color: white; background-color: firebrick; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-laptop fa-5x" aria-hidden="true"></i><br>Materiais Informatica</center></td>
-                        <td style="color: white; background-color: royalBlue; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-shopping-cart fa-5x" aria-hidden="true"></i><br>Compras recentes</center></td>
-                        <td style="color: white; background-color: green; width: 150px; height: 90px; border: 6px solid #ecf0f5;"><center><i class="fa fa-recycle fa-5x" aria-hidden="true"></i><br>Materiais Doação</center></td>                        
+                        <td style="color: white; background-color: firebrick; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-laptop fa-5x" aria-hidden="true"></i><br>Materiais Informatica</center></td>
+                        <td style="color: white; background-color: royalBlue; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-shopping-cart fa-5x" aria-hidden="true"></i><br>Compras recentes</center></td>
+                        <td style="color: white; background-color: green; width: 200px; height: 120px; border: 6px solid #ecf0f5;"><center><i class="fa fa-recycle fa-5x" aria-hidden="true"></i><br>Materiais Doação</center></td>                        
                         
                         <td></td>
                     </tr>
@@ -365,6 +365,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
 
                         <div class="form-group">
+                            <label class="col-lg-2 control-label">Categoria</label>
+                            <div class="col-lg-10">
+                                <input id="produto_categoria" name="produto_categoria" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="col-lg-2 control-label">Marca</label>
                             <div class="col-lg-10">
                                 <input id="produto_marca" name="produto_marca" class="form-control" maxlength="100">
@@ -464,6 +472,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <label class="col-lg-2 control-label">Valor Atual</label>
                             <div class="col-lg-10">
                                 <input id="produto_valor_atual" name="produto_valor_atual" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Observação</label>
+                            <div class="col-lg-10">
+                                <input id="produto_obs" name="produto_obs" class="form-control" maxlength="600">
                                 <span class="help-block"></span>
                             </div>
                         </div>

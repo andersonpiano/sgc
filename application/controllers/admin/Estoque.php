@@ -207,10 +207,10 @@ class Estoque extends Admin_Controller
         $valor = $this->input->post('nf_valor');
         $datanf = $this->input->post('nf_data');
 
-        $this->form_validation->set_rules('nf_codigo', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('nf_fornecedor', 'lang:fornecedores_cnpj', 'required');
-        $this->form_validation->set_rules('nf_valor', 'lang:fornecedores_endereco', 'required');
-        $this->form_validation->set_rules('nf_data', 'lang:fornecedores_email', 'required');
+        $this->form_validation->set_rules('nf_codigo', 'Código', 'required');
+        $this->form_validation->set_rules('nf_fornecedor', 'Fornecedor', 'required');
+        $this->form_validation->set_rules('nf_valor', 'Valor', 'required');
+        $this->form_validation->set_rules('nf_data', 'Data', 'required');
 
 
         $json = array();
@@ -260,20 +260,22 @@ class Estoque extends Admin_Controller
         $setor = $this->input->post('produto_setor');
         $responsavel = $this->input->post('produto_responsavel');
         $nf = $this->input->post('produto_nf');
-        $data_tombamento = $this->input->post('produto_dt_tombamento');
-        $data_validade = $this->input->post('produto_dt_validade');
-        $data_aquisicao = $this->input->post('produto_dt_aquisicao');
+        $data_tombamento = $this->input->post('produto_data_tombamento');
+        $data_validade = $this->input->post('produto_data_validade');
+        $data_aquisicao = $this->input->post('produto_data_aquisicao');
         $valor_compra = $this->input->post('produto_valor_compra');
         $valor_atual = $this->input->post('produto_valor_atual');
+        $categoria = $this->input->post('produto_categoria');
+        $obs = $this->input->post('produto_obs');
 
-        $this->form_validation->set_rules('produto_nome', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('produto_descricao', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('produto_marca', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('produto_fornecedor', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('produto_n_serie', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('produto_nf', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('produto_dt_aquisicao', 'lang:fornecedores_nome', 'required');
-        $this->form_validation->set_rules('produto_valor_compra', 'lang:fornecedores_nome', 'required');
+        $this->form_validation->set_rules('produto_nome', 'Nome', 'required');
+        $this->form_validation->set_rules('produto_descricao', 'Descrição', 'required');
+        $this->form_validation->set_rules('produto_marca', 'Marca', 'required');
+        $this->form_validation->set_rules('produto_fornecedor', 'Fornecedor', 'required');
+        $this->form_validation->set_rules('produto_n_serie', 'Nº de Série', 'required');
+        $this->form_validation->set_rules('produto_nf', 'Nota Fiscal', 'required');
+        $this->form_validation->set_rules('produto_data_aquisicao', 'Data de Aquisição', 'required');
+        $this->form_validation->set_rules('produto_valor_compra', 'Valor da Compra', 'required');
 
         $json = array();
 
@@ -296,7 +298,9 @@ class Estoque extends Admin_Controller
                         'valor_compra'=>$valor_compra,
                         'valor_atual'=>$valor_atual,
                         'cod_responsavel'=>$responsavel,
-                        'cod_notafiscal'=>$nf
+                        'cod_notafiscal'=>$nf,
+                        'cod_categoria'=>$categoria,
+                        'obs'=>$obs
                 ]);
             } else {
                 $id = $data["produto_id"];
@@ -316,14 +320,16 @@ class Estoque extends Admin_Controller
                         'valor_compra'=>$valor_compra,
                         'valor_atual'=>$valor_atual,
                         'cod_responsavel'=>$responsavel,
-                        'cod_notafiscal'=>$nf
+                        'cod_notafiscal'=>$nf,
+                        'cod_categoria'=>$categoria,
+                        'obs'=>$obs
                 ]);
             }
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
         } 
 
-        //var_dump($data); exit;
+        //var_dump($this->data); exit;
             json_encode($json);
             exit;
     }
@@ -438,6 +444,11 @@ class Estoque extends Admin_Controller
             $row = array();
             $row[] = '<center>'.$produto->id.'</center>';
             $row[] = $produto->nome;
+            $row[] = '<center>'.$produto->marca.'</center>';
+            $row[] = '<center>'.$produto->cod_setor.'</center>';
+            $row[] = '<center>'.$produto->cod_categoria.'</center>';
+            $row[] = '<center>'.$produto->tombamento.'</center>';
+            $row[] = '<center>'.$produto->cod_responsavel.'</center>';
 
             $row[] = '<div style="display: inline-block;">
                         <button class="btn btn-primary btn-edit-produto" 
@@ -785,6 +796,42 @@ class Estoque extends Admin_Controller
         $json["input"]["nf_valor"] =$data["valor"];
         $json["input"]["nf_data"] =$data["data"];
         //$json["input"]["nf_img"] =$data["contato"];
+
+        echo json_encode($json);
+        exit;
+    }
+
+    public function ajax_get_produto_data() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+        $json = array();
+        $json["status"] = 1;
+        $json["input"] = array();
+
+        $this->load->model("cemerge/Produto_model");
+        
+        $id = $this->input->post("id");
+        $data = $this->Produto_model->get_data($id)->result_array()[0];
+        $json["input"]["produto_id"] = $data["id"];
+        $json["input"]["produto_nome"] = $data["nome"];
+        $json["input"]["produto_descricao"] = $data["descricao"];
+        $json["input"]["produto_marca"] = $data["marca"];
+        $json["input"]["produto_fornecedor"] = $data["cod_fornecedor"];
+        $json["input"]["produto_tombamento"] = $data["tombamento"];
+        $json["input"]["produto_n_serie"] = $data["n_serie"];
+        $json["input"]["produto_setor"] = $data["cod_setor"];
+        $json["input"]["produto_unidade"] = $data["cod_unidade"];
+        $json["input"]["produto_data_aquisicao"] = $data["data_aquisicao"];
+        $json["input"]["produto_data_tombamento"] = $data["data_tombamento"];
+        $json["input"]["produto_data_validade"] = $data["data_validade"];
+        $json["input"]["produto_valor_compra"] = $data["valor_compra"];
+        $json["input"]["produto_valor_atual"] = $data["valor_atual"];
+        $json["input"]["produto_responsavel"] = $data["cod_responsavel"];
+        $json["input"]["produto_nf"] = $data["cod_notafiscal"];
+        $json["input"]["produto_categoria"] = $data["cod_categoria"];
+        $json["input"]["produto_obs"] = $data["obs"];
 
         echo json_encode($json);
         exit;
