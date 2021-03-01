@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://teste.cemerge.com.br/sgc';
+$config['base_url'] = 'http://localhost/sgc';
 //$config['base_url'] = 'http://www.somossolucoes.com.br/sgc';
 
 /*
