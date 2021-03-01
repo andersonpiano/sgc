@@ -187,7 +187,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <tr class="tableheader">
                             <th class="dt-center text-center" >Código</th>
                             <th class="dt-center text-center" >Nome</th>
-                            <th class="dt-center text-center">Tipo</th>
+                            <th class="dt-center text-center">CPF</th>
+                            <th class="dt-center text-center">E-mail</th>
+                            <th class="dt-center text-center">Contato</th>
+                            <th class="dt-center text-center">Setor</th>
                             <th class="dt-center no-sort text-center">Ações</th>
                         </tr> 
                     </thead>
@@ -258,9 +261,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                         <div class="form-group">
                     <label class="col-lg-2 control-label">Tipo</label>
-                    <?php echo lang('escalas_unidadehospitalar', 'categoria_select', array('class' => 'col-sm-2 control-label')); ?>
+                    <?php echo lang('escalas_unidadehospitalar', 'categoria_tipo_select', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-lg-10">
-                        <?php echo form_dropdown($categoria_select);?>
+                        <?php echo form_dropdown($categoria_tipo_select);?>
                     </div>
                     </div>
 
@@ -367,7 +370,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Categoria</label>
                             <div class="col-lg-10">
-                                <input id="produto_categoria" name="produto_categoria" class="form-control" maxlength="100">
+                                <?php echo form_dropdown($categorias_select);?>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -383,7 +386,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Fornecedor</label>
                             <div class="col-lg-10">
-                                <input id="produto_fornecedor" name="produto_fornecedor" class="form-control" maxlength="100">
+                                    <?php echo form_dropdown($fornecedores_select);?>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -403,27 +406,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Unidade Hospitalar</label>
-                            <div class="col-lg-10">
-                                <input id="produto_unidade" name="produto_unidade" class="form-control" maxlength="100">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Setor</label>
-                            <div class="col-lg-10">
-                                <input id="produto_setor" name="produto_setor" class="form-control" maxlength="100">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Responsavel</label>
                             <div class="col-lg-10">
-                                <input id="produto_responsavel" name="produto_responsavel" class="form-control" maxlength="100">
+                                    <?php echo form_dropdown($responsavel_select);?>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -431,7 +418,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Nota Fiscal</label>
                             <div class="col-lg-10">
-                                <input id="produto_nf" name="produto_nf" class="form-control" maxlength="100">
+                                    <?php echo form_dropdown($nf_select);?>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -439,7 +426,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Data de Tombamento</label>
                             <div class="col-lg-10">
-                                <input id="produto_data_tombamento" name="produto_data_tombamento" class="form-control" maxlength="100">
+                                <input id="produto_data_tombamento" name="produto_data_tombamento" type="date" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -447,7 +434,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Data de Validade</label>
                             <div class="col-lg-10">
-                                <input id="produto_data_validade" name="produto_data_validade" class="form-control" maxlength="100">
+                                <input id="produto_data_validade" name="produto_data_validade" type="date" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -455,7 +442,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Data de Aquisição</label>
                             <div class="col-lg-10">
-                                <input id="produto_data_aquisicao" name="produto_data_aquisicao" class="form-control" maxlength="100">
+                                <input id="produto_data_aquisicao" name="produto_data_aquisicao" type="date" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -680,46 +667,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 <div class="modal-body">
                     <form id="form_responsavel">
-                        <input id="fornecedor_nome" name="fornecedor_nome" hidden>
+                        <input id="responsavel_id" name="responsavel_id" hidden>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Tipo</label>
+                            <label class="col-lg-2 control-label">Nome</label>
                             <div class="col-lg-10">
-                                <input id="fornecedor_nome" name="fornecedor_nome" class="form-control" maxlength="100">
+                                <input id="responsavel_nome" name="responsavel_nome" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
 
                             <div class="form-group">
-                            <label class="col-lg-2 control-label">Produto</label>
+                            <label class="col-lg-2 control-label">CPF</label>
                                 <div class="col-lg-10">
-                                    <input id="fornecedor_cnpj" name="fornecedor_cnpj" class="form-control" maxlength="100">
+                                    <input id="responsavel_cpf" name="responsavel_cpf" class="form-control" maxlength="100">
                                     <span class="help-block"></span>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                            <label class="col-lg-2 control-label">Quantidade</label>
+                            <label class="col-lg-2 control-label">E-Mail</label>
                                 <div class="col-lg-10">
-                                    <input id="fornecedor_endereco" name="fornecedor_endereco" class="form-control" maxlength="100">
+                                    <input id="responsavel_email" name="responsavel_email" class="form-control" maxlength="100">
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                            <label class="col-lg-2 control-label">Data</label>
+                            <label class="col-lg-2 control-label">Contato</label>
                                 <div class="col-lg-10">
-                                    <input id="fornecedor_email" name="fornecedor_email" class="form-control" maxlength="100">
+                                    <input id="responsavel_contato" name="responsavel_contato" class="form-control" maxlength="100">
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                             <label class="col-lg-2 control-label">Setor</label>
                                 <div class="col-lg-10">
-                                    <input id="fornecedor_contato" name="fornecedor_contato" class="form-control" maxlength="100">
+                                    <input id="responsavel_setor" name="responsavel_setor" class="form-control" maxlength="100">
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <button type="submit" id="btn_salvar_fornecedor" class="btn btn-primary">
+                            <button type="submit" id="btn_save_responsavel" class="btn btn-primary">
                             <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
                             <span class="help-block"></span>
                         </div>

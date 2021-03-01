@@ -170,6 +170,37 @@ $(function() {
 		return false;
 	});
 
+	$("#form_responsavel").submit(function() {
+
+		$.ajax({
+			type: "POST",
+			url: "estoque/cadastrar_responsavel",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function() {
+				clearErrors();
+				$("#btn_save_responsavel").siblings(".help-block").html(loadingImg("Cadastrando..."));
+			},
+			success: function(response) {
+				clearErrors();
+				if (response["status"]) {
+					$("#modal_responsavel").modal("hide");
+					swal("Sucesso!","Produto salvo com sucesso!", "success");
+					dt_responsaveis.ajax.reload();
+				} else {
+					showErrorsModal(response["error_list"])
+				}
+			},
+			error: function(response){
+				$("#modal_responsavel").modal("hide");
+				swal("Erro!","Erro ao salvar Produto!", "warning");
+				showErrorsModal(response["error_list"])
+				dt_responsaveis.ajax.reload();
+			}
+		})
+		return false;
+	});
+
 	function active_btn_categoria() {
 		
 		$(".btn-edit-categoria").click(function(){

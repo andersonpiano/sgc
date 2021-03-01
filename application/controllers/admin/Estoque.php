@@ -39,35 +39,75 @@ class Estoque extends Admin_Controller
         
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-        $categoria_select = $this->_get_categorias();
+        $categoria_tipo_select = $this->_get_tipo_categorias();
+        $categorias_select = $this->_get_categorias();
+        $fornecedores_select = $this->_get_fornecedores();
+        $nf_select = $this->_get_nf();
+        $responsavel_select = $this->_get_responsaveis();
             
 
-        $this->data['categoria_select'] = array(
-            'name'  => 'categoria_select',
-            'id'    => 'categoria_select',
+        $this->data['categoria_tipo_select'] = array(
+            'name'  => 'categoria_tipo_select',
+            'id'    => 'categoria_tipo_select',
             'type'  => 'select',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('categoria_select'),
-            'options' => $categoria_select,
+            'value' => $this->form_validation->set_value('categoria_tipo_select'),
+            'options' => $categoria_tipo_select,
+        );
+
+        $this->data['categorias_select'] = array(
+            'name'  => 'produto_categoria',
+            'id'    => 'produto_categoria',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('categorias_select'),
+            'options' => $categorias_select,
+        );
+
+        $this->data['fornecedores_select'] = array(
+            'name'  => 'produto_fornecedor',
+            'id'    => 'produto_fornecedor',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('fornecedores_select'),
+            'options' => $fornecedores_select,
+        );
+
+        $this->data['nf_select'] = array(
+            'name'  => 'produto_nf',
+            'id'    => 'produto_nf',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('nf_select'),
+            'options' => $nf_select,
+        );
+
+        $this->data['responsavel_select'] = array(
+            'name'  => 'produto_responsavel',
+            'id'    => 'produto_responsavel',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('responsavel_select'),
+            'options' => $responsavel_select,
         );
 
 
         $this->template->admin_render('admin/estoque/index', $this->data);
     }
 
-    private function _get_categorias()
+    private function _get_tipo_categorias()
     {
         
         $this->load->model('cemerge/Categoria_Estoque_model');
 
-        $categoria_select = array(
+        $categoria_tipo_select = array(
             '' => 'Selecione o tipo de Categoria',
             '1' => 'Bens de Consumo',
             '2' => 'Bens Móveis',
         );
 
         //var_dump($categorias); exit;
-        return $categoria_select;
+        return $categoria_tipo_select;
     }
 
     private function _get_fornecedores()
@@ -85,6 +125,57 @@ class Estoque extends Admin_Controller
         }
         //var_dump($categorias); exit;
         return $fornecedores_select;
+    }
+
+    private function _get_categorias()
+    {
+        
+        $this->load->model('cemerge/Fornecedor_model');
+
+        $categorias = $this->Categoria_Estoque_model->get_all();
+
+        $categorias_select = array(
+            '' => 'Selecione uma Categoria',
+        );
+        foreach ($categorias as $categoria) {
+            $categorias_select[$categoria->id] = $categoria->nome;
+        }
+        //var_dump($categorias); exit;
+        return $categorias_select;
+    }
+
+    private function _get_nf()
+    {
+        
+        $this->load->model('cemerge/NF_model');
+
+        $nfs = $this->NF_model->get_all();
+
+        $nf_select = array(
+            '' => 'Selecione uma Nota Fiscal',
+        );
+        foreach ($nfs as $nf) {
+            $nf_select[$nf->id] = $nf->codigo;
+        }
+        //var_dump($categorias); exit;
+        return $nf_select;
+    }
+
+    private function _get_responsaveis()
+    {
+        
+        $this->load->model('cemerge/Responsavel_model');
+
+        $responsaveis = $this->Responsavel_model->get_all();
+
+        $responsavel_select = array(
+            '' => 'Selecione um Responsavel',
+        );
+        foreach ($responsaveis as $responsavel) {
+            $responsavel_select[$responsavel->id] = $responsavel->nome;
+        }
+        //var_dump($categorias); exit;
+        return $responsavel_select;
     }
     
     public function cadastrar_categoria(){
@@ -112,10 +203,10 @@ class Estoque extends Admin_Controller
             $json["status"] = 1;
         
         $nome = $this->input->post('categoria_nome');
-        $tipo = $this->input->post('categoria_select');
+        $tipo = $this->input->post('categoria_tipo_select');
 
         $this->form_validation->set_rules('categoria_nome', 'lang:nome', 'required');
-        $this->form_validation->set_rules('categoria_select', 'lang:nome', 'required');
+        $this->form_validation->set_rules('categoria_tipo_select', 'lang:nome', 'required');
 
         if ($this->form_validation->run() == true) {
             $data = $this->input->post();
@@ -233,6 +324,68 @@ class Estoque extends Admin_Controller
             exit;
     }
 
+    public function cadastrar_responsavel(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->load->model("cemerge/Responsavel_model");
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/estoque/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $nome = $this->input->post('responsavel_nome');
+        $cpf = $this->input->post('responsavel_cpf');
+        $email = $this->input->post('responsavel_email');
+        $contato = $this->input->post('responsavel_contato');
+        $setor = $this->input->post('responsavel_setor');
+
+
+        $this->form_validation->set_rules('responsavel_nome', 'Nome', 'required');
+        $this->form_validation->set_rules('responsavel_cpf', 'CPF', 'required');
+        $this->form_validation->set_rules('responsavel_email', 'Email', 'required');
+        $this->form_validation->set_rules('responsavel_contato', 'Contato', 'required');
+        $this->form_validation->set_rules('responsavel_setor', 'Setor', 'required');
+        
+        $json = array();
+
+        if ($this->form_validation->run() == true) {
+            $data = $this->input->post();
+            if(empty($data['responsavel_id'])) {
+                $this->Responsavel_model->insert([
+                    'nome'=>$nome, 
+                    'cpf'=>$cpf, 
+                    'email'=>$email, 
+                    'contato'=>$contato,
+                    'setor'=>$setor
+                ]);
+            } else {
+                $id = $data["responsavel_id"];
+                unset($data['responsavel_id']);
+                $this->Responsavel_model->update($id, [
+                    'nome'=>$nome, 
+                    'cpf'=>$cpf, 
+                    'email'=>$email, 
+                    'contato'=>$contato,
+                    'setor'=>$setor
+                ]);
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        } 
+
+        //var_dump($data); exit;
+            json_encode($json);
+            exit;
+    }
+
     public function cadastrar_produto(){
             
         if (!$this->ion_auth->logged_in()) {
@@ -256,8 +409,6 @@ class Estoque extends Admin_Controller
         $fornecedor = $this->input->post('produto_fornecedor');
         $tombamento = $this->input->post('produto_tombamento');
         $n_serie = $this->input->post('produto_n_serie');
-        $unidade = $this->input->post('produto_unidade');
-        $setor = $this->input->post('produto_setor');
         $responsavel = $this->input->post('produto_responsavel');
         $nf = $this->input->post('produto_nf');
         $data_tombamento = $this->input->post('produto_data_tombamento');
@@ -290,8 +441,6 @@ class Estoque extends Admin_Controller
                         'cod_fornecedor'=>$fornecedor,
                         'tombamento'=>$tombamento,
                         'n_serie'=>$n_serie,
-                        'cod_setor'=>$setor,
-                        'cod_unidade'=>$unidade,
                         'data_aquisicao'=>$data_aquisicao,
                         'data_tombamento'=>$data_tombamento,
                         'data_validade'=>$data_validade,
@@ -312,8 +461,6 @@ class Estoque extends Admin_Controller
                         'cod_fornecedor'=>$fornecedor,
                         'tombamento'=>$tombamento,
                         'n_serie'=>$n_serie,
-                        'cod_setor'=>$setor,
-                        'cod_unidade'=>$unidade,
                         'data_aquisicao'=>$data_aquisicao,
                         'data_tombamento'=>$data_tombamento,
                         'data_validade'=>$data_validade,
@@ -605,22 +752,26 @@ class Estoque extends Admin_Controller
         }
             
         $this->load->model("cemerge/Responsavel_model");
-        $estoque = $this->Responsavel_model->get_datatable();
+        $responsaveis = $this->Responsavel_model->get_datatable();
 
         $data = array();
-        foreach ($estoque as $est) {
+        foreach ($responsaveis as $responsavel) {
 
             $row = array();
-            $row[] = '<center>'.$est->id.'</center>';
-            $row[] = $est->cod_produto;
+            $row[] = '<center>'.$responsavel->id.'</center>';
+            $row[] = '<center>'.$responsavel->nome.'</center>';
+            $row[] = '<center>'.$responsavel->cpf.'</center>';
+            $row[] = '<center>'.$responsavel->email.'</center>';
+            $row[] = '<center>'.$responsavel->contato.'</center>';
+            $row[] = '<center>'.$responsavel->setor.'</center>';
 
             $row[] = '<div style="display: inline-block;">
                         <button class="btn btn-primary btn-edit-categoria" 
-                            id='.$est->id.'>
+                            id='.$responsavel->id.'>
                             <i class="fa fa-edit"></i>
                         </button>
                         <button class="btn btn-danger btn-del-categoria" 
-                            id='.$est->id.'>
+                            id='.$responsavel->id.'>
                             <i class="fa fa-times"></i>
                         </button>
                     </div>';
@@ -639,7 +790,6 @@ class Estoque extends Admin_Controller
     exit;
     }
     
-
     public function ajax_listar_fornecedores() {
 
     if (!$this->input->is_ajax_request()) {
@@ -747,7 +897,7 @@ class Estoque extends Admin_Controller
         $data = $this->Categoria_Estoque_model->get_data($id)->result_array()[0];
         $json["input"]["categoria_id"] = $data["id"];
         $json["input"]["categoria_nome"] = $data['nome'];
-        $json["input"]["categoria_select"] = $data['tipo'];
+        $json["input"]["categoria_tipo_select"] = $data['tipo'];
         //var_dump($data); exit;
         echo json_encode($json);
         exit;
@@ -821,8 +971,6 @@ class Estoque extends Admin_Controller
         $json["input"]["produto_fornecedor"] = $data["cod_fornecedor"];
         $json["input"]["produto_tombamento"] = $data["tombamento"];
         $json["input"]["produto_n_serie"] = $data["n_serie"];
-        $json["input"]["produto_setor"] = $data["cod_setor"];
-        $json["input"]["produto_unidade"] = $data["cod_unidade"];
         $json["input"]["produto_data_aquisicao"] = $data["data_aquisicao"];
         $json["input"]["produto_data_tombamento"] = $data["data_tombamento"];
         $json["input"]["produto_data_validade"] = $data["data_validade"];
@@ -856,39 +1004,4 @@ class Estoque extends Admin_Controller
         $this->Profissional_model->update($id, ['estoque' => $estoque]);
     }
 
-    public function ajax_listar_profissionais() {
-
-        if (!$this->input->is_ajax_request()) {
-            exit("Nenhum acesso de script direto permitido!");
-        }
-            
-        $this->load->model("cemerge/Profissional_model");
-        $profissionais = $this->Profissional_model->get_datatable();
-
-        $fornecedores_select = $this->_get_fornecedores();
-        $categoria_select = $this->_get_categorias();
-    
-        foreach ($profissionais as $profissional) {
-
-            $row = array();
-            $row[] = '<center>'.$profissional->id.'<center>';
-            $row[] = $profissional->nome;
-            $row[] = '<center>'.form_dropdown('categoria_select', $categoria_select, $profissional->nivel_estoque, 'class="form-control" id="categoria_select" profissional_id="'.$profissional->id.'"').'</center>';
-    
-            //$row[] = '<span class="text-center">'.$this->Fornecedor_model->get_estoque_by_id($profissional->estoque)->nome.'</span>';
-
-            $row[] = '<center>'.form_dropdown('estoque_select', $fornecedores_select, $profissional->estoque, 'class="form-control" id="estoque_select" profissional_id="'.$profissional->id.'"').'</center>';
-    
-            $data[] = $row;
-    
-        }
-        $json = array(
-            "draw" => $this->input->post("draw"),
-            "recordsTotal" => $this->Profissional_model->records_total(),
-            "recordsFiltered" => $this->Profissional_model->records_filtered(),
-            "data" => $data,
-        );
-        echo json_encode($json);
-        exit;
-        }
 }
