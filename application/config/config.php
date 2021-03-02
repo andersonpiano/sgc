@@ -44,7 +44,7 @@ $config['index_page'] = 'index.php';
     'newline' => "\r\n",
     'mailtype' => 'html',
     'validation' => true,
-);*/*
+);*/
 /*
 $config['protocol'] = 'smtp';
 $config['smtp_host'] = 'smtp.somossolucoes.com.br'; //ssl://smtp.gmail.com
