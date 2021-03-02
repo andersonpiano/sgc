@@ -15,8 +15,8 @@ class Justificativa_model extends MY_Model
     {
         $fields = "j.id as id, ";
         $fields .= "e.dataplantao as data_inicial_plantao, ";
-        $fields .= "e.horainicialplantao as hora_entrada, ";
-        $fields .= "e.horafinalplantao as hora_saida, ";
+        $fields .= "e.entrada_registrada as hora_entrada, ";
+        $fields .= "e.saida_registrada as hora_saida, ";
         $fields .= "p.id as profissional_id, ";
         $fields .= "s.nome as setor_nome, ";
         $fields .= "p.nome as nome_profissional, ";
@@ -28,8 +28,10 @@ class Justificativa_model extends MY_Model
         $sql .= "JOIN setores s on (j.setor_id = s.id) ";
         $sql .= "WHERE ";
         $sql .= "j.data_plantao BETWEEN '$datainicial' and '$datafinal'";
+        if ($status == 3){
+        } else {
         $sql .= "AND j.status = $status";
-
+        };
         $query = $this->db->query($sql);
 
         return $query->result();

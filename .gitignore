@@ -44,3 +44,5 @@ Temporary Items
 application/session/
 application/config/common/dp_config.php
 *.php
+application/config/database.php
+application/config/config.php

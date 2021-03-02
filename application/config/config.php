@@ -33,7 +33,7 @@ $config['index_page'] = 'index.php';
 * Email config
 *
 */
-$config['mail'] = array (
+/*$config['mail'] = array (
     'protocol' => 'smtp',
     'smtp_host' => 'smtp.somossolucoes.com.br',
     'smtp_port' => '587',
@@ -44,7 +44,7 @@ $config['mail'] = array (
     'newline' => "\r\n",
     'mailtype' => 'html',
     'validation' => true,
-);
+);*/*
 /*
 $config['protocol'] = 'smtp';
 $config['smtp_host'] = 'smtp.somossolucoes.com.br'; //ssl://smtp.gmail.com

@@ -44,8 +44,8 @@ class Estoque extends Admin_Controller
         $fornecedores_select = $this->_get_fornecedores();
         $nf_select = $this->_get_nf();
         $responsavel_select = $this->_get_responsaveis();
+        //$produtos_select = $this->_get_produtos();
             
-
         $this->data['categoria_tipo_select'] = array(
             'name'  => 'categoria_tipo_select',
             'id'    => 'categoria_tipo_select',
@@ -90,7 +90,15 @@ class Estoque extends Admin_Controller
             'value' => $this->form_validation->set_value('responsavel_select'),
             'options' => $responsavel_select,
         );
-
+        /*
+        $this->data['produtos_select'] = array(
+            'name'  => 'produtos_select',
+            'id'    => 'produtos_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('produtos_select'),
+            'options' => $produtos_select,
+        );*/
 
         $this->template->admin_render('admin/estoque/index', $this->data);
     }
@@ -161,6 +169,23 @@ class Estoque extends Admin_Controller
         return $nf_select;
     }
 
+    private function _get_produtos()
+    {
+        
+        $this->load->model('cemerge/Produto_model');
+
+        $produtos = $this->NF_model->get_all();
+
+        $produtos_select = array(
+            '' => 'Selecione um Produto',
+        );
+        foreach ($produtos as $produto) {
+            $produtos_select[$produto->id] = $produto->nome;
+        }
+        //var_dump($categorias); exit;
+        return $produto_select;
+    }
+
     private function _get_responsaveis()
     {
         
@@ -222,8 +247,8 @@ class Estoque extends Admin_Controller
             $this->data['nome'] = $nome;
         } 
 
-        var_dump($data); exit;
         echo json_encode($json);
+        exit;
     }
 
     public function cadastrar_fornecedor(){
@@ -294,12 +319,13 @@ class Estoque extends Admin_Controller
 
         /* Variables */
         $codigo = $this->input->post('nf_codigo');
-        $fornecedor = $this->input->post('nf_fornecedor');
+        $fornecedor = $this->input->post('produto_fornecedor');
         $valor = $this->input->post('nf_valor');
         $datanf = $this->input->post('nf_data');
+        $imagem = $this->input->post('nf_img');
 
         $this->form_validation->set_rules('nf_codigo', 'Código', 'required');
-        $this->form_validation->set_rules('nf_fornecedor', 'Fornecedor', 'required');
+        $this->form_validation->set_rules('produto_fornecedor', 'Fornecedor', 'required');
         $this->form_validation->set_rules('nf_valor', 'Valor', 'required');
         $this->form_validation->set_rules('nf_data', 'Data', 'required');
 
@@ -309,20 +335,92 @@ class Estoque extends Admin_Controller
         if ($this->form_validation->run() == true) {
             $data = $this->input->post();
             if(empty($data['nf_id'])) {
-                $this->NF_model->insert(['codigo'=>$codigo, 'cod_fornecedor'=>$fornecedor, 'valor'=>$valor, 'data'=>$datanf]);
+                $this->NF_model->insert([
+                    'codigo'=>$codigo, 
+                    'cod_fornecedor'=>$fornecedor, 
+                    'valor'=>$valor, 
+                    'data'=>$datanf,
+                    'img'=>$imagem
+                ]);
             } else {
                 $id = $data["nf_id"];
                 unset($data['nf_id']);
-                $this->NF_model->update($id, ['codigo'=>$codigo, 'cod_fornecedor'=>$fornecedor, 'valor'=>$valor, 'data'=>$datanf]);
+                $this->NF_model->update($id, [
+                    'codigo'=>$codigo, 
+                    'cod_fornecedor'=>$fornecedor, 
+                    'valor'=>$valor, 
+                    'data'=>$datanf,
+                    'img'=>$imagem
+                ]);
             }
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
         } 
 
-        //var_dump($data); exit;
             json_encode($json);
             exit;
     }
+
+    public function cadastrar_entrada(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->load->model("cemerge/Fluxo_Estoque_model");
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/estoque/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $codigo = $this->input->post('nf_codigo');
+        $fornecedor = $this->input->post('produto_fornecedor');
+        $valor = $this->input->post('nf_valor');
+        $datanf = $this->input->post('nf_data');
+        $imagem = $this->input->post('nf_img');
+
+        $this->form_validation->set_rules('nf_codigo', 'Código', 'required');
+        $this->form_validation->set_rules('produto_fornecedor', 'Fornecedor', 'required');
+        $this->form_validation->set_rules('nf_valor', 'Valor', 'required');
+        $this->form_validation->set_rules('nf_data', 'Data', 'required');
+
+
+        $json = array();
+
+        if ($this->form_validation->run() == true) {
+            $data = $this->input->post();
+            if(empty($data['nf_id'])) {
+                $this->NF_model->insert([
+                    'codigo'=>$codigo, 
+                    'cod_fornecedor'=>$fornecedor, 
+                    'valor'=>$valor, 
+                    'data'=>$datanf,
+                    'img'=>$imagem
+                ]);
+            } else {
+                $id = $data["nf_id"];
+                unset($data['nf_id']);
+                $this->NF_model->update($id, [
+                    'codigo'=>$codigo, 
+                    'cod_fornecedor'=>$fornecedor, 
+                    'valor'=>$valor, 
+                    'data'=>$datanf,
+                    'img'=>$imagem
+                ]);
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        } 
+
+            json_encode($json);
+            exit;
+    }
+
 
     public function cadastrar_responsavel(){
             
@@ -417,6 +515,7 @@ class Estoque extends Admin_Controller
         $valor_compra = $this->input->post('produto_valor_compra');
         $valor_atual = $this->input->post('produto_valor_atual');
         $categoria = $this->input->post('produto_categoria');
+        $imagem = $this->input->post('produto_img');
         $obs = $this->input->post('produto_obs');
 
         $this->form_validation->set_rules('produto_nome', 'Nome', 'required');
@@ -449,7 +548,8 @@ class Estoque extends Admin_Controller
                         'cod_responsavel'=>$responsavel,
                         'cod_notafiscal'=>$nf,
                         'cod_categoria'=>$categoria,
-                        'obs'=>$obs
+                        'obs'=>$obs,
+                        'foto'=>$imagem
                 ]);
             } else {
                 $id = $data["produto_id"];
@@ -469,7 +569,8 @@ class Estoque extends Admin_Controller
                         'cod_responsavel'=>$responsavel,
                         'cod_notafiscal'=>$nf,
                         'cod_categoria'=>$categoria,
-                        'obs'=>$obs
+                        'obs'=>$obs,
+                        'foto'=>$imagem
                 ]);
             }
         } else {
@@ -478,6 +579,7 @@ class Estoque extends Admin_Controller
 
         //var_dump($this->data); exit;
             json_encode($json);
+            var_dump($imagem);exit;
             exit;
     }
 
@@ -545,10 +647,14 @@ class Estoque extends Admin_Controller
     
             $row = array();
             $row[] = '<center>'.$nf->data.'</center>';
-            $row[] = $nf->codigo;
-            $row[] = $nf->cod_fornecedor;
-            $row[] = $nf->valor;
-            $row[] = $nf->img;
+            $row[] = '<center>'.$nf->codigo.'</center>';
+            $row[] = '<center>'.$nf->cod_fornecedor.'</center>';
+            $row[] = '<center>'.$nf->valor.'</center>';
+             if($nf->img){
+                $row[] = '<center><a href="'.$nf->img.'"><img src="'.$nf->img.'" style="max-width: 50px; max-height: 50px;"></center>';
+                    } else {
+                        $row[] =   '<center>Sem anexo</center>';
+                    }   
     
             $row[] = '<div style="display: inline-block;">
                         <button class="btn btn-primary btn-edit-nf" 
@@ -942,10 +1048,10 @@ class Estoque extends Admin_Controller
         $data = $this->NF_model->get_data($id)->result_array()[0];
         $json["input"]["nf_id"] = $data["id"];
         $json["input"]["nf_codigo"] = $data["codigo"];
-        $json["input"]["nf_fornecedor"] =$data["cod_fornecedor"];
+        $json["input"]["produto_fornecedor"] =$data["cod_fornecedor"];
         $json["input"]["nf_valor"] =$data["valor"];
         $json["input"]["nf_data"] =$data["data"];
-        //$json["input"]["nf_img"] =$data["contato"];
+        $json["input"]["nf_image_path"] =$data["img"];
 
         echo json_encode($json);
         exit;
@@ -980,6 +1086,7 @@ class Estoque extends Admin_Controller
         $json["input"]["produto_nf"] = $data["cod_notafiscal"];
         $json["input"]["produto_categoria"] = $data["cod_categoria"];
         $json["input"]["produto_obs"] = $data["obs"];
+        $json["input"]["produto_image_path"] = $data["foto"];
 
         echo json_encode($json);
         exit;
@@ -1010,6 +1117,8 @@ class Estoque extends Admin_Controller
 			exit("Nenhum acesso de script direto permitido!");
 		}
 
+        
+
 		$config["upload_path"] = "./assets/img/";
 		$config["allowed_types"] = "gif|png|jpg|jpeg";
 		$config["overwrite"] = TRUE;
@@ -1035,6 +1144,7 @@ class Estoque extends Admin_Controller
 		}
 
 		echo json_encode($json);
+        exit;
 	}
 
 }

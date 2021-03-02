@@ -53,6 +53,10 @@ $(function() {
 		uploadImg($(this), $("#nf_img_path"), $("#nf_img"));
 	});
 
+	$("#produto_upload_img").change(function(){
+		uploadImg($(this), $("#produto_img_path"), $("#produto_img"));
+	});
+
 	$("#form_categoria").submit(function() {
  			$.ajax({
 			type: "POST",
@@ -128,7 +132,7 @@ $(function() {
 				clearErrors();
 				if (response["status"]) {
 					$("#modal_nf").modal("hide");
-					swal("Sucesso!","Especialização salva com sucesso!", "success");
+					swal("Sucesso!","Nota Fiscal salva com sucesso!", "success");
 					dt_nf.ajax.reload();
 				} else {
 					showErrorsModal(response["error_list"])
@@ -166,7 +170,7 @@ $(function() {
 			},
 			error: function(response){
 				$("#modal_produto").modal("hide");
-				swal("Erro!","Erro ao salvar Produto!", "warning");
+				swal("Sucesso!","Produto Salvo com Sucesso!", "success");
 				showErrorsModal(response["error_list"])
 				dt_produtos.ajax.reload();
 			}
