@@ -1004,4 +1004,37 @@ class Estoque extends Admin_Controller
         $this->Profissional_model->update($id, ['estoque' => $estoque]);
     }
 
+    public function ajax_import_image() {
+
+		if (!$this->input->is_ajax_request()) {
+			exit("Nenhum acesso de script direto permitido!");
+		}
+
+		$config["upload_path"] = "./assets/img/";
+		$config["allowed_types"] = "gif|png|jpg|jpeg";
+		$config["overwrite"] = TRUE;
+
+		$this->load->library("upload", $config);
+
+		$json = array();
+		$json["status"] = 1;
+
+		if (!$this->upload->do_upload("image_file")) {
+			$json["status"] = 0;
+			$json["error"] = $this->upload->display_errors("","");
+		} else {
+			if ($this->upload->data()["file_size"] <= 5120) {
+				$file_name = $this->upload->data()["file_name"];
+				$json["img_path"] = base_url() . "assets/img/" . $file_name;
+
+			} else {
+				$json["status"] = 0;
+				$json["error"] = "Arquivo não deve ser maior que 5 MB!";
+			}
+
+		}
+
+		echo json_encode($json);
+	}
+
 }

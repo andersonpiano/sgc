@@ -49,6 +49,10 @@ $(function() {
 		$("#modal_estoque").modal();
 	});
 
+	$("#nf_upload_img").change(function(){
+		uploadImg($(this), $("#nf_img_path"), $("#nf_img"));
+	});
+
 	$("#form_categoria").submit(function() {
  			$.ajax({
 			type: "POST",
@@ -788,47 +792,3 @@ $(function() {
 		}
 	});
 	})
-
-	
-/*
-	$(document).on('change', '#categoria_select', function() {
-
-        var categoria = $(this).val();
-        var id = $(this).attr('profissional_id');
-        var url = 'estoque/troca_categoria/'+id;
-        var sucess = false;
-        $.ajax({
-            url: url,
-            method: 'post',
-            data: {
-                nivel_fornecedor : categoria
-            },
-            success: function(responseData) {
-                swal("Sucesso!","Troca realizada com sucesso",'success');
-            },
-            error: function(responseData) {
-                swal("Erro","Ocorreu um erro ao realizar a troca.",'warning');
-            }
-	});
-});
-
-$(document).on('change', '#fornecedor_select', function() {
-
-	var fornecedor = $(this).val();
-	var id = $(this).attr('profissional_id');
-	var url = 'estoque/troca_fornecedor/'+id;
-	var sucess = false;
-	$.ajax({
-		url: url,
-		method: 'post',
-		data: {
-			fornecedor : fornecedor
-		},
-		success: function(responseData) {
-			swal("Sucesso!","Troca realizada com sucesso",'success');
-		},
-		error: function(responseData) {
-			swal("Erro","Ocorreu um erro ao realizar a troca.",'warning');
-		}
-});
-});*/
