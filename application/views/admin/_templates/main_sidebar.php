@@ -45,12 +45,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
 
-                        <li class="<?=active_link_controller('ajuda')?>">
-                            <a href="<?php echo site_url('admin/ajuda'); ?>">
-                                <i class="fa fa-info-circle"></i> <span><?php echo lang('menu_ajuda'); ?></span>
-                            </a>
-                        </li>
-
 <?php if($this->ion_auth->in_group('profissionais')) :?>
                         <li class="treeview <?=active_link_controller('plantoes')?>">
                             <a href="#">
