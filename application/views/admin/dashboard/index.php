@@ -275,8 +275,7 @@ if ($url_exist) {
                 $text .= ' de ' . date('H:i', strtotime($oportunidade->horainicialplantao));
                 $text .= ' &agrave;s ' . date('H:i', strtotime($oportunidade->horafinalplantao)) . '.';
                 $text .= ' Clique aqui para aceitar, caso seja do seu interesse.';
-                echo anchor('admin/escalas/confirmaroportunidade/'.$oportunidade->id, $text, array('class' => 'btn btn-light btn-flat', 'target' => '_blank', 'title' => 'Aceitar Oportunidade', 'onclick' => 'return confirm(\'Deseja aceitar esse plantão?\')'));
-                
+                echo($text);
             ?>
                                                 </a></p>
         <?php endforeach;?>
