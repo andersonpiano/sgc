@@ -123,6 +123,8 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_fopag_edit'] = 'Editar';
 /* *********** */$lang['menu_fopag_view'] = 'Visualizar';
 
+/* ****** */$lang['menu_ajuda']  = 'Ajuda';
+
 /* ****** */$lang['menu_plantoes']  = 'Meus Plantões';
 /* *********** */$lang['menu_plantoes_create']     = 'Criar';
 /* *********** */$lang['menu_plantoes_edit']       = 'Editar';
