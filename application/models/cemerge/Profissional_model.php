@@ -74,9 +74,7 @@ class Profissional_model extends MY_Model
     }
 
     var $column_search = array("nome");
-
-    var $column_order = array("id", "nome", "registro", "email");
-
+    var $column_order = array("id", "nome", "especializacao");
 
     private function _get_datatable() {
 
