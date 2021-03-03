@@ -80,9 +80,9 @@ class Fopag extends Admin_Controller
     foreach ($profissionais as $profissional) {
 
         $row = array();
+        $row[] = '<center>'.$profissional->registro.'</center>';
         $row[] = '<center>'.$profissional->id.'</center>';
         $row[] = '<center>'.$profissional->nome.'</center>';
-        $row[] = '<center>'.$profissional->registro.'</center>';
         $row[] = '<center>'.$profissional->email.'</center>';
 
         $row[] = '<center><div style="display: inline-block;">
@@ -90,17 +90,17 @@ class Fopag extends Admin_Controller
                         id='.$profissional->id.'>
                         <i class="fa fa-address-card"></i>
                     </button>
-                    <button class="btn btn-warning btn-profissional-view" 
+                    <button class="btn btn-info btn-profissional-view" 
                         id='.$profissional->id.'>
-                        <i class="fa fa-check-square-o"></i>
-                    </button>
-                    <button class="btn btn-info btn-del-profissional" 
-                        id='.$profissional->id.'>
-                        <i class="fa fa-edit"></i>
+                        <i class="fa fa-file-o"></i>
                     </button>
                     <button class="btn btn-danger btn-del-profissional" 
                         id='.$profissional->id.'>
-                        <i class="fa fa-file-o"></i>
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <button class="btn btn-danger btn-del-profissional" 
+                        id='.$profissional->id.'>
+                        <i class="fa fa-times"></i>
                     </button>
                 </div></center>';
 
@@ -149,7 +149,7 @@ class Fopag extends Admin_Controller
         exit;
     }
 
-    public function ajax_get_evento_data() {
+    public function ajax_get_fornecedor_data() {
 
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
@@ -158,69 +158,29 @@ class Fopag extends Admin_Controller
         $json["status"] = 1;
         $json["input"] = array();
 
-        $this->load->model("cemerge/evento_model");
+        $this->load->model("cemerge/Fornecedor_model");
         
         $id = $this->input->post("id");
-        $data = $this->evento_model->get_data($id)->result_array()[0];
-        $json["input"]["evento_id"] = $data["id"];
-        $json["input"]["evento_nome"] = $data["nome"];
-        $json["input"]["evento_cnpj"] =$data["cnpj"];
-        $json["input"]["evento_endereco"] =$data["endereco"];
-        $json["input"]["evento_email"] =$data["email"];
-        $json["input"]["evento_contato"] =$data["contato"];
+        $data = $this->Fornecedor_model->get_data($id)->result_array()[0];
+        $json["input"]["fornecedor_id"] = $data["id"];
+        $json["input"]["fornecedor_nome"] = $data["nome"];
+        $json["input"]["fornecedor_cnpj"] =$data["cnpj"];
+        $json["input"]["fornecedor_endereco"] =$data["endereco"];
+        $json["input"]["fornecedor_email"] =$data["email"];
+        $json["input"]["fornecedor_contato"] =$data["contato"];
 
         echo json_encode($json);
         exit;
     }
 
-    public function ajax_listar_eventos() {
-
+    public function troca_profissional($id){
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
         }
-            
-        $this->load->model("cemerge/evento_model");
-        $eventos = $this->evento_model->get_datatable();
-    
-        $data = array();
-        foreach ($eventos as $evento) {
-    
-            $row = array();
-            $row[] = '<center>'.$evento->id.'</center>';
-            $row[] = '<center>'.$evento->nome.'</center>';
-            $row[] = '<center>'.$evento->tipo.'</center>';
-    
-            $row[] = '<center><div style="display: inline-block;">
-                        <button class="btn btn-primary btn-evento-fopag" 
-                            id='.$evento->id.'>
-                            <i class="fa fa-address-card"></i>
-                        </button>
-                        <button class="btn btn-warning btn-evento-view" 
-                            id='.$evento->id.'>
-                            <i class="fa fa-check-square-o"></i>
-                        </button>
-                        <button class="btn btn-info btn-del-evento" 
-                            id='.$evento->id.'>
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button class="btn btn-danger btn-del-evento" 
-                            id='.$evento->id.'>
-                            <i class="fa fa-file-o"></i>
-                        </button>
-                    </div></center>';
-    
-            $data[] = $row;
-    
-        }
-        $json = array(
-            "draw" => $this->input->post("draw"),
-            "recordsTotal" => $this->evento_model->records_total(),
-            "recordsFiltered" => $this->evento_model->records_filtered(),
-            "data" => $data,
-        );
-        echo json_encode($json);
-        exit;
-        }
+        $this->load->model("cemerge/Profissional_model");
+        $profissional = $this->input->get_post('nivel_estoque');
+        $this->Profissional_model->update($id, ['nivel_estoque'=>$profissional]);
+    }
 
     public function ajax_import_image() {
 

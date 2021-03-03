@@ -39,9 +39,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <table id="dt_profissional" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
+                                <th class="dt-center text-center" >CRM</th>
                                 <th class="dt-center text-center" >Matricula</th>
                                 <th class="dt-center text-center">Nome</th>
-                                <th class="dt-center text-center" >CRM</th>                                
                                 <th class="dt-center text-center">E-mail</th>
                                 <th class="dt-center no-sort text-center">Ações</th>
                             </tr> 

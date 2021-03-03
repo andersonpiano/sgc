@@ -6,6 +6,7 @@ class Justificativas extends Admin_Controller
     const STATUS_JUSTIFICATIVA_AGUARDANDO = 0;
     const STATUS_JUSTIFICATIVA_APROVADA = 1;
     const STATUS_JUSTIFICATIVA_NEGADA = 2;
+    const STATUS_JUSTIFICATIVA_TODAS = 3;
 
     private $_permitted_groups = array('admin', 'profissionais', 'coordenadorplantao', 'sac');
     private $_admin_groups = array('admin', 'coordenadorplantao', 'sac');
@@ -51,6 +52,7 @@ class Justificativas extends Admin_Controller
             $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
             $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
+            $this::STATUS_JUSTIFICATIVA_TODAS => 'Todas',
         );
         $status = $this->input->post('status');
         if ($this->form_validation->run() == true) {
@@ -91,8 +93,8 @@ class Justificativas extends Admin_Controller
                 $plantao_entrada = $ct->hora_entrada;
                 $plantao_saida = $ct->hora_saida;
         
-                $ct->entrada = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
-                $ct->saida = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
+                //$ct->entrada = $ct->hora_entrada;//$this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+                //$ct->saida = $ct->hora_saida;//$this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
             }
 
         } else {

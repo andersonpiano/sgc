@@ -45,12 +45,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
 
-                        <li class="<?=active_link_controller('ajuda')?>">
-                            <a href="<?php echo site_url('admin/ajuda'); ?>">
-                                <i class="fa fa-info-circle"></i> <span><?php echo lang('menu_ajuda'); ?></span>
-                            </a>
-                        </li>
-
 <?php if($this->ion_auth->in_group('profissionais')) :?>
                         <li class="treeview <?=active_link_controller('plantoes')?>">
                             <a href="#">
@@ -157,6 +151,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li class="<?=active_link_controller('estoque')?>">
                             <a href="<?php echo site_url('admin/estoque'); ?>">
                                 <i class="fa fa-truck"></i> <span><?php echo lang('menu_estoque'); ?></span>
+                            </a>
+                        </li>
+                        <li class="<?=active_link_controller('fopag')?>">
+                            <a href="<?php echo site_url('admin/fopag'); ?>">
+                                <i class="fa fa-address-card"></i> <span><?php echo lang('menu_fopag'); ?></span>
                             </a>
                         </li>
                         <li class="<?=active_link_controller('profissionais')?>">
