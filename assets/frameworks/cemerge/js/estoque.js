@@ -49,6 +49,10 @@ $(function() {
 		$("#modal_estoque").modal();
 	});
 
+	$("#nf_upload_img").change(function(){
+		uploadImg($(this), $("#nf_img_path"), $("#nf_img"));
+	});
+
 	$("#form_categoria").submit(function() {
  			$.ajax({
 			type: "POST",
@@ -165,6 +169,37 @@ $(function() {
 				swal("Erro!","Erro ao salvar Produto!", "warning");
 				showErrorsModal(response["error_list"])
 				dt_produtos.ajax.reload();
+			}
+		})
+		return false;
+	});
+
+	$("#form_responsavel").submit(function() {
+
+		$.ajax({
+			type: "POST",
+			url: "estoque/cadastrar_responsavel",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function() {
+				clearErrors();
+				$("#btn_save_responsavel").siblings(".help-block").html(loadingImg("Cadastrando..."));
+			},
+			success: function(response) {
+				clearErrors();
+				if (response["status"]) {
+					$("#modal_responsavel").modal("hide");
+					swal("Sucesso!","Produto salvo com sucesso!", "success");
+					dt_responsaveis.ajax.reload();
+				} else {
+					showErrorsModal(response["error_list"])
+				}
+			},
+			error: function(response){
+				$("#modal_responsavel").modal("hide");
+				swal("Erro!","Erro ao salvar Produto!", "warning");
+				showErrorsModal(response["error_list"])
+				dt_responsaveis.ajax.reload();
 			}
 		})
 		return false;
@@ -757,47 +792,3 @@ $(function() {
 		}
 	});
 	})
-
-	
-/*
-	$(document).on('change', '#categoria_select', function() {
-
-        var categoria = $(this).val();
-        var id = $(this).attr('profissional_id');
-        var url = 'estoque/troca_categoria/'+id;
-        var sucess = false;
-        $.ajax({
-            url: url,
-            method: 'post',
-            data: {
-                nivel_fornecedor : categoria
-            },
-            success: function(responseData) {
-                swal("Sucesso!","Troca realizada com sucesso",'success');
-            },
-            error: function(responseData) {
-                swal("Erro","Ocorreu um erro ao realizar a troca.",'warning');
-            }
-	});
-});
-
-$(document).on('change', '#fornecedor_select', function() {
-
-	var fornecedor = $(this).val();
-	var id = $(this).attr('profissional_id');
-	var url = 'estoque/troca_fornecedor/'+id;
-	var sucess = false;
-	$.ajax({
-		url: url,
-		method: 'post',
-		data: {
-			fornecedor : fornecedor
-		},
-		success: function(responseData) {
-			swal("Sucesso!","Troca realizada com sucesso",'success');
-		},
-		error: function(responseData) {
-			swal("Erro","Ocorreu um erro ao realizar a troca.",'warning');
-		}
-});
-});*/
