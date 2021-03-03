@@ -118,6 +118,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_estoque_edit'] = 'Editar';
 /* *********** */$lang['menu_estoque_view'] = 'Visualizar';
 
+
 /* ****** */$lang['menu_fopag']  = 'Folha de Pagamentos';
 /* *********** */$lang['menu_fopag_create'] = 'Buscar / Nova';
 /* *********** */$lang['menu_fopag_edit'] = 'Editar';
