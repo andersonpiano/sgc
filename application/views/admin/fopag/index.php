@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div id="tab_eventos" class="tab-pane">
                 <div class="container-fluid">
-                    <h2 class="text-center"><strong>Gerenciar Eventos</strong></h2>
+                    <h2 class="text-center"><strong>Gerenciar Notas Fiscais</strong></h2>
                     <a id="btn_add_eventos" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Evento</i></a>
                     <table id="dt_eventos" class="table table-striped table-bordered">
                         <thead>
@@ -71,7 +71,130 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </table>
                 </div>
             </div>
- 
+            
+        <div id="tab_folhas" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar folhas</strong></h2>
+                <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Categoria</i></a>
+                <table id="dt_categoria" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th width="10%" class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Nome</th>
+                            <th width="20%" class="dt-center text-center">Tipo</th>
+                            <th width="07%" class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_produtos" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Produtos</strong></h2>
+                <a id="btn_add_produto" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Produto</i></a>
+                <table id="dt_produtos" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th width="10%" class="dt-center text-center" >Código</th>
+                            <th width="30%" class="dt-center text-center" >Nome</th>
+                            <th width="10%" class="dt-center text-center">Marca</th>
+                            <th width="10%" class="dt-center text-center">Setor</th>
+                            <th width="10%" class="dt-center text-center">Categoria</th>
+                            <th width="10%" class="dt-center text-center" >Tombamento</th>
+                            <th width="10%" class="dt-center text-center">Responsavel</th>
+                            <th width="10%" class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_estoque" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Estoque</strong></h2>
+                <table id="dt_estoque" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th width="10%" class="dt-center text-center" >Código</th>
+                            <th width="60%" class="dt-center text-center" >Produto</th>
+                            <th width="20%" class="dt-center text-center">Quantidade</th>
+                            <th width="10%" class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_entrada" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Entrada de Produtos</strong></h2>
+                <a id="btn_add_entrada" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Registrar Entrada</i></a>
+                <table id="dt_entrada" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Produto</th>
+                            <th class="dt-center text-center">Quantidade</th>
+                            <th class="dt-center text-center">Data</th>
+                            <th class="dt-center text-center">Setor</th>
+                            <th class="dt-center text-center">Usuário</th>
+                            <th class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_saida" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Saida de Produtos</strong></h2>
+                <a id="btn_add_saida" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Registrar Saída</i></a>
+                <table id="dt_saida" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Nome</th>
+                            <th class="dt-center text-center">Tipo</th>
+                            <th class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab_responsaveis" class="tab-pane">
+            <div class="container-fluid">
+                <h2 class="text-center"><strong>Gerenciar Responsaveis</strong></h2>
+                <a id="btn_add_responsavel" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Cadastrar Responsável</i></a>
+                <table id="dt_responsaveis" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="tableheader">
+                            <th class="dt-center text-center" >Código</th>
+                            <th class="dt-center text-center" >Nome</th>
+                            <th class="dt-center text-center">CPF</th>
+                            <th class="dt-center text-center">E-mail</th>
+                            <th class="dt-center text-center">Contato</th>
+                            <th class="dt-center text-center">Setor</th>
+                            <th class="dt-center no-sort text-center">Ações</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div id="tab_relatorios" class="tab-pane">
             <div class="container-fluid">
                 <center><table style="margin: 100px; border: 6px solid #ecf0f5;">
