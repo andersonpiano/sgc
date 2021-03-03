@@ -103,7 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="w-20"><?php echo lang('frequencias_profissional');?></th>
+                                                <th class="w-20"><?php echo lang('frequencias_setor');?></th>
                                                 <th class="text-center w-10"><?php echo lang('frequencias_dataplantao');?></th>
                                                 <th class="text-center w-10"><?php echo lang('frequencias_horafrequencia');?></th>
                                                 <th class="text-center w-10"><?php echo('Status / Tipo');?></th>
