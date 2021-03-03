@@ -28,10 +28,8 @@ class Justificativa_model extends MY_Model
         $sql .= "JOIN setores s on (j.setor_id = s.id) ";
         $sql .= "WHERE ";
         $sql .= "j.data_plantao BETWEEN '$datainicial' and '$datafinal'";
-        if ($status == 3){ 
-        } else {
         $sql .= "AND j.status = $status";
-        }
+
         $query = $this->db->query($sql);
 
         return $query->result();
