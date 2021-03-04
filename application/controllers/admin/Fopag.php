@@ -182,6 +182,56 @@ class Fopag extends Admin_Controller
         $this->Profissional_model->update($id, ['nivel_estoque'=>$profissional]);
     }
 
+    public function ajax_listar_eventos() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/evento_model");
+        $eventos = $this->evento_model->get_datatable();
+    
+        $data = array();
+        foreach ($eventos as $evento) {
+    
+            $row = array();
+            $row[] = '<center>'.$evento->id.'</center>';
+            $row[] = '<center>'.$evento->nome.'</center>';
+            $row[] = '<center>'.$evento->registro.'</center>';
+            $row[] = '<center>'.$evento->email.'</center>';
+    
+            $row[] = '<center><div style="display: inline-block;">
+                        <button class="btn btn-primary btn-evento-fopag" 
+                            id='.$evento->id.'>
+                            <i class="fa fa-address-card"></i>
+                        </button>
+                        <button class="btn btn-warning btn-evento-view" 
+                            id='.$evento->id.'>
+                            <i class="fa fa-check-square-o"></i>
+                        </button>
+                        <button class="btn btn-info btn-del-evento" 
+                            id='.$evento->id.'>
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-del-evento" 
+                            id='.$evento->id.'>
+                            <i class="fa fa-file-o"></i>
+                        </button>
+                    </div></center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" => $this->evento_model->records_total(),
+            "recordsFiltered" => $this->evento_model->records_filtered(),
+            "data" => $data,
+        );
+        echo json_encode($json);
+        exit;
+        }
+        
     public function ajax_import_image() {
 
 		if (!$this->input->is_ajax_request()) {
