@@ -107,7 +107,7 @@ class Escalas extends Admin_Controller
 
                 // Lista
                 if ($tipoescala == 0 and $tipovisualizacao == 0) {
-                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, null, 'profissional_nome, dataplantao'); // dataplantao, horainicialplantao');
+                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, null, null, 'dataplantao, escalas.horainicialplantao'); // dataplantao, horainicialplantao');
                 } elseif ($tipoescala == 1 and $tipovisualizacao == 0) {
                     $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, null, 'profissional_nome, dataplantao'); //, dataplantao, horainicialplantao');
                 } elseif ($tipoescala == 2 and $tipovisualizacao == 0) {

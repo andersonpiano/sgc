@@ -159,6 +159,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-truck"></i> <span><?php echo lang('menu_estoque'); ?></span>
                             </a>
                         </li>
+                        <li class="<?=active_link_controller('fopag')?>">
+                            <a href="<?php echo site_url('admin/fopag'); ?>">
+                                <i class="fa fa-address-card"></i> <span><?php echo lang('menu_fopag'); ?></span>
+                            </a>
+                        </li>
                         <li class="<?=active_link_controller('profissionais')?>">
                         <a href="#">
                                 <i class="fa fa-user-md"></i>

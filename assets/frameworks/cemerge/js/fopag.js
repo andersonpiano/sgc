@@ -189,7 +189,7 @@ function active_btn_evento() {
 				   data: {"id" : $id},
 				   success: function(response) {
 					   swal("Sucesso!", "evento removida com sucesso", "success");
-					   dt_evento.ajax.reload();
+					   dt_eventos.ajax.reload();
 				   },
 				   error: function(response){
 					   swal("Erro!", 'Ocorreu um erro ao executar essa ação','warning');
@@ -201,7 +201,7 @@ function active_btn_evento() {
    });
 }
 
-var dt_evento = $("#dt_eventos").DataTable({
+var dt_eventos = $("#dt_eventos").DataTable({
    "oLanguage": DATATABLE_PTBR,
    "autoWidth": false,
    "processing": true,

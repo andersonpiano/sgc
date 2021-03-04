@@ -96,6 +96,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/estoque.js'); ?>"></script>
 <?php endif; ?>
+<?php if ($this->router->fetch_class() == 'fopag') : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/fopag.js'); ?>"></script>
+<?php endif; ?>
 <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pace.min.js'); ?>"></script>
 <script src="<?php echo base_url($frameworks_dir . '/moment/moment.min.js'); ?>"></script>
 <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery.blockUI.js'); ?>"></script>

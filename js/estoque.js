@@ -49,10 +49,6 @@ $(function() {
 		$("#modal_estoque").modal();
 	});
 
-	$("#produto_upload_img").change(function(){
-		uploadImg($(this), $("#produto_img_path"), $("#produto_img"));
-	});
-
 	$("#nf_upload_img").change(function(){
 		uploadImg($(this), $("#nf_img_path"), $("#nf_img"));
 	});
