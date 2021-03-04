@@ -37,34 +37,136 @@ class Fopag extends Admin_Controller
         
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-        $profissional_tipo_select = $this->_get_tipo_profissionais();
-        //$produtos_select = $this->_get_produtos();
+        $tipo_evento_select = $this->_get_tipo_evento();
+        $eventos_select = $this->_get_eventos();
+        $anos_select = $this->_get_anos();
+        $meses_select = $this->_get_meses();
+        $profissionais_select = $this->_get_profissionais();
             
-        $this->data['profissional_tipo_select'] = array(
-            'name'  => 'profissional_tipo_select',
-            'id'    => 'profissional_tipo_select',
+        $this->data['tipo_evento_select'] = array(
+            'name'  => 'tipo_evento_select',
+            'id'    => 'tipo_evento_select',
             'type'  => 'select',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('profissional_tipo_select'),
-            'options' => $profissional_tipo_select,
+            'value' => $this->form_validation->set_value('tipo_evento_select'),
+            'options' => $tipo_evento_select,
+        );
+
+        $this->data['eventos_select'] = array(
+            'name'  => 'eventos_select',
+            'id'    => 'eventos_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('eventos_select'),
+            'options' => $eventos_select,
+        );
+
+        $this->data['anos_select'] = array(
+            'name'  => 'anos_select',
+            'id'    => 'anos_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('anos_select'),
+            'options' => $anos_select,
+        );
+
+        $this->data['meses_select'] = array(
+            'name'  => 'meses_select',
+            'id'    => 'meses_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('meses_select'),
+            'options' => $meses_select,
+        );
+
+        $this->data['profissionais_select'] = array(
+            'name'  => 'profissionais_select',
+            'id'    => 'profissionais_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('profissionais_select'),
+            'options' => $profissionais_select,
         );
 
         $this->template->admin_render('admin/fopag/index', $this->data);
     }
 
-    private function _get_tipo_profissionais()
+    private function _get_tipo_evento()
     {
         
-        $this->load->model('cemerge/Profissional_model');
+        $this->load->model('cemerge/Evento_model');
 
-        $profissional_tipo_select = array(
-            '' => 'Selecione o tipo de profissional',
-            '1' => 'Bens de Consumo',
-            '2' => 'Bens Móveis',
+        $tipo_evento_select = array(
+            '' => 'Selecione o tipo de Evento',
+            '1' => 'Crédito',
+            '2' => 'Débito',
         );
 
-        //var_dump($profissionais); exit;
-        return $profissional_tipo_select;
+        return $tipo_evento_select;
+    }
+
+    private function _get_eventos()  {
+        
+        $this->load->model('cemerge/Evento_model');
+
+        $eventos = $this->Evento_model->get_all();
+
+        $eventos_select = array(
+            '' => 'Selecione um Evento',
+        );
+        foreach ($eventos as $evento) {
+            $eventos_select[$evento->id] = $evento->nome;
+        }
+        //var_dump($categorias); exit;
+        return $eventos_select;
+    }
+
+    private function _get_profissionais()  {
+        
+        $this->load->model('cemerge/profissional_model');
+
+        $profissionais = $this->profissional_model->get_all();
+
+        $profissionais_select = array(
+            '' => 'Selecione um profissional',
+        );
+        foreach ($profissionais as $profissional) {
+            $profissionais_select[$profissional->id] = $profissional->nome;
+        }
+        //var_dump($categorias); exit;
+        return $profissionais_select;
+    }
+
+    private function _get_anos()  {
+        
+        $anos_select = array(
+            '' => 'Selecione um Ano',
+            '' => '2021',
+        );
+
+        return $anos_select;
+    }
+
+    private function _get_meses()  {
+        
+        $meses_select = array(
+            '' => 'Selecione um Mês',
+            '01' => 'Janeiro',
+            '02' => 'Fevereiro',
+            '03' => 'Março',
+            '04' => 'Abril',
+            '05' => 'Maio',
+            '06' => 'Junho',
+            '07' => 'Julho',
+            '08' => 'Agosto',
+            '09' => 'Setembro',
+            '10' => 'Outubro',
+            '11' => 'Novembro',
+            '12' => 'Dezembro',
+            '13' => '13º Salário',
+        );
+
+        return $meses_select;
     }
 
     public function ajax_listar_profissionais() {
@@ -80,27 +182,27 @@ class Fopag extends Admin_Controller
     foreach ($profissionais as $profissional) {
 
         $row = array();
-        $row[] = '<center>'.$profissional->registro.'</center>';
         $row[] = '<center>'.$profissional->id.'</center>';
         $row[] = '<center>'.$profissional->nome.'</center>';
+        $row[] = '<center>'.$profissional->registro.'</center>';
         $row[] = '<center>'.$profissional->email.'</center>';
 
         $row[] = '<center><div style="display: inline-block;">
-                    <button class="btn btn-primary btn-profissional-fopag" 
+                    <button class="btn btn-primary btn-profissional-view" 
                         id='.$profissional->id.'>
                         <i class="fa fa-address-card"></i>
                     </button>
-                    <button class="btn btn-info btn-profissional-view" 
+                    <button class="btn btn-success btn-profissional-frequencia" 
+                        id='.$profissional->id.'>
+                        <i class="fa fa-check-square-o"></i>
+                    </button>
+                    <button  class="btn btn-info btn-profissional-holerite" 
                         id='.$profissional->id.'>
                         <i class="fa fa-file-o"></i>
                     </button>
-                    <button class="btn btn-danger btn-del-profissional" 
+                    <button style="color:white; background-color:#2F4F4F;" class="btn btn-profissional-folha" 
                         id='.$profissional->id.'>
-                        <i class="fa fa-times"></i>
-                    </button>
-                    <button class="btn btn-danger btn-del-profissional" 
-                        id='.$profissional->id.'>
-                        <i class="fa fa-times"></i>
+                        <i class="fa fa-money"></i>
                     </button>
                 </div></center>';
 
@@ -143,7 +245,7 @@ class Fopag extends Admin_Controller
         $data = $this->Profissional_model->get_data($id)->result_array()[0];
         $json["input"]["profissional_id"] = $data["id"];
         $json["input"]["profissional_nome"] = $data['nome'];
-        $json["input"]["profissional_tipo_select"] = $data['tipo'];
+        $json["input"]["tipo_evento_select"] = $data['tipo'];
         //var_dump($data); exit;
         echo json_encode($json);
         exit;
@@ -231,7 +333,7 @@ class Fopag extends Admin_Controller
         echo json_encode($json);
         exit;
         }
-        
+
     public function ajax_import_image() {
 
 		if (!$this->input->is_ajax_request()) {

@@ -102,6 +102,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/fopag.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery-3.6.0.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery.dataTables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.buttons.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jszip.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pdfmake.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/vfs_fonts.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/buttons.print.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.select.min.js'); ?>"></script>
+
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/jquery.dataTables.min.css'); ?>">
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/buttons.dataTables.min.css'); ?>">
+        <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/select.dataTables.min.css'); ?>">
+
 <?php endif; ?>
 <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pace.min.js'); ?>"></script>
 <script src="<?php echo base_url($frameworks_dir . '/moment/moment.min.js'); ?>"></script>

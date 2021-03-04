@@ -7,6 +7,12 @@ $(function() {
 		$("#modal_profissional").modal();
 	});
 
+	$("#btn_add_evento").click(function(){
+		clearErrors();
+		$("#form_evento")[0].reset();
+		$("#modal_evento").modal();
+	});
+
 	$("#profissional_upload_img").change(function(){
 		uploadImg($(this), $("#profissional_img_path"), $("#profissional_img"));
 	});
@@ -64,6 +70,19 @@ $(function() {
 			})
 		});
 
+		$(".btn-profissional-folha").click(function(){
+			clearErrors();
+			$("#form_folha")[0].reset();
+			$("#modal_folha").modal();
+			//swal("Sucesso","Você chegou até aqui","success")
+		});
+
+		$(".btn-profissional-view").click(function(){
+			clearErrors();
+			$id = $(this).attr('id');
+			window.location.href = href="http://localhost/sgc/admin/profissionais/edit/"+$id;
+		});
+
 		$(".btn-del-profissional").click(function(){
 			
 			$id = $(this).attr('id');
@@ -101,7 +120,7 @@ $(function() {
 		"oLanguage": DATATABLE_PTBR,
 		"autoWidth": false,
 		"processing": true,
-		"serverSide": true,
+		"serverSide": true,		
 		"ajax": {
 			"url": "fopag/ajax_listar_profissionais",
 			"method": "POST",
@@ -112,7 +131,8 @@ $(function() {
 		],
 		"drawCallback": function() {
 			active_btn_profissional();
-		}
+		},
+		select: true,
 	});
 
 	$("#form_evento").submit(function() {
