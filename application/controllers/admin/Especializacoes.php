@@ -331,6 +331,49 @@ class Especializacoes extends Admin_Controller
         $this->Profissional_model->update($id, ['especializacao' => $especializacao]);
     }
 
+    public function ajax_listar_profissionais_cadastro() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/Profissional_model");
+        $profissionais = $this->Profissional_model->get_datatable();
+    
+        $data = array();
+        foreach ($profissionais as $profissional) {
+    
+            $row = array();
+            $row[] = '<center>'.$profissional->id.'</center>';
+            $row[] = '<center>'.$profissional->nome.'</center>';
+            $row[] = '<center>'.$profissional->registro.'</center>';
+            $row[] = '<center>'.$profissional->email.'</center>';
+    
+            $row[] = '<center><div style="display: inline-block;">
+                        <button class="btn btn-primary btn-profissional-edit" 
+                            id='.$profissional->id.'>
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-success btn-profissional-frequencia" 
+                            id='.$profissional->id.'>
+                            <i class="fa fa-check-square-o"></i>
+                        </button>
+
+                    </div></center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" => $this->Profissional_model->records_total(),
+            "recordsFiltered" => $this->Profissional_model->records_filtered(),
+            "data" => $data,
+        );
+        echo json_encode($json);
+        exit;
+        }
+
     public function ajax_listar_profissionais() {
 
         if (!$this->input->is_ajax_request()) {

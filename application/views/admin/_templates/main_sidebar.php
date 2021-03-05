@@ -165,17 +165,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
                         <li class="<?=active_link_controller('profissionais')?>">
-                        <a href="#">
+                        <a href="/sgc/admin/especializacoes/">
                                 <i class="fa fa-user-md"></i>
                                 <span><?php echo lang('menu_profissionais'); ?></span>
-                                <i class="fa fa-angle-left pull-right"></i>
                             </a>
-                            <ul class="treeview-menu">
-                                <li class="fa fa-user-md"><a href="<?php echo site_url('admin/profissionais'); ?>"><?php echo lang('menu_profissionais_create'); ?></a></li>
-                            </ul>
-                            <ul class="treeview-menu">
-                                <li class="<?=active_link_function('especializacao')?>"><a href="<?php echo site_url('admin/especializacoes/'); ?>"><?php echo lang('menu_especializacoes'); ?></a></li>
-                            </ul>
                         </li>
                         <li class="treeview <?=active_link_controller('residentes')?>">
                             <a href="#">

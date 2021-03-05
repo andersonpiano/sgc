@@ -24,13 +24,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="container">
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_categoria" role="tab" data-toggle="tab">Níveis de Formação</a></li>
+            <li class="active"><a href="#tab_profissionais_cadastro" role="tab" data-toggle="tab">Profissionais</a></li>
+            <li><a href="#tab_categoria" role="tab" data-toggle="tab">Níveis de Formação</a></li>
             <li><a href="#tab_especializacao" role="tab" data-toggle="tab">Especialidades</a></li>
             <li><a href="#tab_profissionais" role="tab" data-toggle="tab">Associar a Profissionais</a></li>
         </ul>
 
         <div class="tab-content">
-            <div id="tab_categoria" class="tab-pane active">
+            <div id="tab_categoria" class="tab-pane">
                 <div class="container-fluid">
                     <h2 class="text-center"><strong>Gerenciar Niveis de Formação</strong></h2>
                     <a id="btn_add_categoria" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Adicionar Nível</i></a>
@@ -65,6 +66,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </table>
             </div>
         </div>
+
+        <div id="tab_profissionais_cadastro" class="tab-pane active">
+                <div class="container-fluid">
+                    <h2 class="text-center"><strong>Gerenciar Profissionais</strong></h2>
+                    <a id="btn_add_profissional_cadastro" href="/sgc/admin/profissionais/create" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Cadastrar profissional</i></a>
+                    <table id="dt_profissionais_cadastro" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th class="dt-center text-center" >Matricula</th>
+                                <th class="dt-center text-center">Nome</th>
+                                <th class="dt-center text-center" >CRM</th>
+                                <th class="dt-center text-center">E-mail</th>
+                                <th class="dt-center no-sort text-center">Ações</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <div id="tab_profissionais" class="tab-pane">
                 <div class="container-fluid">

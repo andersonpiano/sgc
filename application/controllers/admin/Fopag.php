@@ -42,6 +42,7 @@ class Fopag extends Admin_Controller
         $anos_select = $this->_get_anos();
         $meses_select = $this->_get_meses();
         $profissionais_select = $this->_get_profissionais();
+        $tipos_folha_select = $this->_get_tipo_folha();
             
         $this->data['tipo_evento_select'] = array(
             'name'  => 'tipo_evento_select',
@@ -88,13 +89,20 @@ class Fopag extends Admin_Controller
             'options' => $profissionais_select,
         );
 
+        $this->data['tipos_folha_select'] = array(
+            'name'  => 'tipos_folha_select',
+            'id'    => 'tipos_folha_select',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('tipos_folha_select'),
+            'options' => $tipos_folha_select,
+        );
+
         $this->template->admin_render('admin/fopag/index', $this->data);
     }
 
     private function _get_tipo_evento()
     {
-        
-        $this->load->model('cemerge/Evento_model');
 
         $tipo_evento_select = array(
             '' => 'Selecione o tipo de Evento',
@@ -103,6 +111,18 @@ class Fopag extends Admin_Controller
         );
 
         return $tipo_evento_select;
+    }
+
+    private function _get_tipo_folha()
+    {
+        
+        $tipos_folha_select = array(
+            '' => 'Selecione o tipo de Folha',
+            '1' => 'Normal',
+            '2' => 'Complementar',
+        );
+
+        return $tipos_folha_select;
     }
 
     private function _get_eventos()  {
@@ -141,7 +161,7 @@ class Fopag extends Admin_Controller
         
         $anos_select = array(
             '' => 'Selecione um Ano',
-            '' => '2021',
+            '2021' => '2021',
         );
 
         return $anos_select;
@@ -188,20 +208,20 @@ class Fopag extends Admin_Controller
         $row[] = '<center>'.$profissional->email.'</center>';
 
         $row[] = '<center><div style="display: inline-block;">
-                    <button class="btn btn-primary btn-profissional-view" 
+                    <button class="btn btn-primary btn-profissional-edit" 
                         id='.$profissional->id.'>
-                        <i class="fa fa-address-card"></i>
+                        <i class="fa fa-edit"></i>
                     </button>
                     <button class="btn btn-success btn-profissional-frequencia" 
                         id='.$profissional->id.'>
                         <i class="fa fa-check-square-o"></i>
                     </button>
-                    <button  class="btn btn-info btn-profissional-holerite" 
+                    <button class="btn btn-info btn-profissional-holerite" 
                         id='.$profissional->id.'>
                         <i class="fa fa-file-o"></i>
                     </button>
                     <button style="color:white; background-color:#2F4F4F;" class="btn btn-profissional-folha" 
-                        id='.$profissional->id.'>
+                        id='.$profissional->id.' >
                         <i class="fa fa-money"></i>
                     </button>
                 </div></center>';
@@ -251,7 +271,7 @@ class Fopag extends Admin_Controller
         exit;
     }
 
-    public function ajax_get_fornecedor_data() {
+    public function ajax_get_evento_data() {
 
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
@@ -260,28 +280,87 @@ class Fopag extends Admin_Controller
         $json["status"] = 1;
         $json["input"] = array();
 
-        $this->load->model("cemerge/Fornecedor_model");
+        $this->load->model("cemerge/evento_model");
         
         $id = $this->input->post("id");
-        $data = $this->Fornecedor_model->get_data($id)->result_array()[0];
-        $json["input"]["fornecedor_id"] = $data["id"];
-        $json["input"]["fornecedor_nome"] = $data["nome"];
-        $json["input"]["fornecedor_cnpj"] =$data["cnpj"];
-        $json["input"]["fornecedor_endereco"] =$data["endereco"];
-        $json["input"]["fornecedor_email"] =$data["email"];
-        $json["input"]["fornecedor_contato"] =$data["contato"];
+        $data = $this->evento_model->get_data($id)->result_array()[0];
+        $json["input"]["evento_id"] = $data["id"];
+        $json["input"]["evento_nome"] = $data["nome"];
+        $json["input"]["evento_fixo"] =$data["fixo"];
+        $json["input"]["evento_percentual"] =$data["percentual"];
+        $json["input"]["evento_valor"] =$data["valor_ref"];
+        $json["input"]["eventos_select"] =$data["valor_base"];
+        $json["input"]["eventos_incidencias"] =$data["incidencias"];
 
         echo json_encode($json);
         exit;
     }
-
-    public function troca_profissional($id){
-        if (!$this->input->is_ajax_request()) {
-            exit("Nenhum acesso de script direto permitido!");
+    public function cadastrar_evento(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
         }
-        $this->load->model("cemerge/Profissional_model");
-        $profissional = $this->input->get_post('nivel_estoque');
-        $this->Profissional_model->update($id, ['nivel_estoque'=>$profissional]);
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->load->model("cemerge/Evento_model");
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/fopag/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $nome = $this->input->post('evento_nome');
+        $tipo = $this->input->post('evento_tipo');
+        $fixo = $this->input->post('evento_fixo');
+        $percentual = $this->input->post('evento_percentual');
+        $valor_ref = $this->input->post('evento_valor');
+        $valor_base = $this->input->post('eventos_select');
+        $incidencias = $this->input->post('evento_incidencias');
+
+
+        $this->form_validation->set_rules('evento_nome', 'Nome', 'required');
+        $this->form_validation->set_rules('evento_tipo', 'Tipo', 'required');
+        $this->form_validation->set_rules('evento_fixo', 'Fixo', 'required');
+        $this->form_validation->set_rules('evento_percentual', 'Percentual', 'required');
+        $this->form_validation->set_rules('evento_valor', 'Valor', 'required');
+        
+        $json = array();
+
+        if ($this->form_validation->run() == true) {
+            $data = $this->input->post();
+            if(empty($data['evento_id'])) {
+                $this->Evento_model->insert([
+                    'nome'=>$nome, 
+                    'tipo'=>$tipo, 
+                    'fixo'=>$fixo, 
+                    'percentual'=>$percentual,
+                    'valor_ref'=>$valor_ref,
+                    'valor_base'=>$valor_base,
+                    'incidencias'=>$incidencias
+                ]);
+            } else {
+                $id = $data["evento_id"];
+                unset($data['evento_id']);
+                $this->Evento_model->update($id, [
+                    'nome'=>$nome, 
+                    'tipo'=>$tipo, 
+                    'fixo'=>$fixo, 
+                    'percentual'=>$percentual,
+                    'valor_ref'=>$valor_ref,
+                    'valor_base'=>$valor_base,
+                    'incidencias'=>$incidencias
+                ]);
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        } 
+
+            //var_dump($data); exit;
+            json_encode($json);
+            exit;
     }
 
     public function ajax_listar_eventos() {
@@ -299,25 +378,19 @@ class Fopag extends Admin_Controller
             $row = array();
             $row[] = '<center>'.$evento->id.'</center>';
             $row[] = '<center>'.$evento->nome.'</center>';
-            $row[] = '<center>'.$evento->registro.'</center>';
-            $row[] = '<center>'.$evento->email.'</center>';
+            $row[] = '<center>'.$evento->tipo.'</center>';
+            $row[] = '<center>'.$evento->fixo.'</center>';
+            $row[] = '<center>'.$evento->percentual.'</center>';
+            $row[] = '<center>'.$evento->valor_ref.'</center>';
     
             $row[] = '<center><div style="display: inline-block;">
-                        <button class="btn btn-primary btn-evento-fopag" 
-                            id='.$evento->id.'>
-                            <i class="fa fa-address-card"></i>
-                        </button>
-                        <button class="btn btn-warning btn-evento-view" 
-                            id='.$evento->id.'>
-                            <i class="fa fa-check-square-o"></i>
-                        </button>
-                        <button class="btn btn-info btn-del-evento" 
+                        <button class="btn btn-primary btn-edit-evento" 
                             id='.$evento->id.'>
                             <i class="fa fa-edit"></i>
                         </button>
                         <button class="btn btn-danger btn-del-evento" 
                             id='.$evento->id.'>
-                            <i class="fa fa-file-o"></i>
+                            <i class="fa fa-times"></i>
                         </button>
                     </div></center>';
     
@@ -333,6 +406,56 @@ class Fopag extends Admin_Controller
         echo json_encode($json);
         exit;
         }
+
+        public function ajax_listar_folhas() {
+
+            if (!$this->input->is_ajax_request()) {
+                exit("Nenhum acesso de script direto permitido!");
+            }
+                
+            $this->load->model("cemerge/folha_model");
+
+            $id_profissional = $this->input->get_post('profissional_id');
+            $mes = $this->input->post('meses_select');
+            $ano = $this->input->post('anos_select');
+            $tipo_folha = $this->input->post('tipos_folha_select');
+
+            $folhas = $this->folha_model->get_folhas($id_profissional, $mes, $ano, $tipo_folha);
+
+            var_dump($id_profissional); exit;
+        
+            $data = array();
+            foreach ($folhas as $folha) {
+        
+                $row = array();
+                $row[] = '<center>'.$folha->ano.'</center>';
+                $row[] = '<center>'.$folha->mes.'</center>';
+                $row[] = '<center>'.$folha->tp_folha.'</center>';
+                $row[] = '<center>'.$folha->valor_ref.'</center>';
+        
+                $row[] = '<center><div style="display: inline-block;">
+                            <button class="btn btn-primary btn-edit-folha" 
+                                id='.$folha->id.'>
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-del-folha" 
+                                id='.$folha->id.'>
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div></center>';
+        
+                $data[] = $row;
+        
+            }
+            $json = array(
+                "draw" => $this->input->post("draw"),
+                "recordsTotal" => $this->folha_model->records_total(),
+                "recordsFiltered" => $this->folha_model->records_filtered(),
+                "data" => $data,
+            );
+            echo json_encode($json);
+            exit;
+            }
 
     public function ajax_import_image() {
 
@@ -367,5 +490,82 @@ class Fopag extends Admin_Controller
 		echo json_encode($json);
         exit;
 	}
+
+    public function cadastrar_folha(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->load->model("cemerge/Folha_model");
+        $this->load->model("cemerge/Evento_model");
+        $this->load->model("cemerge/Profissional_model");
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/fopag/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $ano = $this->input->post('anos_select');
+        $mes = $this->input->post('meses_select');
+        $tipo = $this->input->post('tipos_folha_select');
+        $profissionais = $this->Profissional_model->get_all();
+        $eventos_fixos = $this->Evento_model->get_eventos_fixos();
+
+        $this->form_validation->set_rules('anos_select', 'Ano', 'required');
+        $this->form_validation->set_rules('meses_select', 'Mês', 'required');
+        $this->form_validation->set_rules('tipos_folha_select', 'Tipo', 'required');
+        
+        $json = array();
+
+        if ($this->form_validation->run() == true) {
+            $data = $this->input->post();
+            if(empty($data['folha_id'])) {
+                foreach ($profissionais as $profissional){
+                    if($profissional){
+                        foreach ($eventos_fixos as $evento){
+                            $this->Folha_model->insert([
+                                'ano'=>$ano, 
+                                'mes'=>$mes, 
+                                'id_evento'=>$evento->id, 
+                                'tipo'=>$evento->tipo,
+                                'tp_folha'=>$tipo,
+                                'valor_ref'=>$evento->valor_ref,
+                                'valor_total'=>$evento->valor_ref,
+                                'id_unidade'=> '1',
+                                'id_setor' => '1',
+                                'id_profissional' => $profissional->id
+                            ]);   
+                        }
+                    } else {
+                        alert("Não existem nenhum profissional para processar");
+                    }
+                }
+
+            } else {
+                $id = $data["folha_id"];
+                unset($data['folha_id']);
+                $this->folha_model->update($id, [
+                    'nome'=>$nome, 
+                    'tipo'=>$tipo, 
+                    'fixo'=>$fixo, 
+                    'percentual'=>$percentual,
+                    'valor_ref'=>$valor_ref,
+                    'valor_base'=>$valor_base,
+                    'incidencias'=>$incidencias
+                ]);
+            }
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        } 
+
+            
+            json_encode($json);
+            exit;
+    }
 
 }

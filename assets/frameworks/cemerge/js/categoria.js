@@ -165,6 +165,25 @@ $(function() {
 			active_btn_categoria();
 		}
 	});
+
+	var dt_profissionais_cadastro = $("#dt_profissionais_cadastro").DataTable({
+		"oLanguage": DATATABLE_PTBR,
+		"autoWidth": false,
+		"processing": true,
+		"serverSide": true,		
+		"ajax": {
+			"url": "ajax_listar_profissionais_cadastro",
+			"method": "POST",
+		},
+		"columnDefs": [
+			{ targets: "no-sort", orderable: false },
+			{ targets: "dt-center", className: "dt-center" },
+		],
+		"drawCallback": function() {
+			active_btn_profissional_cadastro();
+		},
+		select: true,
+	});
 	
 	function active_btn_especializacao() {
 		
@@ -217,6 +236,44 @@ $(function() {
 			})
 
 		});
+	}
+
+	function active_btn_profissional_cadastro() {
+		
+		$(".btn-edit-profissional_cadastro").click(function(){
+			$.ajax({
+				type: "POST",
+				url: "fopag/ajax_get_profissional_data",
+				dataType: 'json',
+				data: {"id": $(this).attr('id')},
+				success: function(response) {
+					clearErrors();
+					$("#form_profissional")[0].reset();
+					$.each(response["input"], 
+					function(id, value) {
+						$("#"+id).val(value);
+					});
+					$("#modal_profissional").modal();
+				},
+				error: function(response){
+					swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+				}
+			})
+		});
+
+		$(".btn-profissional-folha").click(function(){
+			clearErrors();
+			$("#form_folha")[0].reset();
+			$("#modal_folha").modal();
+			//swal("Sucesso","Você chegou até aqui","success")
+		});
+
+		$(".btn-profissional-edit").click(function(){
+			clearErrors();
+			$id = $(this).attr('id');
+			window.location.href = href="/sgc/admin/profissionais/edit/"+$id;
+		});
+
 	}
 
 	var dt_especializacao = $("#dt_especializacao").DataTable({
