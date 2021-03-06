@@ -240,6 +240,54 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <form id="form_folha">
 
                         <input id="folha_id" name="folha_id" hidden>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Ano</label>
+                            <div class="col-lg-10">
+                                    <?php echo form_dropdown($anos_select);?>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Mês</label>
+                            <div class="col-lg-10">
+                                    <?php echo form_dropdown($meses_select);?>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Tipo</label>
+                            <div class="col-lg-10">
+                                    <?php echo form_dropdown($tipos_folha_select);?>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                        <button type="submit" id="btn_save_folha" class="btn btn-primary text-center">
+                            <i class="fa fa-money"></i>&nbsp;&nbsp;Gerar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_lancador_profissional" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Selecione a Folha de Pagamentos</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="form_lancador_profissional">
+
                         <input id="profissional_id" name="profissional_id" hidden>
 
                         <div class="form-group">
@@ -267,9 +315,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
 
                         <div class="form-group text-center">
-                        <button type="submit" id="btn_save_folhas" class="btn btn-primary text-center">
-                            <i class="fa fa-money"></i>&nbsp;&nbsp;Lançador</button>
-                            <button type="submit" id="btn_limpar_folhas_img" class="btn btn-primary text-center">
+                        <button type="submit" id="btn_lancador" class="btn btn-primary text-center">
+                            <i class="fa fa-money"></i>&nbsp;&nbsp;Lançador</button>&nbsp;&nbsp;
+                            <button type="submit" id="btn_contra_cheque" class="btn btn-primary text-center">
                             <i class="fa fa-file-o"></i>&nbsp;&nbsp;Contra Cheque</button>
                             <span class="help-block"></span>
                         </div>
@@ -278,47 +326,54 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
         </div>
     </div>
-    <div id="modal_lancador_profissional" class="modal fade">
+
+    <div id="modal_jade" class="modal fade">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">X</button>
-                    <h4 class="modal-title">lancador_profissional de Pagamentos</h4>
+                    <h4 class="modal-title">Lançador de Eventos</h4>
                 </div>
 
                 <div class="modal-body">
-                    <form id="form_lancador_profissional">
-
-                        <input id="folha_id" name="folha_id" hidden>
+                    <form id="form_jade">
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Ano</label>
+                            <label class="col-lg-2 control-label">Matricula</label>
                             <div class="col-lg-10">
-                                    <?php echo form_dropdown($anos_select);?>
+                                    <label><bold>0001<bold></label>
                                 <span class="help-block"></span>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Mês</label>
+                            <label class="col-lg-2 control-label">Funcionario</label>
                             <div class="col-lg-10">
-                                    <?php echo form_dropdown($meses_select);?>
+                                <label><bold>ANDERSON DE SOUSA PEREIRA</bold></label>
                                 <span class="help-block"></span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Tipo</label>
-                            <div class="col-lg-10">
-                                    <?php echo form_dropdown($tipos_folha_select);?>
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
+                        <table id="dt_eventos_profissional" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th class="dt-center text-center" >COD</th>
+                                <th class="dt-center text-center">DESCRIÇÃO</th>
+                                <th class="dt-center text-center" >QTD</th>
+                                <th class="dt-center text-center">REF</th>
+                                <th class="dt-center text-center">PROVENTOS</th>
+                                <th class="dt-center text-center">DESCONTOS</th>
+                                <th class="dt-center no-sort text-center">AÇÕES</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
 
                         <div class="form-group text-center">
-                        <button type="submit" id="btn_save_lancador_profissional" class="btn btn-primary text-center">
-                            <i class="fa fa-money"></i>&nbsp;&nbsp;Gerar</button>
+                        <button type="submit" id="btn_jade" class="btn btn-success text-center">
+                            <i class="fa fa-plus"></i>&nbsp;&nbsp;Adicionar</button>&nbsp;&nbsp;
                             <span class="help-block"></span>
                         </div>
                     </form>

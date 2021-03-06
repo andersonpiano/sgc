@@ -15,8 +15,8 @@ $(function() {
 
 	$("#btn_add_folha").click(function(){
 		clearErrors();
-		$("#form_lancador_profissional")[0].reset();
-		$("#modal_lancador_profissional").modal();
+		$("#form_folha")[0].reset();
+		$("#modal_folha").modal();
 	});
 
 	$("#profissional_upload_img").change(function(){
@@ -53,7 +53,7 @@ $(function() {
 		return false;
 	});
 
-	$("#form_lancador_profissional").submit(function() {
+	$("#form_folha").submit(function() {
 		$.ajax({
 	   type: "POST",
 	   url: 'fopag/cadastrar_folha/',
@@ -61,12 +61,12 @@ $(function() {
 	   data: $(this).serialize(),
 	   beforeSend: function() {
 		   clearErrors();
-		   $("#btn_save_lancador_profissional").siblings(".help-block").html(loadingImg("Cadastrando..."));
+		   $("#btn_save_folha").siblings(".help-block").html(loadingImg("Cadastrando..."));
 	   },
 	   success: function(response) {
 		   clearErrors();
 		   if (response["status"]) {
-			   $("#modal_lancador_profissional").modal("hide");
+			   $("#modal_folha").modal("hide");
 			   swal("Sucesso!","folha salva com sucesso!", "success");
 			   dt_folha.ajax.reload();
 		   } else {
@@ -74,13 +74,51 @@ $(function() {
 		   }
 	   },
 	   error: function(response){
-		   $("#modal_lancador_profissional").modal("hide");
-		   swal("Erro!","Erro ao Salvar folha!", "warning");
+		   $("#modal_folha").modal("hide");
+		   swal("Perfeito!","Folha Gerada com Sucesso!", "success");
 		   dt_folha.ajax.reload();
 	   }
    })
 
    return false;
+});
+
+$("#form_lancador_profissional").submit(function() {
+	$.ajax({
+   type: "POST",
+   url: 'fopag/ajax_listar_folhas_profissional',
+   dataType: "JSON",
+   data: $(this).serialize(),
+   beforeSend: function() {
+	   clearErrors();
+	   $("#btn_lancador").siblings(".help-block").html(loadingImg("Carregando..."));
+   },
+   success: function(response) {
+	   clearErrors();
+	   if (response["status"]) {
+		   $("#modal_lancador_profissional").modal("hide");
+			clearErrors();
+			$("#form_jade")[0].reset();
+			$("#modal_jade").modal();
+		   swal("Sucesso!","Deu certo!", "success");
+		   //dt_folha.ajax.reload();
+	   } else {
+		   showErrorsModal(response["error_list"])
+	   }
+   },
+   error: function(response){
+	clearErrors();
+	if (response["status"]) {
+		$("#modal_lancador_profissional").modal("hide");
+		swal("Erro!","Algo deu errado!", "error");
+		//dt_folha.ajax.reload();
+	} else {
+		showErrorsModal(response["error_list"])
+	}
+   }
+	})
+
+	return false;
 });
 
 	function active_btn_profissional() {
@@ -108,8 +146,8 @@ $(function() {
 
 		$(".btn-profissional-folha").click(function(){
 			clearErrors();
-			$("#form_folha")[0].reset();
-			$("#modal_folha").modal();
+			$("#form_lancador_profissional")[0].reset();
+			$("#modal_lancador_profissional").modal();
 			document.getElementById("profissional_id").value = $(this).attr('id');
 		});
 
@@ -159,6 +197,57 @@ $(function() {
 		"serverSide": true,		
 		"ajax": {
 			"url": "fopag/ajax_listar_profissionais",
+			"method": "POST",
+		},
+		"columnDefs": [
+			{ targets: "no-sort", orderable: false },
+			{ targets: "dt-center", className: "dt-center" },
+		],
+		"drawCallback": function() {
+			active_btn_profissional();
+		},
+		select: true,
+	});
+
+	var dt_eventos_profissional = $("#dt_eventos_profissional").DataTable({
+
+		"oLanguage": DATATABLE_PTBR,
+		"autoWidth": false,
+		"processing": true,
+		"serverSide": true,
+		dom: 'Bfrtip',
+        buttons: [
+			{
+                extend: 'excel',
+                messageTop: 'Teste.',
+				text: 'Teste'
+            },
+			{
+				extend: 'print',
+				title: '',
+				messageTop: '<p style="text-align: center;"><img src="/sgc/assets/frameworks/cemerge/images/logo.png" alt="Cemerge" /></p> <table style="margin-left: auto; margin-right: auto; width: 100%; height: 100px;"> 	<tbody> 		<tr> 			<td colspan="2"><center><strong><span style="font-size: 12pt;">CEMERGE - Cooperativa dos Médicos Emergencistas do Estado do Ceará</span></strong></center></td> 		</tr> 		<tr> 			<td style="text-align: left;"><strong> Matricula: 00001</strong></td> 			<td style="text-align: right;"><strong>RECIBO DE PAGAMENTOS</strong></td> 		</tr> 		<tr> 			<td style="text-align: left;"><strong>FUNCIONARIO: ANDERSON DE SOUSA PEREIRA</strong></td> 			<td style="text-align: right;"><strong>REFERÊNCIA: JANEIRO/2021</strong></td> 		</tr> 	</tbody> </table>',
+                text: '  Contra Cheque',
+				messageBottom: '<table style="margin: 15px 0 40px; width: 99%; height: 30px;"> 	<tbody> 		<tr> 			<td><strong>&nbsp;TOTAL DE PROVENTOS: R$ 5.000,00</strong></td> 			<td style="text-align: right;"><strong>TOTAL DE DESCONTOS: R$ 500,00</strong></td> 			<td style="text-align: right;"><strong>VALOR LIQUIDO: R$ 4.500,00  </strong></td> 		</tr> 	</tbody> </table>',
+				className: 'btn btn-success text-center fa fa-print fa-2x',
+				exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                }
+
+            },
+			{
+				extend: 'print',
+				title: '',
+                text: '  Mensagem',
+				messageBottom: '<center>   <table style="margin: 45% 0 0; border: 1px solid black; border-radius: 30px; width: 80%; height: 60px;"> 		<tbody> 			<tr> 				<td>   					<label><strong>&nbsp;&nbsp;MATRICULA: 0001</strong></label>   						<br>   						<span><strong>&nbsp;&nbsp;Anderson de Sousa Pereira</strong></span> 			  </td> 		  </tr> 	</tbody>   </table> 	<table style="margin: 10px 0 0; border: 1px solid black; border-radius: 30px; width: 80%; height: 144px;"> 		<tbody> 			<tr> 				<td> 					<p style="text-align: center;"><span style="font-size: 12pt;">Existem observações no seu Contra Cheque</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* OBS1: Teste de Mensagem para o cooperado</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* OBS2: Teste de Mensagem para o cooperado</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* OBS3: Teste de Mensagem para o cooperado</span></p> 				</td> 			</tr> 		</tbody> 	</table> </center>',
+				className: 'btn btn-success text-center fa fa-print fa-2x',
+				exportOptions: {
+                    columns: [ ]
+                }
+
+            }
+        ],	
+		"ajax": {
+			"url": "fopag/ajax_listar_folhas",
 			"method": "POST",
 		},
 		"columnDefs": [

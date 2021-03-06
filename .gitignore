@@ -46,3 +46,4 @@ application/config/common/dp_config.php
 application/config/database.php
 *.PNG
 *.jpg
+application/config/database.php

@@ -17,7 +17,7 @@ class Fopag extends Admin_Controller
        /* Title Page */
        
        $this->page_title->push(lang('menu_fopag'));
-       $this->data['pagetitle'] = '<li class="fa fa-address-card fa-2x"><bold> Folha de Pagamentos</bold></li>';
+       $this->data['pagetitle'] = '<li class="fa fa-money fa-2x"><bold> Folha de Pagamentos</bold></li>';
 
        /* Breadcrumbs :: Common */
         $this->breadcrumbs->unshift(1, lang('menu_fopag'), 'admin/fopag');
@@ -362,6 +362,48 @@ class Fopag extends Admin_Controller
             json_encode($json);
             exit;
     }
+    
+    public function jade(){
+            
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma especialização.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->load->model("cemerge/Evento_model");
+        $this->load->model("cemerge/Folha_model");
+        $this->load->model("cemerge/Profissional_model");
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_estoque_create'), 'admin/fopag/');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Variables */
+        $id = $this->input->post('profissional_id');
+        $ano = $this->input->post('anos_select');
+        $mes = $this->input->post('meses_select');
+        $tipo = $this->input->post('tipos_folha_select');
+        
+        $this->form_validation->set_rules('profissional_id', 'ID', 'required');
+        $this->form_validation->set_rules('anos_select', 'Ano', 'required');
+        $this->form_validation->set_rules('meses_select', 'Mês', 'required');
+        $this->form_validation->set_rules('tipos_folha_select', 'Tipo', 'required');
+        
+        $json = array();
+        $json["status"] = 1;
+        if ($this->form_validation->run() == true) {
+            $json = $this->input->post();
+            
+        } else {
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        } 
+            //var_dump($json); exit;
+            json_encode($json);
+            exit;
+    }
 
     public function ajax_listar_eventos() {
 
@@ -407,7 +449,7 @@ class Fopag extends Admin_Controller
         exit;
         }
 
-        public function ajax_listar_folhas() {
+        public function ajax_listar_folhas_profissional() {
 
             if (!$this->input->is_ajax_request()) {
                 exit("Nenhum acesso de script direto permitido!");
@@ -416,14 +458,12 @@ class Fopag extends Admin_Controller
             $this->load->model("cemerge/folha_model");
 
             $id_profissional = $this->input->get_post('profissional_id');
-            $mes = $this->input->post('meses_select');
-            $ano = $this->input->post('anos_select');
-            $tipo_folha = $this->input->post('tipos_folha_select');
+            $mes = $this->input->get_post('meses_select');
+            $ano = $this->input->get_post('anos_select');
+            $tipo_folha = $this->input->get_post('tipos_folha_select');
 
-            $folhas = $this->folha_model->get_folhas($id_profissional, $mes, $ano, $tipo_folha);
+            $folhas = $this->folha_model->get_folhas(1, 1, 2021, 1);
 
-            var_dump($id_profissional); exit;
-        
             $data = array();
             foreach ($folhas as $folha) {
         
@@ -449,12 +489,72 @@ class Fopag extends Admin_Controller
             }
             $json = array(
                 "draw" => $this->input->post("draw"),
-                "recordsTotal" => $this->folha_model->records_total(),
+                "recordsTotal" =>$this->folha_model->records_total(),
                 "recordsFiltered" => $this->folha_model->records_filtered(),
+                "status" => 1,
                 "data" => $data,
-            );
+            ); 
             echo json_encode($json);
             exit;
+        }
+
+    public function ajax_listar_folhas() {
+
+                if (!$this->input->is_ajax_request()) {
+                    exit("Nenhum acesso de script direto permitido!");
+                }
+                    
+                $this->load->model("cemerge/folha_model");
+                $this->load->model("cemerge/Evento_model");
+    
+                $id_profissional = $this->input->get_post('profissional_id');
+                $mes = $this->input->get_post('meses_select');
+                $ano = $this->input->get_post('anos_select');
+                $tipo_folha = $this->input->get_post('tipos_folha_select');
+                $eventos = $this->Evento_model->get_all();
+    
+                $folhas = $this->folha_model->get_folhas(1, 1, 2021, 1);
+    
+                $data = array();
+                foreach ($folhas as $folha) {
+            
+                    $row = array();
+                    $row[] = '<center>'.$folha->ano.'</center>';
+                    $row[] = '<center>'.$folha->mes.'</center>';
+                    $row[] = '<center>'.$folha->quantidade.'</center>';
+                    $row[] = '<center>'.$folha->valor_ref.'</center>';
+
+                    if($folha->tipo == 'C'){
+                        $row[] = '<center>'.(10*$folha->valor_ref).'</center>';
+                        $row[] = '';
+                    } else {
+                        $row[] = '';
+                        $row[] = '<center>'.($folha->quantidade*$folha->valor_ref).'</center>';
+                    }
+            
+                    $row[] = '<center><div style="display: inline-block;">
+                                <button class="btn btn-primary btn-edit-folha" 
+                                    id='.$folha->id.'>
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-del-folha" 
+                                    id='.$folha->id.'>
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div></center>';
+            
+                    $data[] = $row;
+            
+                }
+                $json = array(
+                    "draw" => $this->input->post("draw"),
+                    "recordsTotal" => $this->folha_model->records_total(),
+                    "recordsFiltered" => $this->folha_model->records_filtered(),
+                    "status" => 1,
+                    "data" => $data,
+                );
+                echo json_encode($json);
+                exit;
             }
 
     public function ajax_import_image() {
