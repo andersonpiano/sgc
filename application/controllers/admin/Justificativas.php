@@ -42,7 +42,9 @@ class Justificativas extends Admin_Controller
         $this->data['breadcrumb'] = $this->breadcrumbs->show(); 
         // Modulos Carregados  
         $this->load->model('cemerge/FrequenciaAssessus_model');
-
+            $data_plantao_inicio = $this->input->post('data_plantao_inicio');
+            $data_plantao_fim = $this->input->post('data_plantao_fim');
+            $status = $this->input->post('status');
         /* Validate form input */
         $this->form_validation->set_rules('data_plantao_inicio', 'lang:justificativas_data_inicio', 'required');
         $this->form_validation->set_rules('data_plantao_fim', 'lang:justificativas_data_fim', 'required');
@@ -54,12 +56,8 @@ class Justificativas extends Admin_Controller
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
             $this::STATUS_JUSTIFICATIVA_TODAS => 'Todas',
         );
-        $status = $this->input->post('status');
-        if ($this->form_validation->run() == true) {
-            $data_plantao_inicio = $this->input->post('data_plantao_inicio');
-            $data_plantao_fim = $this->input->post('data_plantao_fim');
-            $status = $this->input->post('status');
-            
+
+        if ($this->form_validation->run() == true) {       
             /* Justificativas */
             //$profissional_id = $this->session->userdata('profissional_id');
             //$this->data['justificativas'] = $this->justificativa_model->get_where(array('profissional_id' => $profissional_id, 'data_plantao >='=>$data_plantao_inicio, 'data_plantao <='=>$data_plantao_fim));
@@ -170,7 +168,7 @@ class Justificativas extends Admin_Controller
             'escala_id' => $escala_id,
             'setor_id' => $setor_id,
             'data_plantao' => $data_plantao_inicio,
-            'entrada_justificada' => $hora_entrada,
+            'entrada_entrada' => $hora_entrada,
             'saida_justificada' => $hora_saida,
             'descricao' => $descricao,
             'status' => 0

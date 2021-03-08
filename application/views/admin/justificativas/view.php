@@ -76,7 +76,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_descricao')); ?></th>
-                                                <td><?php echo(htmlspecialchars(nl2br($justificativa->descricao), ENT_QUOTES, 'UTF-8')); ?></td>
+                                                <td><?php echo(htmlspecialchars(nl2br($justificativa->descricao), ENT_QUOTES, 'UTF-8')); ?></td> 
                                             </tr>
                                             <?php if($justificativa->status == '2') {?> 
                                             <tr>

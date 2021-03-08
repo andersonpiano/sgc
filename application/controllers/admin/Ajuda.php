@@ -52,6 +52,25 @@ class Ajuda extends Admin_Controller
         $this->template->admin_render('admin/ajuda/index', $this->data);
     }
 
+    public function primeiro_acesso(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/primeiro_acesso', $this->data);
+    }
+
+    public function buscar_frequencia(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/buscar_frequencia', $this->data);
+    }
+
+    public function buscar_escala(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/buscar_escala', $this->data);
+    }    
+
+
     private function _get_tipo_profissionais()
     {
         

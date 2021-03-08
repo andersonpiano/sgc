@@ -29,7 +29,23 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                 <?php endif; ?>
                 <div class="print-header row">
                     <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Justificativas ".isset($status)); ?></h3></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php 
+                        switch ($this->input->post('status')) {
+                            case 0:
+                                echo ("Justificativas Aguardando Aprovação");  
+                                break;
+                            case 1:
+                                echo ("Justificativas Deferidas"); 
+                                break;
+                            case 2:
+                                echo ("Justificativas Indeferidas"); 
+                                break;
+                            case 3:
+                                    echo ("Justificativas"); 
+                                    break;
+                        }               
+                    
+                    ?></h3></div>
                 </div>
                     <section class="content dontprint">
                     <div class="row dontprint">
@@ -107,8 +123,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo htmlspecialchars($justificativa->turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo(($justificativa->entrada_justificada && $justificativa->entrada_justificada != null) ? date('H:i:s', strtotime($justificativa->entrada_justificada)) : "Sem Registro"); ?></td> 
-                                                <td><?php echo(($justificativa->saida_justificada && $justificativa->saida_justificada != null) ? date('H:i:s', strtotime($justificativa->saida_justificada)) : "Sem Registro"); ?></td>
+                                                <td><?php echo((isset($justificativa->entrada_justificada) && $justificativa->entrada_justificada != null) ? date('H:i', strtotime($justificativa->entrada_justificada)) : "Sem Registro"); ?></td> 
+                                                <td><?php echo((isset($justificativa->saida_justificada) && $justificativa->saida_justificada != null) ? date('H:i', strtotime($justificativa->saida_justificada)) : "Sem Registro"); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
