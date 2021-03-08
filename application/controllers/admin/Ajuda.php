@@ -70,6 +70,17 @@ class Ajuda extends Admin_Controller
         $this->template->admin_render('admin/ajuda/buscar_escala', $this->data);
     }    
 
+    public function trocar_ou_confirmar_plantao(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/buscar_escala', $this->data);
+    }
+
+    public function trocar_plantao_de_medico(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/buscar_escala', $this->data);
+    }
 
     private function _get_tipo_profissionais()
     {

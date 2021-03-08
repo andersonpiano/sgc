@@ -28,19 +28,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <center><h1><label>1. Acesse: <a href="http://www.cemerge.com.br/sgc" >http://www.cemerge.com.br/sgc</a></label><h1></center>
                 <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/primeiro_acesso.png"></center><br>
                 <center><h2><strong>2. Clique no link “Acessar o sistema” ou no botão “Acessar” no banner principal.</strong></h2></center>
-                <center><img src="/sgc/assets/manuais/img/primeiro_acesso2.png"></center><br>
+                <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/primeiro_acesso2.png"></center><br>
                 <center><h2><strong>3. Entre com seu e-mail cadastrado na CEMERGE e sua senha cadastrada.</strong></h2></center>
-                <center><img src="/sgc/assets/manuais/img/primeiro_acesso3.png"></center><br>
+                <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/primeiro_acesso3.png"></center><br>
                 <center><h2><strong>4. Vá até o menu “Conferência” e escolha uma opção.</strong></h2></center>
-                <center><img src="/sgc/assets/manuais/img/buscar_frequencia.png"></center><br>
+                <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/buscar_frequencia.png"></center><br>
                 <center><h2><strong>5. Na opção “Buscar frequência por setor”, Você seleciona Unidade hospitalar, Data Inicial e Data final e clica em “Buscar”.</strong></h2></center>
-                <center><img src="/sgc/assets/manuais/img/buscar_frequencia2.png"></center><br>
+                <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/buscar_frequencia2.png"></center><br>
                 <center><h2><strong>6. Selecionado os campos, aparecerá esta tela: Primeiro o nome do médico, seguido de sua batida de ponto. “entrada ou saída”.</strong></h2></center>
-                <center><img src="/sgc/assets/manuais/img/buscar_frequencia3.png"></center><br>
+                <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/buscar_frequencia3.png"></center><br>
                 <center><h2><strong>7. Na opção “Buscar frequência por profissional”, você seleciona Unidade Hospitalar, Médico(a), Data Inicial, Data final e clica em “Buscar”.</strong></h2></center>
-                <center><img src="/sgc/assets/manuais/img/buscar_frequencia4.png"></center><br>
+                <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/buscar_frequencia4.png"></center><br>
                 <center><h2><strong>8. Selecionado os campos, aparecerá esta tela: Primeiro o nome do médico, seguido de Setor, data e suas frequências. “entrada ou saída”.</strong></h2></center>
-                <center><img src="/sgc/assets/manuais/img/buscar_frequencia5.png"></center><br>
+                <center><img style="width:40%; height:40%;" src="/sgc/assets/manuais/img/buscar_frequencia5.png"></center><br>
             </div>
         </div>
     </div>    
