@@ -70,16 +70,40 @@ class Ajuda extends Admin_Controller
         $this->template->admin_render('admin/ajuda/buscar_escala', $this->data);
     }    
 
+    public function criar_e_validar_escala(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/criar_e_validar_escala', $this->data);
+    }
+
+    public function criar_escala_por_copia(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/criar_escala_por_copia', $this->data);
+    }
+
+    public function criar_primeira_escala(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/criar_primeira_escala', $this->data);
+    }
+
     public function trocar_ou_confirmar_plantao(){
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
         
-        $this->template->admin_render('admin/ajuda/buscar_escala', $this->data);
+        $this->template->admin_render('admin/ajuda/trocar_ou_confirmar_plantao', $this->data);
     }
 
     public function trocar_plantao_de_medico(){
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
         
-        $this->template->admin_render('admin/ajuda/buscar_escala', $this->data);
+        $this->template->admin_render('admin/ajuda/trocar_plantao_de_medico', $this->data);
+    }
+
+    public function ceder_plantao_de_medico(){
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        
+        $this->template->admin_render('admin/ajuda/ceder_plantao_de_medico', $this->data);
     }
 
     private function _get_tipo_profissionais()
