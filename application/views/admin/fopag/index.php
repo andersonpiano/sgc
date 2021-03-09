@@ -236,6 +236,78 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
         </div>
     </div>
+
+    <div id="modal_evento_profissional" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Editar Lançamento</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="form_evento_profissional">
+
+                        <input id="folha_id" name="folha_id" hidden>
+                        <input id="evento_profissional_id" name="evento_profissional_id" hidden>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Nome</label>
+                            <div class="col-lg-10">
+                                <input id="evento_profissional_nome" name="evento_profissional_nome" class="form-control" maxlength="44" onKeyPress="if(this.value.length==44) return false;">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Valor Referência</label>
+                            <div class="col-lg-10">
+                                <input id="evento_profissional_valor" name="evento_profissional_valor" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Quantidade</label>
+                            <div class="col-lg-10">
+                                <input id="evento_profissional_quantidade" name="evento_profissional_quantidade" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Valor Total</label>
+                            <div class="col-lg-10">
+                                    <input id="evento_profissional_total" name="evento_profissional_total" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Incidência</label>
+                            <div class="col-lg-10">
+                            <input type = "checkbox" id="IR" name = "evento_profissional_incidencias" value = "2">
+                            <label for = "IR">&nbsp;&nbsp;IR&nbsp;&nbsp;</label>
+                            <input type = "checkbox" id="INSS" name = "evento_profissional_incidencias" value = "3">
+                            <label for = "INSS">&nbsp;&nbsp;INSS&nbsp;&nbsp;</label>
+          
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                        <button type="submit" id="btn_save_eventos" class="btn btn-primary text-center">
+                            <i class="fa fa-save"></i>&nbsp;&nbsp;Salvar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div id="modal_folha" class="modal fade">
             <div class="modal-dialog modal-lg">

@@ -296,6 +296,31 @@ class Fopag extends Admin_Controller
         echo json_encode($json);
         exit;
     }
+
+    public function ajax_get_evento_folha_data() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+        $json = array();
+        $json["status"] = 1;
+        $json["input"] = array();
+
+        $this->load->model("cemerge/Folha_model");
+        
+        $id = 16470;
+        $data = $this->Folha_model->get_data($id)->result_array()[0];
+        
+        $json["input"]["folha_id"] = $data["id"];
+        $json["input"]["evento_profissional_id"] = $data["id_evento"];
+        //$json["input"]["evento_profissional_nome"] = $this->Evento_model->get_evento_by_id($data["id_evento"])->nome;
+        /*$json["input"]["evento_profissional_quantidade"] =$data["quantidade"];
+        $json["input"]["evento_profissional_valor"] =$data["valor_ref"];
+        $json["input"]["evento_profissional_total"] =$data["valor_total"];*/
+
+        echo json_encode($json);
+        exit;
+    }
     public function cadastrar_evento(){
             
         if (!$this->ion_auth->logged_in()) {
@@ -469,12 +494,12 @@ class Fopag extends Admin_Controller
             $this->load->model("cemerge/Folha_model");
             $this->load->model("cemerge/Profissional_model");
             $this->load->model("cemerge/Evento_model");
-
+            /*
             $id_profissional = $this->input->get_post('profissional_id');
             $mes = $this->input->get_post('meses_select');
             $ano = $this->input->get_post('anos_select');
             $tipo_folha = $this->input->get_post('tipos_folha_select');
-
+            */
             $folhas = $this->Folha_model->get_folhas(1, 1, 2021, 1);
 
             $data = array();
@@ -500,11 +525,11 @@ class Fopag extends Admin_Controller
                 }
         
                 $row[] = '<center><div style="display: inline-block;">
-                            <button class="btn btn-primary btn-edit-folha" 
+                            <button class="btn btn-primary btn-edit-evento-folha" 
                                 id='.$folha->id.'>
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger btn-del-folha" 
+                            <button class="btn btn-danger btn-del-evento_folha" 
                                 id='.$folha->id.'>
                                 <i class="fa fa-times"></i>
                             </button>
