@@ -191,6 +191,29 @@ $("#form_lancador_profissional").submit(function() {
 			})
 		});
 
+		$(".btn-edit-evento-folha").click(function(){
+		$.ajax({
+			type: "POST",
+			url: "fopag/ajax_get_evento_folha_data",
+			dataType: 'json',
+			data: {"id": $(this).attr('id')},
+			success: function(response) {
+				clearErrors();
+				$("#form_evento_profissional")[0].reset();
+				$.each(response["input"], 
+				function(id, value) {
+					$("#"+id).val(value);
+				});
+				$("#modal_evento_profissional").modal();
+				swal("Perfeito!","Seu processo chegou até aqui","success");
+			},
+			error: function(response){
+				$("#modal_evento_profissional").modal();
+				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+			}
+		})
+	});
+
 		$(".btn-profissional-folha").click(function(){
 			clearErrors();
 			$("#form_lancador_profissional")[0].reset();
@@ -255,31 +278,6 @@ $("#form_lancador_profissional").submit(function() {
 		},
 		select: true,
 	});
-
-	$(".btn-edit-evento-folha").click(function(){
-		$.ajax({
-			type: "POST",
-			url: "fopag/ajax_get_evento_folha_data",
-			dataType: 'json',
-			data: {"id": $(this).attr('id')},
-			success: function(response) {
-				clearErrors();
-				$("#form_evento_profissional")[0].reset();
-				$.each(response["input"], 
-				function(id, value) {
-					$("#"+id).val(value);
-				});
-				$("#modal_evento_profissional").modal();
-				swal("Perfeito!","Seu processo chegou até aqui","success");
-			},
-			error: function(response){
-				$("#modal_evento_profissional").modal();
-				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
-			}
-		})
-	});
-
-	
 
 	var dt_folha = $("#dt_folha").DataTable({
 		"oLanguage": DATATABLE_PTBR,
