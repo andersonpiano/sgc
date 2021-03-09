@@ -21,6 +21,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <?php endif; ?>
 
                 <section class="content">
+                    <div class="print-header row">
+                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
@@ -95,7 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php foreach ($profissional->setorescoordena as $setor) : ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($setor->nome, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td>
+                                                <td class="dontprint text-center">
                                                     <?php echo anchor('admin/setores/view/'.$setor->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
                                                     <?php echo anchor('admin/setores/edit/'.$setor->id, lang('actions_edit'), array('class' => 'btn btn-default btn-flat')); ?> &nbsp;
                                                     <?php echo anchor('admin/users/unlinkfromsector/'.$profissional->usuario->user_id.'/'.$setor->id, lang('actions_unlink'), array('class' => 'btn btn-default btn-flat')); ?>

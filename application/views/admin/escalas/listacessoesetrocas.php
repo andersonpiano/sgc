@@ -49,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_find'))); ?>
+                                                    <a href="<?php echo(current_url()); ?>" onclick="window.print(); return false;" class="btn btn-default btn-flat">Imprimir</a>&nbsp;
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/escalas/listarcessoesetrocas', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
@@ -62,11 +63,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
 
                 <section class="content">
+                    <div class="print-header row">
+                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Resultados</h3>
+                                    <h3 class="box-title">Lista de Cessões e Trocas</h3>
                                 </div>
                                 <div class="box-body">
                                     <table class="table table-striped table-hover">
@@ -77,7 +82,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_profissional_substituto');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_dataplantao');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_turno');?></th>
-                                                <th class="text-center"><?php echo lang('escalas_status_passagem');?></th>
+                                                <th class="text-center dontprint"><?php echo lang('escalas_status_passagem');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -88,8 +93,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($ct->profissional_substituto_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($ct->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars($ct->turno, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td class="text-center"><?php echo htmlspecialchars($ct->status_cessao_troca, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td>
+                                                <td class="text-center dontprint"><?php echo htmlspecialchars($ct->status_cessao_troca, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="dontprint text-center">
                                                     <?php echo anchor('admin/escalas/confirmarcessaotroca/'.$ct->id, lang('actions_confirm'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank', 'onclick' => 'return confirm(\'Tem certeza que deseja confirmar a cessão ou troca?\');')) . '&nbsp;'; ?>
                                                     <?php echo anchor('admin/escalas/cancelarcessaotroca/'.$ct->id, lang('actions_delete'), array('class' => 'btn btn-danger btn-flat', 'target' => '_blank', 'onclick' => 'return confirm(\'Tem certeza que deseja apagar a cessão ou troca?\');')) . '&nbsp;'; ?>
                                                 </td>

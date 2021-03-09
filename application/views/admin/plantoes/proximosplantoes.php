@@ -22,6 +22,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 <!-- if (sizeof($proximosplantoes) > 0) { echo('A pesquisa não retornou resultados.');-->
                 <section class="content">
+                    <div class="print-header row">
+                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
@@ -41,7 +45,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php endif; ?>
                                                 <th><?php echo lang('plantoes_dataplantao');?></th>
                                                 <th><?php echo lang('plantoes_horario');?></th>
-                                                <th><?php echo lang('plantoes_action');?></th>
+                                                <th class="dontprint text-center"><?php echo lang('plantoes_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -53,7 +57,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php endif; ?>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($plantao->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($plantao->horainicialplantao)) . ' - ' . date('H:i', strtotime($plantao->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td>
+                                                <td class="dontprint text-center">
                                                     <?php echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/proximosplantoes', lang('actions_to_offer'), 'class="btn btn-primary"'); ?> &nbsp;
                                                     <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-default"'); ?> &nbsp;
                                                 </td>
