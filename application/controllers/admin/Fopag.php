@@ -289,6 +289,7 @@ class Fopag extends Admin_Controller
         $json["input"]["evento_fixo"] =$data["fixo"];
         $json["input"]["evento_percentual"] =$data["percentual"];
         $json["input"]["evento_valor"] =$data["valor_ref"];
+        $json["input"]["evento_quantidade"] =$data["quantidade"];
         $json["input"]["eventos_select"] =$data["valor_base"];
         $json["input"]["eventos_incidencias"] =$data["incidencias"];
 
@@ -317,6 +318,7 @@ class Fopag extends Admin_Controller
         $fixo = $this->input->post('evento_fixo');
         $percentual = $this->input->post('evento_percentual');
         $valor_ref = $this->input->post('evento_valor');
+        $quantidade = $this->input->post('evento_quantidade');
         $valor_base = $this->input->post('eventos_select');
         $incidencias = $this->input->post('evento_incidencias');
 
@@ -325,6 +327,7 @@ class Fopag extends Admin_Controller
         $this->form_validation->set_rules('evento_tipo', 'Tipo', 'required');
         $this->form_validation->set_rules('evento_fixo', 'Fixo', 'required');
         $this->form_validation->set_rules('evento_percentual', 'Percentual', 'required');
+        $this->form_validation->set_rules('evento_quantidade', 'Quantidade', 'required');        
         $this->form_validation->set_rules('evento_valor', 'Valor', 'required');
         
         $json = array();
@@ -338,6 +341,7 @@ class Fopag extends Admin_Controller
                     'fixo'=>$fixo, 
                     'percentual'=>$percentual,
                     'valor_ref'=>$valor_ref,
+                    'quantidade'=>$quantidade,
                     'valor_base'=>$valor_base,
                     'incidencias'=>$incidencias
                 ]);
@@ -350,6 +354,7 @@ class Fopag extends Admin_Controller
                     'fixo'=>$fixo, 
                     'percentual'=>$percentual,
                     'valor_ref'=>$valor_ref,
+                    'quantidade'=>$quantidade,
                     'valor_base'=>$valor_base,
                     'incidencias'=>$incidencias
                 ]);
@@ -420,9 +425,15 @@ class Fopag extends Admin_Controller
             $row = array();
             $row[] = '<center>'.$evento->id.'</center>';
             $row[] = '<center>'.$evento->nome.'</center>';
-            $row[] = '<center>'.$evento->tipo.'</center>';
-            $row[] = '<center>'.$evento->fixo.'</center>';
-            $row[] = '<center>'.$evento->percentual.'</center>';
+            if ($evento->tipo == 'C'){
+                $row[] = '<center>Crédito</center>';
+            } else {
+                $row[] = '<center>Débito</center>';
+            }
+            
+            $row[] = '<center>'.$this->sim_nao($evento->fixo).'</center>';
+            $row[] = '<center>'.$this->sim_nao($evento->percentual).'</center>';
+            $row[] = '<center>'.$evento->quantidade.'</center>';
             $row[] = '<center>'.$evento->valor_ref.'</center>';
     
             $row[] = '<center><div style="display: inline-block;">
@@ -455,23 +466,38 @@ class Fopag extends Admin_Controller
                 exit("Nenhum acesso de script direto permitido!");
             }
                 
-            $this->load->model("cemerge/folha_model");
+            $this->load->model("cemerge/Folha_model");
+            $this->load->model("cemerge/Profissional_model");
+            $this->load->model("cemerge/Evento_model");
 
             $id_profissional = $this->input->get_post('profissional_id');
             $mes = $this->input->get_post('meses_select');
             $ano = $this->input->get_post('anos_select');
             $tipo_folha = $this->input->get_post('tipos_folha_select');
 
-            $folhas = $this->folha_model->get_folhas(1, 1, 2021, 1);
+            $folhas = $this->Folha_model->get_folhas(1, 1, 2021, 1);
 
             $data = array();
             foreach ($folhas as $folha) {
         
                 $row = array();
-                $row[] = '<center>'.$folha->ano.'</center>';
-                $row[] = '<center>'.$folha->mes.'</center>';
+                $row[] = '<center>'.$folha->id_evento.'</center>';
+                $row[] = '<center>'.$this->Evento_model->get_evento_by_id($folha->id_evento)->nome.'</center>';
                 $row[] = '<center>'.$folha->tp_folha.'</center>';
-                $row[] = '<center>'.$folha->valor_ref.'</center>';
+                if($this->Evento_model->get_evento_by_id($folha->id_evento)->percentual == 1){
+                    $row[] = '<center>'.$folha->valor_ref.'%</center>';
+                } else {
+                    $row[] = '<center>'.$folha->valor_ref.'</center>';
+                }
+                
+
+                if($folha->tipo == 'C'){
+                    $row[] = '<center>'.($folha->quantidade*$folha->valor_ref).'</center>';
+                    $row[] = '';
+                } else {
+                    $row[] = '';
+                    $row[] = '<center>'.($folha->quantidade*$folha->valor_ref).'</center>';
+                }
         
                 $row[] = '<center><div style="display: inline-block;">
                             <button class="btn btn-primary btn-edit-folha" 
@@ -489,8 +515,8 @@ class Fopag extends Admin_Controller
             }
             $json = array(
                 "draw" => $this->input->post("draw"),
-                "recordsTotal" =>$this->folha_model->records_total(),
-                "recordsFiltered" => $this->folha_model->records_filtered(),
+                "recordsTotal" =>$this->Folha_model->records_total(),
+                "recordsFiltered" => $this->Folha_model->records_filtered(),
                 "status" => 1,
                 "data" => $data,
             ); 
@@ -498,13 +524,70 @@ class Fopag extends Admin_Controller
             exit;
         }
 
+    public function sim_nao($i) {
+        $retorno = '';
+        if ($i == 1){
+            $retorno = 'Sim';
+        } else {
+            $retorno = 'Não';
+        }
+
+        return $retorno;
+    }
+
+    public function mostra_mes($i){
+        
+        switch ($i){
+            case 1:
+                $row = 'Janeiro';
+                break;
+            case 2:
+                $row = 'Fevereiro';
+                break;
+            case 3:
+                $row = 'Março';
+                break;
+            case 4:
+                $row = 'Abril';
+                break;
+            case 5:
+                $row = 'Maio';
+                break;
+            case 6:
+                $row = 'Junho';
+                break;
+            case 7:
+                $row = 'Julho';
+                break;
+            case 8:
+                $row = 'Agosto';
+                break;
+            case 9:
+                $row = 'Setembro';
+                break;
+            case 10:
+                $row = 'Outubro';
+                break;
+            case 11:
+                $row = 'Novembro';
+                break;
+            case 12:
+                $row = 'Dezembro';
+                break;
+            case 13:
+                $row = 'Décimo Terceiro';
+                break;
+        }
+        return $row;
+    }
+
     public function ajax_listar_folhas() {
 
                 if (!$this->input->is_ajax_request()) {
                     exit("Nenhum acesso de script direto permitido!");
                 }
                     
-                $this->load->model("cemerge/folha_model");
+                $this->load->model("cemerge/Folha_model");
                 $this->load->model("cemerge/Evento_model");
     
                 $id_profissional = $this->input->get_post('profissional_id');
@@ -513,24 +596,23 @@ class Fopag extends Admin_Controller
                 $tipo_folha = $this->input->get_post('tipos_folha_select');
                 $eventos = $this->Evento_model->get_all();
     
-                $folhas = $this->folha_model->get_folhas(1, 1, 2021, 1);
+                $folhas = $this->Folha_model->get_folhas(1, 1, 2021, 1);
     
                 $data = array();
                 foreach ($folhas as $folha) {
             
                     $row = array();
                     $row[] = '<center>'.$folha->ano.'</center>';
-                    $row[] = '<center>'.$folha->mes.'</center>';
-                    $row[] = '<center>'.$folha->quantidade.'</center>';
-                    $row[] = '<center>'.$folha->valor_ref.'</center>';
+                    $row[] = '<center>'.$this->mostra_mes($folha->mes).'</center>';;
 
-                    if($folha->tipo == 'C'){
-                        $row[] = '<center>'.(10*$folha->valor_ref).'</center>';
-                        $row[] = '';
+                    
+                    if ($folha->tp_folha == 1){
+                        $row[] = '<center>Normal</center>';
                     } else {
-                        $row[] = '';
-                        $row[] = '<center>'.($folha->quantidade*$folha->valor_ref).'</center>';
+                        $row[] = '<center>Complementar</center>';
                     }
+                    
+                    $row[] = '<center>'.$folha->valor_ref.'</center>';
             
                     $row[] = '<center><div style="display: inline-block;">
                                 <button class="btn btn-primary btn-edit-folha" 
@@ -548,8 +630,8 @@ class Fopag extends Admin_Controller
                 }
                 $json = array(
                     "draw" => $this->input->post("draw"),
-                    "recordsTotal" => $this->folha_model->records_total(),
-                    "recordsFiltered" => $this->folha_model->records_filtered(),
+                    "recordsTotal" => $this->Folha_model->records_total(),
+                    "recordsFiltered" => $this->Folha_model->records_filtered(),
                     "status" => 1,
                     "data" => $data,
                 );
@@ -635,6 +717,7 @@ class Fopag extends Admin_Controller
                                 'tipo'=>$evento->tipo,
                                 'tp_folha'=>$tipo,
                                 'valor_ref'=>$evento->valor_ref,
+                                'quantidade'=>$evento->quantidade,
                                 'valor_total'=>$evento->valor_ref,
                                 'id_unidade'=> '1',
                                 'id_setor' => '1',
@@ -649,7 +732,7 @@ class Fopag extends Admin_Controller
             } else {
                 $id = $data["folha_id"];
                 unset($data['folha_id']);
-                $this->folha_model->update($id, [
+                $this->Folha_model->update($id, [
                     'nome'=>$nome, 
                     'tipo'=>$tipo, 
                     'fixo'=>$fixo, 

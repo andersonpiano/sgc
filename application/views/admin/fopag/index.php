@@ -63,6 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <th class="dt-center text-center">Tipo</th>
                                 <th class="dt-center text-center">Fixo</th>
                                 <th class="dt-center text-center">%</th>
+                                <th class="dt-center text-center">QTD</th>
                                 <th class="dt-center text-center">REF</th>
                                 <th class="dt-center no-sort text-center">Ações</th>
                             </tr> 
@@ -84,7 +85,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <th class="dt-center text-center" >Mês</th>
                             <th width="20%" class="dt-center text-center">Tipo</th>
                             <th width="20%" class="dt-center text-center">Total</th>
-                            <th width="07%" class="dt-center no-sort text-center">Ações</th>
+                            <th width="10%" class="dt-center no-sort text-center">Ações</th>
                         </tr> 
                     </thead>
                     <tbody>
@@ -192,6 +193,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <label class="col-lg-2 control-label">Valor Referência</label>
                             <div class="col-lg-10">
                                 <input id="evento_valor" name="evento_valor" class="form-control" maxlength="100">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Quantidade</label>
+                            <div class="col-lg-10">
+                                <input id="evento_quantidade" name="evento_quantidade" class="form-control" maxlength="100">
                                 <span class="help-block"></span>
                             </div>
                         </div>
