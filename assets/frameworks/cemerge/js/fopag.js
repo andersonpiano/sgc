@@ -84,6 +84,53 @@ $(function() {
 });
 
 $("#form_lancador_profissional").submit(function() {
+
+	var dt_eventos_profissional = $("#dt_eventos_profissional").DataTable({
+
+		"oLanguage": DATATABLE_PTBR,
+		"autoWidth": false,
+		"processing": true,
+		"serverSide": true,
+		dom: 'Brt',
+        buttons: [
+			{
+				extend: 'print',
+				title: '',
+				messageTop: '<p style="text-align: center;"><img src="/sgc/assets/frameworks/cemerge/images/logo.png" alt="Cemerge" /></p> <table style="margin-left: auto; margin-right: auto; width: 100%; height: 100px;"> 	<tbody> 		<tr> 			<td colspan="2"><center><strong><span style="font-size: 12pt;">CEMERGE - Cooperativa dos Médicos Emergencistas do Estado do Ceará</span></strong><br><strong><span style="font-size: 12pt;">CNPJ: 03.200.244/0001-06</span></strong></center><br><br></td> 		</tr> 		<tr> 			<td style="text-align: left;"><strong> Matricula: 00001</strong></td> 			<td style="text-align: right;"><strong>RECIBO DE PAGAMENTOS</strong></td> 		</tr> 		<tr> 			<td style="text-align: left;"><strong>FUNCIONARIO: ANDERSON DE SOUSA PEREIRA</strong></td> 			<td style="text-align: right;"><strong>REFERÊNCIA: JANEIRO/2021</strong></td> 		</tr> <tr></tr> 	</tbody> </table>',
+                text: '  Contra Cheque',
+				messageBottom: '<table style="margin: 15px 0 10px; width: 99%; height: 30px;"> 	<tbody> 		<tr> 			<td><strong>&nbsp;TOTAL DE PROVENTOS: R$ 5.000,00</strong></td> 			<td style="text-align: right;"><strong>TOTAL DE DESCONTOS: R$ 500,00</strong></td> 			<td style="text-align: right;"><strong>VALOR LIQUIDO: R$ 4.500,00 </strong></td> 		</tr> 	</tbody> </table> <p><span style="font-size: 10pt;"><strong>RECEBI A IMPORTÂNCIA ACIMA DISCRIMINADA, REFERENTE A PRESTAÇÃO DE SERVIÇOS MÉDICOS EM REGIME COOPERATIVISTA E NA QUALIDADE DE ASSOCIADO.</strong></span></p> <table style="margin: 5px 0 10px; width: 99%; height: 30px;"> 	<tbody> 		<tr> 			<td style="text-align: left;">FORTALEZA-CE&nbsp; ____/____/____&nbsp;</td><td style="text-align: center;">&nbsp;______________________________________________</td> 		</tr> 	</tbody> </table>',
+				className: 'btn btn-success text-center fa fa-print fa-2x',
+				exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                }
+
+            },
+			{
+				extend: 'print',
+				title: '',
+                text: '  Mensagem',
+				messageBottom: '<center> 	<table style="margin: 25% 0 0; border: 1px solid black; border-radius: 30px; width: 90%; height: 60px;"> 		<tbody> 			<tr> 				<td><label><strong>&nbsp;&nbsp;MATRICULA: 0001</strong></label> <br /> <span><strong>&nbsp;&nbsp;Anderson de Sousa Pereira</strong></span></td> 			</tr> 		</tbody> 	</table> 	<table style="margin: 10px 0 0; border: 1px solid black; border-radius: 30px; width: 90%; height: 144px;"> 		<tbody> 			<tr> 				<td> 					<p style="text-align: center;"><span style="font-size: 12pt;">Existem observações no seu Contra Cheque</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* CONFIRA OS DADOS CADASTRAIS ACIMA E INFORME SE HOUVER DIVERGENCIA</span></p><p style="text-align: center;"><span style="font-size: 12pt;">* APRESENTE A QUITAÇÃO DO ISS-ANUAL E EVITE A RETENÇÃO ADICIONAL DE 5%</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* O VALOR DA VERBA 802 CORRESPONDE AO DA RETENÇÃO DO INSS, MAS SERÁ DEVOLVIDO CONTRA-APRESENTAÇÃO DE DOCUMENTOS, NÃO VALE COMO PROVA DE INSS-RETIDO</span></p> 				</td> 			</tr> 		</tbody> 	</table> 	<p>&nbsp;</p> 	<p>&nbsp;</p> 	<table style="width: 1191px; height: 364px;"> 		<tbody> 			<tr> 				<td> 					<p>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br /></p> 				</td> 			</tr> 		</tbody> 	</table> </center>',
+				className: 'btn btn-success text-center fa fa-print fa-2x',
+				exportOptions: {
+                    columns: [ ]
+                }
+
+            }
+        ],	
+		"ajax": {
+			"url": "fopag/ajax_listar_folhas_profissional",
+			"method": "POST",
+		},
+		"columnDefs": [
+			{ targets: "no-sort", orderable: false },
+			{ targets: "dt-center", className: "dt-center" },
+		],
+		"drawCallback": function() {
+			active_btn_profissional();
+		},
+		select: true,
+	});
+
 	$.ajax({
    type: "POST",
    url: 'fopag/ajax_listar_folhas_profissional',
@@ -100,8 +147,8 @@ $("#form_lancador_profissional").submit(function() {
 			clearErrors();
 			$("#form_jade")[0].reset();
 			$("#modal_jade").modal();
-		   swal("Sucesso!","Deu certo!", "success");
-		   //dt_folha.ajax.reload();
+		   //swal("Sucesso!","Deu certo!", "success");
+		   dt_eventos_profissional.ajax.reload();
 	   } else {
 		   showErrorsModal(response["error_list"])
 	   }
@@ -111,7 +158,7 @@ $("#form_lancador_profissional").submit(function() {
 	if (response["status"]) {
 		$("#modal_lancador_profissional").modal("hide");
 		swal("Erro!","Algo deu errado!", "error");
-		//dt_folha.ajax.reload();
+		dt_eventos_profissional.ajax.reload();
 	} else {
 		showErrorsModal(response["error_list"])
 	}
@@ -209,56 +256,30 @@ $("#form_lancador_profissional").submit(function() {
 		select: true,
 	});
 
-	var dt_eventos_profissional = $("#dt_eventos_profissional").DataTable({
-
-		"oLanguage": DATATABLE_PTBR,
-		"autoWidth": false,
-		"processing": true,
-		"serverSide": true,
-		dom: 'Bfrtip',
-        buttons: [
-			{
-                extend: 'excel',
-                messageTop: 'Teste.',
-				text: 'Teste'
-            },
-			{
-				extend: 'print',
-				title: '',
-				messageTop: '<p style="text-align: center;"><img src="/sgc/assets/frameworks/cemerge/images/logo.png" alt="Cemerge" /></p> <table style="margin-left: auto; margin-right: auto; width: 100%; height: 100px;"> 	<tbody> 		<tr> 			<td colspan="2"><center><strong><span style="font-size: 12pt;">CEMERGE - Cooperativa dos Médicos Emergencistas do Estado do Ceará</span></strong></center></td> 		</tr> 		<tr> 			<td style="text-align: left;"><strong> Matricula: 00001</strong></td> 			<td style="text-align: right;"><strong>RECIBO DE PAGAMENTOS</strong></td> 		</tr> 		<tr> 			<td style="text-align: left;"><strong>FUNCIONARIO: ANDERSON DE SOUSA PEREIRA</strong></td> 			<td style="text-align: right;"><strong>REFERÊNCIA: JANEIRO/2021</strong></td> 		</tr> 	</tbody> </table>',
-                text: '  Contra Cheque',
-				messageBottom: '<table style="margin: 15px 0 40px; width: 99%; height: 30px;"> 	<tbody> 		<tr> 			<td><strong>&nbsp;TOTAL DE PROVENTOS: R$ 5.000,00</strong></td> 			<td style="text-align: right;"><strong>TOTAL DE DESCONTOS: R$ 500,00</strong></td> 			<td style="text-align: right;"><strong>VALOR LIQUIDO: R$ 4.500,00  </strong></td> 		</tr> 	</tbody> </table>',
-				className: 'btn btn-success text-center fa fa-print fa-2x',
-				exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5 ]
-                }
-
-            },
-			{
-				extend: 'print',
-				title: '',
-                text: '  Mensagem',
-				messageBottom: '<center>   <table style="margin: 45% 0 0; border: 1px solid black; border-radius: 30px; width: 80%; height: 60px;"> 		<tbody> 			<tr> 				<td>   					<label><strong>&nbsp;&nbsp;MATRICULA: 0001</strong></label>   						<br>   						<span><strong>&nbsp;&nbsp;Anderson de Sousa Pereira</strong></span> 			  </td> 		  </tr> 	</tbody>   </table> 	<table style="margin: 10px 0 0; border: 1px solid black; border-radius: 30px; width: 80%; height: 144px;"> 		<tbody> 			<tr> 				<td> 					<p style="text-align: center;"><span style="font-size: 12pt;">Existem observações no seu Contra Cheque</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* OBS1: Teste de Mensagem para o cooperado</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* OBS2: Teste de Mensagem para o cooperado</span></p> 					<p style="text-align: center;"><span style="font-size: 12pt;">* OBS3: Teste de Mensagem para o cooperado</span></p> 				</td> 			</tr> 		</tbody> 	</table> </center>',
-				className: 'btn btn-success text-center fa fa-print fa-2x',
-				exportOptions: {
-                    columns: [ ]
-                }
-
-            }
-        ],	
-		"ajax": {
-			"url": "fopag/ajax_listar_folhas",
-			"method": "POST",
-		},
-		"columnDefs": [
-			{ targets: "no-sort", orderable: false },
-			{ targets: "dt-center", className: "dt-center" },
-		],
-		"drawCallback": function() {
-			active_btn_profissional();
-		},
-		select: true,
+	$(".btn-edit-evento-folha").click(function(){
+		$.ajax({
+			type: "POST",
+			url: "fopag/ajax_get_evento_folha_data",
+			dataType: 'json',
+			data: {"id": $(this).attr('id')},
+			success: function(response) {
+				clearErrors();
+				$("#form_evento_profissional")[0].reset();
+				$.each(response["input"], 
+				function(id, value) {
+					$("#"+id).val(value);
+				});
+				$("#modal_evento_profissional").modal();
+				swal("Perfeito!","Seu processo chegou até aqui","success");
+			},
+			error: function(response){
+				$("#modal_evento_profissional").modal();
+				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+			}
+		})
 	});
+
+	
 
 	var dt_folha = $("#dt_folha").DataTable({
 		"oLanguage": DATATABLE_PTBR,
@@ -294,7 +315,7 @@ $("#form_lancador_profissional").submit(function() {
 		   if (response["status"]) {
 			   $("#modal_evento").modal("hide");
 			   swal("Sucesso!","evento salva com sucesso!", "success");
-			   dt_eventoss.ajax.reload();
+			   dt_eventos.ajax.reload();
 		   } else {
 			   showErrorsModal(response["error_list"])
 		   }
@@ -302,7 +323,7 @@ $("#form_lancador_profissional").submit(function() {
 	   error: function(response){
 		   $("#modal_evento").modal("hide");
 		   swal("Erro!","Erro ao Salvar evento!", "warning");
-		   dt_eventoss.ajax.reload();
+		   dt_eventos.ajax.reload();
 	   }
    })
 

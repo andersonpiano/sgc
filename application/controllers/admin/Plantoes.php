@@ -655,8 +655,6 @@ class Plantoes extends Admin_Controller
             'class' => 'form-control',
             'options' => $tipospassagem
         );
-        array_push($profissionais_setor, $profissionais_setor[9999] = 'LISTA DE OPORTUNIDADES');
-        unset($profissionais_setor[10000]);
 
         $this->data['profissionalsubstituto_id'] = array(
             'name'  => 'profissionalsubstituto_id',
@@ -1564,7 +1562,7 @@ class Plantoes extends Admin_Controller
     public function _get_profissionais_setor($profissionais)
     {
         $profissionaissetor = array();
-        $profissionaissetor[''] = 'Selecione um profissional';
+        $profissionaissetor[9999] = 'LISTA DE OPORTUNIDADES';
         foreach ($profissionais as $profissional) {
             $profissionaissetor[$profissional->id] = $profissional->nome;
         }

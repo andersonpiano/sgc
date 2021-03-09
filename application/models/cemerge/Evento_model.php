@@ -92,6 +92,16 @@ class Evento_model extends MY_Model
         return $query;
     }
 
+    public function get_evento_by_id($id){
+        
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function get_eventos_fixos(){
 
         $this->db->select('id, nome, tipo, fixo, percentual, valor_ref, valor_base, incidencias');
