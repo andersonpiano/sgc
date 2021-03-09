@@ -98,12 +98,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <?php if ($tipovisualizacao['value'] == 1) : ?>
     <section class="content">
+        <div class="print-header row">
+            <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+            <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+        </div>
         <?php echo($calendario);?>
     </section>
 <?php endif;?>
 
 <?php if ($tipovisualizacao['value'] == 0) : ?>
                 <section class="content">
+                <div class="print-header row">
+                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box"><!-- Minha escala consolidada -->
@@ -128,9 +136,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('plantoes_setor');?></th>
                                                 <th><?php echo lang('plantoes_dataplantao');?></th>
                                                 <th><?php echo lang('plantoes_box_title');?></th>
-                                                <th><?php echo lang('plantoes_horainicialplantao'). ' registrada'; ?></th>
-                                                <th><?php echo lang('plantoes_horafinalplantao'). ' registrada'; ?></th>
-                                                <th><?php echo lang('plantoes_action');?></th>
+                                                <th class="text-center"><?php echo lang('plantoes_horainicialplantao'). ' registrada'; ?></th>
+                                                <th class="text-center"><?php echo lang('plantoes_horafinalplantao'). ' registrada'; ?></th>
+                                                <th class="dontprint"><?php echo lang('plantoes_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -139,9 +147,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($plantao->nomesetor, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($plantao->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($plantao->horainicialplantao)) . ' - ' . date('H:i', strtotime($plantao->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo (($plantao->dt_frq_entrada) ? htmlspecialchars(date('H:i', strtotime($plantao->dt_frq_entrada)), ENT_QUOTES, 'UTF-8') : ' - '); ?></td>
-                                                <td><?php echo (($plantao->dt_frq_saida) ? htmlspecialchars(date('H:i', strtotime($plantao->dt_frq_saida)), ENT_QUOTES, 'UTF-8') : ' - '); ?></td>
-                                                <td>
+                                                <td class="text-center"><?php echo (($plantao->dt_frq_entrada) ? htmlspecialchars(date('H:i', strtotime($plantao->dt_frq_entrada)), ENT_QUOTES, 'UTF-8') : ' - '); ?></td>
+                                                <td class="text-center"><?php echo (($plantao->dt_frq_saida) ? htmlspecialchars(date('H:i', strtotime($plantao->dt_frq_saida)), ENT_QUOTES, 'UTF-8') : ' - '); ?></td>
+                                                <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/create/index.php?'.'plantao_id='.$plantao->id.'&setor_id='.$plantao->idsetor.'&profissional_id='.'&data_plantao='.$plantao->dataplantao.'&hora_in='.date('H:i', strtotime($plantao->dt_frq_entrada)).'&hora_out='.date('H:i', strtotime($plantao->dt_frq_saida)), lang('actions_justificativa'), 'class="btn btn-primary"'); ?> &nbsp;
                                                     <?php echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/index', lang('actions_to_offer'), 'class="btn btn-primary"'); ?> &nbsp;
                                                     <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-default"'); ?>
@@ -176,7 +184,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('plantoes_profissional_titular');?></th>
                                                 <th><?php echo lang('plantoes_tipopassagem');?></th>
                                                 <th><?php echo lang('plantoes_statuspassagem');?></th>
-                                                <th><?php echo lang('plantoes_action');?></th>
+                                                <th class="dontprint"><?php echo lang('plantoes_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -202,7 +210,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         <?php echo htmlspecialchars($statuspassagem[$recebido->passagenstrocas_statuspassagem], ENT_QUOTES, 'UTF-8'); ?>
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="dontprint text-center">
             <?php if ($recebido->passagenstrocas_statuspassagem == 0) :?>
                 <?php if ($recebido->passagenstrocas_tipopassagem == 0) :?>
                                                             <?php echo anchor('admin/plantoes/confirm/'.$recebido->id, lang('actions_confirm'), 'class="btn btn-primary"'); ?> &nbsp;
@@ -228,7 +236,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('plantoes_profissional_substituto');?></th>
                                                 <th><?php echo lang('plantoes_tipopassagem');?></th>
                                                 <th><?php echo lang('plantoes_statuspassagem');?></th>
-                                                <th><?php echo lang('plantoes_action');?></th>
+                                                <th class="dontprint text-center"><?php echo lang('plantoes_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -254,7 +262,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         <?php echo htmlspecialchars($statuspassagem[$passagem->passagenstrocas_statuspassagem], ENT_QUOTES, 'UTF-8'); ?>
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="dontprint text-center">
             <?php if ($passagem->passagenstrocas_statuspassagem == 2) :?>
                                                         <?php echo anchor('admin/plantoes/acceptproposal/'.$passagem->id, lang('actions_accept'), 'class="btn btn-primary"'); ?> &nbsp;
             <?php endif;?>&nbsp;
@@ -290,7 +298,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
                                                 <th><?php echo lang('escalas_horario');?></th>
-                                                <th><?php echo lang('escalas_action');?></th>
+                                                <th class="dontprint text-center"><?php echo lang('escalas_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -374,7 +382,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
                                                 <th><?php echo lang('escalas_horario');?></th>
-                                                <th><?php echo lang('escalas_action');?></th>
+                                                <th class="dontprint text-center"><?php echo lang('escalas_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -388,7 +396,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php endif;?>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td>
+                                                <td class="dontprint text-center">
                                                     <?php echo anchor('admin/plantoes/toofferbyadmin/'.$escala->id, lang('actions_to_give_in'), 'class="btn btn-primary" target="_blank"'); ?> &nbsp;
                                                     <?php echo anchor('admin/plantoes/exchangebyadmin/'.$escala->id, lang('actions_to_exchange'), 'class="btn btn-primary" target="_blank"'); ?> &nbsp;
                                                 </td>
@@ -423,7 +431,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('plantoes_profissional_substituto');?></th>
                                                 <th><?php echo lang('plantoes_tipopassagem');?></th>
                                                 <th><?php echo lang('plantoes_statuspassagem');?></th>
-                                                <th><?php echo lang('plantoes_action');?></th>
+                                                <th class="dontprint text-center"><?php echo lang('plantoes_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -450,7 +458,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         <?php echo htmlspecialchars($statuspassagem[$passagem->passagenstrocas_statuspassagem], ENT_QUOTES, 'UTF-8'); ?>
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="dontprint text-center">
             <?php if ($passagem->passagenstrocas_statuspassagem == 2) :?>
                                                         <?php echo anchor('admin/plantoes/acceptproposal/'.$passagem->id, lang('actions_accept'), 'class="btn btn-primary"'); ?> &nbsp;
             <?php endif;?>

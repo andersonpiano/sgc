@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php endif; ?>
                                                     <th><?php echo lang('plantoes_tipopassagem');?></th>
                                                     <th><?php echo lang('plantoes_statuspassagem');?></th>
-                                                    <th><?php echo lang('plantoes_action');?></th>
+                                                    <th class="dontprint text-center"><?php echo lang('plantoes_action');?></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -62,7 +62,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <td><?php echo htmlspecialchars($plantao->profissional_substituto_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                     <?php endif; ?>
                                                     <td><?php echo htmlspecialchars($tipospassagem[$plantao->passagenstrocas_tipopassagem], ENT_QUOTES, 'UTF-8'); ?></td>
-                                                    <td>
+                                                    <td>    
                                                 <?php
                                                 $status_passagem = '';
                                                 if ($plantao->passagenstrocas_statuspassagem == 0) {
@@ -77,7 +77,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                             <?php echo htmlspecialchars($statuspassagem[$plantao->passagenstrocas_statuspassagem], ENT_QUOTES, 'UTF-8'); ?>
                                                         </span>
                                                     </td>
-                                                    <td>
+                                                    <td class="dontprint text-center">
                                                         <?php if ($plantao->passagenstrocas_statuspassagem == 0 && $plantao->passagenstrocas_tipopassagem == 0) { echo anchor('admin/plantoes/confirm/'.$plantao->id, lang('actions_confirm'), 'class="btn btn-primary"'); } ?> &nbsp;
                                                         <?php if ($plantao->passagenstrocas_statuspassagem == 0 && $plantao->passagenstrocas_tipopassagem == 1) { echo anchor('admin/plantoes/propose/'.$plantao->id, lang('actions_propose'), 'class="btn btn-primary"'); } ?> &nbsp;
                                                         <?php if ($plantao->passagenstrocas_statuspassagem == 1) { echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/cessoestrocas', lang('actions_to_offer'), 'class="btn btn-primary"'); } ?> &nbsp;
@@ -95,6 +95,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </section>
                     <?php else: ?>
                     <section class="content col-md-12 col-xs-12">
+                        <div class="print-header row">
+                            <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                            <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                        </div>
                         <div class="row">
                             <div class="col-md-12 col-xs-12">
                                 <div class="box">
@@ -113,6 +117,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 <?php if (!empty($passagens)) : ?>
                 <section class="content col-md-12 col-xs-12">
+                    <div class="print-header row">
+                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12 col-xs-12">
                             <div class="box">
@@ -142,7 +150,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('plantoes_profissional_substituto');?></th>
                                                 <th><?php echo lang('plantoes_tipopassagem');?></th>
                                                 <th><?php echo lang('plantoes_statuspassagem');?></th>
-                                                <th><?php echo lang('plantoes_action');?></th>
+                                                <th class="dontprint text-center"><?php echo lang('plantoes_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -171,7 +179,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         <?php echo htmlspecialchars($statuspassagem[$plantao->passagenstrocas_statuspassagem], ENT_QUOTES, 'UTF-8'); ?>
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="dontprint text-center">
                                                     <?php if ($plantao->passagenstrocas_statuspassagem == 0 && $plantao->passagenstrocas_tipopassagem == 0) : ?>
                                                         <a href="#" onclick="cancelarCessao(<?php echo($plantao->passagenstrocas_id);?>);" class="btn btn-primary"><?php echo(lang('actions_cancel'));?></a>
                                                     <?php endif; ?> &nbsp;
@@ -189,6 +197,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
                 <?php else: ?>
                 <section class="content col-md-12 col-xs-12">
+                    <div class="print-header row">
+                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12 col-xs-12">
                             <div class="box">
