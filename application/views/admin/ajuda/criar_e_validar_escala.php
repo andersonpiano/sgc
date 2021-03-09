@@ -31,15 +31,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <center><img style="width:30%; height:30%;" src="/sgc/assets/manuais/img/primeiro_acesso2.png"></center><br>
                 <center><h3><strong>2. Entre com seu e-mail cadastrado na CEMERGE e sua senha cadastrada.</strong></h3></align>
                 <center><img style="width:30%; height:30%;"  src="/sgc/assets/manuais/img/primeiro_acesso3.png"></center><br>
-                <center><h3><strong>3. Vá até o menu “Escalas” e escolha a opção “Buscar Escalas”.</strong></h3></center>
-                <center><img style="width:20%; height:20%;"  src="/sgc/assets/manuais/img/buscar_escala.png"></center><br>
-                <center><h3><strong>4. Nessa opção, você seleciona a Unidade hospitalar, Setor, Data Inicial, Data final, Tipo de escala e clica em “Buscar”.</strong></h3></center>
-                <center><img style="width:30%; height:30%;"  src="/sgc/assets/manuais/img/buscar_escala2.png"></center><br>
-                <center><td align='justify'><h3><strong>OBS:<br> Tipo de Escala: Original - Escala ainda não alterada pelo coordenador ou profissional.<br><br>
-                                    Tipo de Escala: Consolidada - Escala já alterada pelo coordenador ou profissional e com plantões definitivos.<br><br>
-                                    Tipo de Escala: Trocas e passagens - Aparece apenas as trocas de plantões entre os profissionais.</strong></h3><br><br></td align='justify'></center>
-                <center><h3><strong>5. Na opção “Buscar" irá aparecer as escalas em ordem de data.</strong></h3></center>
-                <center><img style="width:60%; height:60%;"  src="/sgc/assets/manuais/img/buscar_escala3.png"></center><br>
+                <center><h3><strong>3. Na área “Coordenação de Plantão” até o menu “Escalas” e escolha a opção “Validar escala”</strong></h3></center>
+                <center><img style="width:20%; height:20%;"  src="/sgc/assets/manuais/img/validar.png"></center><br>
+                <center><h3><strong>4. Selecione a unidade hospitalar, setor, ano e mês da escala que deseja validar.</strong></h3></center>
+                <center><img style="width:30%; height:30%;"  src="/sgc/assets/manuais/img/validar2.png"></center><br>
+                <center><h3><strong>5. A escala consolidada será listada, conforme abaixo:</strong></h3></center>
+                <center><img style="width:30%; height:30%;"  src="/sgc/assets/manuais/img/validar3.png"></center><br>
+                <center><h3><strong>6. Role até o final da página, examinando se a escala está totalmente correta e se não falta nenhuma cessão ou troca a ser realizada.<br> Caso esteja tudo ok, clique no botão “Validar e enviar a escala” ao final da página.</strong></h3></center>
+                <center><img style="width:20%; height:20%;"  src="/sgc/assets/manuais/img/validar4.png"></center><br>
+                <center><h3><strong>7. Será exibida uma mensagem de confirmação caso tudo ocorra como esperado ou uma mensagem de erro caso ocorra algum imprevisto.</strong></h3></center><br>
+                <center><h3><strong>8. A escala agora está pronta para ser processada pela área responsável pelos processos na Cemerge.</strong></h3></center>
             </div>
     </div>
 </section>
