@@ -71,7 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['buscarfrequenciaporprofissional'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/profissionais_por_unidade.js'); ?>"></script>
 <?php endif; ?>
-<?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['buscarescalaporprofissional'])) : ?>
+<?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['buscarescalaporprofissional', 'buscarfrequenciaprocessada'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/profissionais_por_unidade.js'); ?>"></script>
 <?php endif; ?>
 

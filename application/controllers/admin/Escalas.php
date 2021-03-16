@@ -702,6 +702,132 @@ class Escalas extends Admin_Controller
         }
     }
 
+    public function buscarfrequenciaprocessada()
+    {
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
+            redirect('auth/login', 'refresh');
+        } else {
+            /* Breadcrumbs */
+            $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+            /* Reset */
+            $this->data['escalas'] = array();
+
+            /* Variables */
+            $this->data['diasdasemana'] = $this->_diasdasemana;
+
+            /* Validate form input */
+            $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
+            $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
+            $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
+
+            if ($this->form_validation->run() == true) {
+                $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+                $setor_id = $this->input->post('setor_id');
+                $profissional_id = $this->input->post('profissional_id');
+                $datainicial = $this->input->post('datainicial');
+                $datafinal = $this->input->post('datafinal');
+
+                $setores = $this->_get_setores($unidadehospitalar_id);
+
+                // Realizando a busca
+                $where = array(
+                    'unidadehospitalar_id' => $unidadehospitalar_id,
+                    'escalas.setor_id' => $setor_id,
+                    'escalas.dataplantao >=' => $datainicial,
+                    'escalas.dataplantao <=' => $datafinal,
+                );
+//                var_dump($profissional_id); exit;
+                if ($profissional_id <> ''){
+                    $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal);
+                } else {
+                $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal);
+                }
+                /** Processando batidas de 13:00:00 de saída e entrada automática */
+                $size = count($this->data['escalas']);
+                for ($i = 0; $i <= $size-1; $i++) {
+                    $this->data['escalas'][$i]->batidasaida_inserida = false;
+                    $this->data['escalas'][$i]->batidaentrada_inserida = false;
+                    if (isset($this->data['escalas'][$i+1])) {
+                        if ($this->data['escalas'][$i]->horafinalplantao == '13:00:00'
+                            && $this->data['escalas'][$i]->nome_profissional == $this->data['escalas'][$i+1]->nome_profissional
+                            && $this->data['escalas'][$i]->dataplantao == $this->data['escalas'][$i+1]->dataplantao
+                            && is_null($this->data['escalas'][$i]->batidasaida)
+                            && !is_null($this->data['escalas'][$i]->batidaentrada)
+                        ) {
+                            $this->data['escalas'][$i]->batidasaida = '13:00:00';
+                            $this->data['escalas'][$i]->batidasaida_inserida = true;
+                        }
+                    }
+                    if (isset($this->data['escalas'][$i-1])) {
+                        if ($this->data['escalas'][$i]->horainicialplantao == '13:00:00'
+                            && $this->data['escalas'][$i]->nome_profissional == $this->data['escalas'][$i-1]->nome_profissional
+                            && $this->data['escalas'][$i]->dataplantao == $this->data['escalas'][$i-1]->dataplantao
+                            && is_null($this->data['escalas'][$i]->batidaentrada)
+                            && !is_null($this->data['escalas'][$i]->batidasaida)
+                        ) {
+                            $this->data['escalas'][$i]->batidaentrada = '13:00:00';
+                            $this->data['escalas'][$i]->batidaentrada_inserida = true;
+                        }
+                    }
+                }
+            } else {
+                $datainicial = date('Y-m-01');
+                $datafinal = date('Y-m-t');
+                $unidadehospitalar_id = '';
+                $profissional_id = '';
+                $setores = array('' => 'Selecione um setor');
+            }
+
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+            $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $profissionais = $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
+
+            $this->data['datainicial'] = array(
+                'name'  => 'datainicial',
+                'id'    => 'datainicial',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datainicial,
+            );
+            $this->data['datafinal'] = array(
+                'name'  => 'datafinal',
+                'id'    => 'datafinal',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datafinal,
+            );
+            $this->data['unidadehospitalar_id'] = array(
+                'name'  => 'unidadehospitalar_id',
+                'id'    => 'unidadehospitalar_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+                'options' => $unidadeshospitalares,
+            );
+            $this->data['setor_id'] = array(
+                'name'  => 'setor_id',
+                'id'    => 'setor_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('setor_id'),
+                'options' => $setores,
+            );
+            $this->data['profissional_id'] = array(
+                'name'  => 'profissional_id',
+                'id'    => 'profissional_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('profissional_id'),
+                'options' => $profissionais,
+            );
+
+            /* Load Template */
+            $this->template->admin_render('admin/escalas/listafrequenciaprocessada', $this->data);
+        }
+    }
+
     public function validar()
     {
         if (!$this->ion_auth->logged_in()) {
@@ -1685,7 +1811,7 @@ class Escalas extends Admin_Controller
             redirect('admin/escalas/conferencia', 'refresh');
         }
     }
-
+    
     public function aguardarjustificativa($escala_id)
     {
         if (!$this->ion_auth->logged_in()) {
@@ -1706,8 +1832,10 @@ class Escalas extends Admin_Controller
 
         if ($sucesso) {
             $this->session->set_flashdata('message', 'O status da escala foi mudado para "Aguardando justificativa". Feche esta janela e volte para a janela anterior.');
+            $this->escala_model->update($escala_id, ['justificativa' => 1]);
         } else {
             $this->session->set_flashdata('message', 'Houve um erro ao alterar o status da escala. Tente novamente.');
+            $this->escala_model->update($escala_id, ['justificativa' => 0]);
         }
         redirect('admin/escalas/conferencia', 'refresh');
     }

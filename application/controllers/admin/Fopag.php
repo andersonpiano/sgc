@@ -606,6 +606,25 @@ class Fopag extends Admin_Controller
         return $row;
     }
 
+    public function frequencia(){
+        if (!$this->ion_auth->logged_in() OR !$this->ion_auth->in_group($this->_permitted_groups)) {
+            redirect('auth/login', 'refresh');
+        } else {
+            /* Breadcrumbs */
+            $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+            /* Variables */
+            $this->data['diasdasemana'] = $this->_diasdasemana;
+
+            /* Reset */
+            $this->data['frequencias'] = array();
+
+            $this->load->model("cemerge/Folha_model");
+
+            $frequencias = $this->escala_model->get_escalas_frequencias($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
+        }
+    }
+
     public function ajax_listar_folhas() {
 
                 if (!$this->input->is_ajax_request()) {

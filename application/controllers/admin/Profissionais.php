@@ -224,7 +224,7 @@ class Profissionais extends Admin_Controller
 
         if ($profissional and trim($profissional->cpf) != '0' and trim($profissional->cpf) != '') {
             $username = strtolower($profissional->nomecurto);
-            $password = $profissional->cpf;
+            $password = 'cemerge@2021';
             $email = $profissional->email;
             $additional_data = array(
                         'first_name' => $profissional->nome,
