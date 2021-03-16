@@ -57,6 +57,7 @@ class Dashboard extends Admin_Controller
             $this->data['trocas_propostas_confirmar'] = array();
             $this->data['trocas_recebidas_confirmar'] = array();
             $this->data['oportunidades'] = array();
+            $this->data['justificativas'] = array();
             $this->data['cessoes'] = array();
             $this->data['trocas'] = array();
             $this->data['proximosplantoes'] = array();
@@ -86,6 +87,8 @@ class Dashboard extends Admin_Controller
                     = $this->passagemtroca_model->get_sessoes_from_limbo(date('Y-m-d'), date('Y-m-d', strtotime('+30 days')), 0, $profissional->id);
                                         /*= $this->escala_model->get_oportunidades($profissional->id);*/
                                        // var_dump($this->data['oportunidades']); exit;
+                $this->data['justificativas']
+                    = $this->escala_model->get_justificativas_a_confirmar($profissional->id);
 
                 $this->data['cessoes'] = $this->getCessoes($profissional->id);
                 $this->data['trocas'] = $this->getTrocas($profissional->id);

@@ -1811,7 +1811,7 @@ class Escalas extends Admin_Controller
             redirect('admin/escalas/conferencia', 'refresh');
         }
     }
-
+    
     public function aguardarjustificativa($escala_id)
     {
         if (!$this->ion_auth->logged_in()) {
@@ -1832,8 +1832,10 @@ class Escalas extends Admin_Controller
 
         if ($sucesso) {
             $this->session->set_flashdata('message', 'O status da escala foi mudado para "Aguardando justificativa". Feche esta janela e volte para a janela anterior.');
+            $this->escala_model->update($escala_id, ['justificativa' => 1]);
         } else {
             $this->session->set_flashdata('message', 'Houve um erro ao alterar o status da escala. Tente novamente.');
+            $this->escala_model->update($escala_id, ['justificativa' => 0]);
         }
         redirect('admin/escalas/conferencia', 'refresh');
     }

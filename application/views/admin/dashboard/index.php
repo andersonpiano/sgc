@@ -263,6 +263,29 @@ if ($url_exist) {
                                     <br/>
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <p class="text-left text-uppercase"><strong>Plantões aguardando justificativas</strong></p>
+    <?php if(sizeof($justificativas) > 0) :?>
+        <?php foreach($justificativas as $justificativa) :?>
+                                            <span class="badge badge-success">Importante</span>&nbsp;
+                                            <p class="text-justify">
+            <?php
+                $text = 'O plantão do dia ' . date('d/m/Y', strtotime($justificativa->dataplantao));
+                $text .= ' Inicio: ' . date('H:i', strtotime($justificativa->horainicialplantao));
+                $text .= ' Fim ' . date('H:i', strtotime($justificativa->horafinalplantao));
+                $text .= ' Esta aguardando justificativa';
+                
+                echo($text);
+            ?>
+                                            </p>
+        <?php endforeach;?>
+    <?php else:?>
+                                                <p>Sem novidades por enquanto</p>
+    <?php endif;?>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-md-12">
                                             <p class="text-left text-uppercase"><strong>Oportunidades</strong></p>
     <?php if(sizeof($oportunidades) > 0) :?>
         <?php foreach($oportunidades as $oportunidade) :?>
@@ -288,6 +311,8 @@ if ($url_exist) {
 <?php endif;?>
                             </div>
                         </div>
+
+
                     </div>
                 </section>
             </div>

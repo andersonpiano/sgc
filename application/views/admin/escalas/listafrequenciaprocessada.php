@@ -94,10 +94,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th><?php echo lang('escalas_setor');?></th>
-                                                <th><?php echo lang('escalas_profissional');?></th>
-                                                <th class="text-center"><?php echo lang('escalas_dataplantao');?></th>
+                                            <th class="text-center"><?php echo lang('escalas_dataplantao');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_turno');?></th>
+                                                <th><?php echo lang('escalas_profissional');?></th>
+                                                <th><?php echo lang('escalas_setor');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_horaentrada');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_horasaida');?></th>
                                                 <th class="text-center">Horas Trabalhadas</th>
@@ -122,10 +122,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
         ?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($escala->nomesetor, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo htmlspecialchars($escala->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars($turno, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($escala->nomesetor, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center <?php echo($escala->batidaentrada ? 'bg-success' : 'bg-danger');?>"><span class="<?php echo($escala->batidaentrada_inserida ? 'bg-primary' : '');?>"><?php echo htmlspecialchars($escala->batidaentrada ? date('H:i:s', strtotime($escala->batidaentrada)) : ' - ', ENT_QUOTES, 'UTF-8'); ?></span></td>
                                                 <td class="text-center <?php echo($escala->batidasaida ? 'bg-success' : 'bg-danger');?>"><span class="<?php echo($escala->batidasaida_inserida ? 'bg-primary' : '');?>"><?php echo htmlspecialchars($escala->batidasaida ? date('H:i:s', strtotime($escala->batidasaida)) : ' - ', ENT_QUOTES, 'UTF-8'); ?></span></td>
                                                 <?php 
