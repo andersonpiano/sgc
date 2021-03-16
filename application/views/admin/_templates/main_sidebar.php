@@ -229,6 +229,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li class="<?=active_link_function('buscarescalaprocessada')?>"><a href="<?php echo site_url('admin/escalas/buscarescalaprocessada'); ?>"><?php echo lang('menu_conferencias_buscar_processadas'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
+                                <li class="<?=active_link_function('buscarfrequenciaprocessada')?>"><a href="<?php echo site_url('admin/escalas/buscarfrequenciaprocessada'); ?>"><?php echo lang('menu_conferencias_frequencia_processada'); ?></a></li>
+                            </ul>
+                            <ul class="treeview-menu">
                                 <li class="<?=active_link_function('buscarfrequencias')?>"><a href="<?php echo site_url('admin/frequencias/buscarfrequencias'); ?>"><?php echo lang('menu_conferencias_buscar_frequencias'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
