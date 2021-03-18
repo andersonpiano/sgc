@@ -104,4 +104,15 @@ class Setor_model extends MY_Model {
 
         return $query->result();
     }
+
+    public function assessus_x_sgc($setor_id)
+    {
+        $sql = "select id, setor_id, cd_set ";
+        $sql .= "from grupos_setores ";
+        $sql .= "where setor_id = $setor_id ";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
 }

@@ -23,6 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <?php echo lang('setores_nome', 'nome', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-10">
+                                            <?php echo form_hidden('setor_id', $setor->id);?>
                                                 <?php echo form_input($nome);?>
                                             </div>
                                         </div>
@@ -34,8 +35,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('setores_maximoprofissionais', 'maximoprofissionais', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-1">
+                                            <div class="col-sm-10">
                                                 <?php echo form_input($maximoprofissionais);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('setores_assessus', 'setores_assessus', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-10">
+                                            <?php echo form_dropdown($setores_assessus);?>
                                             </div>
                                         </div>
                                         <div class="form-group">

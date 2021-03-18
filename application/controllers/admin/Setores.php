@@ -231,6 +231,14 @@ class Setores extends Admin_Controller {
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('nome', $setor->nome)
         );
+        
+        $this->data['nome'] = array(
+            'name'  => 'nome',
+            'id'    => 'nome',
+            'type'  => 'text',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('nome', $setor->nome)
+        );
         $this->data['unidadehospitalar_id'] = array(
             'name'  => 'unidadehospitalar_id',
             'id'    => 'unidadehospitalar_id',
@@ -253,6 +261,13 @@ class Setores extends Admin_Controller {
             'type'  => 'checkbox',
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('active', $setor->active)
+        );
+
+        $this->data['setores_assessus'] = array(
+            'name'  => 'setores_assessus',
+            'id'    => 'setores_assessus',
+            'type'  => 'select',
+            'class' => 'form-control',
         );
 
         /* Load Template */
@@ -352,9 +367,19 @@ class Setores extends Admin_Controller {
 
         $this->load->model('cemerge/setor_model');
         $setores = $this->setor_model->get_setores_assessus_por_cd_pes_jur($cd_pes_jur);
-        array_unshift($setores, ['cd_set' => '', 'nm_set' => 'Selecione um setor']);
+        array_unshift($setores, ['cd_set' => '0', 'nm_set' => 'Selecione um setor']);
 
         echo json_encode($setores);
+        exit;
+    }
+
+    public function assessus_x_sgc($setor_id)
+    {
+        $setor_id = (int) $setor_id;
+        $this->load->model('cemerge/setor_model');
+        $setor = $this->setor_model->assessus_x_sgc($setor_id);
+
+        echo json_encode($setor);
         exit;
     }
 }
