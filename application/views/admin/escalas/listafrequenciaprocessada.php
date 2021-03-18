@@ -34,18 +34,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
-                                                <?php echo form_dropdown($setor_id);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <?php echo lang('escalas_profissional', 'profissional_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo form_dropdown($profissional_id);?>
                                             </div>
                                         </div>
-                                        
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-4">
+                                                <?php echo form_dropdown($setor_id);?>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-3">

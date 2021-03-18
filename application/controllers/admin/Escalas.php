@@ -776,13 +776,13 @@ class Escalas extends Admin_Controller
                 $datafinal = date('Y-m-t');
                 $unidadehospitalar_id = '';
                 $profissional_id = '';
-                $setores = array('' => 'Selecione um setor');
+                $setores = array('' => 'Todos os Setores');
             }
 
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
-            $profissionais = $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
+            $profissionais = $this->_get_profissionais_por_unidade_hospitalar_frequencia($unidadehospitalar_id);
 
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
@@ -2848,6 +2848,20 @@ class Escalas extends Admin_Controller
 
         $profissionais = array(
             '' => 'Selecione um profissional',
+        );
+        foreach ($profissionais_por_unidade_hospitalar as $profissional) {
+            $profissionais[$profissional->id] = $profissional->nome;
+        }
+
+        return $profissionais;
+    }
+
+    public function _get_profissionais_por_unidade_hospitalar_frequencia($unidadehospitalar_id)
+    {
+        $profissionais_por_unidade_hospitalar = $this->profissional_model->get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
+
+        $profissionais = array(
+            '' => 'Todos os Profissionais',
         );
         foreach ($profissionais_por_unidade_hospitalar as $profissional) {
             $profissionais[$profissional->id] = $profissional->nome;

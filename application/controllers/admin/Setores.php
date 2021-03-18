@@ -330,7 +330,17 @@ class Setores extends Admin_Controller {
         } else {
             $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id], null, 'nome');
         }
-        array_unshift($setores, ['id' => '', 'nome' => 'Selecione um setor']);
+        array_unshift($setores, ['id' => '', 'nome' => 'Todos os Setores']);
+
+        echo json_encode($setores);
+        exit;
+    }
+
+    public function setor_por_profissional($profissional_id)
+    {
+        $this->load->model('cemerge/setor_model');
+        $setores = $this->setor_model->get_setores_por_profissional($profissional_id);
+        array_unshift($setores, ['id' => '', 'nome' => 'Todos os Setores']);
 
         echo json_encode($setores);
         exit;

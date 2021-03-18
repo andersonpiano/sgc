@@ -224,7 +224,7 @@ class Profissionais extends Admin_Controller
 
         if ($profissional and trim($profissional->cpf) != '0' and trim($profissional->cpf) != '') {
             $username = strtolower($profissional->nomecurto);
-            $password = 'cemerge@2021';
+            $password = "cemerge@2021";
             $email = $profissional->email;
             $additional_data = array(
                         'first_name' => $profissional->nome,
@@ -597,7 +597,7 @@ class Profissionais extends Admin_Controller
         if ($unidadehospitalar_id and $unidadehospitalar_id != 0) {
             $profissionais = $this->profissional_model->get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
         }
-        array_unshift($profissionais, ['id' => '', 'nome' => 'Selecione um profissional']);
+        array_unshift($profissionais, ['id' => '', 'nome' => 'Todos os Profissionais']);
 
         echo json_encode($profissionais);
         exit;

@@ -1,0 +1,6 @@
+{
+    "html.format.templating": true,
+    "php.validate.executablePath": "",
+    "vscode_custom_css.imports": [""]
+
+}
