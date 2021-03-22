@@ -96,6 +96,7 @@ class Escalas extends Admin_Controller
                 $unidadehospitalar = array();
                 $unidadehospitalar = $this->unidadehospitalar_model->get_by_id($unidadehospitalar_id);
                 $this->data['unidade_nome'] = $unidadehospitalar->razaosocial;
+                $this->data['setor_nome'] =  $this->setor_model->get_setor_por_id($setor_id);
                 
                 // Realizando a busca
                 $where = array(

@@ -77,6 +77,18 @@ class Setor_model extends MY_Model {
         return $query->result();
     }
 
+    public function get_setor_por_id($id)
+    {
+        $fields = '*';
+
+        $this->db->select($fields);
+        $this->db->from($this->table);
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function get_setores_coordenados_por_profissional($profissional_id)
     {
         $fields = 'setores.*';
