@@ -2710,6 +2710,7 @@ class Escalas extends Admin_Controller
 
         /* Validate form input */
         $this->form_validation->set_rules('profissional_id', 'lang:escalas_profissional', 'required');
+        $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
         $this->form_validation->set_rules('dataplantao', 'lang:escalas_dataplantao', 'required');
         $this->form_validation->set_rules('horainicialplantao', 'lang:escalas_horainicialplantao', 'required');
         $this->form_validation->set_rules('horafinalplantao', 'lang:escalas_horafinalplantao', 'required');
@@ -2720,12 +2721,17 @@ class Escalas extends Admin_Controller
             }
 
             if ($this->form_validation->run() == true) {
+                $profissional_id = $this->input->post('profissional_id');
+                $escalado = $this->escala_model->get_profissional_escalado($escala->dataplantao, $escala->horainicialplantao, $profissional_id);
+
                 $data = array(
                     'profissional_id' => $this->input->post('profissional_id'),
+
                     'setor_id' => $this->input->post('setor_id'),
                 );
 
-                if ($this->escala_model->update($escala->id, $data)) {
+                if ($escalado < 1) {
+                    $this->escala_model->update($escala->id, $data);
                     $this->session->set_flashdata('message', 'Escala atualizada com sucesso.');
 
                     if ($this->ion_auth->is_admin()) {
@@ -2734,7 +2740,7 @@ class Escalas extends Admin_Controller
                         redirect('admin/escalas', 'refresh');
                     }
                 } else {
-                    $this->session->set_flashdata('message', 'Ocorreu um erro ao atualizar a escala.');
+                    $this->session->set_flashdata('message', 'Profissional ja Possui escala neste periodo.');
 
                     if ($this->ion_auth->is_admin()) {
                         redirect('admin/escalas', 'refresh');
@@ -2763,7 +2769,7 @@ class Escalas extends Admin_Controller
             'id'    => 'dataplantao',
             'type'  => 'date',
             'class' => 'form-control',
-            //'readonly' => 'readonly',
+            'readonly' => 'readonly',
             'value' => $this->form_validation->set_value('dataplantao', $escala->dataplantao)
         );
         $this->data['horainicialplantao'] = array(
@@ -2771,7 +2777,7 @@ class Escalas extends Admin_Controller
             'id'    => 'horainicialplantao',
             'type'  => 'time',
             'class' => 'form-control',
-            //'readonly' => 'readonly',
+            'readonly' => 'readonly',
             'value' => $this->form_validation->set_value('horainicialplantao', $escala->horainicialplantao)
         );
         $this->data['horafinalplantao'] = array(
@@ -2779,7 +2785,7 @@ class Escalas extends Admin_Controller
             'id'    => 'horafinalplantao',
             'type'  => 'time',
             'class' => 'form-control',
-            //'readonly' => 'readonly',
+            'readonly' => 'readonly',
             'value' => $this->form_validation->set_value('horafinalplantao', $escala->horafinalplantao)
         );
         $this->data['profissional_id'] = array(

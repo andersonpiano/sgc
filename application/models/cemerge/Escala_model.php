@@ -461,6 +461,18 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function get_profissional_escalado($data, $hora, $profissional_id){
+
+        $sql = "SELECT * FROM escalas ";
+        $sql .= "where profissional_id = '$profissional_id' ";
+        $sql .= "and dataplantao = '$data' ";
+        $sql .= "and horainicialplantao = '$hora' ";
+
+        $query = $this->db->query($sql);
+
+        return $query->num_rows();
+    }
+
     public function get_frequencias_escalas($unidadehospitalar_id, $setor_id, $datainicial, $datafinal)
     {
         $sql = "select p.nome as nome_profissional_frq, f.cd_ctl_frq, f.cd_pes_jur, f.cd_set, tb_set.nm_set, ";
