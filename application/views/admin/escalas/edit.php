@@ -39,7 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <?php echo lang('escalas_setor', 'setor', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo($escala->setor->nome);?>
+                                                <?php echo form_dropdown($setor_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">

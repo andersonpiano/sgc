@@ -107,7 +107,7 @@ class Frequencias extends Admin_Controller
         /* Load Template */
         $this->template->admin_render('admin/frequencias/listafrequencias', $this->data);
     }
-
+    
     public function buscarfrequenciaporprofissional()
     {
         if (!$this->ion_auth->logged_in()) {

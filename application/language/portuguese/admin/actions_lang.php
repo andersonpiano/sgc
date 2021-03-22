@@ -11,6 +11,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['actions_cancel'] = 'Cancelar';
+$lang['actions_batidas_ignoradas'] = 'Batidas Ignoradas';
 $lang['actions_create'] = 'Criar';
 $lang['actions_create_user'] = 'Criar Usuário';
 $lang['actions_link_user_sector'] = 'Vincular a um Setor';

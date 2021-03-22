@@ -190,6 +190,7 @@ class Setores extends Admin_Controller {
                     'nome' => $this->input->post('nome'),
                     'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
                     'maximoprofissionais' => $this->input->post('maximoprofissionais'),
+                    'id_assessus' => $this->input->post('setores_assessus')
                 );
 
                 if ($this->setor_model->update($setor->id, $data)) {
@@ -223,6 +224,7 @@ class Setores extends Admin_Controller {
 
         // pass unidades to the dropdown
         $unidadeshospitalares = $this->_get_unidadeshospitalares();
+        $setores = $this->_get_setores_assessus();
 
         $this->data['nome'] = array(
             'name'  => 'nome',
@@ -268,10 +270,26 @@ class Setores extends Admin_Controller {
             'id'    => 'setores_assessus',
             'type'  => 'select',
             'class' => 'form-control',
+            'value' => $this->form_validation->set_value('setor_id'),
+            'selected' => $setor->id_assessus,
+            'options' => $setores,
         );
 
         /* Load Template */
         $this->template->admin_render('admin/setores/edit', $this->data);
+    }
+
+    public function _get_setores_assessus()
+    {
+        $setores_por_unidade = $this->setor_model->get_setores_assessus_por_cd_pes_jur(1);
+
+        $setores = array(
+            '' => 'Selecione um setor',
+        );
+        foreach ($setores_por_unidade as $setor) {
+            $setores[$setor->cd_set] = $setor->nm_set;
+        }
+        return $setores;
     }
 
     public function view($id)
@@ -355,7 +373,6 @@ class Setores extends Admin_Controller {
     {
         $this->load->model('cemerge/setor_model');
         $setores = $this->setor_model->get_setores_por_profissional($profissional_id);
-        array_unshift($setores, ['id' => '', 'nome' => 'Todos os Setores']);
 
         echo json_encode($setores);
         exit;

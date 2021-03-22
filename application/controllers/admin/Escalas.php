@@ -1811,6 +1811,64 @@ class Escalas extends Admin_Controller
             redirect('admin/escalas/conferencia', 'refresh');
         }
     }
+
+    public function desfazerignorarbatida($frequencia_id)
+    {
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }  
+        $frequencia_id = (int)$frequencia_id;
+
+        /* Breadcrumbs */
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        $frequencia = $this->frequenciaassessus_model->get_by_cdctlfrq($frequencia_id);
+
+        if ($frequencia) {
+            $this->frequenciaassessus_model->update($frequencia_id, ['ignorar' => 0]);
+        }
+
+        return $json['status'] = 1;
+        exit;
+    }
+
+    public function ajax_listar_batidas_ignoradas() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }  
+        $this->load->model("cemerge/FrequenciaAssessus_model");
+        $batidas = $this->FrequenciaAssessus_model->get_batidas();
+
+        $data = array();
+        foreach ($batidas as $batida) {
+    
+            $row = array();
+            $row[] = '<center>'.date('d/m/Y',strtotime($batida->DT_FRQ)).'</center>';
+            $row[] = '<center>'.date('H:i',strtotime($batida->DT_FRQ)).'</center>';
+            $row[] = '<center>'.$batida->CD_SET.'</center>';
+            $row[] = '<center>'.$batida->CD_PES_FIS.'</center>';
+    
+            $row[] = '<center><div style="display: inline-block;">
+                        <button class="btn btn-link btn-reverter-batida-ignorada" 
+                            id='.$batida->CD_CTL_FRQ.'>
+                            <i class="fa fa-refresh"> Restaurar Batida</i>
+                        </button>
+                    </div></center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" => $this->FrequenciaAssessus_model->records_total(),
+            "recordsFiltered" => $this->FrequenciaAssessus_model->records_filtered(),
+            "status" => 1,
+            "data" => $data,
+        );
+        echo json_encode($json);
+        exit;
+    }
     
     public function aguardarjustificativa($escala_id)
     {
@@ -2652,9 +2710,9 @@ class Escalas extends Admin_Controller
 
         /* Validate form input */
         $this->form_validation->set_rules('profissional_id', 'lang:escalas_profissional', 'required');
-        //$this->form_validation->set_rules('dataplantao', 'lang:escalas_dataplantao', 'required');
-        //$this->form_validation->set_rules('horainicialplantao', 'lang:escalas_horainicialplantao', 'required');
-        //$this->form_validation->set_rules('horafinalplantao', 'lang:escalas_horafinalplantao', 'required');
+        $this->form_validation->set_rules('dataplantao', 'lang:escalas_dataplantao', 'required');
+        $this->form_validation->set_rules('horainicialplantao', 'lang:escalas_horainicialplantao', 'required');
+        $this->form_validation->set_rules('horafinalplantao', 'lang:escalas_horafinalplantao', 'required');
 
         if (isset($_POST) && !empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
@@ -2664,6 +2722,7 @@ class Escalas extends Admin_Controller
             if ($this->form_validation->run() == true) {
                 $data = array(
                     'profissional_id' => $this->input->post('profissional_id'),
+                    'setor_id' => $this->input->post('setor_id'),
                 );
 
                 if ($this->escala_model->update($escala->id, $data)) {
@@ -2697,13 +2756,14 @@ class Escalas extends Admin_Controller
         $this->data['escala']->setor = $escala->setor;
         $this->data['escala']->unidadehospitalar = $escala->unidadehospitalar;
         $profissionais = $this->_get_profissionais($escala->setor_id);
+        $setores = $this-> _get_setores_profissional($escala->profissional_id);
 
         $this->data['dataplantao'] = array(
             'name'  => 'dataplantao',
             'id'    => 'dataplantao',
             'type'  => 'date',
             'class' => 'form-control',
-            'readonly' => 'readonly',
+            //'readonly' => 'readonly',
             'value' => $this->form_validation->set_value('dataplantao', $escala->dataplantao)
         );
         $this->data['horainicialplantao'] = array(
@@ -2711,7 +2771,7 @@ class Escalas extends Admin_Controller
             'id'    => 'horainicialplantao',
             'type'  => 'time',
             'class' => 'form-control',
-            'readonly' => 'readonly',
+            //'readonly' => 'readonly',
             'value' => $this->form_validation->set_value('horainicialplantao', $escala->horainicialplantao)
         );
         $this->data['horafinalplantao'] = array(
@@ -2719,7 +2779,7 @@ class Escalas extends Admin_Controller
             'id'    => 'horafinalplantao',
             'type'  => 'time',
             'class' => 'form-control',
-            'readonly' => 'readonly',
+            //'readonly' => 'readonly',
             'value' => $this->form_validation->set_value('horafinalplantao', $escala->horafinalplantao)
         );
         $this->data['profissional_id'] = array(
@@ -2730,6 +2790,16 @@ class Escalas extends Admin_Controller
             'value' => $this->form_validation->set_value('profissional_id'),
             'selected' => $escala->profissional_id,
             'options' => $profissionais,
+        );
+
+        $this->data['setor_id'] = array(
+            'name'  => 'setor_id',
+            'id'    => 'setor_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('setor_id'),
+            'selected' => $escala->setor_id,
+            'options' => $setores,
         );
         /*
         $this->data['active'] = array(
@@ -2831,6 +2901,20 @@ class Escalas extends Admin_Controller
     public function _get_setores($unidadehospitalar_id)
     {
         $setores_por_unidade = $this->setor_model->get_where(['unidadehospitalar_id' => $unidadehospitalar_id]);
+
+        $setores = array(
+            '' => 'Selecione um setor',
+        );
+        foreach ($setores_por_unidade as $setor) {
+            $setores[$setor->id] = $setor->nome;
+        }
+
+        return $setores;
+    }
+
+    public function _get_setores_profissional($profissional_id)
+    {
+        $setores_por_unidade = $this->setor_model->get_setores_por_profissional($profissional_id);
 
         $setores = array(
             '' => 'Selecione um setor',

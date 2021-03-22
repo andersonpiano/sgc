@@ -170,6 +170,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <?php echo(lang('escalas_unidadehospitalar') . ": " . $freqs[0]->nomeunidade . "&nbsp;-&nbsp;"); ?>
                                         <?php echo(lang('escalas_setor') . ": " . $setor); ?>
                                     </h3>
+                                    <button style="font-size:20px; float: right;" class="btn btn-link btn-batidas-ignoradas text-center" id='batidas_ignoradas'><i class="fa fa-question-circle-o"></i>&nbsp;Batidas Ignoradas</button>
                                 </div>
                                 <div class="box-body">
                                     <table class="table table-striped table-bordered table-hover table-sm">
@@ -346,3 +347,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </section>
             </div>
+            <div id="modal_jade" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Batidas Ignoradas</h4>
+                </div>
+
+                <div class="modal-body">
+                        <table id="dt_jade" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th class="dt-center text-center">DATA</th>
+                                <th class="dt-center text-center">HORA</th>
+                                <th class="dt-center text-center">SETOR</th>
+                                <th class="dt-center text-center" >MÉDICO</th>
+                                
+                                <th class="dt-center no-sort text-center">AÇÕES</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                        <div class="form-group text-center">
+                            <span class="help-block"></span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -59,6 +59,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/jsPDF/jspdf.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/export2pdf.js'); ?>"></script>
 <?php endif; ?>
+<?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['conferencia'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/conferencia.js'); ?>"></script>
+<?php endif; ?>
 <?php if ($this->router->fetch_class() == 'plantoes' && in_array($this->router->fetch_method(), ['cederplantaoeprocessar'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/frequencias_por_profissional.js'); ?>"></script>
 <?php endif; ?>
@@ -75,10 +82,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/profissionais_por_unidade.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_por_profissional.js'); ?>"></script>
 <?php endif; ?>
-<?php if ($this->router->fetch_class() == 'setores' && in_array($this->router->fetch_method(), ['edit'])) : ?>
-        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_assessus.js'); ?>"></script>
-<?php endif; ?>
-
 <?php if ($this->router->fetch_class() == 'faltas' && in_array($this->router->fetch_method(), ['index'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/faltas__profissionais_por_unidade_hospitalar.js'); ?>"></script>
 <?php endif; ?>
