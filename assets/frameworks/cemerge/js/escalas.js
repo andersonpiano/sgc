@@ -4,6 +4,21 @@ $(document).ready(function(){
 
     $(document).on('change', '#profissional_id', function() {
 
+        var val = $(this).val();
+        var url2 = '/sgc/admin/setores/setor_por_profissional/' + val;
+
+        $.ajax({
+            url: url2,
+            method: 'get',
+            dataType: 'json',
+            success: function(responseData) {
+                $('#setor_id').empty();
+                $.each(responseData, function(i, s) {
+                    $('#setor_id').append($('<option></option>').val(s.id).html(s.nome));
+                });
+            },
+        });
+
         var profissional = $(this).val();
         var escala = $(this).next('input').val();
         var url = '/sgc/admin/escalas/atribuirescala/';
@@ -39,9 +54,16 @@ $(document).ready(function(){
                 console.log(responseData);
             }
         });
+        
      
 }); 
 });
+
+
+    $(document).on('change', '#profissional_id', function() {
+        
+    });
+
 
 
 $(window).load(function(){

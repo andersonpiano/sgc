@@ -2756,7 +2756,7 @@ class Escalas extends Admin_Controller
         $this->data['escala']->setor = $escala->setor;
         $this->data['escala']->unidadehospitalar = $escala->unidadehospitalar;
         $profissionais = $this->_get_profissionais($escala->setor_id);
-        $setores = $this-> _get_setores_profissional($escala->profissional_id);
+        $setores = $this-> _get_setores(1);
 
         $this->data['dataplantao'] = array(
             'name'  => 'dataplantao',

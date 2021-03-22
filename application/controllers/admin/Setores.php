@@ -279,6 +279,19 @@ class Setores extends Admin_Controller {
         $this->template->admin_render('admin/setores/edit', $this->data);
     }
 
+    public function _get_setores_sgc()
+    {
+        $setores_por_unidade = $this->setor_model->get_setores_por_unidade(1);
+
+        $setores = array(
+            '' => 'Selecione um setor',
+        );
+        foreach ($setores_por_unidade as $setor) {
+            $setores[$setor->cd_set] = $setor->nm_set;
+        }
+        return $setores;
+    }
+
     public function _get_setores_assessus()
     {
         $setores_por_unidade = $this->setor_model->get_setores_assessus_por_cd_pes_jur(1);

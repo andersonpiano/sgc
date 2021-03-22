@@ -63,6 +63,20 @@ class Setor_model extends MY_Model {
         return $query->result();
     }
 
+    public function get_setores_por_unidade($unidade)
+    {
+        $fields = 'setores.*';
+
+        $this->db->select($fields);
+        $this->db->from($this->table);
+        $this->db->join('profissionalsetor', 'setores.id = profissionalsetor.setor_id', 'left');
+        $this->db->join('profissionais', 'profissionais.id = profissionalsetor.profissional_id', 'left');
+        $this->db->where('unidadehospitalar_id', $unidade);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
     public function get_setores_coordenados_por_profissional($profissional_id)
     {
         $fields = 'setores.*';
