@@ -32,6 +32,7 @@ $(function(){
 		"autoWidth": false,
 		"processing": true,
 		"serverSide": true,
+		"order": [[ 0, "desc" ]],
 		dom: 'Brt',		
 		"ajax": {
 			"url": "ajax_listar_batidas_ignoradas",

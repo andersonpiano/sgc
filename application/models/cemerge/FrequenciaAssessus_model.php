@@ -69,7 +69,7 @@ class FrequenciaAssessus_model extends MY_Model
         
         return $query->row();
     }
-    var $column_search = array("CD_PES_FIS");
+    var $column_search = array("dt_frq");
     var $column_order = array("DT_FRQ", "CD_PES_FIS");
 
     private function _get_batidas() {
