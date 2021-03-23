@@ -88,7 +88,7 @@ class Dashboard extends Admin_Controller
                                         /*= $this->escala_model->get_oportunidades($profissional->id);*/
                                        // var_dump($this->data['oportunidades']); exit;
                 $this->data['justificativas']
-                    = $this->Escala_model->get_justificativas_a_confirmar($profissional->id);
+                    = $this->escala_model->get_justificativas_a_confirmar($profissional->id);
 
                 $this->data['cessoes'] = $this->getCessoes($profissional->id);
                 $this->data['trocas'] = $this->getTrocas($profissional->id);
