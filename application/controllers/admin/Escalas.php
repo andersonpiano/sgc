@@ -1879,6 +1879,7 @@ class Escalas extends Admin_Controller
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
             redirect('auth/login', 'refresh');
+            
         }
         if (!$this->ion_auth->in_group($this->_permitted_groups)) {
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
@@ -2731,8 +2732,18 @@ class Escalas extends Admin_Controller
                 if ($escalado < 1) {
                     $this->escala_model->update($escala->id, $data);
                     $this->session->set_flashdata('message', 'Escala atualizada com sucesso.');
+                    if ($this->ion_auth->is_admin()) {
+                        redirect('admin/escalas', 'refresh');
+                    } else {
+                        redirect('admin/escalas', 'refresh');
+                    }
                 } else {
                     $this->session->set_flashdata('message', 'Profissional ja Possui escala neste periodo.');
+                    if ($this->ion_auth->is_admin()) {
+                        redirect('admin/escalas', 'refresh');
+                    } else {
+                        redirect('admin/escalas', 'refresh');
+                    }
                 }
             }
         }
