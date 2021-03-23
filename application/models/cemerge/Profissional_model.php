@@ -62,6 +62,15 @@ class Profissional_model extends MY_Model
         return $query->row();
     }
 
+    public function get_profissional_by_id($profissional_id){
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('id', $profissional_id);
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function get_by_cd_pes_fis($cd_pes_fis) {
         $fields = 'id, cd_pes_fis, registro, nome, nomecurto';
 

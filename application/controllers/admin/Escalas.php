@@ -1840,15 +1840,18 @@ class Escalas extends Admin_Controller
         }  
         $this->load->model("cemerge/FrequenciaAssessus_model");
         $batidas = $this->FrequenciaAssessus_model->get_batidas();
+        
 
         $data = array();
         foreach ($batidas as $batida) {
-    
+            $setor_sgc = $this->setor_model->sgc_x_assessus($batida->CD_SET)->setor_id;
+            $profissional_sgc = $this->profissional_model->get_by_cd_pes_fis($batida->CD_PES_FIS);
+            //var_dump($setor_sgc); exit;
             $row = array();
             $row[] = '<center>'.date('d/m/Y',strtotime($batida->DT_FRQ)).'</center>';
             $row[] = '<center>'.date('H:i',strtotime($batida->DT_FRQ)).'</center>';
-            $row[] = '<center>'.$batida->CD_SET.'</center>';
-            $row[] = '<center>'.$batida->CD_PES_FIS.'</center>';
+            $row[] = '<center>'.$this->setor_model->get_setor_por_id($setor_sgc)->nome.'</center>';
+            $row[] = '<center>'.$profissional_sgc->nome.'</center>';
     
             $row[] = '<center><div style="display: inline-block;">
                         <button class="btn btn-link btn-reverter-batida-ignorada" 

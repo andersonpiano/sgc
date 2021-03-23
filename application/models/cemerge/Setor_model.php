@@ -141,4 +141,15 @@ class Setor_model extends MY_Model {
 
         return $query->result();
     }
+
+    public function sgc_x_assessus($cd_set)
+    {
+        $sql = "select id, setor_id, cd_set ";
+        $sql .= "from grupos_setores ";
+        $sql .= "where cd_set = $cd_set ";
+
+        $query = $this->db->query($sql);
+
+        return $query->row();
+    }
 }
