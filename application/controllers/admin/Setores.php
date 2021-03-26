@@ -225,6 +225,7 @@ class Setores extends Admin_Controller {
         // pass unidades to the dropdown
         $unidadeshospitalares = $this->_get_unidadeshospitalares();
         $setores = $this->_get_setores_assessus();
+        $profissionais = $this->_get_responsavel($setor->id);
 
         $this->data['nome'] = array(
             'name'  => 'nome',
@@ -275,6 +276,16 @@ class Setores extends Admin_Controller {
             'options' => $setores,
         );
 
+        $this->data['responsavel_id'] = array(
+            'name'  => 'responsavel_id',
+            'id'    => 'responsavel_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('setor_id'),
+            'selected' => $setor->id_responsavel,
+            'options' => $profissionais,
+        );
+
         /* Load Template */
         $this->template->admin_render('admin/setores/edit', $this->data);
     }
@@ -303,6 +314,20 @@ class Setores extends Admin_Controller {
             $setores[$setor->cd_set] = $setor->nm_set;
         }
         return $setores;
+    }
+
+    public function _get_responsavel($setor)
+    {
+        $this->load->model('cemerge/Profissional_model');
+        $profissionais_por_setor = $this->Profissional_model->get_profissionais_por_setor($setor);
+
+        $profissionais = array(
+            '' => 'Selecione um Profissional',
+        );
+        foreach ($profissionais_por_setor as $profissional) {
+            $profissionais[$profissional->id] = $profissional->nome;
+        }
+        return $profissionais;
     }
 
     public function view($id)

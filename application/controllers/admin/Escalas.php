@@ -3002,6 +3002,8 @@ class Escalas extends Admin_Controller
     {
         $profissional_id = $this->input->post('profissional', 0);
         $escala_id = $this->input->post('escala', 0);
+        $data_ini = $this->input->post('data_ini', 0);
+        $hora_ini = $this->input->post('hora_ini', 0);
 
         $escala = $this->escala_model->get_by_id($escala_id);
         $profissional_ant = $escala->profissional_id;
@@ -3010,8 +3012,10 @@ class Escalas extends Admin_Controller
 
         $sessoes = $this->passagemtroca_model->get_where(['escala_id' => $escala_id], null);
         $sucess = false;
+        $escalado = $this->escala_model->get_profissional_escalado($data_ini, $hora_ini, $profissional_id);
+        //var_dump($escalado); exit;
 
-        if (empty($sessoes)){
+        if (empty($sessoes) && $escalado < 1){
             try {
                 $this->escala_model->update($escala_id, ['profissional_id' => $profissional_id]);
                 $sucess = true;
@@ -3022,7 +3026,7 @@ class Escalas extends Admin_Controller
 
         //echo json_encode($profissional);
         //echo json_encode($escala);
-        echo json_encode(['sucess' => $sucess, 'profissional' => $profissional_ant]);
+        echo json_encode(['sucess' => $sucess, 'profissional' => $profissional_id]);
         exit;
     }
 

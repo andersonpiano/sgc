@@ -6,6 +6,8 @@ $(document).ready(function(){
 
         var profissional = $(this).val();
         var escala = $(this).next('input').val();
+        var hora_ini = $(this).prev('input').val();
+        var data_ini = document.getElementById("data_plantao_"+escala).value;
         var url = '/sgc/admin/escalas/atribuirescala/';
         var sucess = false;
         $.ajax({
@@ -13,7 +15,9 @@ $(document).ready(function(){
             method: 'post',
             data: {
                 profissional : profissional,
-                escala : escala
+                escala : escala,
+                data_ini : data_ini,
+                hora_ini : hora_ini
             },
             success: function(responseData) {
                 // Se sucesso, remover ou travar o dropdown
@@ -21,13 +25,13 @@ $(document).ready(function(){
                 $sucess = JSON.parse(responseData).sucess;
 
                 if ($sucess == true){
-                    /*$('#row_id_' + escala).fadeOut('slow', 
+                    $('#row_id_' + escala).fadeOut('slow', 
                     function(here){ 
                         $('#row_id_' + escala).remove();
-                    }*/
-                    alert("Troca realizada com sucesso");
+                    });
+                    swal("Sucesso","Troca realizada com sucesso","success");
                 } else {
-                    alert("Este plantão já foi repassado a outro profissional e não pode ser trocado aqui.");
+                    swal("Erro!","Este plantão já foi repassado a outro profissional ou profissional selecionado ja está escalado em outro plantão.", 'error');
                     //document.getElementById('profissional_id').value = JSON.parse(responseData).profissional;
                     //console.log($('[name="escala_id_' + escala + '"]').prev('select').val());
                     selectProfissional = $('[name="escala_id_' + escala + '"]').prev('select');
@@ -35,7 +39,7 @@ $(document).ready(function(){
                 };
             },
             error: function(responseData) {
-                alert("Ocorreu um erro ao atribuir a escala ao profissional. Por favor, tente novamente mais tarde");
+                swal("Erro!","Ocorreu um erro ao atribuir a escala ao profissional. Por favor, tente novamente mais tarde","error");
                 console.log(responseData);
             }
         });

@@ -46,6 +46,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('setores_coordenador', 'setores_coordenador', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-10">
+                                            <?php echo form_dropdown($responsavel_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <?php echo form_hidden('id', $setor->id);?>
                                                 <?php echo form_hidden($csrf); ?>

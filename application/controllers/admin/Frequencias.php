@@ -305,6 +305,7 @@ class Frequencias extends Admin_Controller
                     'CD_PES_JUR' => $unidadehospitalar_id,
                     'CD_SET' => $setor_id,
                     'TP_FRQ' => $tipo_batida,
+                    'tipo_batida' =>$tipo_batida
                 );
 
                 $this->load->model('cemerge/frequenciaassessus_model');
