@@ -49,6 +49,7 @@ class Escalas extends Admin_Controller
         $this->load->model('cemerge/frequencia_model');
         $this->lang->load('admin/escalas');
         $this->load->helper('messages');
+        $this->lang->load('admin/profissionais');
 
         /* Title Page */
         $this->page_title->push(lang('menu_escalas'));
@@ -1195,12 +1196,14 @@ class Escalas extends Admin_Controller
             /* Validate form input */
             $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
             $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
+            $this->form_validation->set_rules('vinculo', 'lang:profissionais_vinculo', 'required');
             $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
             $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
 
             if ($this->form_validation->run() == true) {
                 $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
                 $setor_id = $this->input->post('setor_id');
+                $vinculo_id = $this->input->post('vinculo');
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
                 $domingo = $this->input->post('domingo');
@@ -1217,12 +1220,22 @@ class Escalas extends Admin_Controller
                 //$profissionais = $this->get_profissionais($setor_id);
 
                 // Realizando a busca
+                if ($vinculo_id != 3) {
                 $where = array(
                     'unidadehospitalar_id' => $unidadehospitalar_id,
                     'escalas.setor_id' => $setor_id,
                     'escalas.dataplantao >=' => $datainicial,
-                    'escalas.dataplantao <=' => $datafinal
+                    'escalas.dataplantao <=' => $datafinal,
+                    'profissionais.vinculo_id' => $vinculo_id
                 );
+                } else {
+                    $where = array(
+                        'unidadehospitalar_id' => $unidadehospitalar_id,
+                        'escalas.setor_id' => $setor_id,
+                        'escalas.dataplantao >=' => $datainicial,
+                        'escalas.dataplantao <=' => $datafinal
+                    );
+                };
 
                 // Se escolhido o turno
                 $turno = null;
@@ -1288,6 +1301,8 @@ class Escalas extends Admin_Controller
             );
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $vinculos = $this->_get_vinculos();
+            $vinculos_atribuir = $this->_get_vinculos_atribuir();
             $turnos = array(
                 '0' => 'Todos',
                 '1' => 'Manhã',
@@ -1348,6 +1363,23 @@ class Escalas extends Admin_Controller
                 'class' => 'form-control',
                 'options' => $tipos_plantao,
             );
+            $this->data['vinculo'] = array(
+                'name'  => 'vinculo',
+                'id'    => 'vinculo',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'selected' => $this->form_validation->set_value('vinculo'),
+                'options' => $vinculos,
+            );
+
+            $this->data['vinculos_atribuir'] = array(
+                'name'  => 'vinculos_atribuir',
+                'id'    => 'vinculos_atribuir',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('vinculos_atibuir'),
+                'options' => $vinculos_atribuir,
+            );
             
             //$this->data['profissionais'] = $profissionais;
 
@@ -1372,6 +1404,19 @@ class Escalas extends Admin_Controller
             /* Load Template */
             $this->template->admin_render('admin/escalas/atribuir', $this->data);
         }
+    }
+
+    public function _get_vinculos()
+    {
+        $this->load->model('cemerge/vinculo_model');
+        $vinculos = $this->vinculo_model->get_all();
+
+        $v = array();
+        foreach ($vinculos as $vinculo) {
+            $v[$vinculo->id] = $vinculo->nome;
+        }
+
+        return $v;
     }
 
     public function conferencia()
@@ -2324,6 +2369,11 @@ class Escalas extends Admin_Controller
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $tipos = array(
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
 
             $this->data['datainicialplantao'] = array(
                 'name'  => 'datainicialplantao',
@@ -2349,6 +2399,15 @@ class Escalas extends Admin_Controller
                 'type'  => 'time',
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('horainicialplantao'),
+            );
+
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
             );
             $this->data['horafinalplantao'] = array(
                 'name'  => 'horafinalplantao',
@@ -3013,6 +3072,7 @@ class Escalas extends Admin_Controller
         $sessoes = $this->passagemtroca_model->get_where(['escala_id' => $escala_id], null);
         $sucess = false;
         $escalado = $this->escala_model->get_profissional_escalado($data_ini, $hora_ini, $profissional_id);
+        $vinculo = $this->profissional_model->get_vinculo_por_profissional($profissional_id);
         //var_dump($escalado); exit;
 
         if (empty($sessoes) && $escalado < 1){
@@ -3026,8 +3086,19 @@ class Escalas extends Admin_Controller
 
         //echo json_encode($profissional);
         //echo json_encode($escala);
-        echo json_encode(['sucess' => $sucess, 'profissional' => $profissional_id]);
+        echo json_encode(['sucess' => $sucess, 'profissional' => $profissional_id, 'vinculo'=> $vinculo[0]->vinculo_id, 'profissional_ant'=> $profissional_ant]);
         exit;
+    }
+
+    private function _get_vinculos_atribuir()
+    {
+
+        $vinculos = array(
+            '1' => 'CEMERGE',
+            '2' => 'SESA',
+        );
+
+        return $vinculos;
     }
 
     public function alterartipoplantao()

@@ -24,6 +24,18 @@ class Profissional_model extends MY_Model
         return $query->result();
     }
 
+    public function get_vinculo_por_profissional($profissional_id){
+        
+        $this->db->select('vinculo_id');
+        $this->db->from($this->table);
+        $this->db->where('id', $profissional_id);
+        $query = $this->db->get();
+
+        return $query->result();
+
+
+    }
+
     public function get_profissionais_por_unidade_hospitalar($unidadehospitalar_id) {
         $fields = 'profissionais.id, profissionais.nome, profissionais.nomecurto';
 

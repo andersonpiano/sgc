@@ -44,6 +44,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('profissionais_vinculo', 'vinculo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-4">
+                                                <?php echo form_dropdown($vinculo);?>
+                                                <?php //echo form_multiselect($setor_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
                                                 <?php echo form_input($datainicial);?>
@@ -199,3 +206,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </section>
             </div>
+    <div id="modal_vinculo" class="modal fade">
+            <div class="modal-dialog modal-lg" style="width:50%;">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title">Selecione o Vinculo</h4></center>
+                </div>
+
+                <div class="modal-body">
+                        <div class="form-group">
+                            <center><label class="control-label">Este profissional possui 2 vinculos, favor selecione o vinculo a ser utilizado</label></center>                                <center>
+                                <?php 
+                                /*$data = array(
+                                    '1'  => 'CEMERGE',
+                                    '2' => 'SESA',
+                                );*/
+                                echo form_dropdown($this->data['vinculos_atribuir']); 
+                                ?></center>
+                                <span class="help-block"></span>
+                        </div>
+                        <div class="form-group text-center">
+                        <button id="btn_vinculo" class="btn btn-success text-center btn-vinculo">
+                            <i class="fa fa-plus"></i>&nbsp;&nbsp;Selecionar</button>
+                            <span class="help-block"></span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>

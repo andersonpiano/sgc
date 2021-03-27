@@ -20,7 +20,7 @@ class Profissionais extends Admin_Controller
         $this->data['pagetitle'] = $this->page_title->show();
 
         /* Breadcrumbs :: Common */
-        $this->breadcrumbs->unshift(1, lang('menu_profissionais'), 'admin/profissionais');
+        $this->breadcrumbs->unshift(1, lang('menu_profissionais'), 'admin/profissionais/');
     }
 
     public function index()
@@ -125,7 +125,7 @@ class Profissionais extends Admin_Controller
             && $this->profissional_model->insert($additional_data)
         ) {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
-            redirect('admin/profissionais', 'refresh');
+            redirect('admin/especializacoes/', 'refresh');
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
@@ -316,7 +316,7 @@ class Profissionais extends Admin_Controller
                 } else {
                     $this->session->set_flashdata('message', 'O profissional já é vinculado a este setor.');
                 }
-                redirect('admin/profissionais', 'refresh');
+                redirect('admin/especializacoes/', 'refresh');
             }
         }
 
@@ -439,7 +439,7 @@ class Profissionais extends Admin_Controller
                         $this->session->set_flashdata('message', 'Profissional atualizado com sucesso.');
 
                         if ($this->ion_auth->is_admin()) {
-                            redirect('admin/profissionais', 'refresh');
+                            redirect('admin/especializacoes/', 'refresh');
                         } else {
                             redirect('admin', 'refresh');
                         }
@@ -447,7 +447,7 @@ class Profissionais extends Admin_Controller
                         $this->session->set_flashdata('message', $this->ion_auth->errors());
 
                         if ($this->ion_auth->is_admin()) {
-                            redirect('admin/profissionais', 'refresh');
+                            redirect('admin/especializacoes/', 'refresh');
                         } else {
                             redirect('admin', 'refresh');
                         }

@@ -36,7 +36,7 @@ class Escala_model extends MY_Model
         // escalas.*
         $fields = 'escalas.id, escalas.dataplantao, escalas.datafinalplantao, ';
         $fields .= 'escalas.horainicialplantao, escalas.horafinalplantao, escalas.duracao, ';
-        $fields .= 'escalas.profissional_id, escalas.setor_id, ';
+        $fields .= 'escalas.profissional_id, escalas.setor_id, profissionais.vinculo_id, ';
         $fields .= 'escalas.tipo_plantao, escalas.extra, ';
         $fields .= 'profissionais.id as profissional_id, ';
         $fields .= 'profissionais.registro as profissional_registro, ';
