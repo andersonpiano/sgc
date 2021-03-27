@@ -1220,20 +1220,28 @@ class Escalas extends Admin_Controller
                 //$profissionais = $this->get_profissionais($setor_id);
 
                 // Realizando a busca
-                if ($vinculo_id != 3) {
+                if ($vinculo_id == 1 || $vinculo_id == 2) {
                 $where = array(
                     'unidadehospitalar_id' => $unidadehospitalar_id,
                     'escalas.setor_id' => $setor_id,
                     'escalas.dataplantao >=' => $datainicial,
                     'escalas.dataplantao <=' => $datafinal,
-                    'profissionais.vinculo_id' => $vinculo_id
+                    'escalas.vinculo_id' => $vinculo_id,
                 );
+                } else if ($vinculo_id == 4){
+                    $where = array(
+                        'unidadehospitalar_id' => $unidadehospitalar_id,
+                        'escalas.setor_id' => $setor_id,
+                        'escalas.dataplantao >=' => $datainicial,
+                        'escalas.dataplantao <=' => $datafinal,
+                        'profissionais.vinculo_id' => null
+                    );
                 } else {
                     $where = array(
                         'unidadehospitalar_id' => $unidadehospitalar_id,
                         'escalas.setor_id' => $setor_id,
                         'escalas.dataplantao >=' => $datainicial,
-                        'escalas.dataplantao <=' => $datafinal
+                        'escalas.dataplantao <=' => $datafinal,
                     );
                 };
 
@@ -1301,8 +1309,14 @@ class Escalas extends Admin_Controller
             );
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
-            $vinculos = $this->_get_vinculos();
+            $vinculos = array(
+                '3' => 'Todos',
+                '1' => 'CEMERGE',
+                '2' => 'SESA',
+                '4' => 'Vagos'
+            );
             $vinculos_atribuir = $this->_get_vinculos_atribuir();
+
             $turnos = array(
                 '0' => 'Todos',
                 '1' => 'Manhã',
@@ -2273,13 +2287,23 @@ class Escalas extends Admin_Controller
         $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 20 days')); // deixar somente data atual date('Y-m-d')
         $this->data['data_maxima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' + 90 days'));
 
+        $diaria = $this->input->post('diaria');
+        $manha = $this->input->post('manha');
+        $tarde = $this->input->post('tarde');
+        $noite = $this->input->post('noite');
+        $tipo = $this->input->post('tipos');
+
+
         /* Validate form input */
         $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
         $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
         $this->form_validation->set_rules('datainicialplantao', 'lang:escalas_datainicialplantao', 'required');
+        /*
         $this->form_validation->set_rules('datafinalplantao', 'lang:escalas_datafinalplantao', 'required');
         $this->form_validation->set_rules('horainicialplantao', 'lang:escalas_horainicialplantao', 'required');
         $this->form_validation->set_rules('horafinalplantao', 'lang:escalas_horafinalplantao', 'required');
+        */
+        $this->form_validation->set_rules('tipos', 'lang:escalas_tipos', 'required');
 
         if ($this->form_validation->run() == true) {
             $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
@@ -2298,7 +2322,7 @@ class Escalas extends Admin_Controller
                 'horainicialplantao' => $this->input->post('horainicialplantao'),
                 'horafinalplantao' => $this->input->post('horafinalplantao')
             );
-
+            /*
             $datainicial = new DateTime($datainicialplantao);
             $datafinal = new DateTime($datafinalplantao);
             if ($datainicial > $datafinal) {
@@ -2309,7 +2333,7 @@ class Escalas extends Admin_Controller
             if ($horainicialplantao == $horafinalplantao) {
                 $this->session->set_flashdata('message', 'A hora inicial do plantão não pode ser igual &agrave; hora final.');
                 redirect('admin/escalas/create', 'refresh');
-            }
+            }*/
         }
 
         // Realizar o insert no model
@@ -2336,6 +2360,7 @@ class Escalas extends Admin_Controller
             $this->escala_model->delete($where);
 
             // Loop para inserir no período
+            
             for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {
                 $hrinicialplantao = $additional_data['horainicialplantao'];
                 $hrfinalplantao = $additional_data['horafinalplantao'];
@@ -3064,6 +3089,8 @@ class Escalas extends Admin_Controller
         $data_ini = $this->input->post('data_ini', 0);
         $hora_ini = $this->input->post('hora_ini', 0);
 
+        $vinculo_atribuir = $this->input->post('vinculos_atribuir');
+
         $escala = $this->escala_model->get_by_id($escala_id);
         $profissional_ant = $escala->profissional_id;
 
@@ -3086,8 +3113,20 @@ class Escalas extends Admin_Controller
 
         //echo json_encode($profissional);
         //echo json_encode($escala);
-        echo json_encode(['sucess' => $sucess, 'profissional' => $profissional_id, 'vinculo'=> $vinculo[0]->vinculo_id, 'profissional_ant'=> $profissional_ant]);
+        echo json_encode(['sucess' => $sucess, 'profissional' => $profissional_id, 'vinculo_atribuir' => $vinculo_atribuir, 'vinculo'=> $vinculo[0]->vinculo_id, 'profissional_ant'=> $profissional_ant]);
         exit;
+    }
+
+    public function troca_vinculo_escala(){
+
+        $escala_id = $this->input->post('escala');
+        $vinculo_id = $this->input->post('vinculo_id');
+        $success = 'errado';
+        if($this->escala_model->update($escala_id, ['vinculo_id' => $vinculo_id])){
+            $success = 'certo';
+        };
+
+        return $success;
     }
 
     private function _get_vinculos_atribuir()

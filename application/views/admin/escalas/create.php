@@ -52,17 +52,45 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($datainicialplantao);?>
                                             </div>
                                         </div>
+                                        <!--
                                         <div class="form-group">
-                                            <?php echo lang('escalas_datafinalplantao', 'datafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php //echo lang('escalas_datafinalplantao', 'datafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php echo form_input($datafinalplantao);?>
+                                                <?php //echo form_input($datafinalplantao);?>
                                             </div>
                                         </div>
+                                        -->
 
                                         <div class="form-group">
                                             <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
                                                 <?php echo form_dropdown($this->data['tipos']);?>
+                                            </div>
+                                        </div>
+
+                                        <div id="diaria_div" class="form-group diaria">
+                                            <?php echo lang('escalas_diaria', 'diaria', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_input(['type' => 'number', 'id' => 'diaria', 'class' => 'form-control']);?>
+                                            </div>
+                                        </div>
+
+                                        <div id="manha" class="form-group manha">
+                                            <?php echo lang('escalas_manha', 'manha', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_input(['type' => 'number', 'id' => 'manha', 'class' => 'form-control']);?>
+                                            </div>
+                                        </div>
+                                        <div id="tarde" class="form-group tarde">
+                                            <?php echo lang('escalas_tarde', 'tarde', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_input(['type' => 'number', 'id' => 'tarde', 'class' => 'form-control']);?>
+                                            </div>
+                                        </div>
+                                        <div id="noite" class="form-group noite">
+                                            <?php echo lang('escalas_noite', 'noite', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_input(['type' => 'number', 'id' => 'noite', 'class' => 'form-control']);?>
                                             </div>
                                         </div>
 

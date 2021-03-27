@@ -302,7 +302,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     }
                                                     ?>
                                                 </td>
-                                                <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>"><?php echo(htmlspecialchars($freq->nome_profissional ? $freq->nome_profissional : '-', ENT_QUOTES, 'UTF-8')); ?></span></td>
+                                                <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>"><?php echo(htmlspecialchars($freq->nome_profissional ? $freq->nome_profissional : '-', ENT_QUOTES, 'UTF-8')); ?><button style="font-size:19px; position: relative; float: right; color:red;" class="btn btn-link btn-remover-medico text-center" id='remover_medico'><i class="fa fa-times" aria-hidden="true"></i></i></button></span></td>
                                                 <td title="<?php echo($freq->falta ? $tipo_falta : ''); ?>" class="text-center dontprint" <?php echo($tipo_batida_escala == "OK" ? 'bg-success' : 'bg-danger'); ?><?php echo($freq->falta ? ' title_help ' : ''); ?>">
                                                     <?php echo($tipo_batida_escala); ?>
                                                 </td>
@@ -373,6 +373,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </table>
 
                         <div class="form-group text-center">
+                            <span class="help-block"></span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal_excluir_profissional" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Exclusão de Médico da Escala</h4>
+                </div>
+
+                <div class="modal-body">
+                        <div class="form-group text-center">
+                            <?php echo lang('escalas_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
+                            <div class="col-sm-2">
+                                <?php echo form_input('teste');?>
+                            </div>
                             <span class="help-block"></span>
                         </div>
                 </div>

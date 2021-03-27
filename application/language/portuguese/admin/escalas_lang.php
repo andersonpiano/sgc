@@ -68,3 +68,7 @@ $lang['escalas_status']              = 'Condição';
 $lang['escalas_status_passagem']     = 'Status da Cessão ou Troca';
 $lang['escalas_status_oportunidade']     = 'Tipo de Oportunidade';
 $lang['escalas_box_title']           = 'Escala';
+$lang['escalas_manha']           = 'Manhã';
+$lang['escalas_diaria']           = 'Manhã | Tarde';
+$lang['escalas_tarde']           = 'Tarde';
+$lang['escalas_noite']           = 'Noite';

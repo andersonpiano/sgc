@@ -36,7 +36,20 @@ $(document).ready(function(){
                             function(here){ 
                                 $('#row_id_' + escala).remove();
                             });
+                            $.ajax({
+                                url: '/sgc/admin/escalas/troca_vinculo_escala/',
+                                method: 'post',
+                                data: {
+                                    vinculo_id : document.getElementById('vinculos_atribuir').value,
+                                    escala : escala
+                                },
+                            success: function(responseData) {
                             swal("Sucesso","Troca realizada com sucesso","success");
+                            }, 
+                            error: function(responseData){
+                                swal("Erro!","Erro ao atribuir vinculo.", 'error');
+                            }
+                        });
                         } else {
                             swal("Erro!","Este plantão já foi repassado a outro profissional ou profissional selecionado ja está escalado em outro plantão.", 'error');
                             //document.getElementById('profissional_id').value = JSON.parse(responseData).profissional;

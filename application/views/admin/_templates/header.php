@@ -85,6 +85,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['atribuir'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
 <?php endif; ?>
+<?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['create'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/escalas_create.js'); ?>"></script>
+<?php endif; ?>
 <?php if ($this->router->fetch_class() == 'faltas' && in_array($this->router->fetch_method(), ['index'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/faltas__profissionais_por_unidade_hospitalar.js'); ?>"></script>
 <?php endif; ?>
