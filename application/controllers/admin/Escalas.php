@@ -1087,6 +1087,25 @@ class Escalas extends Admin_Controller
         //redirect('admin/escalas/processarescala', 'refresh');
     }
 
+    public function remover_medico(){
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+        $escala_id = $this->input->post('escala');
+        $sucess = false;
+
+        $this->load->model('cemerge/passagemtroca_model');
+
+        $sessoes = $this->passagemtroca_model->get_where(['escala_id' => $escala_id], null);
+        if (empty($sessoes)){
+            $this->escala_model->update($escala_id, ['profissional_id' => 0]);
+            $sucess = true;
+        };
+        //var_dump($sessoes);exit;
+        echo json_encode(['sucess'=>$sucess]);
+        exit;      
+    }
+
     public function processarescalaprescricao($unidadehospitalar_id, $datainicial = null)
     {
         $unidadehospitalar_id = (int)$unidadehospitalar_id;

@@ -22,48 +22,55 @@ $(function(){
 			confirmButtonText: 'Remover',
 			cancelButtonText: 'Cancelar',
 			showLoaderOnConfirm: true,
-			preConfirm: (login) => {
-			  return fetch(`//api.github.com/users/${login}`)
-				.then(response => {
-				  if (!response.ok) {
-					throw new Error(response.statusText)
-				  }
-				  return response.json()
-				})
-				.catch(error => {
-				  Swal.showValidationMessage(
-					`Requisição falhou: ${error}`
-				  )
+			preConfirm: (motivo) => {
+				escala = $(this).attr('escala');
+				profissional = $(this).attr('profissional');
+        		$.ajax({
+            		url: '/sgc/admin/logs/registro/',
+            		method: 'post',
+            	data: {
+					id: escala,
+                	tabela : 'escalas - id=' + escala,
+					motivo : motivo,
+					campo_alterado : 'profissional_id = '+profissional+' - Deletado'
+					},
+				success: function(responseData) {
+					$.ajax({
+						url: '/sgc/admin/escalas/remover_medico/',
+						method: 'post',
+						type: 'json',
+					data: {
+						escala: escala,
+						},
+					success: function(responseData){
+						if (JSON.parse(responseData).sucess){
+						swal('Sucesso','Médico Excluido com sucesso','success');
+						location.reload();
+						} else {
+							swal('Erro','Este plantão foi recebido por cessão/troca e não pode ser removido aqui.','error');
+						}					
+					},
+					error: function(){
+						swal('Erro','Este plantão foi recebido por cessão/troca e não pode ser removido aqui.','error');
+					}
+					})
+					},
+				error: function(responseData){
+					swal('Erro','Log não pode ser gravado.','error');
+					}
 				})
 			},
 			allowOutsideClick: () => !Swal.isLoading()
-		  }).then((result) => {
-			if (result.isConfirmed) {
+		}).then((result) => {
+			/*if (result.success) {
 			  Swal.fire({
-				title: `${result.value.login}'s avatar`,
-				imageUrl: result.value.avatar_url
+				icon: 'sucess',
+				title: 'Parabéns',
+				text: 'Médico Excluido com sucesso',
+				footer: 'Em caso de dúvidas contactar o Gestor de Ti'
 			  })
-			}
-		  })
-		/*
-		Swal.fire({
-			title: 'Tem Certeza?',
-			text: "Não será possivel reverter essa ação!",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Remover',
-			cancelButtonText: 'Cancelar'
-		  }).then((result) => {
-			if (result.isConfirmed) {
-			  Swal.fire(
-				'Deletado!',
-				'Médico Deletado com sucesso.',
-				'success'
-			  )
-			}
-		  })*/
+			}*/
+		  })		
 	});
 
 	function active_btn_jade() {

@@ -302,7 +302,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     }
                                                     ?>
                                                 </td>
-                                                <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>"><?php echo(htmlspecialchars($freq->nome_profissional ? $freq->nome_profissional : '-', ENT_QUOTES, 'UTF-8')); ?><button style="font-size:19px; position: relative; float: right; color:red;" class="btn btn-link btn-remover-medico text-center" id='remover_medico'><i class="fa fa-times" aria-hidden="true"></i></i></button></span></td>
+                                                <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>">
+                                                <?php
+                                                    echo($freq->nome_profissional ? $freq->nome_profissional . '<button style="font-size:19px; position: relative; float: right; color:red;" class="btn btn-link btn-remover-medico text-center" id="remover_medico" escala="'.$freq->id.'" profissional="'.$freq->id_profissional.'"><i class="fa fa-times" aria-hidden="true"></i></i></button>': '-'); ?></span></td>
                                                 <td title="<?php echo($freq->falta ? $tipo_falta : ''); ?>" class="text-center dontprint" <?php echo($tipo_batida_escala == "OK" ? 'bg-success' : 'bg-danger'); ?><?php echo($freq->falta ? ' title_help ' : ''); ?>">
                                                     <?php echo($tipo_batida_escala); ?>
                                                 </td>
