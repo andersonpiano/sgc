@@ -9,13 +9,11 @@ class Usuarioprofissional_model extends MY_Model {
         parent::__construct($this->table);
     }
 
-    public function get_usuario_por_profissional($profissional){
+    public function get_usuario_por_profissional($profissional_id){
         $fields = 'usuariosprofissionais.*';
 
-        $this->db->select($fields);
+        $this->db->select('user_id');
         $this->db->from($this->table);
-        $this->db->join('profissionalsetor', 'setores.id = profissionalsetor.setor_id', 'left');
-        $this->db->join('profissionais', 'profissionais.id = profissionalsetor.profissional_id', 'left');
         $this->db->where('profissional_id', $profissional_id);
         $query = $this->db->get();
 

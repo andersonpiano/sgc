@@ -22,4 +22,9 @@ class Usuariosetor_model extends MY_Model
 
         return $query->result();
     }
+
+    public function trocar_coordenador($setor, $user){
+        
+        return $this->db->update($this->table, ['user_id' => $user], ['setor_id' => $setor]);
+    }
 }

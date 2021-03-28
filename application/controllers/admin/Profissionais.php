@@ -294,7 +294,7 @@ class Profissionais extends Admin_Controller
         $setores = array();
 
         /* Validate form input */
-        $this->form_validation->set_rules('unidadehospitalar_id', 'lang:profissionais_unidadehospitalar', 'required');
+        //$this->form_validation->set_rules('unidadehospitalar_id', 'lang:profissionais_unidadehospitalar', 'required');
         $this->form_validation->set_rules('setor_id', 'lang:profissionais_setor', 'required');
 
         if (isset($_POST) && !empty($_POST)) {
@@ -348,6 +348,7 @@ class Profissionais extends Admin_Controller
 
         /* Load Template */
         $this->template->admin_render('admin/profissionais/linktosector', $this->data);
+        return true;
     }
 
     public function unlinkfromsector($profissional_id, $setor_id)

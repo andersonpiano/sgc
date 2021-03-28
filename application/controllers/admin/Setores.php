@@ -356,17 +356,78 @@ class Setores extends Admin_Controller {
         $profissionais = $this->data['setor']->profissionais;
         $usuarios_dropdown = $this->get_usuarios_dropdown($id);
         //var_dump($usuarios);exit;
-        $this->data['setor_id'] = array(
-            'name'  => 'setor_id',
-            'id'    => 'setor_id',
+        $this->data['profissional_id'] = array(
+            'name'  => 'profissional_id',
+            'id'    => 'profissional_id',
             'type'  => 'select',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('setor_id'),
+            'value' => $this->form_validation->set_value('profissional_id'),
             'options' => $usuarios_dropdown,
         );
 
         /* Load Template */
         $this->template->admin_render('admin/setores/view', $this->data);
+    }
+
+    public function trocar_coordenador(){
+        
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $this->load->model('cemerge/usuariosetor_model');
+        
+        $setor = $this->input->post('setor');
+        $profissional = $this->input->post('profissional');
+        $user_id = $this->usuarioprofissional_model->get_usuario_por_profissional($profissional)[0];
+        //var_dump($user_id->user_id);exit;
+
+        $this->form_validation->set_rules('profissional', 'profissional', 'required|greater_than[0]|integer');
+        $this->data['sucess'] = false;
+
+            if ($this->form_validation->run() == true) {
+                if ($this->usuariosetor_model->trocar_coordenador($setor, $user_id->user_id)) {
+                    $this->data['sucess'] = true;
+                } 
+            }
+
+
+        echo json_encode($this->data['sucess']); exit;
+    }
+
+    public function ajax_profissionais() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/profissional_model");
+
+        $profissionais = $this->profissional_model->get_datatable();
+
+        $data = array();
+        foreach ($profissionais as $profissional) {
+    
+            $row = array();
+            $row[] = '<center>'.$profissional->id.'</center>';
+            $row[] = '<center>'.$profissional->nome.'</center>';
+            
+            $row[] = '<center><div style="display: inline-block;">
+                        <button style="color:green; font-size:20px;" class="btn btn-link btn-add-profissional" 
+                            id='.$profissional->id.'>
+                            <i class="fa fa-check-square-o"></i>
+                        </button>
+                    </div></center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" =>$this->profissional_model->records_total(),
+            "recordsFiltered" => $this->profissional_model->records_filtered(),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
     }
 
     public function get_usuarios_dropdown($setor)
@@ -399,6 +460,18 @@ class Setores extends Admin_Controller {
         echo json_encode($coordenadores);
         exit;
         //return $coordenadores;
+    }
+
+    public function user_by_prof($profissional_id){
+        
+        $this->db->select('*');
+        $this->db->from('usuariosprofissionais');
+        $this->db->join('profissionalsetor', 'setores.id = profissionalsetor.setor_id', 'left');
+        $this->db->join('profissionais', 'profissionais.id = profissionalsetor.profissional_id', 'left');
+        $this->db->where('profissional_id', $profissional_id);
+        $query = $this->db->get();
+
+        return $query->result();
     }
 
     public function _get_csrf_nonce()

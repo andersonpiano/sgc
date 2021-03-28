@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="box">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Profissionais do setor</h3>
-                                    <button style="font-size:19px; position: relative; float: right; color:green;" class="btn btn-link btn-addtosector text-center" id="add_medico_setor" escala="'.$freq->id.'" profissional="'.$freq->id_profissional.'"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Adicionar ao Setor</i></button>
+                                    <button style="font-size:19px; position: relative; float: right; color:green;" class="btn btn-link btn-addtosector text-center" id="add_medico_setor" setor="<?php echo $setor->id;?>"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Adicionar ao Setor</i></button>
                                 </div>
                                 <div class="box-body">
                                     <table class="table table-striped table-hover">
@@ -62,8 +62,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <tr>
                                                 <td><?php echo htmlspecialchars($profissional->nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <?php echo anchor('admin/profissionais/view/'.$profissional->id, ' ', array('class' => 'btn btn-primary text-center fa fa-eye')); ?> &nbsp;
-                                                    <?php echo anchor('admin/profissionais/edit/'.$profissional->id, ' ', array('class' => 'btn btn-primary text-center fa fa-edit')); ?> &nbsp;
+                                                    <?php echo anchor('admin/profissionais/view/'.$profissional->id, ' ', array('class' => 'btn btn-primary text-center fa fa-eye', 'style'=>'margin: 0 2px 0 0;')); ?>
+                                                    <?php echo anchor('admin/profissionais/edit/'.$profissional->id, ' ', array('class' => 'btn btn-primary text-center fa fa-edit', 'style'=>'margin: 0 2px 0 0;')); ?>
                                                     <?php echo anchor('admin/profissionais/unlinkfromsector/'.$profissional->id.'/'.$setor->id, ' ', array('class' => 'btn btn-danger btn-flat fa fa-chain-broken')); ?>
                                                 </td>
                                             </tr>
@@ -121,16 +121,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     '1'  => 'CEMERGE',
                                     '2' => 'SESA',
                                 );*/
-                                echo form_dropdown($setor_id); 
+                                echo form_dropdown($profissional_id); 
                                 ?>
                             </center>
                                 <span class="help-block"></span>
                         </div>
                         <div class="form-group text-center">
-                        <button id="btn_selecionar_coordenador" class="btn btn-success text-center btn-selecionar_coordenador">
+                        <button id="btn_selecionar_coordenador" setor="<?php echo $setor->id;?>" class="btn btn-success text-center btn-selecionar-coordenador">
                             <i class="fa fa-plus"></i>&nbsp;&nbsp;Selecionar</button>
                             <span class="help-block"></span>
                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_add_to_setor" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title">Selecione o profissional</h4></center>
+                </div>
+
+                <div class="modal-body">
+                        <table id="dt_profissionais" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th style="width:20%" class="dt-center text-center" >COD</th>
+                                <th style="width:60%" class="dt-center text-center">Nome</th>
+                                <th style="width:20%" class="dt-center no-sort text-center">Selecionar</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
