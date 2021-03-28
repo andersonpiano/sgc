@@ -353,8 +353,52 @@ class Setores extends Admin_Controller {
         $this->data['setor']->profissionais = $this->profissional_model->get_profissionais_por_setor($id);
         $this->data['setor']->usuarios = $this->usuariosetor_model->get_usuarios_por_setor($id);
 
+        $profissionais = $this->data['setor']->profissionais;
+        $usuarios_dropdown = $this->get_usuarios_dropdown($id);
+        //var_dump($usuarios);exit;
+        $this->data['setor_id'] = array(
+            'name'  => 'setor_id',
+            'id'    => 'setor_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('setor_id'),
+            'options' => $usuarios_dropdown,
+        );
+
         /* Load Template */
         $this->template->admin_render('admin/setores/view', $this->data);
+    }
+
+    public function get_usuarios_dropdown($setor)
+    {   
+        $this->load->model('cemerge/profissional_model');
+        $usuarios = $this->profissional_model->get_profissionais_por_setor($setor);
+
+        $coordenadores = array(
+            '' => 'Selecione o novo coordenador',
+        );
+        foreach ($usuarios as $usuario) {
+            $coordenadores[$usuario->id] = $usuario->nomecurto;
+        }
+        //echo json_encode(['coordenadores' => $coordenadores]);
+        return $coordenadores;
+    }
+
+    public function get_usuarios_dropdown_encode()
+    {   
+
+        $setor = $this->input->post('setor');
+        $this->load->model('cemerge/profissional_model');
+        $usuarios = $this->profissional_model->get_profissionais_por_setor($setor);
+
+        $coordenadores = array(
+        );
+        foreach ($usuarios as $usuario) {
+            $coordenadores[$usuario->id] = $usuario->nomecurto;
+        }
+        echo json_encode($coordenadores);
+        exit;
+        //return $coordenadores;
     }
 
     public function _get_csrf_nonce()

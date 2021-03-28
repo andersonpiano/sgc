@@ -131,6 +131,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <link rel="stylesheet" href="<?php echo base_url($frameworks_dir . '/cemerge/css/select.dataTables.min.css'); ?>">
 
 <?php endif; ?>
+<?php if ($this->router->fetch_class() == 'setores' && $this->router->fetch_method() == 'view') : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_view.js'); ?>"></script>
+<?php endif; ?>
 <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pace.min.js'); ?>"></script>
 <script src="<?php echo base_url($frameworks_dir . '/moment/moment.min.js'); ?>"></script>
 <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery.blockUI.js'); ?>"></script>
