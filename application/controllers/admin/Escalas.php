@@ -740,7 +740,7 @@ class Escalas extends Admin_Controller
                     'escalas.dataplantao <=' => $datafinal,
                 );
 //                var_dump($profissional_id); exit;
-                if ($profissional_id <> ''){
+                if ($profissional_id <> '' || $profissional_id <> 0){
                     $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal);
                 } else {
                 $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal);
@@ -2306,12 +2306,6 @@ class Escalas extends Admin_Controller
         $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 20 days')); // deixar somente data atual date('Y-m-d')
         $this->data['data_maxima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' + 90 days'));
 
-        $diaria = $this->input->post('diaria');
-        $manha = $this->input->post('manha');
-        $tarde = $this->input->post('tarde');
-        $noite = $this->input->post('noite');
-        $tipo = $this->input->post('tipos');
-
 
         /* Validate form input */
         $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
@@ -2329,30 +2323,68 @@ class Escalas extends Admin_Controller
             $setor_id = $this->input->post('setor_id');
             $datainicialplantao = $this->input->post('datainicialplantao');
             $datafinalplantao = $this->input->post('datafinalplantao');
-            $horainicialplantao = $this->input->post('horainicialplantao');
-            $horafinalplantao = $this->input->post('horafinalplantao');
+            $diaria = $this->input->post('diaria');
+            $manha = $this->input->post('manha');
+            $tarde = $this->input->post('tarde');
+            $noite = $this->input->post('noite');
+            $tipo = $this->input->post('tipos');
+            //$horainicialplantao = $this->input->post('horainicialplantao');
+            //$horafinalplantao = $this->input->post('horafinalplantao');
             //$active = $this->input->post('active');
 
-            $additional_data = array(
+            //var_dump($diaria); exit;
+            $additional_dataM = array(
                 'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
                 'setor_id' => $this->input->post('setor_id'),
-                'datainicialplantao' => $this->input->post('datainicialplantao'),
-                'datafinalplantao' => $this->input->post('datafinalplantao'),
-                'horainicialplantao' => $this->input->post('horainicialplantao'),
-                'horafinalplantao' => $this->input->post('horafinalplantao')
+                'datainicialplantao' => $datainicialplantao,
+                'datafinalplantao' => $datainicialplantao,
+                'horainicialplantao' => '07:00:00',
+                'horafinalplantao' => '13:00:00'
             );
-            /*
+
+            $additional_dataT = array(
+                'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
+                'setor_id' => $this->input->post('setor_id'),
+                'datainicialplantao' => $datainicialplantao,
+                'datafinalplantao' => $datainicialplantao,
+                'horainicialplantao' => '13:00:00',
+                'horafinalplantao' => '19:00:00'
+            );
+
+            $additional_dataN = array(
+                'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
+                'setor_id' => $this->input->post('setor_id'),
+                'datainicialplantao' => $datainicialplantao,
+                'datafinalplantao' => date('Y-m-d', strtotime($datainicialplantao . ' +1 day')),
+                'horainicialplantao' => '19:00:00',
+                'horafinalplantao' => '07:00:00'
+            );
+            
             $datainicial = new DateTime($datainicialplantao);
             $datafinal = new DateTime($datafinalplantao);
+            //var_dump($datafinal); exit;
+
             if ($datainicial > $datafinal) {
                 $this->session->set_flashdata('message', 'A data final do plantão deve ser maior ou igual &agrave; data inicial.');
-                redirect('admin/escalas/create', 'refresh');
+                //redirect('admin/escalas/create', 'refresh');
             }
 
-            if ($horainicialplantao == $horafinalplantao) {
-                $this->session->set_flashdata('message', 'A hora inicial do plantão não pode ser igual &agrave; hora final.');
-                redirect('admin/escalas/create', 'refresh');
-            }*/
+            /*
+            if ($additional_dataM['horainicialplantao'] == $additional_dataM['horafinalplantao']) {
+                $this->session->set_flashdata('message', 'A hora inicial do plantão Manhã não pode ser igual &agrave; data final.');
+                //redirect('admin/escalas/create', 'refresh');
+            }
+
+            if ($additional_dataT['horainicialplantao'] == $additional_dataT['horafinalplantao']) {
+                $this->session->set_flashdata('message', 'A hora inicial do plantão Tarde não pode ser igual &agrave; data final.');
+                //redirect('admin/escalas/create', 'refresh');
+            }
+            if ($additional_dataN['horainicialplantao'] == $additional_dataN['horafinalplantao']) {
+                $this->session->set_flashdata('message', 'A hora inicial do plantão Noite não pode ser igual &agrave; data final.');
+                //redirect('admin/escalas/create', 'refresh');
+            }
+            */
+
         }
 
         // Realizar o insert no model
@@ -2362,46 +2394,181 @@ class Escalas extends Admin_Controller
             $setor = $this->setor_model->get_by_id($setor_id);
             if ($setor->maximoprofissionais < 1) {
                 $this->session->set_flashdata('message', 'O número máximo de profissionais por plantão no setor não foi informado. Corrija esta informação no cadastro de setores.');
-                redirect('admin/escalas/create', 'refresh');
+                //redirect('admin/escalas/create', 'refresh');
             }
-
-            $datainicial = new DateTime($additional_data['datainicialplantao']);
-            $datafinal = new DateTime($additional_data['datafinalplantao']);
+            
+            $datainicialM = new DateTime($additional_dataM['datainicialplantao']);
+            $datafinalM = new DateTime($additional_dataM['datafinalplantao']);
+            $horainicialM = new DateTime($additional_dataM['horainicialplantao']);
+            $horafinalM = new DateTime($additional_dataM['horafinalplantao']);
+            $datainicialT = new DateTime($additional_dataT['datainicialplantao']);
+            $datafinalT = new DateTime($additional_dataT['datafinalplantao']);
+            $horainicialT = new DateTime($additional_dataT['horainicialplantao']);
+            $horafinalT = new DateTime($additional_dataT['horafinalplantao']);
+            $datainicialN = new DateTime($additional_dataN['datainicialplantao']);
+            $datafinalN = new DateTime($additional_dataN['datafinalplantao']);
+            $horainicialN = new DateTime($additional_dataN['horainicialplantao']);
+            $horafinalN = new DateTime($additional_dataN['horafinalplantao']);
 
             // Apagar escalas do período no mesmo setor e horários
-            $where = array(
-                'setor_id' => $setor_id,
-                'dataplantao >=' => $datainicialplantao,
-                'dataplantao <=' => $datafinalplantao,
-                'horainicialplantao' => $horainicialplantao,
-                'horafinalplantao' => $horafinalplantao,
-            );
-            $this->escala_model->delete($where);
+            $delete = false;
 
-            // Loop para inserir no período
-            
-            for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {
-                $hrinicialplantao = $additional_data['horainicialplantao'];
-                $hrfinalplantao = $additional_data['horafinalplantao'];
-                $dtinicialplantao = $i->format("Y-m-d");
-                $dtfinalplantao = $dtinicialplantao;
-                $duracao = abs((int)$hrinicialplantao - (int)$hrfinalplantao);
-                if ((int)$hrinicialplantao > (int)$hrfinalplantao) {
-                    $dtfinalplantao = date('Y-m-d', strtotime($dtinicialplantao . ' +1 day'));
-                }
-                for ($j=1; $j <= $setor->maximoprofissionais; $j++) { 
-                    $insert_data = array(
-                        'setor_id' => $additional_data['setor_id'],
-                        'dataplantao' => $dtinicialplantao,
-                        'datafinalplantao' => $dtfinalplantao,
-                        'horainicialplantao' => $hrinicialplantao,
-                        'horafinalplantao' => $hrfinalplantao,
-                        'duracao' => $duracao
-                    );
-                    $success = $this->escala_model->insert($insert_data);
+            if ($tipo == 1){
+
+                $whereMTN = array(
+                    'setor_id' => $setor_id,
+                    'dataplantao >=' => $datainicialplantao,
+                    'dataplantao <=' => $datafinalplantao,
+                    /*'horainicialplantao' => $horainicialM->format('H:i:s'),
+                    'horafinalplantao' => $horafinalM->format('H:i:s'),*/
+                );/*
+                $whereT = array(
+                    'setor_id' => $setor_id,
+                    'dataplantao >=' => $datainicialT->format('Y-m-d'),
+                    'dataplantao <=' => $datafinalT->format('Y-m-d'),
+                    'horainicialplantao' => $horainicialT->format('H:i:s'),
+                    'horafinalplantao' => $horafinalT->format('H:i:s'),
+                );
+                $whereN = array(
+                    'setor_id' => $setor_id,
+                    'dataplantao >=' => $datainicialN->format('Y-m-d'),
+                    'dataplantao <=' => $datafinalN->format('Y-m-d'),
+                    'horainicialplantao' => $horainicialN->format('H:i:s'),
+                    'horafinalplantao' => $horafinalN->format('H:i:s'),
+                );*/
+                if ($this->escala_model->delete($whereMTN)){
+                    $delete = true;
+                }              
+            } else {
+                $whereMT = array(   
+                    'setor_id' => $setor_id,
+                    'dataplantao >=' => $datainicialplantao,
+                    'dataplantao <=' => $datafinalplantao,
+                    /*'horainicialplantao' => $horainicialM->format('H:i:s'),
+                    'horafinalplantao' => $horafinalM->format('H:i:s'),*/
+                );/*
+                $whereT = array(
+                    'setor_id' => $setor_id,
+                    'dataplantao >=' => $datainicialT->format('Y-m-d'),
+                    'dataplantao <=' => $datafinalT->format('Y-m-d'),
+                    'horainicialplantao' => $horainicialT->format('H:i:s'),
+                    'horafinalplantao' => $horafinalT->format('H:i:s'),
+                );*/
+                if ($this->escala_model->delete($whereMT)){
+                    $delete = true;
                 }
             }
-
+            //var_dump($manha); exit;            
+            // Loop para inserir no período
+            if ($tipo == 1){
+                //Manhã
+                for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {
+                    $hrinicialplantaoM = $horainicialM->format('H:i:s');
+                    $hrfinalplantaoM = $horafinalM->format('H:i:s');
+                    $dtinicialplantaoM = $i->format('Y-m-d');
+                    $dtfinalplantaoM = $dtinicialplantaoM;
+                    $duracaoM = abs((int)$hrinicialplantaoM - (int)$hrfinalplantaoM);
+                    if ((int)$hrinicialplantaoM > (int)$hrfinalplantaoM) {
+                        $dtfinalplantaoM = date('Y-m-d', strtotime($dtinicialplantaoM . ' +1 day'));
+                    }
+                    for ($j= 1; $j <= $manha; $j++) { 
+                        $insert_dataM = array(
+                            'setor_id' => $additional_dataM['setor_id'],
+                            'dataplantao' => $dtinicialplantaoM,
+                            'datafinalplantao' => $dtfinalplantaoM,
+                            'horainicialplantao' => $hrinicialplantaoM,
+                            'horafinalplantao' => $hrfinalplantaoM,
+                            'duracao' => $duracaoM
+                        );
+                        $success = $this->escala_model->insert($insert_dataM);
+                    }
+                    $hrinicialplantaoT = $horainicialT->format('H:i:s');
+                    $hrfinalplantaoT = $horafinalT->format('H:i:s');
+                    $dtinicialplantaoT = $i->format('Y-m-d');
+                    $dtfinalplantaoT = $dtinicialplantaoT;
+                    $duracaoT = abs((int)$hrinicialplantaoT - (int)$hrfinalplantaoT);
+                    if ((int)$hrinicialplantaoT > (int)$hrfinalplantaoT) {
+                        $dtfinalplantaoT = date('Y-m-d', strtotime($dtinicialplantaoT . ' +1 day'));
+                    }
+                    for ($j=1; $j <= $tarde; $j++) { 
+                        $insert_dataT = array(
+                            'setor_id' => $additional_dataT['setor_id'],
+                            'dataplantao' => $dtinicialplantaoT,
+                            'datafinalplantao' => $dtfinalplantaoT,
+                            'horainicialplantao' => $hrinicialplantaoT,
+                            'horafinalplantao' => $hrfinalplantaoT,
+                            'duracao' => $duracaoT
+                        );
+                        $success = $this->escala_model->insert($insert_dataT);
+                    }
+                    $hrinicialplantaoN = $horainicialN->format('H:i:s');
+                    $hrfinalplantaoN = $horafinalN->format('H:i:s');
+                    $dtinicialplantaoN = $i->format('Y-m-d');
+                    $dtfinalplantaoN = $dtinicialplantaoN;
+                    $duracaoN = abs((int)$hrinicialplantaoN - (int)$hrfinalplantaoN);
+                    if ((int)$hrinicialplantaoN > (int)$hrfinalplantaoN) {
+                        $dtfinalplantaoN = date('Y-m-d', strtotime($dtinicialplantaoN . ' +1 day'));
+                    }
+                    for ($j=1; $j <= $noite; $j++) { 
+                        $insert_dataN = array(
+                            'setor_id' => $additional_dataN['setor_id'],
+                            'dataplantao' => $dtinicialplantaoN,
+                            'datafinalplantao' => $dtfinalplantaoN,
+                            'horainicialplantao' => $hrinicialplantaoN,
+                            'horafinalplantao' => $hrfinalplantaoN,
+                            'duracao' => $duracaoN
+                        );
+                    
+                        $success = $this->escala_model->insert($insert_dataN);
+                        //var_dump($insert_dataM); exit;
+                    }
+                };
+            } else {
+                //Manhã
+                for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {
+                    $hrinicialplantaoM = $horainicialM->format('H:i:s');
+                    $hrfinalplantaoM = $horafinalM->format('H:i:s');
+                    $dtinicialplantaoM = $i->format('Y-m-d');
+                    $dtfinalplantaoM = $dtinicialplantaoM;
+                    $duracaoM = abs((int)$hrinicialplantaoM - (int)$hrfinalplantaoM);
+                    if ((int)$hrinicialplantaoM > (int)$hrfinalplantaoM) {
+                        $dtfinalplantaoM = date('Y-m-d', strtotime($dtinicialplantao . ' +1 day'));
+                    }
+                    for ($j=1; $j <= $diaria; $j++) { 
+                        $insert_dataM = array(
+                            'setor_id' => $additional_dataM['setor_id'],
+                            'dataplantao' => $dtinicialplantaoM,
+                            'datafinalplantao' => $dtfinalplantaoM,
+                            'horainicialplantao' => $hrinicialplantaoM,
+                            'horafinalplantao' => $hrfinalplantaoM,
+                            'duracao' => $duracaoM
+                        );
+                        $success = $this->escala_model->insert($insert_dataM);
+                        //var_dump($insert_dataM); exit; 
+                    }
+                    $hrinicialplantaoT = $horainicialT->format('H:i:s');
+                    $hrfinalplantaoT = $horafinalT->format('H:i:s');
+                    $dtinicialplantaoT = $i->format('Y-m-d');
+                    $dtfinalplantaoT = $dtinicialplantaoT;
+                    $duracaoT = abs((int)$hrinicialplantaoT - (int)$hrfinalplantaoT);
+                    for ($j=1; $j <= $diaria; $j++) { 
+                        $insert_dataT = array(
+                            'setor_id' => $additional_dataT['setor_id'],
+                            'dataplantao' => $dtinicialplantaoT,
+                            'datafinalplantao' => $dtfinalplantaoT,
+                            'horainicialplantao' => $hrinicialplantaoT,
+                            'horafinalplantao' => $hrfinalplantaoT,
+                            'duracao' => $duracaoT
+                        );
+                        $success = $this->escala_model->insert($insert_dataT);
+                        //var_dump($insert_dataT); exit;
+                    }
+                };
+            }
+            //var_dump($success); exit;
+            //var_dump($success1); exit;
+            //var_dump($success2); exit;
+            //var_dump($success3); exit;
             if ($success) {
                 $this->session->set_flashdata('message', 'Escala criada com sucesso.');
                 redirect('admin/escalas/create', 'refresh');
@@ -2452,6 +2619,34 @@ class Escalas extends Admin_Controller
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('tipos'),
                 'options' => $tipos,
+            );
+            $this->data['diaria'] = array(
+                'name'  => 'diaria',
+                'id'    => 'diaria',
+                'type'  => 'number',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('diaria'),
+            );
+            $this->data['manha'] = array(
+                'name'  => 'manha',
+                'id'    => 'manha',
+                'type'  => 'number',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('manha'),
+            );
+            $this->data['tarde'] = array(
+                'name'  => 'tarde',
+                'id'    => 'tarde',
+                'type'  => 'number',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tarde'),
+            );
+            $this->data['noite'] = array(
+                'name'  => 'noite',
+                'id'    => 'noite',
+                'type'  => 'number',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('noite'),
             );
             $this->data['horafinalplantao'] = array(
                 'name'  => 'horafinalplantao',

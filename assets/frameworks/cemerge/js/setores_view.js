@@ -74,8 +74,8 @@ $(document).ready(function(){
 			setor : setor
 			},
 		success: function(responseData){
-			swal('Sucesso',"Coordenador alterado!","success");
-			document.reload(forcedReload);
+			//swal('Sucesso',"Coordenador alterado!","success");
+			document.location.reload(true);
 		},
 		error: function(){
 			swal('Erro','Ocorreu um trocar o Coordenador.','error');

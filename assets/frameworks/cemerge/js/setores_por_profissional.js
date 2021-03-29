@@ -10,7 +10,7 @@ $(document).ready(function() {
             success: function(responseData) {
                 $('#setor_id').empty();
                 $.each(responseData, function(i, s) {
-                    $('#setor_id').append($('<option></option>').val(s.id).html(s.nome));
+                    $('#setor_id').append($('<option></option>').val(s.i).html(s));
                 });
             },
         });

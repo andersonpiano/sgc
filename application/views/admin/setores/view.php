@@ -32,6 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <tbody>
                                             <tr>
                                                 <th><?php echo lang('setores_nome'); ?></th>
+                                                <td><?php echo $setor->nome; ?></td>
                                                 <td><?php $data = array(
                                                     'type'  => 'hidden',
                                                     'name'  => 'setor_id',

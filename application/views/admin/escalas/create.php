@@ -52,14 +52,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($datainicialplantao);?>
                                             </div>
                                         </div>
-                                        <!--
+                                        
                                         <div class="form-group">
-                                            <?php //echo lang('escalas_datafinalplantao', 'datafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('escalas_datafinalplantao', 'datafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php //echo form_input($datafinalplantao);?>
+                                                <?php echo form_input($datafinalplantao);?>
                                             </div>
                                         </div>
-                                        -->
+                                        
 
                                         <div class="form-group">
                                             <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
@@ -68,29 +68,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
 
-                                        <div id="diaria_div" class="form-group diaria">
+                                        <div id="diaria_div" class="form-group">
                                             <?php echo lang('escalas_diaria', 'diaria', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php echo form_input(['type' => 'number', 'id' => 'diaria', 'class' => 'form-control']);?>
+                                                <?php echo form_input($this->data['diaria']);?>
                                             </div>
                                         </div>
 
-                                        <div id="manha" class="form-group manha">
+                                        <div id="manha" class="form-group">
                                             <?php echo lang('escalas_manha', 'manha', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php echo form_input(['type' => 'number', 'id' => 'manha', 'class' => 'form-control']);?>
+                                                <?php echo form_input($this->data['manha']);?>
                                             </div>
                                         </div>
-                                        <div id="tarde" class="form-group tarde">
+                                        <div id="tarde" class="form-group">
                                             <?php echo lang('escalas_tarde', 'tarde', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php echo form_input(['type' => 'number', 'id' => 'tarde', 'class' => 'form-control']);?>
+                                                <?php echo form_input($this->data['tarde']);?>
                                             </div>
                                         </div>
-                                        <div id="noite" class="form-group noite">
+                                        <div id="noite" class="form-group">
                                             <?php echo lang('escalas_noite', 'noite', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php echo form_input(['type' => 'number', 'id' => 'noite', 'class' => 'form-control']);?>
+                                                <?php echo form_input($this->data['noite']);?>
                                             </div>
                                         </div>
 

@@ -529,7 +529,14 @@ class Setores extends Admin_Controller {
         $this->load->model('cemerge/setor_model');
         $setores = $this->setor_model->get_setores_por_profissional($profissional_id);
 
-        echo json_encode($setores);
+        $opcoes = array(
+            0 => 'Todos',
+        );
+        foreach ($setores as $setor) {
+            $opcoes[$setor->id] = $setor->nome;
+        }
+
+        echo json_encode($opcoes);
         exit;
     }
 
