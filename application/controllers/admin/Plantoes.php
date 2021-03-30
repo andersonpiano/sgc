@@ -563,7 +563,7 @@ class Plantoes extends Admin_Controller
                 if ($this->input->post('tipopassagem') == 1) {
                     $primeirodiames = date('Y-m-01', strtotime($plantao->dataplantao)); //$primeirodiames = date('Y-m-d');
                     $ultimodiames = date('Y-m-t', strtotime($plantao->dataplantao)); // Correção do problema que informava que não haviam plantões disponíveis
-                    $plantoes = $this->get_escalas_consolidadas_por_profissional(
+                    $plantoes = $this->setor_model->get_escalas_consolidadas_por_profissional(
                         $profissionaltroca_id,
                         $primeirodiames,
                         $ultimodiames,
