@@ -5,6 +5,16 @@ $(document).ready(function(){
 		$("#modal_coordenador").modal();
 		clearErrors();
 	});
+	/*
+		$( ".btn-troca-coordenador").focus(function() {
+		alert( "Handler for .focus() called." );
+		});
+	*/
+	/*$( ".btn-troca-coordenador").mouseover(function() {
+		//alert( "Handler for .focus() called." );
+		$(".btn-troca-coordenador").text("I am fine");
+		});*/	
+		
 	$(".btn-addtosector").click(function(){
 		$("#modal_add_to_setor").modal();
 		var setor = $(this).attr('setor');

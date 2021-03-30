@@ -59,6 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <tr>
                                                 <th><?php echo lang('setores_nome');?></th>
                                                 <th><?php echo lang('setores_unidadehospitalar');?></th>
+                                                <th><?php echo lang('setores_vagas');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -67,8 +68,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($setor->nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($setor->unidadehospitalar->razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
-                                                    <?php echo anchor('admin/setores/edit/'.$setor->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
-                                                    <?php echo anchor('admin/setores/view/'.$setor->id, lang('actions_see'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                    <?php echo anchor('admin/setores/edit/'.$setor->id, ' '/*lang('actions_edit')*/, array('class' => 'btn btn-primary btn-flat fa fa-edit')); ?> &nbsp;
+                                                    <?php echo anchor('admin/setores/view/'.$setor->id, ' '/*lang('actions_see')*/, array('class' => 'btn btn-primary btn-flat fa fa-eye')); ?>
                                                 </td>
                                             </tr>
 <?php endforeach;?>

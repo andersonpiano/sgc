@@ -26,3 +26,4 @@ $lang['setores_box_title']           = 'Setor';
 $lang['setores_assessus']           = 'Setor Assessus';
 $lang['setores_responsavel']           = 'Responsável';
 $lang['setores_coordenador']           = 'Coordenador';
+$lang['setores_vagas']           = 'Vagas';
