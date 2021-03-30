@@ -54,6 +54,7 @@ $(function(){
 					error: function(){
 						swal('Erro','Este plantão foi recebido por cessão/troca e não pode ser removido aqui.','error');
 					}
+					
 					})
 					},
 				error: function(responseData){
@@ -71,7 +72,8 @@ $(function(){
 				footer: 'Em caso de dúvidas contactar o Gestor de Ti'
 			  })
 			}*/
-		  })		
+		  }),
+		  document.location.reload(true);		
 	});
 
 	function active_btn_jade() {
