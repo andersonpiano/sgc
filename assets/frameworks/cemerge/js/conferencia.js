@@ -44,7 +44,7 @@ $(function(){
 						},
 					success: function(responseData){
 						if (JSON.parse(responseData).sucess){
-							swal({
+							/*swal({
 								icon: 'success',
 								title: "Sucesso",
 								text: 'Médico Excluido com sucesso!',
@@ -54,9 +54,10 @@ $(function(){
 							}, function (isConfirm) {
 								if (isConfirm) {
 									document.location.reload(true)
-								} 
-							})
-						//swal('Sucesso','Médico Excluido com sucesso','success');
+								}
+								document.location.reload(true)
+							})*/
+						swal('Sucesso','Médico Excluido com sucesso','success');
 						//await new Promise(r => setTimeout(r, 2000));
 						//document.location.reload(true);
 						} else {
