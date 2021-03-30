@@ -53,8 +53,8 @@ $(function(){
 								//cancelButtonText: "No",
 							}, function (isConfirm) {
 								if (isConfirm) {
-									document.location.reload(true);
-								}
+									document.location.reload(true)
+								} 
 							})
 						//swal('Sucesso','Médico Excluido com sucesso','success');
 						//await new Promise(r => setTimeout(r, 2000));
