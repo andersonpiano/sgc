@@ -45,7 +45,7 @@ $(function(){
 					success: function(responseData){
 						if (JSON.parse(responseData).sucess){
 						//swal('Sucesso','Médico Excluido com sucesso','success');
-						await new Promise(r => setTimeout(r, 2000));
+						//await new Promise(r => setTimeout(r, 2000));
 						document.location.reload(true);
 						} else {
 							swal('Erro','Este plantão foi recebido por cessão/troca e não pode ser removido aqui.','error');
