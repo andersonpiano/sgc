@@ -44,7 +44,19 @@ $(function(){
 						},
 					success: function(responseData){
 						if (JSON.parse(responseData).sucess){
-						swal('Sucesso','Médico Excluido com sucesso','success');
+							swal({
+								icon: 'success',
+								title: "Sucesso",
+								text: 'Médico Excluido com sucesso!',
+								showCancelButton: false,
+								confirmButtonText: "OK"
+								//cancelButtonText: "No",
+							}, function (isConfirm) {
+								if (isConfirm) {
+									document.location.reload(true);
+								}
+							})
+						//swal('Sucesso','Médico Excluido com sucesso','success');
 						//await new Promise(r => setTimeout(r, 2000));
 						//document.location.reload(true);
 						} else {
@@ -56,6 +68,7 @@ $(function(){
 					}
 					
 					})
+					//
 					},
 				error: function(responseData){
 					swal('Erro','Log não pode ser gravado.','error');
@@ -72,8 +85,7 @@ $(function(){
 				footer: 'Em caso de dúvidas contactar o Gestor de Ti'
 			  })
 			}*/
-		  }),
-		  document.location.reload(true);		
+		  })		
 	});
 
 	function active_btn_jade() {
