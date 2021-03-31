@@ -2339,7 +2339,8 @@ class Escalas extends Admin_Controller
                 'datainicialplantao' => $datainicialplantao,
                 'datafinalplantao' => $datainicialplantao,
                 'horainicialplantao' => '07:00:00',
-                'horafinalplantao' => '13:00:00'
+                'horafinalplantao' => '13:00:00',
+                'tipo_escala' => $tipo
             );
 
             $additional_dataT = array(
@@ -2348,7 +2349,8 @@ class Escalas extends Admin_Controller
                 'datainicialplantao' => $datainicialplantao,
                 'datafinalplantao' => $datainicialplantao,
                 'horainicialplantao' => '13:00:00',
-                'horafinalplantao' => '19:00:00'
+                'horafinalplantao' => '19:00:00',
+                'tipo_escala' => $tipo
             );
 
             $additional_dataN = array(
@@ -2357,7 +2359,8 @@ class Escalas extends Admin_Controller
                 'datainicialplantao' => $datainicialplantao,
                 'datafinalplantao' => date('Y-m-d', strtotime($datainicialplantao . ' +1 day')),
                 'horainicialplantao' => '19:00:00',
-                'horafinalplantao' => '07:00:00'
+                'horafinalplantao' => '07:00:00',
+                'tipo_escala' => $tipo
             );
             
             $datainicial = new DateTime($datainicialplantao);
@@ -2419,6 +2422,7 @@ class Escalas extends Admin_Controller
                     'setor_id' => $setor_id,
                     'dataplantao >=' => $datainicialplantao,
                     'dataplantao <=' => $datafinalplantao,
+                    'tipo_escala' => $tipo
                     /*'horainicialplantao' => $horainicialM->format('H:i:s'),
                     'horafinalplantao' => $horafinalM->format('H:i:s'),*/
                 );/*
@@ -2444,6 +2448,7 @@ class Escalas extends Admin_Controller
                     'setor_id' => $setor_id,
                     'dataplantao >=' => $datainicialplantao,
                     'dataplantao <=' => $datafinalplantao,
+                    'tipo_escala' => $tipo
                     /*'horainicialplantao' => $horainicialM->format('H:i:s'),
                     'horafinalplantao' => $horafinalM->format('H:i:s'),*/
                 );/*
