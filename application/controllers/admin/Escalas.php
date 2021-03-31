@@ -1917,6 +1917,7 @@ class Escalas extends Admin_Controller
             exit("Nenhum acesso de script direto permitido!");
         }  
         $this->load->model("cemerge/FrequenciaAssessus_model");
+        $this->load->model("cemerge/Setor_model");
         $batidas = $this->FrequenciaAssessus_model->get_batidas();
         
 
