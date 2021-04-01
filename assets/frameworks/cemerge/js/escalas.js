@@ -60,10 +60,10 @@ $(document).ready(function(){
                     });
                 } else {
                     if ($sucess == true){
-                        $('#row_id_' + escala).fadeOut('slow', 
+                        /*$('#row_id_' + escala).fadeOut('slow', 
                         function(here){ 
                             $('#row_id_' + escala).remove();
-                        });
+                        });*/
                         swal("Sucesso","Troca realizada com sucesso","success");
                     } else {
                         swal("Erro!","Este plantão já foi repassado a outro profissional ou profissional selecionado ja está escalado em outro plantão.", 'error');
