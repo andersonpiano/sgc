@@ -142,6 +142,21 @@ class Setor_model extends MY_Model {
         return $query->result();
     }
 
+    public function vagas($setor){
+
+        $sql  = "SELECT * ";
+        $sql .= "FROM `escalas` ";
+        $sql .= "WHERE dataplantao ";
+        $sql .= "BETWEEN '".date('Y-m-d')."' and '".date('Y-m-d', strtotime("+30 days"))."'"; 
+        $sql .= "and setor_id = $setor ";
+        $sql .= "and profissional_id = 0 ";
+        
+        $query = $this->db->query($sql);
+
+        return $query->num_rows();
+        
+}
+
     public function sgc_x_assessus($cd_set)
     {
         $sql = "select id, setor_id, cd_set ";

@@ -50,6 +50,7 @@ class Setores extends Admin_Controller {
             // Corrigir atributo para unidadehospitalar_id
             foreach ($this->data['setores'] as $k => $setor) {
                 $this->data['setores'][$k]->unidadehospitalar = $this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
+                $this->data['setores'][$k]->vagas = $this->setor_model->vagas($setor->id);//$this->unidadehospitalar_model->get_by_id($setor->unidadehospitalar_id);
             }
         } else {
             $this->data['setores'] = array();
@@ -439,7 +440,7 @@ class Setores extends Admin_Controller {
             '' => 'Selecione o novo coordenador',
         );
         foreach ($usuarios as $usuario) {
-            $coordenadores[$usuario->id] = $usuario->nomecurto;
+            $coordenadores[$usuario->id] = $usuario->nome;
         }
         //echo json_encode(['coordenadores' => $coordenadores]);
         return $coordenadores;

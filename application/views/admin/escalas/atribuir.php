@@ -141,6 +141,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         echo(lang('escalas_unidadehospitalar')) . ": " . htmlspecialchars($escalas[0]->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8');
                                         echo('<br>');
                                         echo(lang('escalas_setor')) . ": " . htmlspecialchars($escalas[0]->setor_nome, ENT_QUOTES, 'UTF-8');
+                                        echo '<button style="font-size:20px; float: right;" class="btn btn-primary btn-publicar-escala text-center" id="publicar_escala" setor="'.$escalas[0]->setor_id.'"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Publicar Escala</button>';
                                     } else {
                                         echo("A pesquisa não retornou resultados.");
                                     }
@@ -175,6 +176,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_tipo_plantao');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
                                                 <th><?php echo lang('escalas_diadasemana');?></th>
+                                                <th><?php echo lang('escalas_turno');?></th>
                                                 <th><?php echo lang('escalas_horario');?></th>
                                             </tr>
                                         </thead>
@@ -193,7 +195,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_hidden('tipo_plantao_escala_id_' . $escala->id, $escala->id);?>
                                                 </td>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <?php 
+                                                $turno = '';
+                                                $hora_inicial_plantao = date('H:i:s', strtotime($escala->horainicialplantao));
+                                                if ($hora_inicial_plantao == '06:00:00') {
+                                                    $turno = 'Manhã';
+                                                }
+                                                if ($hora_inicial_plantao == '07:00:00') {
+                                                    $turno = 'Manhã';
+                                                }
+                                                if ($hora_inicial_plantao == '13:00:00') {
+                                                    $turno = 'Tarde';
+                                                }
+                                                if ($hora_inicial_plantao == '19:00:00') {
+                                                    $turno = 'Noite';
+                                        }
+                                                ?>
                                                 <td><?php echo htmlspecialchars($diasdasemana[date('w', strtotime($escala->dataplantao))], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
         <?php endforeach;?>
