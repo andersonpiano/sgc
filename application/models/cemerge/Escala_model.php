@@ -38,6 +38,7 @@ class Escala_model extends MY_Model
         $fields .= 'escalas.horainicialplantao, escalas.horafinalplantao, escalas.duracao, ';
         $fields .= 'escalas.profissional_id, escalas.setor_id, profissionais.vinculo_id, ';
         $fields .= 'escalas.tipo_plantao, escalas.extra, ';
+        $fields .= 'escalas.publicada, ';
         $fields .= 'profissionais.id as profissional_id, ';
         $fields .= 'profissionais.registro as profissional_registro, ';
         $fields .= 'profissionais.nome as profissional_nome, ';
@@ -108,6 +109,7 @@ class Escala_model extends MY_Model
 
         return $query->result();
     }
+
 
     public function get_escalas_consolidadas_validacao($setor_id, $ano, $mes)
     {

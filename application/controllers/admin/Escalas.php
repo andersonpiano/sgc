@@ -1452,6 +1452,41 @@ class Escalas extends Admin_Controller
         return $v;
     }
 
+    public function publicar_escala($on_off)
+    {
+        $unidade = $this->input->post('unidade');
+        $data_ini = $this->input->post('data_ini');
+        $data_fim = $this->input->post('data_fim');
+        $turno = $this->input->post('turno');
+        $setor = $this->input->post('setor');
+        $vinculo = $this->input->post('vinculo');
+
+            $where  = "dataplantao between '".$data_ini."' and '".$data_fim."' ";
+            $where .= "and setor_id = ".$setor.' ';
+
+        if ($turno == 1){
+            $where .= "and horainicialplantao = '07:00:00' ";
+        } else if ($turno == 2){
+            $where .= "and horainicialplantao = '13:00:00' ";
+        } else if ($turno == 3){
+            $where .= "and horainicialplantao = '19:00:00' ";
+        } 
+
+        if ($vinculo != 3){
+            $where .= "and vinculo_id = ".$vinculo.' ';
+        } 
+        $sucess = false;
+        if ($this->escala_model->update_where($where, ['publicada' => $on_off])) {
+            $this->session->set_flashdata('message', 'Escala validada e enviada com sucesso.');
+            $sucess = true;
+        } else {
+            $this->session->set_flashdata('message', 'Houve um problema ao validar e enviar a escala.');
+        }
+
+        echo json_encode($sucess);
+        exit;
+    }
+
     public function conferencia()
     {
         if (!$this->ion_auth->logged_in() OR !$this->ion_auth->in_group($this->_permitted_groups)) {

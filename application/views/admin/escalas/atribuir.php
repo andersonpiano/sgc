@@ -141,7 +141,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         echo(lang('escalas_unidadehospitalar')) . ": " . htmlspecialchars($escalas[0]->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8');
                                         echo('<br>');
                                         echo(lang('escalas_setor')) . ": " . htmlspecialchars($escalas[0]->setor_nome, ENT_QUOTES, 'UTF-8');
-                                        echo '<button style="font-size:20px; float: right;" class="btn btn-primary btn-publicar-escala text-center" id="publicar_escala" setor="'.$escalas[0]->setor_id.'"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Publicar Escala</button>';
+                                        echo '<button style="font-size:20px;float: right;" 
+                                        class="btn btn-primary btn-publicar-escala text-center" 
+                                        id="btn-publicar-escala"
+                                        data_ini="'.$this->form_validation->set_value('datainicial').'" 
+                                        data_fim="'.$this->form_validation->set_value('datafinal').'"
+                                        turno="'.$this->input->post('turno_id').'" 
+                                        setor="'.$this->form_validation->set_value('setor_id').'" 
+                                        unidade="'.$this->form_validation->set_value('unidadehospitalar_id').'" 
+                                        vinculo="'.$this->form_validation->set_value('vinculo').'">
+                                        <i class="fa fa-paper-plane">
+                                        </i>&nbsp;&nbsp;Publicar Escala
+                                        </button>';
                                     } else {
                                         echo("A pesquisa não retornou resultados.");
                                     }
@@ -178,6 +189,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_diadasemana');?></th>
                                                 <th><?php echo lang('escalas_turno');?></th>
                                                 <th><?php echo lang('escalas_horario');?></th>
+                                                <th><?php echo lang('escalas_status');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -214,6 +226,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($diasdasemana[date('w', strtotime($escala->dataplantao))], ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <?php 
+                                                    $condicao = '';
+                                                    if ($escala->publicada == 1){
+                                                        $condição = 'Publicada';
+                                                    } else {
+                                                        $condição = 'Despublicada';
+                                                    }
+                                                ?>
+                                                <td><?php echo htmlspecialchars($condição, ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
         <?php endforeach;?>
                                         </tbody>

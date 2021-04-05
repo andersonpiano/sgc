@@ -1,10 +1,40 @@
 $(document).ready(function(){
     // Teste de geolocalização
     //navigator.geolocation.getCurrentPosition(show_map);
-
     
-
-
+    $(".btn-publicar-escala").click(function(){
+        var unidade = $(this).attr('unidade');
+        var data_ini = $(this).attr('data_ini');
+        var data_fim = $(this).attr('data_fim');
+        var turno = $(this).attr('turno');
+        var setor = $(this).attr('setor');
+        var vinculo = $(this).attr('vinculo');
+        $.ajax({
+            url: '/sgc/admin/escalas/publicar_escala/1',
+            method: 'post',
+            data: {
+                unidade: unidade,
+                data_ini: data_ini,
+                data_fim: data_fim,
+                turno: turno,
+                setor: setor,
+                vinculo: vinculo
+            },
+            success: function(responseData){
+                swal(
+                'Sucesso!', 
+                'Escala Publicada com Sucesso', 
+                'success');
+            },
+            error: function(responseData){
+                swal(
+                'Erro!', 
+                'Erro ao publicar escala', 
+                'error');
+            }
+        })
+    });
+    
     $(document).on('change', '#profissional_id', function() {
         var profissional = $(this).val();
         var escala = $(this).next('input').val();
@@ -32,10 +62,10 @@ $(document).ready(function(){
                     $('.btn-vinculo').click(function(){
                         $("#modal_vinculo").modal("hide");
                         if ($sucess == true){
-                            $('#row_id_' + escala).fadeOut('slow', 
+                            /*$('#row_id_' + escala).fadeOut('slow', 
                             function(here){ 
                                 $('#row_id_' + escala).remove();
-                            });
+                            });*/
                             $.ajax({
                                 url: '/sgc/admin/escalas/troca_vinculo_escala/',
                                 method: 'post',
@@ -80,6 +110,8 @@ $(document).ready(function(){
             }
         }); 
 });
+
+
 });
 
 
