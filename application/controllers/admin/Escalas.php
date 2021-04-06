@@ -1474,7 +1474,7 @@ class Escalas extends Admin_Controller
             $email_enviado = $this->email->send();
 
             return $email_enviado;
-        }
+    }
 
     public function publicar_escala($on_off)
     {
