@@ -64,6 +64,19 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function escala_por_profissional($data, $profissional_id){
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where_in('dataplantao', $data);
+        $this->db->where_in('profissional_id', $profissional_id);
+        $this->db->order_by('dataplantao');
+
+        $query = $this->db->get();
+
+        return $query->result();
+ 
+    }
+
     public function get_escalas_consolidadas($where, $where_in = null, $order_by = null)
     {
         $fields = 'escalas.*, profissionais.id as profissional_id, ';

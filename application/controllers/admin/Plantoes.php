@@ -808,6 +808,8 @@ class Plantoes extends Admin_Controller
             'id'    => 'profissionalsubstituto_id',
             'type'  => 'select',
             'class' => 'form-control',
+            'data' => $plantao->dataplantao,
+            'setor' => $plantao->setor_id,
             'options' => $profissionais_setor
         );
         $this->data['frequencias_disponiveis'] = array(

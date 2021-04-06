@@ -1983,7 +1983,7 @@ class Escalas extends Admin_Controller
 
         $data = array();
         foreach ($batidas as $batida) {
-            $setor_sgc = $this->setor_model->sgc_x_assessus($batida->CD_SET)->setor_id;
+            $setor_sgc = $this->setor_model->sgc_x_assessus($batida->cd_set)->setor_id;
             $profissional_sgc = $this->profissional_model->get_by_cd_pes_fis($batida->CD_PES_FIS);
             //var_dump($setor_sgc); exit;
             $row = array();
@@ -2048,6 +2048,21 @@ class Escalas extends Admin_Controller
             $this->escala_model->update($escala_id, ['status'  => $this::STATUS_ESCALA_OK]);
         }
         redirect('admin/escalas/conferencia', 'refresh');
+    }
+
+    public function escala_por_profissional($data, $profissional_id, $setor_id){
+
+        $escalas = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $data, $data, $setor_id);
+
+        $plantoes = array(
+            '' => 'Selecione o Plantão para Troca',
+        );
+        foreach ($escalas as $escala) {
+            $plantoes[$escala->id] = $escala->dataplantao . ' - De: '. $escala->horainicialplantao . ' As'. $escala->horafinalplantao;
+        }
+
+        return $plantoes;
+
     }
 
     public function registrarfalta($escala_id)

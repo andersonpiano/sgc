@@ -28,6 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php if ($mobile == true && $android == true) : ?>
         <meta name="mobile-web-app-capable" content="yes">
 <?php endif; ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
         <link rel="shortcut icon" href="<?php echo base_url($frameworks_dir . '/medino/assets/images/logo/favicon.png'); ?>" type="image/x-icon">
         <link rel="icon" href="<?php echo base_url($frameworks_dir . '/medino/assets/images/logo/favicon.png'); ?>">
         <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic,700italic">-->
