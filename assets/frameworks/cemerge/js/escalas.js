@@ -36,13 +36,17 @@ $(document).ready(function(){
     });
     
     $(document).on('change', '#profissional_id', function() {
-        var profissional = $(this).val();
+        /*var profissional = $(this).val();
         var escala = $(this).next('input').val();
         var hora_ini = $(this).prev('input').val();
-        var data_ini = document.getElementById("data_plantao_"+escala).value;
+        var data_ini = document.getElementById("data_plantao_"+escala).value;*/
+        var profissional = $(this).val();
+        var escala = $(this).attr('escala');
+        var hora_ini = $(this).attr('hora');
+        var data_ini = $(this).attr('data');
         var url = '/sgc/admin/escalas/atribuirescala/';
         var sucess = false;
-        swal('Erro', 'escala - '+escala+' horaIN - '+hora_ini + 'Data - ' + data_ini ,'error');
+        //swal('Erro', 'escala - '+escala+' horaIN - '+hora_ini + 'Data - ' + data_ini ,'error');
         $.ajax({
             url: url,
             method: 'post',

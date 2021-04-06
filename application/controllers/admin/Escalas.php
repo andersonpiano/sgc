@@ -1390,6 +1390,9 @@ class Escalas extends Admin_Controller
                 'id'    => 'profissional_id',
                 'type'  => 'select',
                 'class' => 'form-control',
+                'escala' => $escala->id,
+                'data' => $escala->dataplantao,
+                'hora' => $escala->horainicialplantao,
                 'value' => $this->form_validation->set_value('profissional_id'),
                 'options' => $profissionais,
             );
