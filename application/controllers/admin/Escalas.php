@@ -1983,7 +1983,7 @@ class Escalas extends Admin_Controller
 
         $data = array();
         foreach ($batidas as $batida) {
-            $setor_sgc = $this->setor_model->sgc_x_assessus($batida->cd_set)->setor_id;
+            $setor_sgc = $this->Setor_model->sgc_x_assessus($batida->CD_SET)->setor_id;
             $profissional_sgc = $this->profissional_model->get_by_cd_pes_fis($batida->CD_PES_FIS);
             //var_dump($setor_sgc); exit;
             $row = array();
