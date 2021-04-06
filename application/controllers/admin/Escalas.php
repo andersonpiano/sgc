@@ -1390,9 +1390,6 @@ class Escalas extends Admin_Controller
                 'id'    => 'profissional_id',
                 'type'  => 'select',
                 'class' => 'form-control',
-                'escala' => $escala->id,
-                'data' => $escala->dataplantao,
-                'hora' => $escala->horainicialplantao,
                 'value' => $this->form_validation->set_value('profissional_id'),
                 'options' => $profissionais,
             );
@@ -1477,7 +1474,7 @@ class Escalas extends Admin_Controller
             $email_enviado = $this->email->send();
 
             return $email_enviado;
-    }
+        }
 
     public function publicar_escala($on_off)
     {
@@ -1504,7 +1501,7 @@ class Escalas extends Admin_Controller
         } 
         $sucess = false;
         if ($this->escala_model->update_where($where, ['publicada' => $on_off])) {
-
+            
             $this->session->set_flashdata('message', 'Escala validada e enviada com sucesso.');
             $sucess = true;
         } else {
