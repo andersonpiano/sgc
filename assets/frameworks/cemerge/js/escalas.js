@@ -114,11 +114,10 @@ $(document).ready(function(){
 
 });
 
-
-
+/*
 function show_map(position) {
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
     console.log(latitude);
     console.log(longitude);
-  }
+  }*/

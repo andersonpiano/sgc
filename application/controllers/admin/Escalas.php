@@ -30,6 +30,8 @@ class Escalas extends Admin_Controller
     const STATUS_PASSAGEM_TROCA_PROPOSTA = 2;
     const STATUS_PASSAGEM_REPASSADO = 3;
 
+    const TIPO_NOTIFICACAO_EMAIL = 0;
+
     private $_permitted_groups = array('admin', 'profissionais', 'coordenadorplantao', 'sac', 'sad');
     private $_admin_groups = array('admin', 'sac', 'sad', 'coordenadorplantao');
     private $_profissional = null;
@@ -50,6 +52,8 @@ class Escalas extends Admin_Controller
         $this->lang->load('admin/escalas');
         $this->load->helper('messages');
         $this->lang->load('admin/profissionais');
+
+        $this->load->library('email');
 
         /* Title Page */
         $this->page_title->push(lang('menu_escalas'));
@@ -1452,6 +1456,26 @@ class Escalas extends Admin_Controller
         return $v;
     }
 
+    public function _sendEscala($data, $destinatario)
+    {
+        /* Initialize email */
+        $ci_mail_config = $this->config->item('mail');
+        $this->email->initialize($ci_mail_config);
+
+        $subject = 'CEMERGE - Nova Escala Publicada';
+
+        $message = $this->load->view(
+            'admin/_templates/email/confirmacao_cessao.tpl.php', $data, true
+        );
+            $this->email->to($destinatario);
+            $this->email->subject($subject);
+            $this->email->message($message);
+
+            $email_enviado = $this->email->send();
+
+            return $email_enviado;
+    }
+
     public function publicar_escala($on_off)
     {
         $unidade = $this->input->post('unidade');
@@ -1477,6 +1501,7 @@ class Escalas extends Admin_Controller
         } 
         $sucess = false;
         if ($this->escala_model->update_where($where, ['publicada' => $on_off])) {
+
             $this->session->set_flashdata('message', 'Escala validada e enviada com sucesso.');
             $sucess = true;
         } else {
