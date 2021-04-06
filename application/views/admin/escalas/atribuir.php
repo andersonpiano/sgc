@@ -158,27 +158,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     }
                                     ?> 
                                 </div>
-    <?php if ($is_mobile) : ?>
-                                <div class="box-body" style="border-bottom: 1px;">
-        <?php foreach ($escalas as $escala) : ?>
-                                    <div class="col-xs-12 col-sm-12 col-md-12" id="<?php echo("row_id_" . $escala->id); ?>">
-                                        <div class="w3-card-2 w3-white w3-margin-bottom w3-round">
-                                            <div class="w3-container w3-white">
-                                                <h6><?php echo lang('escalas_profissional'); ?></h6>
-                                                <?php echo form_dropdown($profissional_id, null, $escala->profissional_id);?>
-                                                <?php echo form_hidden('escala_id_' . $escala->id, $escala->id);?>
-                                            </div>
-                                            <div class="w3-container w3-white">
-                                                <h6><span class="fa fa-calendar"></span> <?php echo(htmlspecialchars($diasdasemana[date('w', strtotime($escala->dataplantao))] . " - " . date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'));?></h6>
-                                            </div>
-                                            <div class="w3-container w3-white">
-                                                <h6><span class="fa fa-clock-o"></span> <?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . ' - ' . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8');?></h6>
-                                            </div>
-                                        </div>
-                                    </div>
-        <?php endforeach;?>
-                                </div>
-    <?php else : ?>
                                 <div class="box-body">
                                     <table class="table table-striped table-hover">
                                         <thead>
@@ -240,7 +219,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </tbody>
                                     </table>
                                 </div>
-    <?php endif;?>
                             </div>
                         </div>
                     </div>

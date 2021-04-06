@@ -42,7 +42,7 @@ $(document).ready(function(){
         var data_ini = document.getElementById("data_plantao_"+escala).value;
         var url = '/sgc/admin/escalas/atribuirescala/';
         var sucess = false;
-        //swal('Erro', 'escala - '+escala+' horaIN - '+hora_ini + 'Data - ' + data_ini ,'error');
+        // swal('Erro', 'escala - '+escala+' horaIN - '+hora_ini + 'Data - ' + data_ini ,'error');
         $.ajax({
             url: url,
             method: 'post',
