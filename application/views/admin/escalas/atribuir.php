@@ -51,6 +51,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($this->data['tipos']);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
                                                 <?php echo form_input($datainicial);?>
@@ -141,6 +147,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         echo(lang('escalas_unidadehospitalar')) . ": " . htmlspecialchars($escalas[0]->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8');
                                         echo('<br>');
                                         echo(lang('escalas_setor')) . ": " . htmlspecialchars($escalas[0]->setor_nome, ENT_QUOTES, 'UTF-8');
+                                        echo '<button style="position: relative; font-size:20px;float: right;" 
+                                        class="btn btn-danger btn-despublicar-escala text-center" 
+                                        id="btn-despublicar-escala"
+                                        data_ini="'.$this->form_validation->set_value('datainicial').'" 
+                                        data_fim="'.$this->form_validation->set_value('datafinal').'"
+                                        turno="'.$this->input->post('turno_id').'" 
+                                        setor="'.$this->form_validation->set_value('setor_id').'" 
+                                        unidade="'.$this->form_validation->set_value('unidadehospitalar_id').'" 
+                                        vinculo="'.$this->form_validation->set_value('vinculo').'">
+                                        <i class="fa fa-paper-plane">
+                                        </i>&nbsp;&nbsp;Despublicar
+                                        </button>';
                                         echo '<button style="font-size:20px;float: right;" 
                                         class="btn btn-primary btn-publicar-escala text-center" 
                                         id="btn-publicar-escala"
@@ -151,7 +169,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         unidade="'.$this->form_validation->set_value('unidadehospitalar_id').'" 
                                         vinculo="'.$this->form_validation->set_value('vinculo').'">
                                         <i class="fa fa-paper-plane">
-                                        </i>&nbsp;&nbsp;Publicar Escala
+                                        </i>&nbsp;&nbsp;Publicar
                                         </button>';
                                     } else {
                                         echo("A pesquisa não retornou resultados.");

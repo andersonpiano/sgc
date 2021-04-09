@@ -112,6 +112,7 @@ class Plantoes extends Admin_Controller
                     'escalas.setor_id' => $setor_id,
                     'escalas.dataplantao >=' => $datainicial,
                     'escalas.dataplantao <=' => $datafinal,
+                    
                 );
 
                 // Tipos e status de passagem para exibição
@@ -536,6 +537,7 @@ class Plantoes extends Admin_Controller
 
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
+        $frequencias_disponiveis = array();
 
         // Removendo o profissional logado
         unset($profissionais_setor[$plantao->passagenstrocas_profissionalsubstituto_id]);
@@ -660,8 +662,17 @@ class Plantoes extends Admin_Controller
             'name'  => 'profissionalsubstituto_id',
             'id'    => 'profissionalsubstituto_id',
             'type'  => 'select',
+            'data' => $plantao->dataplantao,
+            'setor' => $plantao->setor_id,
             'class' => 'form-control',
             'options' => $profissionais_setor
+        );
+        $this->data['frequencias_disponiveis'] = array(
+            'name'  => 'frequencias_disponiveis',
+            'id'    => 'frequencias_disponiveis',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'options' => $frequencias_disponiveis
         );
 
         /* Load Template */
@@ -729,17 +740,32 @@ class Plantoes extends Admin_Controller
                 }
 
                 // Dados da passagem a inserir
-                $data = array(
-                    'escala_id' => $plantao->id,
-                    'profissional_id' => $profissional_passagem_id,
-                    'tipopassagem' => $this->input->post('tipopassagem'),
-                    'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id'),
-                    'datahorapassagem' => date('Y-m-d H:i:s'),
-                    'datahoraconfirmacao' => date('Y-m-d H:i:s'),
-                    'statuspassagem' => 1,
-                );
 
-                $passagemtroca_id = $this->passagemtroca_model->insert($data);
+                if ($this->input->post('tipopassagem') == 0){
+                    $data = array(
+                        'escala_id' => $plantao->id,
+                        'profissional_id' => $profissional_passagem_id,
+                        'tipopassagem' => $this->input->post('tipopassagem'),
+                        'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id'),
+                        'datahorapassagem' => date('Y-m-d H:i:s'),
+                        'datahoraconfirmacao' => date('Y-m-d H:i:s'),
+                        'statuspassagem' => 1,
+                    );
+                } else {
+                    $data = array(
+                        'escala_id' => $plantao->id,
+                        'profissional_id' => $profissional_passagem_id,
+                        'tipopassagem' => $this->input->post('tipopassagem'),
+                        'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id'),
+                        'datahorapassagem' => date('Y-m-d H:i:s'),
+                        'datahoraconfirmacao' => date('Y-m-d H:i:s'),
+                        'statuspassagem' => 1,
+                        'escalatroca_id' => $this->input->post('frequencias_disponiveis')
+                    );
+                }
+                
+                    $passagemtroca_id = $this->passagemtroca_model->insert($data);
+
                 if ($passagemtroca_id) {
                     // Atualizando a cessão / troca atual como a única válida para esta escala
                     $this->passagemtroca_model->set_passagem_troca_valida($plantao->id, $passagemtroca_id);
@@ -760,7 +786,8 @@ class Plantoes extends Admin_Controller
                     $this->session->set_flashdata('message', 'Ocorreu um erro ao realizar a cessão do plantão.');
                 }
 
-                redirect('admin/escalas/conferencia', 'refresh');
+               // redirect('admin/escalas/conferencia', 'refresh');
+               redirect($_SERVER['HTTP_REFERER'], 'refresh');
             } else {
                 $this->session->set_flashdata('message', validation_errors());
             }

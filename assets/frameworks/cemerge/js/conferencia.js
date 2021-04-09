@@ -117,7 +117,7 @@ $(function(){
 		"order": [[ 0, "desc" ]],
 		dom: 'Brt',		
 		"ajax": {
-			"url": "ajax_listar_batidas_ignoradas",
+			"url": "/sgc/admin/escalas/ajax_listar_batidas_ignoradas",
 			"method": "POST",
 		},
 		"columnDefs": [

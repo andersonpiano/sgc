@@ -34,6 +34,39 @@ $(document).ready(function(){
             }
         })
     });
+
+    $(".btn-despublicar-escala").click(function(){
+        var unidade = $(this).attr('unidade');
+        var data_ini = $(this).attr('data_ini');
+        var data_fim = $(this).attr('data_fim');
+        var turno = $(this).attr('turno');
+        var setor = $(this).attr('setor');
+        var vinculo = $(this).attr('vinculo');
+        $.ajax({
+            url: '/sgc/admin/escalas/publicar_escala/0',
+            method: 'post',
+            data: {
+                unidade: unidade,
+                data_ini: data_ini,
+                data_fim: data_fim,
+                turno: turno,
+                setor: setor,
+                vinculo: vinculo
+            },
+            success: function(responseData){
+                swal(
+                'Sucesso!', 
+                'Escala Despublicada com Sucesso', 
+                'success');
+            },
+            error: function(responseData){
+                swal(
+                'Erro!', 
+                'Erro ao Despublicar escala', 
+                'error');
+            }
+        })
+    });
     
     $(document).on('change', '#profissional_id', function() {
         var profissional = $(this).val();

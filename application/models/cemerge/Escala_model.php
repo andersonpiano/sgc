@@ -1204,7 +1204,7 @@ class Escala_model extends MY_Model
         $sql .= 'join profissionais on (escalas.profissional_id = profissionais.id) ';
         $sql .= 'join setores on (escalas.setor_id = setores.id) ';
         $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
-        $sql .= 'where profissionais.id = ? ';
+        $sql .= 'where escalas.publicada = 1 and profissionais.id = ? ';
         $sql .= 'and escalas.id not in ';
         $sql .= '(select escala_id ';
         $sql .= 'from passagenstrocas ';

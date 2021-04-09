@@ -1209,7 +1209,7 @@ class Escalas extends Admin_Controller
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
             /* Variables */
-            $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 20 days'));
+            $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 40 days'));
             $this->data['data_maxima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' + 90 days'));
             $this->data['diasdasemana'] = $this->_diasdasemana;
 
@@ -1250,6 +1250,7 @@ class Escalas extends Admin_Controller
                     'escalas.dataplantao >=' => $datainicial,
                     'escalas.dataplantao <=' => $datafinal,
                     'escalas.vinculo_id' => $vinculo_id,
+                    'escalas.tipo_escala' => $this->input->post('tipos')
                 );
                 } else if ($vinculo_id == 4){
                     $where = array(
@@ -1257,7 +1258,8 @@ class Escalas extends Admin_Controller
                         'escalas.setor_id' => $setor_id,
                         'escalas.dataplantao >=' => $datainicial,
                         'escalas.dataplantao <=' => $datafinal,
-                        'profissionais.vinculo_id' => null
+                        'profissionais.vinculo_id' => null,
+                        'escalas.tipo_escala' => $this->input->post('tipos')
                     );
                 } else {
                     $where = array(
@@ -1265,6 +1267,7 @@ class Escalas extends Admin_Controller
                         'escalas.setor_id' => $setor_id,
                         'escalas.dataplantao >=' => $datainicial,
                         'escalas.dataplantao <=' => $datafinal,
+                        'escalas.tipo_escala' => $this->input->post('tipos')
                     );
                 };
 
@@ -1332,6 +1335,29 @@ class Escalas extends Admin_Controller
             );
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $tipos = array(
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
+
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
             $vinculos = array(
                 '3' => 'Todos',
                 '1' => 'CEMERGE',
@@ -1456,7 +1482,7 @@ class Escalas extends Admin_Controller
         return $v;
     }
 
-    public function _sendEscala($data, $destinatario)
+    public function _sendEscala($data, $profissional_nome, $destinatario)
     {
         /* Initialize email */
         $ci_mail_config = $this->config->item('mail');
@@ -1465,7 +1491,7 @@ class Escalas extends Admin_Controller
         $subject = 'CEMERGE - Nova Escala Publicada';
 
         $message = $this->load->view(
-            'admin/_templates/email/confirmacao_cessao.tpl.php', $data, true
+            'admin/_templates/email/escala-publicada.tpl.php', $data, true
         );
             $this->email->to($destinatario);
             $this->email->subject($subject);
@@ -1501,8 +1527,8 @@ class Escalas extends Admin_Controller
         } 
         $sucess = false;
         if ($this->escala_model->update_where($where, ['publicada' => $on_off])) {
-            
             $this->session->set_flashdata('message', 'Escala validada e enviada com sucesso.');
+            $this->_sendEscala('Tabela', 'Anderson', 'anderson@archlinux.com.br');
             $sucess = true;
         } else {
             $this->session->set_flashdata('message', 'Houve um problema ao validar e enviar a escala.');
@@ -2052,16 +2078,31 @@ class Escalas extends Admin_Controller
 
     public function escala_por_profissional($data, $profissional_id, $setor_id){
 
-        $escalas = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $data, $data, $setor_id);
-
-        $plantoes = array(
-            '' => 'Selecione o Plantão para Troca',
-        );
+        $escalas = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $data, date('Y-m-d', strtotime($data . ' + 20 days')), $setor_id);
+        if (empty($escalas)){
+            $plantoes = array(
+                 '' => 'Profissional não possui plantões para troca',
+             );
+        } else {
+            $plantoes = array(
+                // '' => 'Selecione o Plantão para Troca',
+             );
+        }
+        
+        $turno = '';
         foreach ($escalas as $escala) {
-            $plantoes[$escala->id] = $escala->dataplantao . ' - De: '. $escala->horainicialplantao . ' As'. $escala->horafinalplantao;
+            if ($escala->horainicialplantao == '07:00:00'){
+                $turno = 'Manhã';
+            } else if ($escala->horainicialplantao == '13:00:00'){
+                $turno = 'Tarde';
+            } else {
+                $turno = 'Noite';
+            }
+            $plantoes[$escala->id] = date('d/m/Y', strtotime($escala->dataplantao)) . ' - '.$turno;
         }
 
-        return $plantoes;
+        echo json_encode($plantoes);
+        exit;
 
     }
 
@@ -2559,7 +2600,8 @@ class Escalas extends Admin_Controller
                             'datafinalplantao' => $dtfinalplantaoM,
                             'horainicialplantao' => $hrinicialplantaoM,
                             'horafinalplantao' => $hrfinalplantaoM,
-                            'duracao' => $duracaoM
+                            'duracao' => $duracaoM,
+                            'tipo_escala' => $tipo
                         );
                         $success = $this->escala_model->insert($insert_dataM);
                     }
@@ -2578,7 +2620,8 @@ class Escalas extends Admin_Controller
                             'datafinalplantao' => $dtfinalplantaoT,
                             'horainicialplantao' => $hrinicialplantaoT,
                             'horafinalplantao' => $hrfinalplantaoT,
-                            'duracao' => $duracaoT
+                            'duracao' => $duracaoT,
+                            'tipo_escala' => $tipo
                         );
                         $success = $this->escala_model->insert($insert_dataT);
                     }
@@ -2597,7 +2640,8 @@ class Escalas extends Admin_Controller
                             'datafinalplantao' => $dtfinalplantaoN,
                             'horainicialplantao' => $hrinicialplantaoN,
                             'horafinalplantao' => $hrfinalplantaoN,
-                            'duracao' => $duracaoN
+                            'duracao' => $duracaoN,
+                            'tipo_escala' => $tipo
                         );
                     
                         $success = $this->escala_model->insert($insert_dataN);

@@ -68,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <tr>
                                                 <td><?php echo htmlspecialchars($setor->nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($setor->unidadehospitalar->razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><center><?php echo htmlspecialchars($setor->vagas, ENT_QUOTES, 'UTF-8'); ?></center></td>
+                                                <td><center><a href="/sgc/admin/escalas/atribuir"><?php echo htmlspecialchars($setor->vagas, ENT_QUOTES, 'UTF-8'); ?></a></center></td>
                                                 <td>
                                                     <?php echo anchor('admin/setores/edit/'.$setor->id, ' '/*lang('actions_edit')*/, array('class' => 'btn btn-primary btn-flat fa fa-edit')); ?> &nbsp;
                                                     <?php echo anchor('admin/setores/view/'.$setor->id, ' '/*lang('actions_see')*/, array('class' => 'btn btn-primary btn-flat fa fa-eye')); ?>
