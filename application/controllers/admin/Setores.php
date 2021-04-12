@@ -384,11 +384,20 @@ class Setores extends Admin_Controller {
         $this->data['sucess'] = false;
 
             if ($this->form_validation->run() == true) {
-                if ($this->usuariosetor_model->trocar_coordenador($setor, $user_id->user_id)) {
-                    $this->data['sucess'] = true;
-                } 
-            }
 
+                $usuariosetor = $this->usuariosetor_model->setor_usuario($setor);
+
+                if ($usuariosetor >= 1){
+                    if ($this->usuariosetor_model->trocar_coordenador($setor, $user_id->user_id)) {
+                        $this->data['sucess'] = true;
+                    }
+                } else {
+                    $this->usuariosetor_model->insert(['setor_id' => $setor, 'user_id' => $user_id->user_id, 'coordenador' => 1]);
+                    if ($this->usuariosetor_model->trocar_coordenador($setor, $user_id->user_id)) {
+                        $this->data['sucess'] = true;
+                    }
+                }
+            }
 
         echo json_encode($this->data['sucess']); exit;
     }

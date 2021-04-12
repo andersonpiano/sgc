@@ -23,6 +23,17 @@ class Usuariosetor_model extends MY_Model
         return $query->result();
     }
 
+    public function setor_usuario($setor){
+        
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('setor_id', $setor);
+        $query = $this->db->get();
+
+        return $query->num_rows();
+
+    }
+
     public function trocar_coordenador($setor, $user){
         
         return $this->db->update($this->table, ['user_id' => $user], ['setor_id' => $setor]);
