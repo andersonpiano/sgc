@@ -48,6 +48,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($this->data['tipos']);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicialplantao', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
                                                 <?php echo form_input($datainicialplantao);?>
@@ -59,6 +65,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($datafinalplantao);?>
                                             </div>
                                         </div>
+                                        
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">

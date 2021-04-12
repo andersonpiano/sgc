@@ -1102,7 +1102,7 @@ class Escalas extends Admin_Controller
 
         $sessoes = $this->passagemtroca_model->get_where(['escala_id' => $escala_id], null);
         if (empty($sessoes)){
-            $this->escala_model->update($escala_id, ['profissional_id' => 0]);
+            $this->escala_model->update($escala_id, ['profissional_id' => 0, 'tipo_plantao' => 1]);
             $sucess = true;
         };
         //var_dump($sessoes);exit;
@@ -2711,6 +2711,15 @@ class Escalas extends Admin_Controller
                 '3' => 'Diarista'
             );
 
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
+
             $this->data['datainicialplantao'] = array(
                 'name'  => 'datainicialplantao',
                 'id'    => 'datainicialplantao',
@@ -2737,14 +2746,7 @@ class Escalas extends Admin_Controller
                 'value' => $this->form_validation->set_value('horainicialplantao'),
             );
 
-            $this->data['tipos'] = array(
-                'name'  => 'tipos',
-                'id'    => 'tipos',
-                'type'  => 'time',
-                'class' => 'form-control',
-                'value' => $this->form_validation->set_value('tipos'),
-                'options' => $tipos,
-            );
+            
             $this->data['diaria'] = array(
                 'name'  => 'diaria',
                 'id'    => 'diaria',
@@ -2826,6 +2828,7 @@ class Escalas extends Admin_Controller
             $datafinalplantao = $this->input->post('datafinalplantao');
             $horainicialplantao = $this->input->post('horainicialplantao');
             $horafinalplantao = $this->input->post('horafinalplantao');
+            $tipo = $this->input->post('tipos');
             //$active = $this->input->post('active');
 
             $additional_data = array(
@@ -2834,7 +2837,8 @@ class Escalas extends Admin_Controller
                 'datainicialplantao' => $this->input->post('datainicialplantao'),
                 'datafinalplantao' => $this->input->post('datafinalplantao'),
                 'horainicialplantao' => $this->input->post('horainicialplantao'),
-                'horafinalplantao' => $this->input->post('horafinalplantao')
+                'horafinalplantao' => $this->input->post('horafinalplantao'),
+                'tipo_escala' => $tipo
             );
 
             $datainicial = new DateTime($datainicialplantao);
@@ -2875,7 +2879,8 @@ class Escalas extends Admin_Controller
                     'datafinalplantao' => $dtfinalplantao,
                     'horainicialplantao' => $hrinicialplantao,
                     'horafinalplantao' => $hrfinalplantao,
-                    'duracao' => $duracao
+                    'duracao' => $duracao,
+                    'tipo_escala' => $tipo
                 );
                 $success = $this->escala_model->insert($insert_data);
             }
@@ -2891,6 +2896,20 @@ class Escalas extends Admin_Controller
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $tipos = array(
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
 
             $this->data['datainicialplantao'] = array(
                 'name'  => 'datainicialplantao',
@@ -2966,6 +2985,7 @@ class Escalas extends Admin_Controller
             $setor_id = $this->input->post('setor_id');
             $datainicialplantao = $this->input->post('datainicialplantao');
             $datafinalplantao = $this->input->post('datafinalplantao');
+            $tipo = $this->input->post('tipos');
             //$active = $this->input->post('active');
 
             $additional_data = array(
@@ -2973,6 +2993,7 @@ class Escalas extends Admin_Controller
                 'setor_id' => $this->input->post('setor_id'),
                 'datainicialplantao' => $this->input->post('datainicialplantao'),
                 'datafinalplantao' => $this->input->post('datafinalplantao'),
+                'tipo_escala' => $tipo
             );
         }
 
@@ -2985,6 +3006,7 @@ class Escalas extends Admin_Controller
                 'setor_id' => $setor_id,
                 'dataplantao >=' => $datainicialplantao,
                 'dataplantao <=' => $datafinalplantao,
+                'tipo_escala' => $tipo
             );
             $this->escala_model->delete($where);
 
@@ -3021,6 +3043,7 @@ class Escalas extends Admin_Controller
                             'profissional_id' => $escala->profissional_id,
                             'tipo_plantao' => 0,
                             'extra' => 0,
+                            'tipo_escala' => $tipo
                         );
 
                         $insert_id = $this->escala_model->insert($insert_data);
@@ -3048,6 +3071,20 @@ class Escalas extends Admin_Controller
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $tipos = array(
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'type'  => 'time',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
 
             $this->data['datainicialplantao'] = array(
                 'name'  => 'datainicialplantao',
