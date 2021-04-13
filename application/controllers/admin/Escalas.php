@@ -1209,7 +1209,7 @@ class Escalas extends Admin_Controller
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
             /* Variables */
-            $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 40 days'));
+            $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d'));
             $this->data['data_maxima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' + 90 days'));
             $this->data['diasdasemana'] = $this->_diasdasemana;
 
@@ -1841,12 +1841,12 @@ class Escalas extends Admin_Controller
                 $this->escala_model->update($escala_id, ['frequencia_entrada_id' => $frequencia_id]);
                 $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => 1]);
                 $this->session->set_flashdata('message', 'A frequência foi vinculada &agrave; escala com sucesso. Feche esta janela e volte para a janela anterior.');
-                redirect('admin/escalas/conferencia', 'refresh');
+                //redirect('admin/escalas/conferencia', 'refresh');
             } else if (is_null($escala->frequencia_saida_id) && (!is_null($escala->frequencia_entrada_id) or !is_null($frequencia_mt_entrada))) {
                 $this->escala_model->update($escala_id, ['frequencia_saida_id' => $frequencia_id]);
                 $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => 2]);
                 $this->session->set_flashdata('message', 'A frequência foi vinculada &agrave; escala com sucesso. Feche esta janela e volte para a janela anterior.');
-                redirect('admin/escalas/conferencia', 'refresh');
+                //redirect('admin/escalas/conferencia', 'refresh');
             } else {
                 $this->data['escala'] = $escala;
                 $this->data['frequencia'] = $frequencia;
@@ -1884,10 +1884,10 @@ class Escalas extends Admin_Controller
                 $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
 
                 $this->session->set_flashdata('message', 'A frequência foi vinculada &agrave; escala com sucesso. Feche esta janela e volte para a janela anterior.');
-                redirect('admin/escalas/conferencia', 'refresh');
+                //redirect('admin/escalas/conferencia', 'refresh');
             } else {
                 $this->data['message'] = validation_errors() ? validation_errors() : $this->session->flashdata('message');
-                redirect('admin/escalas/corrigirfrequenciaescala/' . $escala_id . '/' . $frequencia_id, 'refresh');
+                //redirect('admin/escalas/corrigirfrequenciaescala/' . $escala_id . '/' . $frequencia_id, 'refresh');
             }
         }
     }

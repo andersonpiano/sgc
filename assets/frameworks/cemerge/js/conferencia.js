@@ -7,6 +7,11 @@ $(function(){
 		active_btn_jade();	
 	});
 
+	$(".btn-batidas-aceitar").click(function(){
+		$("#modal_aceitar_batida").modal();
+		clearErrors();
+	});
+
 	$(".btn-remover-medico").click(function(){
 		//$("#modal_excluir_profissional").modal();
 		clearErrors();

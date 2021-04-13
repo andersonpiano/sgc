@@ -316,10 +316,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                             echo(date('d/m/Y H:i:s', strtotime($f->dt_frq)) . " - " . $f->nome_curto_profissional);
                                                             if ($f->crm == $freq->crm_profissional) {
                                                                 $url_corrigir = "corrigirfrequenciaescala/" . $freq->id . "/" . $f->cd_ctl_frq;
-                                                                echo("&nbsp;<a onclick='return confirm(\"Deseja realmente aceitar e processar esta batida?\");' href='" . $url_corrigir . "' class='label label-success' target='_blank'>Aceitar</a><br>");
+                                                                //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente aceitar e processar esta batida?\");' href='" . $url_corrigir . "' class='label label-success' target='_blank'>Aceitar</a><br>");
+                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar">&nbsp;Aceitar</button>');
                                                             } else {
                                                                 $url_extra = "criarplantaoextra/" . $freq->id . "/" . $f->cd_ctl_frq . "/" . $f->id_profissional;
-                                                                echo("&nbsp;<a onclick='return confirm(\"Deseja realmente criar um plantão extra neste setor a partir desta batida?\");' href='" . $url_extra . "' class='label label-info' target='_blank'>Extra</a>");
+                                                                //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente criar um plantão extra neste setor a partir desta batida?\");' href='" . $url_extra . "' class='label label-info' target='_blank'>Extra</a>");
+                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar">&nbsp;Aceitar</button>');
                                                                 $url_ignorar = "ignorarbatida/" . $f->cd_ctl_frq;
                                                                 echo("&nbsp;<a onclick='return confirm(\"Deseja realmente ignorar esta batida?\");' href='" . $url_ignorar . "' class='label label-warning' target='_blank'>Ignorar</a><br>");
                                                             }
@@ -398,6 +400,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </div>
                             <span class="help-block"></span>
                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_aceitar_batida" class="modal fade">
+            <div class="modal-dialog modal-lg" style="width: 25%; height: 30%;">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title"><?php echo lang('escalas_tipobatida', 'tipobatida', array('class' => '')); ?></h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div>
+                            <select id="tipobatida" name="tipobatida" type="select" class="form-control">
+                                <option value="1">Entrada</option>
+                                <option value="2">Saída</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="text-center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>&nbsp;
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
