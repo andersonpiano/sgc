@@ -83,8 +83,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_dropdown($profissionalsubstituto_id);?>
                                             </div>
                                         </div>
-                                        <div id="sumir" class="form-group frequencias_disponiveis">
-                                            <?php echo lang('plantoes_frequencias_disponiveis', 'frequencias_disponiveis', array('class' => 'col-sm-2 text-right')); ?>
+                                        <div id="sumir" class="form-group plantoes_disponiveis">
+                                            <?php echo lang('plantoes_disponiveis', 'frequencias_disponiveis', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo form_dropdown($frequencias_disponiveis);?>
                                             </div>

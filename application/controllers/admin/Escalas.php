@@ -1370,7 +1370,6 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
-                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
@@ -2039,7 +2038,8 @@ class Escalas extends Admin_Controller
 
         $data = array();
         foreach ($batidas as $batida) {
-            $setor_sgc = $this->Setor_model->sgc_x_assessus($batida->CD_SET)->setor_id;
+            $setor_sgc = $this->setor_model->sgc_x_assessus($batida->CD_SET)->setor_id;
+            //ar_dump($setor_sgc); exit;
             $profissional_sgc = $this->profissional_model->get_by_cd_pes_fis($batida->CD_PES_FIS);
             //var_dump($setor_sgc); exit;
             $row = array();
@@ -2736,7 +2736,6 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
-                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
@@ -2848,26 +2847,39 @@ class Escalas extends Admin_Controller
         $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
         $this->form_validation->set_rules('datainicialplantao', 'lang:escalas_datainicialplantao', 'required');
         $this->form_validation->set_rules('datafinalplantao', 'lang:escalas_datafinalplantao', 'required');
-        $this->form_validation->set_rules('horainicialplantao', 'lang:escalas_horainicialplantao', 'required');
-        $this->form_validation->set_rules('horafinalplantao', 'lang:escalas_horafinalplantao', 'required');
+
 
         if ($this->form_validation->run() == true) {
             $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
             $setor_id = $this->input->post('setor_id');
             $datainicialplantao = $this->input->post('datainicialplantao');
             $datafinalplantao = $this->input->post('datafinalplantao');
-            $horainicialplantao = $this->input->post('horainicialplantao');
-            $horafinalplantao = $this->input->post('horafinalplantao');
+            
             $tipo = $this->input->post('tipos');
+            $turno = $this->input->post('turno_id');
             //$active = $this->input->post('active');
+            $horainicialplantao = '07:00:00';
+            $horafinalplantao = '13:00:00';
+            if ($turno == 1)
+            {
+                $horainicialplantao = '07:00:00';
+                $horafinalplantao = '13:00:00';
+            } else if ($turno == 2)
+            {
+                $horainicialplantao = '13:00:00';
+                $horafinalplantao = '19:00:00';
+            } else {
+                $horainicialplantao = '19:00:00';
+                $horafinalplantao = '07:00:00';
+            }
 
             $additional_data = array(
-                'unidadehospitalar_id' => $this->input->post('unidadehospitalar_id'),
-                'setor_id' => $this->input->post('setor_id'),
-                'datainicialplantao' => $this->input->post('datainicialplantao'),
-                'datafinalplantao' => $this->input->post('datafinalplantao'),
-                'horainicialplantao' => $this->input->post('horainicialplantao'),
-                'horafinalplantao' => $this->input->post('horafinalplantao'),
+                'unidadehospitalar_id' => $unidadehospitalar_id,
+                'setor_id' => $setor_id ,
+                'datainicialplantao' => $datainicialplantao,
+                'datafinalplantao' => $datafinalplantao,
+                'horainicialplantao' => $horainicialplantao,
+                'horafinalplantao' => $horafinalplantao,
                 'tipo_escala' => $tipo
             );
 
@@ -2927,10 +2939,15 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
-                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
+            );
+
+            $turnos = array(
+                '1' => 'Manhã',
+                '2' => 'Tarde',
+                '3' => 'Noite',
             );
 
             $this->data['tipos'] = array(
@@ -2939,6 +2956,15 @@ class Escalas extends Admin_Controller
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('tipos'),
                 'options' => $tipos,
+            );
+
+            $this->data['turno_id'] = array(
+                'name'  => 'turno_id',
+                'id'    => 'turno_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('turno_id'),
+                'options' => $turnos,
             );
 
             $this->data['datainicialplantao'] = array(
@@ -3001,7 +3027,7 @@ class Escalas extends Admin_Controller
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Variables */
-        $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 7 days'));
+        $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 365 days'));
         $this->data['data_maxima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' + 90 days'));
 
         /* Validate form input */
@@ -3102,7 +3128,6 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
-                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'

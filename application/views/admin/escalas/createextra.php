@@ -34,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <p><cite><?php echo lang('escalas_create_extra_description'); ?></cite></p>
                                 </div>
                                 <div class="box-body">
-                                    <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala', 'onsubmit' => 'return confirm(\'A criação da escala apagará toda escala existente nesse mesmo período. Deseja continuar?\');')); ?>
+                                    <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala')); ?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
@@ -66,15 +66,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('escalas_horainicialplantao', 'horainicialplantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('escalas_turno', 'turno_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php echo form_input($horainicialplantao);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('escalas_horafinalplantao', 'horafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
-                                                <?php echo form_input($horafinalplantao);?>
+                                                <?php echo form_dropdown($turno_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">

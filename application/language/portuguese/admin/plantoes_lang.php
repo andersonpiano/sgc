@@ -24,6 +24,7 @@ $lang['plantoes_profissional']                   = 'Médico(a)';
 $lang['plantoes_profissional_titular']           = 'Médico(a) titular';
 $lang['plantoes_profissional_substituto']        = 'Médico(a) substituto(a)';
 $lang['plantoes_frequencias_disponiveis']        = 'Frequências disponíveis';
+$lang['plantoes_disponiveis']        = 'Plantões disponíveis';
 $lang['plantoes_escalatroca']                    = 'Plantão de troca';
 $lang['plantoes_action']                         = 'Ações';
 $lang['plantoes_active']                         = 'Ativo';

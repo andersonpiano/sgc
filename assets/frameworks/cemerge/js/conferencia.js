@@ -5,6 +5,27 @@ $(function(){
 		$("#modal_jade").modal();
 		clearErrors();
 		active_btn_jade();	
+		
+		var dt_jade = $("#dt_jade").DataTable({
+			"oLanguage": DATATABLE_PTBR,
+			"autoWidth": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [[ 0, "desc" ]],
+			dom: 'Brt',		
+			"ajax": {
+				"url": "/sgc/admin/escalas/ajax_listar_batidas_ignoradas",
+				"method": "POST",
+			},
+			"columnDefs": [
+				{ targets: "no-sort", orderable: false },
+				{ targets: "dt-center", className: "dt-center" },
+			],
+			"drawCallback": function() {
+				active_btn_jade();
+			},
+			select: true,
+		});
 	});
 
 	$(".btn-batidas-aceitar").click(function(){
@@ -141,26 +162,5 @@ $(function(){
 			})
 		});
 	}
-
-	var dt_jade = $("#dt_jade").DataTable({
-		"oLanguage": DATATABLE_PTBR,
-		"autoWidth": false,
-		"processing": true,
-		"serverSide": true,
-		"order": [[ 0, "desc" ]],
-		dom: 'Brt',		
-		"ajax": {
-			"url": "/sgc/admin/escalas/ajax_listar_batidas_ignoradas",
-			"method": "POST",
-		},
-		"columnDefs": [
-			{ targets: "no-sort", orderable: false },
-			{ targets: "dt-center", className: "dt-center" },
-		],
-		"drawCallback": function() {
-			active_btn_jade();
-		},
-		select: true,
-	});
 
 })
