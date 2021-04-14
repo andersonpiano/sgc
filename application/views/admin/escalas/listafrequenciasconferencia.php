@@ -317,11 +317,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                             if ($f->crm == $freq->crm_profissional) {
                                                                 $url_corrigir = "corrigirfrequenciaescala/" . $freq->id . "/" . $f->cd_ctl_frq;
                                                                 //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente aceitar e processar esta batida?\");' href='" . $url_corrigir . "' class='label label-success' target='_blank'>Aceitar</a><br>");
-                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar">&nbsp;Aceitar</button>');
+                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
                                                             } else {
                                                                 $url_extra = "criarplantaoextra/" . $freq->id . "/" . $f->cd_ctl_frq . "/" . $f->id_profissional;
                                                                 //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente criar um plantão extra neste setor a partir desta batida?\");' href='" . $url_extra . "' class='label label-info' target='_blank'>Extra</a>");
-                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar">&nbsp;Aceitar</button>');
+                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
                                                                 $url_ignorar = "ignorarbatida/" . $f->cd_ctl_frq;
                                                                 echo("&nbsp;<a onclick='return confirm(\"Deseja realmente ignorar esta batida?\");' href='" . $url_ignorar . "' class='label label-warning' target='_blank'>Ignorar</a><br>");
                                                             }
@@ -417,14 +417,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="modal-body">
                     <div class="form-group">
                         <div>
-                            <select id="tipobatida" name="tipobatida" type="select" class="form-control">
-                                <option value="1">Entrada</option>
-                                <option value="2">Saída</option>
+                            <select id="tipobatida_aceitar" name="tipobatida_aceitar" type="select" class="form-control">
+                                <option value="3">Entrada</option>
+                                <option value="4">Saída</option>
                             </select>
                         </div>
                         <br>
                         <div class="text-center">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>&nbsp;
+                        <button type="button" class="btn btn-primary btn-aceitar" data-dismiss="modal">Confirmar</button>&nbsp;
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                         </div>
                     </div>

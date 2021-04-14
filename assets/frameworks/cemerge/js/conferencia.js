@@ -10,6 +10,34 @@ $(function(){
 	$(".btn-batidas-aceitar").click(function(){
 		$("#modal_aceitar_batida").modal();
 		clearErrors();
+		escala = $(this).attr('escala');
+		frequencia = $(this).attr('frequencia');
+		
+
+		$(".btn-aceitar").click(function(){
+			batida = document.getElementById('tipobatida_aceitar').value;
+			//swal(escala, frequencia + ' ' + batida,'sucess');
+			$.ajax({
+				url: "/sgc/admin/escalas/corrigirfrequenciaescalatipobatida/",
+				method: 'post',
+				data: {
+					'escala_id': escala,
+					'frequencia_id': frequencia,
+					'tipobatida': batida
+				},
+				success: function(response) {
+					clearErrors();
+					swal("Sucesso!", 'Batida registrada!','success');
+					$("#modal_aceitar_batida").modal("hide");
+				},
+				error: function(response){
+					clearErrors();
+					$("#modal_jade").modal("hide");
+					swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+				}
+			})
+		});
+
 	});
 
 	$(".btn-remover-medico").click(function(){

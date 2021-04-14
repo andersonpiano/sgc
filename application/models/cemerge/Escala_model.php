@@ -362,7 +362,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escala_processada($setor_id, $datainicial, $datafinal)
+    public function get_escala_processada($setor_id, $datainicial, $datafinal, $order)
     {
         $sql = "select ec.dataplantao, ec.horainicialplantao, ec.horafinalplantao, ";
         $sql .= "ec.nomesetor, ec.nomeunidade, ec.crm_profissional, ec.nome_profissional, ";
@@ -375,7 +375,16 @@ class Escala_model extends MY_Model
         $sql .= "where ec.dataplantao between '$datainicial' and '$datafinal' ";
         $sql .= "and ec.idsetor = $setor_id ";
         $sql .= "and ec.nome_profissional is not null ";
-        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
+        if ($order == 1){
+        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq ";
+        } else if ($order == 2){
+        $sql .= "order by ec.nomesetor, ec.dataplantao ";
+        } else if ($order == 3){
+        $sql .= "order by ec.nome_profissional, ec.dataplantao ";   
+        } else if ($order == 4){
+        $sql .="order by DAYOFWEEK(ec.dataplantao) ";
+        }
+        //$sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
 
         $query = $this->db->query($sql);
 
@@ -395,8 +404,9 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escala_processada_profissional($profissional_id, $datainicial, $datafinal)
+    public function get_escala_processada_profissional($profissional_id, $datainicial, $datafinal, $order)
     {
+
         $sql = "select ec.dataplantao, ec.horainicialplantao, ec.horafinalplantao, ";
         $sql .= "ec.nomesetor, ec.nomeunidade, ec.crm_profissional, ec.nome_profissional, ";
         $sql .= "f_entrada.DT_FRQ as batidaentrada, f_saida.DT_FRQ as batidasaida ";
@@ -408,7 +418,16 @@ class Escala_model extends MY_Model
         $sql .= "where ec.dataplantao between '$datainicial' and '$datafinal' ";
         $sql .= "and ec.id_profissional = $profissional_id ";
         $sql .= "and ec.nome_profissional is not null ";
+        if ($order == 1){
         $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
+        } else if ($order == 2){
+        $sql .= "order by ec.nomesetor";
+        } else if ($order == 3){
+        $sql .= "order by ec.nome_profissional";   
+        } else if ($order == 4){
+        $sql .="order by DAYOFWEEK(ec.dataplantao) ";
+        }
+        
 
         $query = $this->db->query($sql);
 

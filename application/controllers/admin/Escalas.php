@@ -733,6 +733,8 @@ class Escalas extends Admin_Controller
                 $profissional_id = $this->input->post('profissional_id');
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
+                $tipo_escala = $this->input->post('tipos');
+                $order = $this->input->post('ordem');
 
                 $setores = $this->_get_setores($unidadehospitalar_id);
 
@@ -742,13 +744,16 @@ class Escalas extends Admin_Controller
                     'escalas.setor_id' => $setor_id,
                     'escalas.dataplantao >=' => $datainicial,
                     'escalas.dataplantao <=' => $datafinal,
+                    'escalas.tipo_escala' => $tipo_escala
                 );
 //                var_dump($profissional_id); exit;
                 if ($profissional_id <> '' || $profissional_id <> 0){
-                    $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal);
+                    $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal, $order);
                 } else {
-                $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal);
+                $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal, $order);
                 }
+
+                //var_dump($this->data['escalas']); exit;
                 /** Processando batidas de 13:00:00 de saída e entrada automática */
                 $size = count($this->data['escalas']);
                 for ($i = 0; $i <= $size-1; $i++) {
@@ -789,6 +794,35 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $profissionais = $this->_get_profissionais_por_unidade_hospitalar_frequencia($unidadehospitalar_id);
+            $tipos = array(
+                '0' => 'Todos',
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
+
+            $ordem = array(
+                '1' => 'Normal',
+                '2' => 'Setor',
+                '3' => 'Médico',
+                '4' => 'Dia da Semana'
+            );
+
+            $this->data['ordem'] = array(
+                'name'  => 'ordem',
+                'id'    => 'ordem',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('ordem'),
+                'options' => $ordem,
+            );
 
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
@@ -1336,6 +1370,7 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
+                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
@@ -1344,20 +1379,11 @@ class Escalas extends Admin_Controller
             $this->data['tipos'] = array(
                 'name'  => 'tipos',
                 'id'    => 'tipos',
-                'type'  => 'time',
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('tipos'),
                 'options' => $tipos,
             );
 
-            $this->data['tipos'] = array(
-                'name'  => 'tipos',
-                'id'    => 'tipos',
-                'type'  => 'time',
-                'class' => 'form-control',
-                'value' => $this->form_validation->set_value('tipos'),
-                'options' => $tipos,
-            );
             $vinculos = array(
                 '3' => 'Todos',
                 '1' => 'CEMERGE',
@@ -1876,19 +1902,23 @@ class Escalas extends Admin_Controller
                 $tipobatida = $this->input->post('tipobatida');
 
                 // Atualizar escala e frequência
-                if ($tipobatida == 1) {
+                if ($tipobatida == 3) {
+                    $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
                     $this->escala_model->update($escala_id, ['frequencia_entrada_id' => $frequencia_id]);
                 } else {
+                    $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
                     $this->escala_model->update($escala_id, ['frequencia_saida_id' => $frequencia_id]);
+
                 }
                 $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
 
                 $this->session->set_flashdata('message', 'A frequência foi vinculada &agrave; escala com sucesso. Feche esta janela e volte para a janela anterior.');
-                //redirect('admin/escalas/conferencia', 'refresh');
+                redirect('admin/escalas/conferencia', 'refresh');
             } else {
                 $this->data['message'] = validation_errors() ? validation_errors() : $this->session->flashdata('message');
-                //redirect('admin/escalas/corrigirfrequenciaescala/' . $escala_id . '/' . $frequencia_id, 'refresh');
+                redirect('admin/escalas/corrigirfrequenciaescala/' . $escala_id . '/' . $frequencia_id, 'refresh');
             }
+            echo json_encode('sucess');
         }
     }
 
@@ -2706,6 +2736,7 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
+                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
@@ -2714,7 +2745,6 @@ class Escalas extends Admin_Controller
             $this->data['tipos'] = array(
                 'name'  => 'tipos',
                 'id'    => 'tipos',
-                'type'  => 'time',
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('tipos'),
                 'options' => $tipos,
@@ -2897,6 +2927,7 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
+                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
@@ -2905,7 +2936,6 @@ class Escalas extends Admin_Controller
             $this->data['tipos'] = array(
                 'name'  => 'tipos',
                 'id'    => 'tipos',
-                'type'  => 'time',
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('tipos'),
                 'options' => $tipos,
@@ -3072,6 +3102,7 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
+                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
@@ -3080,7 +3111,6 @@ class Escalas extends Admin_Controller
             $this->data['tipos'] = array(
                 'name'  => 'tipos',
                 'id'    => 'tipos',
-                'type'  => 'time',
                 'class' => 'form-control',
                 'value' => $this->form_validation->set_value('tipos'),
                 'options' => $tipos,

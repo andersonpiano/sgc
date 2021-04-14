@@ -72,3 +72,4 @@ $lang['escalas_manha']           = 'Manhã';
 $lang['escalas_diaria']           = 'Manhã | Tarde';
 $lang['escalas_tarde']           = 'Tarde';
 $lang['escalas_noite']           = 'Noite';
+$lang['escalas_ordem']           = 'Ordenação';

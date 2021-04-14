@@ -27,12 +27,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                                 <div class="box-body">
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala')); ?>
+                                    
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
+                                        
                                         <div class="form-group">
                                             <?php echo lang('escalas_profissional', 'profissional_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
@@ -43,6 +45,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo form_dropdown($setor_id);?>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($this->data['tipos']);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_ordem', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($this->data['ordem']);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -57,6 +72,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($datafinal);?>
                                             </div>
                                         </div>
+                                        
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
