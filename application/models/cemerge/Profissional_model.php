@@ -94,8 +94,8 @@ class Profissional_model extends MY_Model
         return $query->row();
     }
 
-    var $column_search = array("nome");
-    var $column_order = array("id", "nome", "registro", "email");
+    var $column_search = array('matricula',"nome","registro");
+    var $column_order = array('id',"matricula", "nome", "registro", "email");
 
     private function _get_datatable() {
 

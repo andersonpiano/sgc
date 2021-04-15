@@ -1593,7 +1593,7 @@ class Escala_model extends MY_Model
         $fields = 'escalas.*, ';
         $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
         $fields .= 'passagenstrocas.profissionalsubstituto_id as passagenstrocas_profissionalsubstituto_id, ';
-        $fields .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, ';
+        $fields .= 'passagenstrocas.tipopassagem as passagenstrocas_tipopassagem, passagenstrocas.escalatroca_id, ';
         $fields .= 'profissional_passagem.registro as profissional_passagem_registro, ';
         $fields .= 'profissional_passagem.nome as profissional_passagem_nome, ';
         $fields .= 'profissional_passagem.email as profissional_passagem_email, ';
@@ -1607,9 +1607,8 @@ class Escala_model extends MY_Model
         $this->db->join(
             'passagenstrocas',
             'passagenstrocas.escala_id = escalas.id
-            and passagenstrocas.statuspassagem = 0
-            and passagenstrocas.tipopassagem = 0'
-        );
+            and passagenstrocas.statuspassagem = 0'
+        );// and passagenstrocas.tipopassagem = 0'
         $this->db->join('profissionais profissional_passagem', 'profissional_passagem.id = passagenstrocas.profissional_id');
         $this->db->join('profissionais profissional_substituto', 'profissional_substituto.id = passagenstrocas.profissionalsubstituto_id');
         $this->db->join('setores', 'setores.id = escalas.setor_id');
@@ -1677,6 +1676,7 @@ class Escala_model extends MY_Model
 
         return $query->row();
     }
+
 
     public function get_trocas_passagens_por_escala($escala_id)
     {

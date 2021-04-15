@@ -78,8 +78,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         </span>
                                                     </td>
                                                     <td class="dontprint text-center">
-                                                        <?php if ($plantao->passagenstrocas_statuspassagem == 0 && $plantao->passagenstrocas_tipopassagem == 0) { echo anchor('admin/plantoes/confirm/'.$plantao->id, lang('actions_confirm'), 'class="btn btn-primary"'); } ?> &nbsp;
-                                                        <?php if ($plantao->passagenstrocas_statuspassagem == 0 && $plantao->passagenstrocas_tipopassagem == 1) { echo anchor('admin/plantoes/propose/'.$plantao->id, lang('actions_propose'), 'class="btn btn-primary"'); } ?> &nbsp;
+                                                        <?php if ($plantao->passagenstrocas_statuspassagem == 0) { echo anchor('admin/plantoes/confirm/'.$plantao->id, lang('actions_confirm'), 'class="btn btn-primary"'); } ?> &nbsp;
+                                                        <?php //if ($plantao->passagenstrocas_statuspassagem == 0 && $plantao->passagenstrocas_tipopassagem == 1) { echo anchor('admin/plantoes/propose/'.$plantao->id, lang('actions_propose'), 'class="btn btn-primary"'); } ?> &nbsp;
                                                         <?php if ($plantao->passagenstrocas_statuspassagem == 1) { echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/cessoestrocas', lang('actions_to_offer'), 'class="btn btn-primary"'); } ?> &nbsp;
                                                         <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-default"'); ?>
                                                     </td>

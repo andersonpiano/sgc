@@ -2450,7 +2450,7 @@ class Escalas extends Admin_Controller
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Variables */
-        $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 20 days')); // deixar somente data atual date('Y-m-d')
+        $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 365 days')); // deixar somente data atual date('Y-m-d')
         $this->data['data_maxima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' + 90 days'));
 
 

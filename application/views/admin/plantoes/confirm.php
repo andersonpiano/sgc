@@ -74,6 +74,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo $plantao->profissional_substituto_nome;?>
                                             </div>
                                         </div>
+
+                                        <?php if($tipospassagem[$plantao->passagenstrocas_tipopassagem] == 'Troca'){
+                                            
+                                         ?>
+                                         <div class="form-group">
+                                            <?php echo lang('plantoes_solicitado', 'profissionalsubstituto_id', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-6">
+                                                <?php 
+                                                $turno = '';
+                                                if($escala_proposta->horainicialplantao == '07:00:00'){ 
+                                                    $turno = 'Manhã'; 
+                                                } 
+                                                else if ($escala_proposta->horainicialplantao == '13:00:00'){
+                                                    $turno = 'Tarde'; 
+                                                }
+                                                else {
+                                                    $turno = 'Noite'; 
+                                                } 
+                                                
+                                                echo ('Data: '. date('d/m/Y',strtotime($escala_proposta->dataplantao)).' - ' . $turno . ' - '. $plantao->setor_nome);
+                                                
+                                                ;?>
+                                            </div>
+                                        </div> <?php } ?>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <?php echo form_hidden('id', $plantao->id);?>

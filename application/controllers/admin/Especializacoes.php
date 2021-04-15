@@ -344,7 +344,7 @@ class Especializacoes extends Admin_Controller
         foreach ($profissionais as $profissional) {
     
             $row = array();
-            $row[] = '<center>'.$profissional->id.'</center>';
+            $row[] = '<center>'.$profissional->matricula.'</center>';
             $row[] = '<center>'.$profissional->nome.'</center>';
             $row[] = '<center>'.$profissional->registro.'</center>';
             $row[] = '<center>'.$profissional->email.'</center>';
@@ -389,7 +389,7 @@ class Especializacoes extends Admin_Controller
         foreach ($profissionais as $profissional) {
 
             $row = array();
-            $row[] = '<center>'.$profissional->id.'<center>';
+            $row[] = '<center>'.$profissional->matricula.'<center>';
             $row[] = $profissional->nome;
             $row[] = '<center>'.form_dropdown('categoria_select', $categoria_select, $profissional->nivel_especializacao, 'class="form-control" id="categoria_select" profissional_id="'.$profissional->id.'"').'</center>';
     

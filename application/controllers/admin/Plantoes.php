@@ -513,14 +513,17 @@ class Plantoes extends Admin_Controller
         $data_hora_plantao = $plantao->dataplantao . ' ' . $plantao->horainicialplantao;
         if ($data_hora_atual > $data_hora_plantao) {
             $this->session->set_flashdata('message', 'O plantão não pode mais ser cedido ou trocado. As cessões ou trocas devem ser feitas até o horário do plantão.');
-            redirect('admin/profissional/plantoes/' . $url_origem, 'refresh');
+            //redirect('admin/profissional/plantoes/' . $url_origem, 'refresh');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
         }
 
         // Verificando se o plantão já foi passado e está pendente de confirmação
         $passagens_pendentes = $this->escala_model->get_passagens_trocas_pendentes($plantao->id);
         if (sizeof($passagens_pendentes) > 0) {
             $this->session->set_flashdata('message', 'Já existe uma cessão ou troca pendente para este plantão.');
-            redirect('admin/profissional/plantoes/cessoestrocas', 'refresh');
+            //redirect('admin/profissional/plantoes/cessoestrocas', 'refresh');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }
 
         $this->data = array_merge($this->data, $this->checkUserType());
@@ -529,7 +532,8 @@ class Plantoes extends Admin_Controller
         if ($this->data['user_type'] == 0) {
             if (!($plantao->profissional_id == $this->_profissional->id) and !($plantao->passagenstrocas_profissionalsubstituto_id == $this->_profissional->id)) {
                 $this->session->set_flashdata('message', 'Este plantão não pertence ao profissional logado. Favor acessar o sistema com o profissional do plantão.');
-                redirect('admin/plantoes', 'refresh');
+                //redirect('admin/plantoes', 'refresh');
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
 
@@ -545,24 +549,28 @@ class Plantoes extends Admin_Controller
         /* Validate form input */
         $this->form_validation->set_rules('tipopassagem', 'lang:plantoes_tipopassagem', 'required');
         $this->form_validation->set_rules('profissionalsubstituto_id', 'lang:plantoes_profissional_substituto', 'required');
+        $this->form_validation->set_rules('profissional_id', 'Profissional', 'required');
+        $this->form_validation->set_rules('datahorapassagem', 'datahora', 'required');
 
-        if (isset($_POST) && ! empty($_POST)) {
+        if (isset($_POST) && !empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
                 show_error($this->lang->line('error_csrf'));
             }
 
             if ($this->form_validation->run() == true) {
+                //var_dump($this->data);exit;
                 $profissionaltroca_id = $this->input->post('profissionalsubstituto_id');
-                $plantao_conflito = $this->escala_model->get_plantao_conflito($profissionaltroca_id, $plantao->dataplantao, $plantao->horainicialplantao);
+                $tipodepassagem = $this->input->post('tipopassagem');
+                if($tipodepassagem == 0){
+                    $plantao_conflito = $this->escala_model->get_plantao_conflito($profissionaltroca_id, $plantao->dataplantao, $plantao->horainicialplantao);
                 if (!empty($plantao_conflito)) {
                     $detalhe_plantao_conflito = date('d/m/Y', strtotime($plantao_conflito->dataplantao)) . " de " . date('H:i', strtotime($plantao_conflito->horainicialplantao));
                     $detalhe_plantao_conflito .= " às " . date('H:i', strtotime($plantao_conflito->horafinalplantao)) . " no setor " . $plantao_conflito->nomesetor;
                     $this->session->set_flashdata('message', 'O profissional selecionado já possui plantão neste dia e turno. Detalhes: ' . $detalhe_plantao_conflito);
                     redirect('admin/plantoes/tooffer/' . $id . '/index', 'refresh');
                 }
-
-                // Caso seja uma troca, teste se o profissional substituto tem plantões neste setor para trocar
-                if ($this->input->post('tipopassagem') == 1) {
+                } else {
+                    // Caso seja uma troca, teste se o profissional substituto tem plantões neste setor para trocar
                     $primeirodiames = date('Y-m-01', strtotime($plantao->dataplantao)); //$primeirodiames = date('Y-m-d');
                     $ultimodiames = date('Y-m-t', strtotime($plantao->dataplantao)); // Correção do problema que informava que não haviam plantões disponíveis
                     $plantoes = $this->escala_model->get_escalas_consolidadas_por_profissional(
@@ -571,26 +579,47 @@ class Plantoes extends Admin_Controller
                         $ultimodiames,
                         $plantao->setor_id
                     );
+
                     $plantoes_profissional = $this->_get_plantoes_profissional($plantoes);
                     if (sizeof($plantoes_profissional) <= 0) {
                         $this->session->set_flashdata('message', lang('plantoes_profissional_sem_plantoes_disponiveis'));
-                        redirect('admin/plantoes/tooffer/' . $id . '/index', 'refresh');
+                        //redirect('admin/plantoes/tooffer/' . $id . '/index', 'refresh');
+                        redirect($_SERVER['HTTP_REFERER'], 'refresh');
                     }
                 }
+
 
                 // No caso de plantão já passado por outro profissional
                 $profissional_passagem_id = $plantao->profissional_id;
                 if (isset($plantao->passagenstrocas_profissionalsubstituto_id)) {
                     $profissional_passagem_id = $plantao->passagenstrocas_profissionalsubstituto_id;
                 }
-                $data = array(
-                    'escala_id' => $plantao->id,
-                    'profissional_id' => $profissional_passagem_id,
-                    'tipopassagem' => $this->input->post('tipopassagem'),
-                    'profissionalsubstituto_id' => $this->input->post('profissionalsubstituto_id'),
-                    'datahorapassagem' => date('Y-m-d H:i:s'),
-                    'statuspassagem' => 0,
-                );
+
+                $data = array();
+
+                if ($tipodepassagem == 0){
+                    $data = array(
+                        'escala_id' => $plantao->id,
+                        'profissional_id' => $profissional_passagem_id,
+                        'tipopassagem' => 0,
+                        'profissionalsubstituto_id' => $profissionaltroca_id,
+                        'datahorapassagem' => date('Y-m-d H:i:s'),
+                        'statuspassagem' => 0,
+                        'escalatroca_id' => 0
+                    );
+                } else {
+                    $data = array(
+                        'escala_id' => $plantao->id,
+                        'profissional_id' => $profissional_passagem_id,
+                        'tipopassagem' => 1,
+                        'profissionalsubstituto_id' => $profissionaltroca_id,
+                        'datahorapassagem' => date('Y-m-d H:i:s'),
+                        'statuspassagem' => 0,
+                        'escalatroca_id' => $this->input->post('frequencias_disponiveis')
+                    );
+                }
+
+                //var_dump($data); exit;
 
                 if ($this->passagemtroca_model->insert($data)) {
                     /* Send notifications */
@@ -634,27 +663,28 @@ class Plantoes extends Admin_Controller
             'id'    => 'dataplantao',
             'type'  => 'date',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('dataplantao', $plantao->dataplantao)
+            'value' => $plantao->dataplantao
         );
         $this->data['horainicialplantao'] = array(
             'name'  => 'horainicialplantao',
             'id'    => 'horainicialplantao',
             'type'  => 'time',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('horainicialplantao', $plantao->horainicialplantao)
+            'value' => $plantao->horainicialplantao
         );
         $this->data['horafinalplantao'] = array(
             'name'  => 'horafinalplantao',
             'id'    => 'horafinalplantao',
             'type'  => 'time',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('horafinalplantao', $plantao->horafinalplantao)
+            'value' => $plantao->horafinalplantao
         );
         $this->data['tipopassagem'] = array(
             'name'  => 'tipopassagem',
             'id'    => 'tipopassagem',
             'type'  => 'select',
             'class' => 'form-control',
+            'value' => $this->form_validation->set_value('tipopassagem'),
             'options' => $tipospassagem
         );
 
@@ -665,6 +695,7 @@ class Plantoes extends Admin_Controller
             'data' => $plantao->dataplantao,
             'setor' => $plantao->setor_id,
             'class' => 'form-control',
+            'value' => $this->form_validation->set_value('profissionalsubstituto_id'),
             'options' => $profissionais_setor
         );
         $this->data['frequencias_disponiveis'] = array(
@@ -672,6 +703,7 @@ class Plantoes extends Admin_Controller
             'id'    => 'frequencias_disponiveis',
             'type'  => 'select',
             'class' => 'form-control',
+            'value' => $this->form_validation->set_value('frequencias_disponiveis'),
             'options' => $frequencias_disponiveis
         );
 
@@ -1448,6 +1480,8 @@ class Plantoes extends Admin_Controller
 
         /* Load Data */
         $plantao = $this->escala_model->get_escala_passada_a_confirmar($id);
+        $escala_proposta = $this->escala_model->get_escala_consolidada_por_id($plantao->escalatroca_id);
+        //var_dump($escala_proposta); exit;
         $this->data['tipospassagem'] = $this->_get_tipos_passagem();
         $this->data['statuspassagem'] = $this->_get_status_passagem();
 
@@ -1472,6 +1506,10 @@ class Plantoes extends Admin_Controller
                 'datahoraconfirmacao' => $now,
                 'statuspassagem' => 1
             );
+
+            
+
+            
 
             if ($this->passagemtroca_model->update($plantao->passagenstrocas_id, $data)
                 && $this->passagemtroca_model->set_passagem_troca_valida($plantao->id, $plantao->passagenstrocas_id)
@@ -1512,6 +1550,8 @@ class Plantoes extends Admin_Controller
 
         // pass the plantao to the view
         $this->data['plantao'] = $plantao;
+
+        $this->data['escala_proposta'] = $escala_proposta;
 
         $this->data['dataplantao'] = array(
             'name'  => 'dataplantao',
