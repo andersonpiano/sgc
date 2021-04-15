@@ -2136,6 +2136,7 @@ class Escalas extends Admin_Controller
 
     }
 
+
     public function registrarfalta($escala_id)
     {
         if (!$this->ion_auth->logged_in()) {
@@ -2839,7 +2840,7 @@ class Escalas extends Admin_Controller
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
         /* Variables */
-        $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 5 days')); // deixar somente data atual date('Y-m-d')
+        $this->data['data_minima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' - 60 days')); // deixar somente data atual date('Y-m-d')
         $this->data['data_maxima'] = date('Y-m-d', strtotime(date('Y-m-d') . ' + 90 days'));
 
         /* Validate form input */

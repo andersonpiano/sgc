@@ -202,6 +202,7 @@ class Justificativas extends Admin_Controller
                 'id'    => 'setor_id',
                 'type'  => 'select',
                 'class' => 'form-control',
+                'value' => $this->input->post('setor_id'),
                 'options' => $setores_profissional,
             );
             $this->data['descricao'] = array(

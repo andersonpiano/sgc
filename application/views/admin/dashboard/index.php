@@ -267,6 +267,9 @@ if ($url_exist) {
     <?php if(sizeof($justificativas) > 0) :?>
         <?php foreach($justificativas as $justificativa) :?>
                                             <span class="badge badge-success">Importante</span>&nbsp;
+                                            
+                                            <a href="<?php echo ('/sgc/admin/justificativas/create/index.php?plantao_id='.$justificativa->id.'&setor_id='.$justificativa->setor_id.
+                                            '&profissional_id='.$justificativa->profissional_id.'&data_plantao='.$justificativa->dataplantao.'&hora_in="'.$justificativa->horainicialplantao.'"&hora_out="'.$justificativa->horafinalplantao.'"'); ?>>
                                             <p class="text-justify">
             <?php
                 $text = 'O plantão do dia ' . date('d/m/Y', strtotime($justificativa->dataplantao));
@@ -275,7 +278,7 @@ if ($url_exist) {
                 $text .= ' Esta aguardando justificativa';
                 
                 echo($text);
-            ?>
+            ?></a>
                                             </p>
         <?php endforeach;?>
     <?php else:?>

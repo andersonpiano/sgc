@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
-    document.getElementById("sumir").style.display = 'none';
+    if (document.getElementById("sumir")){
+        document.getElementById("sumir").style.display = 'none';
+    }
+    
 
     $(document).on('change', '#tipopassagem', function(){
         $tipo = $(this).val();

@@ -1670,7 +1670,7 @@ class Escala_model extends MY_Model
         dataplantao, datafinalplantao, horainicialplantao, horafinalplantao,
         id_profissional, cd_pes_fis_profissional, crm_profissional, nome_profissional
         from vw_escalas_consolidadas ec
-        where ec.id = $escala_id";
+        where ec.id = $escala_id ";
 
         $query = $this->db->query($sql);
 
