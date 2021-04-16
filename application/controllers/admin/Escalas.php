@@ -3245,7 +3245,7 @@ class Escalas extends Admin_Controller
                     'profissional_id' => $this->input->post('profissional_id'),
                 );
 
-                if ($escalado < 1) {
+                //if ($escalado < 1) {
                     $this->escala_model->update($escala->id, $data);
                     $this->session->set_flashdata('message', 'Escala atualizada com sucesso.');
                     if ($this->ion_auth->is_admin()) {
@@ -3253,14 +3253,14 @@ class Escalas extends Admin_Controller
                     } else {
                         redirect('admin/escalas', 'refresh');
                     }
-                } else {
-                    $this->session->set_flashdata('message', 'Profissional ja Possui escala neste periodo.');
-                    if ($this->ion_auth->is_admin()) {
-                        redirect('admin/escalas', 'refresh');
-                    } else {
-                        redirect('admin/escalas', 'refresh');
-                    }
-                }
+                //} else {
+                    //$this->session->set_flashdata('message', 'Profissional ja Possui escala neste periodo.');
+                    //if ($this->ion_auth->is_admin()) {
+                        //redirect('admin/escalas', 'refresh');
+                    //} else {
+                        //redirect('admin/escalas', 'refresh');
+                    //}
+                //}
             }
         }
 
@@ -3534,14 +3534,14 @@ class Escalas extends Admin_Controller
         $vinculo = $this->profissional_model->get_vinculo_por_profissional($profissional_id);
         //var_dump($escalado); exit;
 
-        if (empty($sessoes) && $escalado < 1){
+        //if (empty($sessoes) && $escalado < 1){
             try {
                 $this->escala_model->update($escala_id, ['profissional_id' => $profissional_id]);
                 $sucess = true;
             } catch (Exception $ex) {
                 echo(json_encode($ex));
             }
-        }
+        //}
 
         //echo json_encode($profissional);
         //echo json_encode($escala);
