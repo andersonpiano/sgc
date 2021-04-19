@@ -2111,7 +2111,7 @@ class Escalas extends Admin_Controller
         $escalas = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $data, date('Y-m-d', strtotime($data . ' + 20 days')), $setor_id);
         if (empty($escalas)){
             $plantoes = array(
-                 '' => 'Profissional não possui plantões para troca',
+                 0 => 'Profissional não possui plantões para troca',
              );
         } else {
             $plantoes = array(

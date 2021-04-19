@@ -180,7 +180,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     </span>
                                                 </td>
                                                 <td class="dontprint text-center">
-                                                    <?php if ($plantao->passagenstrocas_statuspassagem == 0 && $plantao->passagenstrocas_tipopassagem == 0) : ?>
+                                                    <?php if ($plantao->passagenstrocas_statuspassagem == 0) : ?>
                                                         <a href="#" onclick="cancelarCessao(<?php echo($plantao->passagenstrocas_id);?>);" class="btn btn-primary"><?php echo(lang('actions_cancel'));?></a>
                                                     <?php endif; ?> &nbsp;
                                                     <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-default"'); ?>

@@ -208,14 +208,14 @@ class Profissionais extends Admin_Controller
 
     public function createuser($id)
     {
-        if (!$this->ion_auth->logged_in()) {
+        /*if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
             redirect('auth/login', 'refresh');
         }
         if (!$this->ion_auth->in_group($this->_admin_groups)) {
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/dashboard', 'refresh');
-        }
+        }*/
 
         $id = (int) $id;
 
