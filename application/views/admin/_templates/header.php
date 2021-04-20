@@ -78,6 +78,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/plantoes.js'); ?>"></script>
 <?php endif; ?>
 
+<?php if ($this->router->fetch_class() == 'profissionais' && in_array($this->router->fetch_method(), ['edit'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_profissional.js'); ?>"></script>
+<?php endif; ?>
+
 <?php if ($this->router->fetch_class() == 'plantoes') : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/plantoes.js'); ?>"></script>
 <?php endif; ?>

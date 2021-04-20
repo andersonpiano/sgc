@@ -439,6 +439,81 @@ class Setores extends Admin_Controller {
         echo json_encode($json);
         exit;
     }
+    
+
+    public function ajax_setores_profissional($profissional_id) {
+
+        $profissional_id = (int) $profissional_id;
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/setor_model");
+
+        $setores = $this->setor_model->get_datatable_setor_profissional($profissional_id);
+
+        $data = array();
+        foreach ($setores as $setor) {
+            $setor_sgc = $this->setor_model->get_setor_por_id($setor->setor_id);
+            $row = array();
+            $row[] = '<center>'.$setor_sgc->nome.'</center>';
+            
+            $row[] = '<center><div style="display: inline-block;">
+                        <button style="color:red; font-size:20px;" class="btn btn-link btn-add-profissional" 
+                            id='.$profissional_id.'>
+                            <i class="fa fa-times">&nbsp; Remover</i>
+                        </button>
+                    </div></center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
+    }
+
+    public function ajax_setores() {
+
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/setor_model");
+
+        $setores = $this->setor_model->get_datatable();
+
+        $data = array();
+        foreach ($setores as $setor) {
+            $row = array();
+            $row[] = '<center>'.$setor->nome.'</center>';
+            
+            $row[] = '<center><div style="display: inline-block;">
+                        <button style="color:green; font-size:20px;" class="btn btn-link btn-add-profissional" 
+                            id='.'>
+                            <i class="fa fa-plus">&nbsp; Adicionar</i>
+                        </button>
+                    </div></center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" =>$this->setor_model->records_total(),
+            "recordsFiltered" => $this->setor_model->records_filtered(),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
+    }
 
     public function get_usuarios_dropdown($setor)
     {   

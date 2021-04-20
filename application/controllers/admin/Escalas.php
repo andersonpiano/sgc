@@ -1277,33 +1277,69 @@ class Escalas extends Admin_Controller
                 //$profissionais = $this->get_profissionais($setor_id);
 
                 // Realizando a busca
-                if ($vinculo_id == 1 || $vinculo_id == 2) {
-                $where = array(
-                    'unidadehospitalar_id' => $unidadehospitalar_id,
-                    'escalas.setor_id' => $setor_id,
-                    'escalas.dataplantao >=' => $datainicial,
-                    'escalas.dataplantao <=' => $datafinal,
-                    'escalas.vinculo_id' => $vinculo_id,
-                    'escalas.tipo_escala' => $this->input->post('tipos')
-                );
-                } else if ($vinculo_id == 4){
-                    $where = array(
-                        'unidadehospitalar_id' => $unidadehospitalar_id,
-                        'escalas.setor_id' => $setor_id,
-                        'escalas.dataplantao >=' => $datainicial,
-                        'escalas.dataplantao <=' => $datafinal,
-                        'profissionais.vinculo_id' => null,
-                        'escalas.tipo_escala' => $this->input->post('tipos')
-                    );
+
+                $tipo_escala = $this->input->post('tipos');
+
+                if ($tipo_escala != 0){
+
+                    if ($vinculo_id == 1 || $vinculo_id == 2) {
+                        $where = array(
+                            'unidadehospitalar_id' => $unidadehospitalar_id,
+                            'escalas.setor_id' => $setor_id,
+                            'escalas.dataplantao >=' => $datainicial,
+                            'escalas.dataplantao <=' => $datafinal,
+                            'escalas.vinculo_id' => $vinculo_id,
+                            'escalas.tipo_escala' => $tipo_escala
+                        );
+                        } else if ($vinculo_id == 4){
+                            $where = array(
+                                'unidadehospitalar_id' => $unidadehospitalar_id,
+                                'escalas.setor_id' => $setor_id,
+                                'escalas.dataplantao >=' => $datainicial,
+                                'escalas.dataplantao <=' => $datafinal,
+                                'profissionais.vinculo_id' => null,
+                                'escalas.tipo_escala' => $tipo_escala
+                            );
+                        } else {
+                            $where = array(
+                                'unidadehospitalar_id' => $unidadehospitalar_id,
+                                'escalas.setor_id' => $setor_id,
+                                'escalas.dataplantao >=' => $datainicial,
+                                'escalas.dataplantao <=' => $datafinal,
+                                'escalas.tipo_escala' => $tipo_escala
+                            );
+                        };
+
                 } else {
-                    $where = array(
-                        'unidadehospitalar_id' => $unidadehospitalar_id,
-                        'escalas.setor_id' => $setor_id,
-                        'escalas.dataplantao >=' => $datainicial,
-                        'escalas.dataplantao <=' => $datafinal,
-                        'escalas.tipo_escala' => $this->input->post('tipos')
-                    );
-                };
+                    if ($vinculo_id == 1 || $vinculo_id == 2) {
+                        $where = array(
+                            'unidadehospitalar_id' => $unidadehospitalar_id,
+                            'escalas.setor_id' => $setor_id,
+                            'escalas.dataplantao >=' => $datainicial,
+                            'escalas.dataplantao <=' => $datafinal,
+                            'escalas.vinculo_id' => $vinculo_id,
+                        );
+                        } else if ($vinculo_id == 4){
+                            $where = array(
+                                'unidadehospitalar_id' => $unidadehospitalar_id,
+                                'escalas.setor_id' => $setor_id,
+                                'escalas.dataplantao >=' => $datainicial,
+                                'escalas.dataplantao <=' => $datafinal,
+                                'profissionais.vinculo_id' => null,
+
+                            );
+                        } else {
+                            $where = array(
+                                'unidadehospitalar_id' => $unidadehospitalar_id,
+                                'escalas.setor_id' => $setor_id,
+                                'escalas.dataplantao >=' => $datainicial,
+                                'escalas.dataplantao <=' => $datafinal,
+
+                            );
+                        };
+                }
+                
+                
 
                 // Se escolhido o turno
                 $turno = null;
@@ -1370,6 +1406,7 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tipos = array(
+                '0' => 'Todos',
                 '1' => 'Plantonista',
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
@@ -2697,7 +2734,8 @@ class Escalas extends Admin_Controller
                             'datafinalplantao' => $dtfinalplantaoM,
                             'horainicialplantao' => $hrinicialplantaoM,
                             'horafinalplantao' => $hrfinalplantaoM,
-                            'duracao' => $duracaoM
+                            'duracao' => $duracaoM,
+                            'tipo_escala' => $tipo
                         );
                         $success = $this->escala_model->insert($insert_dataM);
                         //var_dump($insert_dataM); exit; 
@@ -2714,7 +2752,8 @@ class Escalas extends Admin_Controller
                             'datafinalplantao' => $dtfinalplantaoT,
                             'horainicialplantao' => $hrinicialplantaoT,
                             'horafinalplantao' => $hrfinalplantaoT,
-                            'duracao' => $duracaoT
+                            'duracao' => $duracaoT,
+                            'tipo_escala' => $tipo
                         );
                         $success = $this->escala_model->insert($insert_dataT);
                         //var_dump($insert_dataT); exit;

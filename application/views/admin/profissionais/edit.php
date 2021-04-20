@@ -35,6 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($registro);?>
                                             </div>
                                         </div>
+                                        <input type="hidden" id="profissional_id" value=<?php echo $profissional->id; ?> ></input>
                                         <div class="form-group">
                                             <?php echo lang('profissionais_matricula', 'matricula', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
@@ -97,6 +98,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        <table id="dt_setores_profissional" class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr class="tableheader">
+                                                    <th width="80%" class="dt-center text-center">Setores</th>
+                                                    <th width="20%" class="dt-center text-center">Ações</th>
+                                                </tr> 
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                        
 <?php endif ?>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
@@ -112,9 +125,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                     <?php echo form_close();?>
+                                    <button style="font-size:19px; position: relative; float: right; color:green;" class="btn btn-link btn-addtosector text-center" id="add_medico_setor"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Adicionar Setor</i></button>
                                 </div>
                             </div>
                          </div>
                     </div>
                 </section>
             </div>
+
+            <div id="modal_add_to_setor" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title">Selecione o Setor</h4></center>
+                </div>
+
+                <div class="modal-body">
+                        <table id="dt_setores" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th style="width:60%" class="dt-center text-center">Nome</th>
+                                <th style="width:20%" class="dt-center no-sort text-center">Selecionar</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
