@@ -36,44 +36,47 @@ class Processamento extends Admin_Controller {
 
         /* Validate form input */
         $this->form_validation->set_rules('unidadehospitalar_id', 'lang:processamento_unidadehospitalar', 'required');
-        $this->form_validation->set_rules('data_escala', 'lang:processamento_data_escala', 'required');
+        $this->form_validation->set_rules('data_inicial', 'lang:processamento_data_inicial', 'required');
+        $this->form_validation->set_rules('data_final', 'lang:processamento_data_final', 'required');
         $this->form_validation->set_rules('processo', 'lang:processamento_processo', 'required');
 
         if ($this->form_validation->run() == true) {
             $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
-            $data_escala = $this->input->post('data_escala');
+            $data_inicial = $this->input->post('data_inicial');
+            $data_final = $this->input->post('data_final');
             $processo = $this->input->post('processo');
             
             switch ($processo) {
             case 0:
-                $this->processar_escala_por_demanda($unidadehospitalar_id, 0, $data_escala);
+                $this->processar_escala_por_demanda($unidadehospitalar_id, 0, $data_inicial, $data_final);
                 break;
             case 1:
-                $this->processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_escala);
+                $this->processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_inicial, $data_final);
                 break;
             case 2:
                 $recriar = 0;  // 0 = Não apagar os registros do dia
-                $this->processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_escala, $recriar);
+                $this->processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_inicial, $data_final, $recriar);
                 break;
             case 3:
                 $recriar = 1;  // 1 = apagar todos os registros do dia e criar novamente
-                $this->processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_escala, $recriar);
+                $this->processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_inicial, $data_final, $recriar);
                 break;
             default:
                 break;
             }
         } else {
             $unidadehospitalar_id = '';
-            $data_escala = date('Y-m-d');
+            $data_inicial = date('Y-m-d');
+            $data_final = date('Y-m-d');
             $processo = '';
         }
 
         $processos = array(
             '' => 'Selecione um processo a ser executado',
-            '0' => 'Processar escalas de plantão na data selecionada',
-            '1' => 'Processar escalas de prescrição na data selecionada',
-            '2' => 'Processar batidas 13h de plantões MT mesmo setor na data selecionada',
-            '3' => 'Processar batidas 13h de plantões MT mesmo setor na data selecionada recriando os valores já processados',
+            '0' => 'Processar escalas de plantão no periodo selecionado',
+            '1' => 'Processar escalas de prescrição no periodo selecionado',
+            '2' => 'Processar batidas 13h de plantões MT mesmo setor no periodo selecionado',
+            '3' => 'Processar batidas 13h de plantões MT mesmo setor no periodo selecionado recriando os valores já processados',
         );
 
         $unidadeshospitalares = $this->_get_unidadeshospitalares();
@@ -86,12 +89,20 @@ class Processamento extends Admin_Controller {
             'value' => $this->form_validation->set_value('unidadehospitalar_id', $unidadehospitalar_id),
             'options' => $unidadeshospitalares,
         );
-        $this->data['data_escala'] = array(
-            'name'  => 'data_escala',
-            'id'    => 'data_escala',
+        $this->data['data_inicial'] = array(
+            'name'  => 'data_inicial',
+            'id'    => 'data_inicial',
             'type'  => 'date',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('data_escala', $data_escala),
+            'value' => $this->form_validation->set_value('data_inicial', $data_inicial),
+        );
+
+        $this->data['data_final'] = array(
+            'name'  => 'data_final',
+            'id'    => 'data_final',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('data_final', $data_final),
         );
         $this->data['processo'] = array(
             'name'  => 'processo',
@@ -106,7 +117,7 @@ class Processamento extends Admin_Controller {
         $this->template->admin_render('admin/processamento/index', $this->data);
     }
 
-    public function processar_escala_por_demanda($unidadehospitalar_id, $setor_id, $data_escala)
+    public function processar_escala_por_demanda($unidadehospitalar_id, $setor_id, $data_inicial, $data_final)
     {
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
@@ -118,7 +129,7 @@ class Processamento extends Admin_Controller {
         }
 
         $hash = md5("Cmg@2020");
-        $url = site_url("admin/batch/processarescala/") . $hash . "/" . $unidadehospitalar_id . "/" . $setor_id . "/" . $data_escala;
+        $url = site_url("admin/batch/processarescala/") . $hash . "/" . $unidadehospitalar_id . "/" . $setor_id . "/" . $data_inicial. "/" . $data_final;
 
         // create curl resource
         $ch = curl_init();
@@ -151,7 +162,7 @@ class Processamento extends Admin_Controller {
         redirect('admin/processamento', 'refresh');
     }
 
-    public function processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_escala)
+    public function processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_inicial, $data_final)
     {
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
@@ -163,7 +174,7 @@ class Processamento extends Admin_Controller {
         }
 
         $hash = md5("Cmg@2020");
-        $url = site_url("admin/batch/processarescalaprescricao/") . $hash . "/" . $unidadehospitalar_id . "/" . $data_escala;
+        $url = site_url("admin/batch/processarescalaprescricao/") . $hash . "/" . $unidadehospitalar_id . "/" . $data_inicial . "/" . $data_final;
 
         // create curl resource
         $ch = curl_init();
@@ -191,7 +202,7 @@ class Processamento extends Admin_Controller {
         redirect('admin/processamento', 'refresh');
     }
 
-    public function processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_escala, $recriar)
+    public function processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_inicial, $data_final, $recriar)
     {
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
@@ -203,7 +214,7 @@ class Processamento extends Admin_Controller {
         }
 
         $hash = md5("Cmg@2020");
-        $url = site_url("admin/batch/processarbatidasmtmesmomedico/") . $hash . "/" . $unidadehospitalar_id . "/" . $data_escala . "/" . $recriar;
+        $url = site_url("admin/batch/processarbatidasmtmesmomedico/") . $hash . "/" . $unidadehospitalar_id . "/" . $data_inicial . "/" . $data_final. "/" . $recriar;
 
         // create curl resource
         $ch = curl_init();

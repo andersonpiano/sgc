@@ -36,9 +36,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('processamento_data_escala', 'data_escala', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('processamento_data_inicial', 'data_inicial', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
-                                                <?php echo form_input($data_escala);?>
+                                                <?php echo form_input($data_inicial);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('processamento_data_final', 'data_final', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_input($data_final);?>
                                             </div>
                                         </div>
                                         <div class="form-group">

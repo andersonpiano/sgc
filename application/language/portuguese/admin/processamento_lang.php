@@ -11,7 +11,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['processamento_processo']            = 'Processos';
-$lang['processamento_data_escala']         = 'Data da Escala';
+$lang['processamento_data_inicial']         = 'Data Inicial';
+$lang['processamento_data_final']         = 'Data Final';
 $lang['processamento_unidadehospitalar']   = 'Unidade Hospitalar';
 $lang['processamento_execute']             = 'Executar processo';
 $lang['processamento_box_title']           = 'Processo';
