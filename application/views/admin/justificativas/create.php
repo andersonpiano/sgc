@@ -21,10 +21,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_justificativa')); ?>
                                         <?php echo(form_hidden('profissional_id', $profissional_id)); ?>
+                                        
                                         <div class="form-group">
                                             <?php echo lang('justificativas_profissional', 'profissional_nome', array('class' => 'col-sm-2 text-right')); ?>
                                             <div class="col-sm-4">
                                                 <?php echo($profissional_nome);?>
+                                                <input id='escala_id' name='escala_id' type="hidden"> </input>
                                             </div>
                                         </div>
                                         <div class="form-group">

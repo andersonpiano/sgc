@@ -156,23 +156,14 @@ class Justificativas extends Admin_Controller
         $profissional_id = $this->session->userdata('profissional_id');
         $profissional_nome = $this->session->userdata('nome');
         $setores_profissional = $this->_get_setores_profissional($profissional_id);
-        $escala_id = $this->input->get_post('plantao_id');
+        $escala_id = $this->input->post('escala_id');
         $setor_id = $this->input->get_post('setor_id');
         $data_plantao_inicio = $this->input->get_post("data_plantao");
         $hora_entrada =  $this->input->post("hora_entrada");
         $hora_saida =  $this->input->post("hora_saida");
         $descricao =  $this->input->post("descricao");
 
-        $insert_data = array(
-            'profissional_id' => $profissional_id,
-            'escala_id' => $escala_id,
-            'setor_id' => $setor_id,
-            'data_plantao' => $data_plantao_inicio,
-            'hora_entrada' => $hora_entrada,
-            'saida_justificada' => $hora_saida,
-            'descricao' => $descricao,
-            'status' => 0
-        );
+        
 
 
         //Coletar dados da batida - Anderson
@@ -181,9 +172,21 @@ class Justificativas extends Admin_Controller
 
         /* Validate form input */
         $this->form_validation->set_rules('descricao', 'lang:justificativas_descricao', 'required');
+        $this->form_validation->set_rules('escala_id', 'escala_id', 'required');
 
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true) {
+
+            $insert_data = array(
+                'profissional_id' => $profissional_id,
+                'escala_id' => $escala_id,
+                'setor_id' => $setor_id,
+                'data_plantao' => $data_plantao_inicio,
+                'entrada_justificada' => $hora_entrada,
+                'saida_justificada' => $hora_saida,
+                'descricao' => $descricao,
+                'status' => 0
+            );
             $justificativa_id = $this->justificativa_model->insert($insert_data);
             if ($justificativa_id) {
                 $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
@@ -196,6 +199,7 @@ class Justificativas extends Admin_Controller
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $this->data['profissional_id'] = $profissional_id;
+            $this->data['escala_id'] = $this->input->post('plantao_id');
             $this->data['profissional_nome'] = $profissional_nome;      
             $this->data['setor_id'] = array(
                 'name'  => 'setor_id',
