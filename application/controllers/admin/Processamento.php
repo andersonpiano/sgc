@@ -145,9 +145,9 @@ class Processamento extends Admin_Controller {
         $info = curl_getinfo($ch);
 
         if ($info['http_code'] == 200) {
-            $message = 'A escala foi processada com sucesso na data selecionada.';
+            $message = 'A escala foi processada com sucesso no periodo selecionado.';
         } else {
-            $message = 'Ocorreu um erro ao processar manualmente a escala na data selecionada.';
+            $message = 'Ocorreu um erro ao processar manualmente a escala no periodo selecionado.';
         }
 
         // close curl resource to free up system resources
@@ -190,9 +190,9 @@ class Processamento extends Admin_Controller {
         $info = curl_getinfo($ch);
 
         if ($info['http_code'] == 200) {
-            $message = 'A escala dos setores de prescrição foi processada com sucesso na data selecionada.';
+            $message = 'A escala dos setores de prescrição foi processada com sucesso no periodo selecionado.';
         } else {
-            $message = 'Ocorreu um erro ao processar manualmente a escala dos setores de prescrição na data selecionada.';
+            $message = 'Ocorreu um erro ao processar manualmente a escala dos setores de prescrição no periodo selecionado.';
         }
 
         // close curl resource to free up system resources
@@ -230,9 +230,9 @@ class Processamento extends Admin_Controller {
         $info = curl_getinfo($ch);
 
         if ($info['http_code'] == 200) {
-            $message = 'As batidas de 13h dos plantões MT do mesmo profissional foram processadas com sucesso na data selecionada.';
+            $message = 'As batidas de 13h dos plantões MT do mesmo profissional foram processadas com sucesso no periodo selecionado.';
         } else {
-            $message = 'Ocorreu um erro ao processar manualmente as batidas de 13h dos plantões MT do mesmo profissional na data selecionada.';
+            $message = 'Ocorreu um erro ao processar manualmente as batidas de 13h dos plantões MT do mesmo profissional no periodo selecionado.';
         }
 
         // close curl resource to free up system resources

@@ -168,7 +168,7 @@ class Justificativas extends Admin_Controller
             'escala_id' => $escala_id,
             'setor_id' => $setor_id,
             'data_plantao' => $data_plantao_inicio,
-            'entrada_entrada' => $hora_entrada,
+            'hora_entrada' => $hora_entrada,
             'saida_justificada' => $hora_saida,
             'descricao' => $descricao,
             'status' => 0
