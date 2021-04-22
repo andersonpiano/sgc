@@ -123,8 +123,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo htmlspecialchars($justificativa->turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo((isset($justificativa->entrada_justificada) && $justificativa->entrada_justificada != null) ? date('H:i', strtotime($justificativa->entrada_justificada)) : "Sem Registro"); ?></td> 
-                                                <td><?php echo((isset($justificativa->saida_justificada) && $justificativa->saida_justificada != null) ? date('H:i', strtotime($justificativa->saida_justificada)) : "Sem Registro"); ?></td>
+                                                <td><?php echo (date('H:i', strtotime($justificativa->hora_entrada)) ? date('H:i', strtotime($justificativa->hora_entrada)) : "Sem Registro"); ?></td> 
+                                                <td><?php echo (date('H:i', strtotime($justificativa->hora_saida)) && $justificativa->hora_saida != null ? date('H:i', strtotime($justificativa->hora_saida)) : "Sem Registro"); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;

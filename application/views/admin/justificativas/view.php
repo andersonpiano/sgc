@@ -68,11 +68,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>
-                                                <td><?php echo($justificativa->hora_entrada ? date('H:i', strtotime($justificativa->hora_entrada)) : " - "); ?></td>
+                                                <td><?php echo($justificativa->entrada_justificada ? date('H:i', strtotime($justificativa->entrada_justificada)) : " - "); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_saida'). " Justificada"); ?></th>
-                                                <td><?php echo($justificativa->hora_saida ? date('H:i', strtotime($justificativa->hora_saida)) : " - "); ?></td>
+                                                <td><?php echo($justificativa->saida_justificada ? date('H:i', strtotime($justificativa->saida_justificada)) : " - "); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_descricao')); ?></th>

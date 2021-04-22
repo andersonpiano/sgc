@@ -393,7 +393,7 @@ class Escala_model extends MY_Model
     public function get_justificativas_a_confirmar($profissional_id)
     {
 
-        $sql = "SELECT * FROM escalas as ec ";
+        $sql = "SELECT ec.id plantao_id, setor_id, profissional_id, dataplantao, nome,  justificativa, horainicialplantao, horafinalplantao FROM escalas as ec ";
         $sql .= "join profissionais p on (p.id = ec.profissional_id) ";
         $sql .= "WHERE ";
         $sql .= "p.id = ".$profissional_id;

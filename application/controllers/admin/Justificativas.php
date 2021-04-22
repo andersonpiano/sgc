@@ -151,6 +151,7 @@ class Justificativas extends Admin_Controller
         $this->breadcrumbs->unshift(2, lang('menu_justificativas_create'), 'admin/justificativas/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
         $this->load->model('cemerge/FrequenciaAssessus_model');
+        $this->load->model('cemerge/escala_model');
 
         /* Variables */
         $profissional_id = $this->session->userdata('profissional_id');
@@ -188,7 +189,9 @@ class Justificativas extends Admin_Controller
                 'status' => 0
             );
             $justificativa_id = $this->justificativa_model->insert($insert_data);
+            
             if ($justificativa_id) {
+                $this->escala_model->update($escala_id,['justificativa' => 0]);
                 $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
                 redirect('admin/justificativas', 'refresh');
             } else {
