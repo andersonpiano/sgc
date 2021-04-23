@@ -69,6 +69,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'plantoes' && in_array($this->router->fetch_method(), ['cederplantaoeprocessar', 'proximosplantoes'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/frequencias_por_profissional.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/proximosplantoes.js'); ?>"></script>
 <?php endif; ?>
 
 <?php if ($this->router->fetch_class() == 'proximosplantoes') : ?>

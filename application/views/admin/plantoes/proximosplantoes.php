@@ -58,8 +58,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($plantao->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($plantao->horainicialplantao)) . ' - ' . date('H:i', strtotime($plantao->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="dontprint text-center">
-                                                    <?php echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/proximosplantoes', lang('actions_to_offer'), 'class="btn btn-primary"'); ?> &nbsp;
-                                                    <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-default"'); ?> &nbsp;
+                                                <button type="button" class="btn btn-primary btn-oferecer fa fa-share" data-dismiss="modal" plantao_id="<?php echo $plantao->id; ?>"><?php echo ' '.lang('actions_to_offer');?></button>&nbsp;
+                                                    <?php /*echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/proximosplantoes', lang('actions_to_offer'), 'class="btn btn-primary"'); */?> &nbsp;
+                                                    <?php echo anchor('admin/plantoes/view/'.$plantao->id, ' '.lang('actions_see'), 'class="btn btn-primary fa fa-eye"'); ?> &nbsp;
                                                 </td>
                                             </tr>
                                         <?php endforeach;?>
@@ -68,7 +69,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                             <?php endforeach;?>
                             </div>
+
                         </div>
                     </div>
                 </section>
             </div>
+
+<div id="modal_ofertar" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 40%">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">X</button>
+                <center><h4 class="modal-title">Selecione o profissional</h4></center>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label text-center">Tipo</label>
+                        <input id="oferecer_tipo" name="oferecer_tipo" class="form-control text-center" maxlength="100">
+                        <span class="help-block"></span>
+                    <label class="control-label text-center">Médico Substituto</label>
+                        <input id="oferecer_profissional" name="oferecer_profissional" class="form-control text-center" maxlength="100">
+                        <span class="help-block"></span>
+                    <label class="control-label text-center">Plantão disponivel</label>
+                        <input id="oferecer_plantao_profissional" name="oferecer_plantao_profissional" class="form-control text-center" maxlength="100">
+                        <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

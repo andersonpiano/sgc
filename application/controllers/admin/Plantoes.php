@@ -538,7 +538,7 @@ class Plantoes extends Admin_Controller
 
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
-        //$frequencias_disponiveis = array();
+        $frequencias_disponiveis = 0;
 
 
         // Removendo o profissional logado
@@ -651,6 +651,25 @@ class Plantoes extends Admin_Controller
                 }
                 //$this->template->admin_render('admin/plantoes/tooffer', $this->data);
                 
+            }else {
+
+                $this->data['profissionalsubstituto_id'] = array(
+                    'name'  => 'profissionalsubstituto_id',
+                    'id'    => 'profissionalsubstituto_id',
+                    'type'  => 'select',
+                    'data' => $plantao->dataplantao,
+                    'setor' => $plantao->setor_id,
+                    'class' => 'form-control',
+                    'value' => 0
+                );
+                $this->data['frequencias_disponiveis'] = array(
+                    'name'  => 'frequencias_disponiveis',
+                    'id'    => 'frequencias_disponiveis',
+                    'type'  => 'select',
+                    'class' => 'form-control',
+                    'value' => 0
+                );
+
             }
             //$this->template->admin_render('admin/plantoes/tooffer', $this->data);
             //redirect('admin/plantoes', 'refresh');
@@ -706,9 +725,9 @@ class Plantoes extends Admin_Controller
             'data' => $plantao->dataplantao,
             'setor' => $plantao->setor_id,
             'class' => 'form-control',
-            //'value' => $this->input->post('profissionalsubstituto_id'),
+            'value' => $this->input->post('profissionalsubstituto_id'),
             'options' => $profissionais_setor
-        );/*
+        );
         $this->data['frequencias_disponiveis'] = array(
             'name'  => 'frequencias_disponiveis',
             'id'    => 'frequencias_disponiveis',
@@ -716,7 +735,7 @@ class Plantoes extends Admin_Controller
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('frequencias_disponiveis', isset($plantao_troca)),
             'options' => $frequencias_disponiveis
-        );*/
+        );
 
         /* Load Template */
         //var_dump($this->data);exit;
