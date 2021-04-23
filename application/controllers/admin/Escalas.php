@@ -1931,28 +1931,29 @@ class Escalas extends Admin_Controller
             $this->form_validation->set_rules('escala_id', 'lang:escalas_escala', 'required');
             $this->form_validation->set_rules('frequencia_id', 'lang:escalas_frequencia', 'required');
             $this->form_validation->set_rules('tipobatida', 'lang:escalas_tipobatida', 'required');
+            $this->form_validation->set_rules('profissional_id', 'lang:escalas_tipobatida', 'required');
 
             if ($this->form_validation->run() == true) {
                 $escala_id = $this->input->post('escala_id');
                 $frequencia_id = $this->input->post('frequencia_id');
                 $tipobatida = $this->input->post('tipobatida');
+                $profissional = $this->input->post('profissional_id');
 
                 // Atualizar escala e frequência
                 if ($tipobatida == 3) {
                     $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
-                    $this->escala_model->update($escala_id, ['frequencia_entrada_id' => $frequencia_id]);
+                    $this->escala_model->update($escala_id, ['frequencia_entrada_id' => $frequencia_id, 'profissional_id' => $profissional]);
                 } else {
                     $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
-                    $this->escala_model->update($escala_id, ['frequencia_saida_id' => $frequencia_id]);
-
+                    $this->escala_model->update($escala_id, ['frequencia_saida_id' => $frequencia_id, 'profissional_id' => $profissional]);
                 }
-                $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
+                //$this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida, 'profissional_id' => $profissional]);
 
                 $this->session->set_flashdata('message', 'A frequência foi vinculada &agrave; escala com sucesso. Feche esta janela e volte para a janela anterior.');
-                redirect('admin/escalas/conferencia', 'refresh');
+                //redirect('admin/escalas/conferencia', 'refresh');
             } else {
                 $this->data['message'] = validation_errors() ? validation_errors() : $this->session->flashdata('message');
-                redirect('admin/escalas/corrigirfrequenciaescala/' . $escala_id . '/' . $frequencia_id, 'refresh');
+                //redirect('admin/escalas/corrigirfrequenciaescala/' . $escala_id . '/' . $frequencia_id, 'refresh');
             }
             echo json_encode('sucess');
         }
@@ -3117,7 +3118,7 @@ class Escalas extends Admin_Controller
             if ($datafinal >= $datainicial) {
                 $success = array();
                 for ($data = $datainicial; $data <= $datafinal; $data->modify('+1 day')) {
-                    $escala_referencia = $this->escala_model->get_escala_referencia($setor_id, $data->format('Y-m-d'), $limite);
+                    $escala_referencia = $this->escala_model->get_escala_referencia($setor_id, $data->format('Y-m-d'));
                     foreach ($escala_referencia as $indice => $escala) {
                         $dtfinalplantao = $data->format('Y-m-d');
                         if ((int)$escala->horainicialplantao > (int)$escala->horafinalplantao) {

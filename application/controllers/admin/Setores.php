@@ -460,7 +460,7 @@ class Setores extends Admin_Controller {
             $row[] = '<center>'.$setor_sgc->nome.'</center>';
             
             $row[] = '<center><div style="display: inline-block;">
-                        <button style="color:red; font-size:20px;" class="btn btn-link btn-add-profissional" 
+                        <button onclick="window.location.href='."'/sgc/admin/profissionais/unlinkfromsector/".$profissional_id.'/'.$setor_sgc->id."'".'" style="color:red; font-size:20px;" class="btn btn-link btn-remover-profissional" 
                             id='.$profissional_id.'>
                             <i class="fa fa-times">&nbsp; Remover</i>
                         </button>
@@ -496,7 +496,7 @@ class Setores extends Admin_Controller {
             
             $row[] = '<center><div style="display: inline-block;">
                         <button style="color:green; font-size:20px;" class="btn btn-link btn-add-profissional" 
-                            id='.'>
+                            id='.$setor->id.'>
                             <i class="fa fa-plus">&nbsp; Adicionar</i>
                         </button>
                     </div></center>';

@@ -538,7 +538,7 @@ class Plantoes extends Admin_Controller
 
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
-        $frequencias_disponiveis = array();
+        //$frequencias_disponiveis = array();
 
 
         // Removendo o profissional logado
@@ -547,6 +547,7 @@ class Plantoes extends Admin_Controller
         /* Validate form input */
         $this->form_validation->set_rules('tipopassagem', 'lang:plantoes_tipopassagem', 'required');
         $this->form_validation->set_rules('profissionalsubstituto_id', 'lang:plantoes_profissional_substituto', 'required');
+        
 
         if (isset($_POST) && !empty($_POST)) {
             if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
@@ -554,7 +555,7 @@ class Plantoes extends Admin_Controller
             }
             
             if ($this->form_validation->run() == true) {
-
+                
                 $tipodepassagem = $this->input->post('tipopassagem');
                 $profissionaltroca_id = $this->input->post('profissionalsubstituto_id');
                 //$plantao_troca = $this->input->post('frequencias_disponiveis');
@@ -589,16 +590,17 @@ class Plantoes extends Admin_Controller
                         'statuspassagem' => 0,
                         'escalatroca_id' => 0
                     );
+                    //redirect('admin/plantoes/tooffer/' . $id . '/index', 'refresh');
                 } else {
                     // Caso seja uma troca, teste se o profissional substituto tem plantões neste setor para trocar
-                    $primeirodiames = date('Y-m-01', strtotime($plantao->dataplantao)); //$primeirodiames = date('Y-m-d');
+                    /*$primeirodiames = date('Y-m-01', strtotime($plantao->dataplantao)); //$primeirodiames = date('Y-m-d');
                     $ultimodiames = date('Y-m-t', strtotime($plantao->dataplantao)); // Correção do problema que informava que não haviam plantões disponíveis
                     $plantoes = $this->escala_model->get_escalas_consolidadas_por_profissional(
                         $profissionaltroca_id,
                         $primeirodiames,
                         $ultimodiames,
                         $plantao->setor_id
-                    );
+                    );*/
 
                     $data = array(
                         'escala_id' => $plantao->id,
@@ -606,22 +608,21 @@ class Plantoes extends Admin_Controller
                         'tipopassagem' => 1,
                         'profissionalsubstituto_id' => $profissionaltroca_id,
                         'datahorapassagem' => date('Y-m-d H:i:s'),
-                        'statuspassagem' => 0,
-                        'escalatroca_id' => $this->input->post('frequencias_disponiveis')
+                        'statuspassagem' => 0
+                        //'escalatroca_id' => $plantao_troca
                     );
 
                     //var_dump('TROCA - ', $data); exit;
 
-                    $plantoes_profissional = $this->_get_plantoes_profissional($plantoes);
+                    /*$plantoes_profissional = $this->_get_plantoes_profissional($plantoes);
                     if (sizeof($plantoes_profissional) <= 0) {
                         $this->session->set_flashdata('message', lang('plantoes_profissional_sem_plantoes_disponiveis'));
-                        redirect('admin/plantoes/tooffer/' . $id . '/index', 'refresh');
+                        
                         //redirect($_SERVER['HTTP_REFERER'], 'refresh');
-                    }
+                    }*/
+                    //redirect('admin/plantoes/tooffer/' . $id . '/index', 'refresh');
                 }
-
                 
-
                 
                 if ($this->passagemtroca_model->insert($data)) {
                     /* Send notifications */
@@ -648,8 +649,12 @@ class Plantoes extends Admin_Controller
                         redirect('/', 'refresh');
                     }
                 }
+                //$this->template->admin_render('admin/plantoes/tooffer', $this->data);
+                
             }
-            $this->template->admin_render('admin/plantoes/tooffer', $this->data);
+            //$this->template->admin_render('admin/plantoes/tooffer', $this->data);
+            //redirect('admin/plantoes', 'refresh');
+            
         }
 
         // display the edit user form
@@ -701,22 +706,23 @@ class Plantoes extends Admin_Controller
             'data' => $plantao->dataplantao,
             'setor' => $plantao->setor_id,
             'class' => 'form-control',
-            //'value' => $this->form_validation->set_value('profissionalsubstituto_id', $profissionaltroca_id),
+            //'value' => $this->input->post('profissionalsubstituto_id'),
             'options' => $profissionais_setor
-        );
+        );/*
         $this->data['frequencias_disponiveis'] = array(
             'name'  => 'frequencias_disponiveis',
             'id'    => 'frequencias_disponiveis',
             'type'  => 'select',
             'class' => 'form-control',
-            //'value' => $this->form_validation->set_value('frequencias_disponiveis', $plantao_troca),
+            'value' => $this->form_validation->set_value('frequencias_disponiveis', isset($plantao_troca)),
             'options' => $frequencias_disponiveis
-        );
+        );*/
 
         /* Load Template */
         //var_dump($this->data);exit;
-
+        
         $this->template->admin_render('admin/plantoes/tooffer', $this->data);
+        
     }
 
     public function cederplantaoeprocessar($id)

@@ -377,7 +377,8 @@ class Profissionais extends Admin_Controller
         }
 
         /* Redirect */
-        redirect('admin/setores/view/'.$setor_id, 'refresh');
+        //redirect('admin/setores/view/'.$setor_id, 'refresh');
+        redirect($_SERVER['HTTP_REFERER'], 'refresh');
     }
 
     public function edit($id)

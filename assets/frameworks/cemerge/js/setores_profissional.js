@@ -6,8 +6,8 @@ $(document).ready(function(){
 
 	function active_btn_setor() {
 		$(".btn-add-profissional").click(function(){
-			var profissional = $(this).attr('id');
-			var setor = document.getElementById('setor_id').value;
+			var profissional = document.getElementById('profissional_id').value;
+			var setor = $(this).attr('id');
 			$.ajax({
 				type: "POST",
 				url: "/sgc/admin/profissionais/linktosector/"+profissional,
@@ -19,13 +19,15 @@ $(document).ready(function(){
 				success: function(response) {
 					clearErrors();
 					$("#modal_add_to_setor").modal("hide");
-					//swal("Sucesso!", 'Profissional Adicionado com Sucesso','success');
+					//swal("Sucesso!", profissional+'-'+setor,'success');
+					document.location.reload(true);
 				},
 				error: function(response){
 					//swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
 					clearErrors();
 					$("#modal_add_to_setor").modal("hide");
 					//swal("Sucesso!", 'Profissional Adicionado com Sucesso','success');
+					//swal("Sucesso!", profissional+'-'+setor,'success');
 					document.location.reload(true);
 				}
 			})

@@ -99,16 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         
-                                        <table id="dt_setores_profissional" class="table table-striped table-bordered">
-                                            <thead>
-                                                <tr class="tableheader">
-                                                    <th width="80%" class="dt-center text-center">Setores</th>
-                                                    <th width="20%" class="dt-center text-center">Ações</th>
-                                                </tr> 
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+
                                         
 <?php endif ?>
                                         <div class="form-group">
@@ -125,6 +116,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                     <?php echo form_close();?>
+                                    <table id="dt_setores_profissional" class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr class="tableheader">
+                                                    <th width="80%" class="dt-center text-center">Setores</th>
+                                                    <th width="20%" class="dt-center text-center">Ações</th>
+                                                </tr> 
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
                                     <button style="font-size:19px; position: relative; float: right; color:green;" class="btn btn-link btn-addtosector text-center" id="add_medico_setor"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Adicionar Setor</i></button>
                                 </div>
                             </div>

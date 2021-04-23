@@ -1,4 +1,4 @@
-$(function(){
+$(document).ready(function(){
 
 	// EXIBIR MODAIS
 	$(".btn-batidas-ignoradas").click(function(){
@@ -33,6 +33,7 @@ $(function(){
 		clearErrors();
 		escala = $(this).attr('escala');
 		frequencia = $(this).attr('frequencia');
+		profissional = $(this).attr('profissional');
 		
 
 		$(".btn-aceitar").click(function(){
@@ -44,6 +45,7 @@ $(function(){
 				data: {
 					'escala_id': escala,
 					'frequencia_id': frequencia,
+					'profissional_id': profissional,
 					'tipobatida': batida
 				},
 				success: function(response) {

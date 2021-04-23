@@ -10,7 +10,7 @@ class Escala_model extends MY_Model
         parent::__construct($this->table);
     }
 
-    public function get_escala_referencia($setor_id, $datainicial, $limite)
+    public function get_escala_referencia($setor_id, $datainicial)
     {
         $fields = 'dataplantao, horainicialplantao, horafinalplantao, duracao, profissional_id, tipo_plantao, extra';
         $where = 'dataplantao = \'' . $datainicial . '\' - INTERVAL 28 DAY ';
@@ -23,7 +23,7 @@ class Escala_model extends MY_Model
         $this->db->from($this->table);
         $this->db->where($where);
         $this->db->order_by($order_by);
-        $this->db->limit($limite);
+        //$this->db->limit($limite);
         //$this->db->limit('84');
 
         $query = $this->db->get();
