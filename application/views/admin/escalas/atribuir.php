@@ -19,16 +19,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </section>
                 <?php endif; ?>
-
-                <section class="content">
-                    <div class="row">
-                        <div class="col-md-12">
-                             <div class="box">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title"><?php echo lang('escalas_attribute'); ?></h3>
+                    <div class="print-header row">
+                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    </div>
+                <section class="content dontprint">
+                    <div class="row dontprint">
+                        <div class="col-md-12 dontprint">
+                            <div class="box dontprint">
+                                <div class="box-header with-border dontprint">
+                                    <h3 class="box-title dontprint"><?php echo lang('escalas_attribute'); ?></h3>
                                     <p><cite><?php echo lang('escalas_attribute_description'); ?></cite></p>
                                 </div>
-                                <div class="box-body">
+                                <div class="box-body dontprint">
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala')); ?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
@@ -125,6 +128,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_filter'))); ?>
+                                                    <a href="<?php echo(current_url()); ?>" onclick="window.print(); return false;" class="btn btn-default btn-flat">Imprimir</a>&nbsp;
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/escalas/atribuir', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
@@ -133,7 +137,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php echo form_close();?>
                                 </div>
                             </div>
-                         </div>
+                        </div>
                     </div>
                 </section>
 
@@ -141,7 +145,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">
-                                <div class="box-header with-border">
+                                <div class="box-header with-border dontprint">
                                     <?php
                                     if (sizeof($escalas) > 0) {
                                         echo(lang('escalas_unidadehospitalar')) . ": " . htmlspecialchars($escalas[0]->unidadehospitalar_razaosocial, ENT_QUOTES, 'UTF-8');
@@ -205,6 +209,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <tr>
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th><?php echo lang('escalas_tipo_plantao');?></th>
+                                                <th><?php echo lang('escalas_tipoescala');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
                                                 <th><?php echo lang('escalas_diadasemana');?></th>
                                                 <th><?php echo lang('escalas_turno');?></th>
@@ -226,6 +231,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_dropdown($tipo_plantao, null, $escala->tipo_plantao);?>
                                                     <?php echo form_hidden('tipo_plantao_escala_id_' . $escala->id, $escala->id);?>
                                                 </td>
+                                                <?php 
+                                                    $tipos = '';
+                                                    if($escala->tipo_escala == 1){ 
+                                                        $tipos = 'Plantonista';
+                                                    } else if($escala->tipo_escala == 2){
+                                                        $tipos = 'Prescritor';
+                                                    } else {
+                                                        $tipos = 'Diarista';
+                                                    }?>
+                                                <td><?php echo htmlspecialchars($tipos, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <?php 
                                                 $turno = '';
@@ -241,8 +256,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 }
                                                 if ($hora_inicial_plantao == '19:00:00') {
                                                     $turno = 'Noite';
-                                        }
+                                                }
                                                 ?>
+                                                
                                                 <td><?php echo htmlspecialchars($diasdasemana[date('w', strtotime($escala->dataplantao))], ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>

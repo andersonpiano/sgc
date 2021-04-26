@@ -52,6 +52,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('escalas_tipo_plantao', 'tipo_plantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($tipo_plantao);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_find'))); ?>&nbsp;
@@ -89,7 +95,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_datainicialplantao');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_turno');?></th>
-                                                <th class="dontprint"><?php echo lang('escalas_action');?></th>
+                                                <th class="text-center"><?php echo lang('escalas_tipo_plantao');?></th>
+                                                <th class="dontprint"><?php //echo lang('escalas_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -114,6 +121,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars($escala->profissional_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars($turno, ENT_QUOTES, 'UTF-8'); ?></td>
+
+                                                <?php 
+                                                    $tipo_de_plantao = '';
+                                                    if($escala->tipo_plantao == 0){ 
+                                                        $tipo_de_plantao = 'Fixo';
+                                                    } else{
+                                                        $tipo_de_plantao = 'Volátil';
+                                                    }?>
+                                                <td class="text-center"><?php echo htmlspecialchars($tipo_de_plantao, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td>
                                                     <?php //echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?>
                                                 </td>

@@ -47,9 +47,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="col-md-3 col-xs-10">
                                 <div class="w3-card-2 w3-white w3-margin-bottom w3-round-large">
                                     <header class="w3-container w3-white">
-                                        <h5><span class="fa fa-lg fa-medkit"></span> Meus Plantões</h5>
-                                    </header>
-                                    <header class="w3-container w3-white">
                                         <h6><span class="fa fa-calendar"></span> Próximos plantões</h6>
                                     </header>
                                     <div class="w3-container">
