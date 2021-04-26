@@ -418,10 +418,10 @@ class Profissionais extends Admin_Controller
         //$this->form_validation->set_rules('active', 'lang:edit_user_validation_company_label', 'required');
 
         if (isset($_POST) and !empty($_POST)) {
-            if ($this->ion_auth->is_admin()) {
+            /*if ($this->ion_auth->is_admin()) {
                 if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
                     show_error($this->lang->line('error_csrf'));
-                }
+                }*/
 
                 if ($this->form_validation->run() == true) {
                     $data = array(
@@ -439,25 +439,15 @@ class Profissionais extends Admin_Controller
 
                     if ($this->profissional_model->update($profissional->id, $data)) {
                         $this->session->set_flashdata('message', 'Profissional atualizado com sucesso.');
+                        redirect('admin/especializacoes/', 'refresh');
 
-                        if ($this->ion_auth->is_admin()) {
-                            redirect('admin/especializacoes/', 'refresh');
-                        } else {
-                            redirect('admin', 'refresh');
-                        }
                     } else {
                         $this->session->set_flashdata('message', $this->ion_auth->errors());
-
-                        if ($this->ion_auth->is_admin()) {
-                            redirect('admin/especializacoes/', 'refresh');
-                        } else {
-                            redirect('admin', 'refresh');
-                        }
                     }
                 }
-            } else {
+            /*} else {
                 $this->session->set_flashdata('message', 'Somente administradores podem alterar dados de profissionais.');
-            }
+            }*/
         }
 
         // display the edit user form

@@ -111,7 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/profissionais', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                     <?php echo anchor('admin/profissionais/createuser/' . $profissional->id, lang('actions_create_user'), array('class' => 'btn btn-default btn-flat')); ?>
-                                                    <?php echo anchor('admin/profissionais/linktosector/' . $profissional->id, lang('actions_link_user_sector'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                   <!-- <?php //echo anchor('admin/profissionais/linktosector/' . $profissional->id, lang('actions_link_user_sector'), array('class' => 'btn btn-default btn-flat')); ?>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -127,10 +127,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </tbody>
                                         </table>
                                     <button style="font-size:19px; position: relative; float: right; color:green;" class="btn btn-link btn-addtosector text-center" id="add_medico_setor"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Adicionar Setor</i></button>
+                                    
                                 </div>
+                                
                             </div>
+                            
                          </div>
+                         
                     </div>
+                    
                 </section>
             </div>
 

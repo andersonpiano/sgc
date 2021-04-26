@@ -492,14 +492,14 @@ class Plantoes extends Admin_Controller
             $url_origem = '';
         }
 
-        if (!$this->ion_auth->logged_in()) {
+        /*if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para utilizar esta funcionalidade.');
             redirect('auth/login', 'refresh');
         }
         if (!$this->ion_auth->in_group($this->_permitted_groups)) {
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/profissional/plantoes/' . $url_origem, 'refresh');
-        }
+        }*/
 
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_plantoes_tooffer'), 'admin/plantoes/tooffer');
@@ -507,6 +507,7 @@ class Plantoes extends Admin_Controller
 
         /* Load Data */
         $plantao = $this->escala_model->get_escala_by_id($id);
+        $frequencias_disponiveis = array();
 
         // Testando se o plantão ainda pode ser cedido ou trocado
         $data_hora_atual = date('Y-m-d H:i:s');
@@ -538,7 +539,7 @@ class Plantoes extends Admin_Controller
 
         $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
         $profissionais_setor = $this->_get_profissionais_setor($profissionais);
-        $frequencias_disponiveis = 0;
+       
 
 
         // Removendo o profissional logado
@@ -550,15 +551,15 @@ class Plantoes extends Admin_Controller
         
 
         if (isset($_POST) && !empty($_POST)) {
-            if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
+           /* if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
                 show_error($this->lang->line('error_csrf'));
-            }
+            }*/
             
             if ($this->form_validation->run() == true) {
                 
                 $tipodepassagem = $this->input->post('tipopassagem');
                 $profissionaltroca_id = $this->input->post('profissionalsubstituto_id');
-                //$plantao_troca = $this->input->post('frequencias_disponiveis');
+                $plantao_troca = $this->input->post('frequencias_disponiveis');
                 $plantao_conflito = $this->escala_model->get_plantao_conflito($profissionaltroca_id, $plantao->dataplantao, $plantao->horainicialplantao);
 
                 $data = array();
@@ -653,23 +654,6 @@ class Plantoes extends Admin_Controller
                 
             }else {
 
-                $this->data['profissionalsubstituto_id'] = array(
-                    'name'  => 'profissionalsubstituto_id',
-                    'id'    => 'profissionalsubstituto_id',
-                    'type'  => 'select',
-                    'data' => $plantao->dataplantao,
-                    'setor' => $plantao->setor_id,
-                    'class' => 'form-control',
-                    'value' => 0
-                );
-                $this->data['frequencias_disponiveis'] = array(
-                    'name'  => 'frequencias_disponiveis',
-                    'id'    => 'frequencias_disponiveis',
-                    'type'  => 'select',
-                    'class' => 'form-control',
-                    'value' => 0
-                );
-
             }
             //$this->template->admin_render('admin/plantoes/tooffer', $this->data);
             //redirect('admin/plantoes', 'refresh');
@@ -677,7 +661,7 @@ class Plantoes extends Admin_Controller
         }
 
         // display the edit user form
-        $this->data['csrf'] = $this->_get_csrf_nonce();
+        //$this->data['csrf'] = $this->_get_csrf_nonce();
 
         // set the flash data error message if there is one
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -733,8 +717,7 @@ class Plantoes extends Admin_Controller
             'id'    => 'frequencias_disponiveis',
             'type'  => 'select',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('frequencias_disponiveis', isset($plantao_troca)),
-            'options' => $frequencias_disponiveis
+            'options' => $frequencias_disp
         );
 
         /* Load Template */
