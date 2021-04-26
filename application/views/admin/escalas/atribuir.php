@@ -253,9 +253,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     } else {
                                                         $condição = 'Despublicada';
                                                     }
+
+                                                    
                                                 ?>
-                                                <td><?php echo htmlspecialchars($condição, ENT_QUOTES, 'UTF-8'); ?></td>
-                                            </tr>
+                                                <td><?php echo htmlspecialchars($condição, ENT_QUOTES, 'UTF-8'); ?>
+                                                <button style="font-size:19px; position: relative; float: right; color:red;" class="btn btn-link btn-remover-plantao text-center" id="remover_plantao" escala=" <?php echo $escala->id; ?>"><i class="fa fa-times" aria-hidden="true"></i></i></button></span></td>
+                                                </td></tr>
         <?php endforeach;?>
                                         </tbody>
                                     </table>

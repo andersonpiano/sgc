@@ -1,6 +1,42 @@
 $(document).ready(function(){
     // Teste de geolocalização
     //navigator.geolocation.getCurrentPosition(show_map);
+    $(".btn-remover-plantao").click(function(){
+        plantao_id = $(this).attr('escala');
+		Swal.fire({
+            title: 'Tem certeza que deseja remover esse plantão?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: `Confirmar`,
+            denyButtonText: `Deu ruim`,
+            cancelButtonText: 'Cancelar',
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.value == true) {
+                $.ajax({
+                    url: '/sgc/admin/escalas/deletar_plantao/'+plantao_id,
+                    method: 'post',
+                    data: {
+                        escala: plantao_id
+                    },
+                    success: function(responseData){
+                        swal(
+                        'Sucesso!', 
+                        'Escala Publicada com Sucesso', 
+                        'success');
+                    },
+                    error: function(responseData){
+                        swal(
+                        'Sucesso!', 
+                        'Plantão deletado com Sucesso', 
+                        'success');
+                    }
+                })
+            } else {
+              //Swal.fire('Deu ruim', plantao_id, 'info')
+            }
+          })
+	});
     
     $(".btn-publicar-escala").click(function(){
         var unidade = $(this).attr('unidade');

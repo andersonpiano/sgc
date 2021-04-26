@@ -193,7 +193,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li class="<?=active_link_function('index')?>"><a href="<?php echo site_url('admin/escalas/atribuir'); ?>"><?php echo lang('menu_escalas_find'); ?></a></li>
+                                <li class="<?=active_link_function('atribuir')?>"><a href="<?php echo site_url('admin/escalas/atribuir'); ?>"><?php echo lang('menu_escalas_find'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('create')?>"><a href="<?php echo site_url('admin/escalas/create'); ?>"><?php echo lang('menu_escalas_create'); ?></a></li>
@@ -204,9 +204,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('createextra')?>"><a href="<?php echo site_url('admin/escalas/createextra'); ?>"><?php echo lang('menu_escalas_create_extra'); ?></a></li>
                             </ul>
-                            <ul class="treeview-menu">
+                            <!--<ul class="treeview-menu">
                                 <li class="<?=active_link_function('atribuir')?>"><a href="<?php echo site_url('admin/escalas'); ?>"><?php echo lang('menu_escalas_atribuir'); ?></a></li>
-                            </ul>
+                            </ul>-->
                         </li>
                         <li class="treeview <?=(
                                 active_link_function('conferencia') or

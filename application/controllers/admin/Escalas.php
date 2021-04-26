@@ -3235,6 +3235,21 @@ class Escalas extends Admin_Controller
         }
     }
 
+    public function deletar_plantao(){
+        $sucess = false;
+
+        $id = $this->input->post('escala');
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        } else {
+            if ($this->escala_model->delete(['id' => $id])){
+                $sucess = true;
+            }
+        }
+        echo json_encode(['sucess' => $sucess]);
+
+    }
+
     public function calendario()
     {
         $setor_id = 2;
