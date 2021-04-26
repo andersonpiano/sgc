@@ -532,6 +532,7 @@ class Escalas extends Admin_Controller
             $this->form_validation->set_rules('profissional_id', 'lang:escalas_profissional', 'required');
             $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
             $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
+            $this->form_validation->set_rules('tipo_plantao', 'lang:escalas_tipo_plantao', 'required');
             //$this->form_validation->set_rules('tipoescala', 'lang:escalas_tipoescala', 'required');
             //$this->form_validation->set_rules('tipovisualizacao', 'lang:escalas_tipovisualizacao', 'required');
 
@@ -542,10 +543,11 @@ class Escalas extends Admin_Controller
                 $profissional_id = $this->input->post('profissional_id');
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
+                $tipo_plantao = $this->input->post('tipo_plantao');
 
                 $profissionais = $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
 
-                $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, null);    
+                $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, null, $tipo_plantao);    
             } else {
                 $unidadehospitalar_id = 0;
                 $profissional_id = 0;
@@ -558,6 +560,12 @@ class Escalas extends Admin_Controller
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $tiposescala = $this->_get_tipos_escala();
+            $tipos_plantao = array(
+                '2' => 'Todos',
+                '0' => 'Fixo',
+                '1' => 'Volátil'
+            );
 
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
@@ -590,6 +598,14 @@ class Escalas extends Admin_Controller
                 'options' => $profissionais,
             );
 
+            $this->data['tipo_plantao'] = array(
+                'name'  => 'tipo_plantao',
+                'id'    => 'tipo_plantao',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipo_plantao'),
+                'options' => $tipos_plantao,
+            );
 
             /* Load Template */
             $this->template->admin_render('admin/escalas/listaescalaporprofissional', $this->data);
@@ -1306,7 +1322,7 @@ class Escalas extends Admin_Controller
                                 'escalas.setor_id' => $setor_id,
                                 'escalas.dataplantao >=' => $datainicial,
                                 'escalas.dataplantao <=' => $datafinal,
-                                'escalas.tipo_escala' => $tipo_escala
+                                'escalas.tipo_escala' => $tipo_escala,
                             );
                         };
 
@@ -1326,7 +1342,6 @@ class Escalas extends Admin_Controller
                                 'escalas.dataplantao >=' => $datainicial,
                                 'escalas.dataplantao <=' => $datafinal,
                                 'profissionais.vinculo_id' => null,
-
                             );
                         } else {
                             $where = array(
@@ -1334,7 +1349,6 @@ class Escalas extends Admin_Controller
                                 'escalas.setor_id' => $setor_id,
                                 'escalas.dataplantao >=' => $datainicial,
                                 'escalas.dataplantao <=' => $datafinal,
-
                             );
                         };
                 }
@@ -1435,6 +1449,7 @@ class Escalas extends Admin_Controller
                 '3' => 'Noite',
             );
             $tipos_plantao = array(
+                '2' => 'Todos',
                 '0' => 'Fixo',
                 '1' => 'Volátil',
             );

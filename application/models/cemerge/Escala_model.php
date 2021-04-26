@@ -34,7 +34,7 @@ class Escala_model extends MY_Model
     public function get_escalas_originais($where, $where_in_column = null, $where_in_values = null, $order_by = null)
     {
         // escalas.*
-        $fields = 'escalas.id, escalas.dataplantao, escalas.datafinalplantao, ';
+        $fields = 'escalas.id, escalas.dataplantao, escalas.datafinalplantao, escalas.tipo_escala, ';
         $fields .= 'escalas.horainicialplantao, escalas.horafinalplantao, escalas.duracao, ';
         $fields .= 'escalas.profissional_id, escalas.setor_id, profissionais.vinculo_id, ';
         $fields .= 'escalas.tipo_plantao, escalas.extra, ';
@@ -1209,9 +1209,9 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, $setor_id = null)
+    public function get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, $setor_id = null, $tipo_plantao = null)
     {
-        $sql = 'select escalas.id, escalas.dataplantao, escalas.datafinalplantao, ';
+        $sql = 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
         $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
         $sql .= 'escalas.duracao, escalas.profissional_id, escalas.setor_id, ';
         $sql .= 'profissionais.registro as profissional_registro, ';
@@ -1229,11 +1229,14 @@ class Escala_model extends MY_Model
         $sql .= 'from passagenstrocas ';
         $sql .= 'where escala_id = escalas.id) ';
         $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
+        if ($tipo_plantao != null && $tipo_plantao != 2){
+            $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao . ' ';
+        }
         if ($setor_id != null) {
             $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
         }
         $sql .= 'union ';
-        $sql .= 'select escalas.id, escalas.dataplantao, escalas.datafinalplantao, ';
+        $sql .= 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
         $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
         $sql .= 'escalas.duracao, escalas.profissional_id, escalas.setor_id, ';
         $sql .= 'profissionais.registro as profissional_registro, ';
@@ -1252,6 +1255,9 @@ class Escala_model extends MY_Model
         $sql .= 'where profissionais.id = ? ';
         $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
         $sql .= 'and passagenstrocas.statuspassagem = 1 ';
+        if ($tipo_plantao != 2){
+            $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao .' ';
+        }
         if ($setor_id != null) {
             $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
         }
