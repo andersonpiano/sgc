@@ -19,4 +19,13 @@ class Usuarioprofissional_model extends MY_Model {
 
         return $query->result();
     }
+
+    public function profissionais_sem_usuario(){
+        $sql = 'select id from profissionais where id not in (SELECT profissional_id FROM usuariosprofissionais) and active = 1';
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+        
+    }
 }

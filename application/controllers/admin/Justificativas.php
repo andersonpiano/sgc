@@ -54,6 +54,7 @@ class Justificativas extends Admin_Controller
             $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
             $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
+            $this::STATUS_JUSTIFICATIVA_NEGADA => 'Pendentes',
             $this::STATUS_JUSTIFICATIVA_TODAS => 'Todas',
         );
 

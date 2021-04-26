@@ -73,30 +73,53 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                 </section>
-            </div>
+            </div></div>
 
 <div id="modal_ofertar" class="modal fade">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="width: 40%">
+        <div class="modal-content">
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">X</button>
-                <center><h4 class="modal-title">Selecione o profissional</h4></center>
-            </div>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h4 class="modal-title">Selecione o profissional</h4>
+                </div>
 
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="control-label text-center">Tipo</label>
-                        <input id="oferecer_tipo" name="oferecer_tipo" class="form-control text-center" maxlength="100">
-                        <span class="help-block"></span>
-                    <label class="control-label text-center">Médico Substituto</label>
-                        <input id="oferecer_profissional" name="oferecer_profissional" class="form-control text-center" maxlength="100">
-                        <span class="help-block"></span>
-                    <label class="control-label text-center">Plantão disponivel</label>
-                        <input id="oferecer_plantao_profissional" name="oferecer_plantao_profissional" class="form-control text-center" maxlength="100">
-                        <span class="help-block"></span>
+                <div class="modal-body">
+                    <form id="form_oferecer">
+
+                        <input id="folha_id" name="folha_id" hidden>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Tipo</label>
+                            <div class="col-lg-10">
+                                    <?php echo form_dropdown($tipo_oferta);?>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Médico Substituto</label>
+                            <div class="col-lg-10">
+                                    <?php echo form_dropdown($tipo_oferta);?>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Plantão</label>
+                            <div class="col-lg-10">
+                                    <?php echo form_dropdown($tipo_oferta);?>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                        <button type="submit" id="btn_save_folha" class="btn btn-primary text-center">
+                            <i class="fa fa-money"></i>&nbsp;&nbsp;Confirmar</button>
+                            <span class="help-block"></span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>

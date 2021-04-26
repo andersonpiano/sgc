@@ -331,13 +331,27 @@ class Plantoes extends Admin_Controller
                 $this->data['proximosplantoes'] = array();
                 if ($this->data['user_type'] == 0) {
                     $this->data['proximosplantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional(
-                        $this->_profissional->id, $datainicial, $datafinal, $setor_id
+                        $this->_profissional->id, $datainicial, $datafinal, $setor_id, 2
                     );
                 } elseif ($this->data['user_type'] == 1 or $this->data['user_type'] == 2) {
                     $this->data['proximosplantoes'] = $this->escala_model->get_escalas_consolidadas_por_setor_e_usuario(
-                        $this->data['user_id'], $datainicial, $datafinal, $setor_id
+                        $this->data['user_id'], $datainicial, $datafinal, $setor_id, 2
                     );
                 }
+
+                $tipos_oferta = array(
+                    '0' => 'Cessão',
+                    '1' => 'Troca'
+                );
+
+                $this->data['tipo_oferta'] = array(
+                    'name'  => 'tipo_oferta',
+                    'id'    => 'tipo_oferta',
+                    'type'  => 'select',
+                    'class' => 'form-control',
+                    'value' => $this->form_validation->set_value('meses_select'),
+                    'options' => $tipos_oferta,
+                );
 
                 $this->load->helper('group_by');
                 $this->data['proximosplantoes'] = group_by("unidadehospitalar_razaosocial", $this->data['proximosplantoes']);

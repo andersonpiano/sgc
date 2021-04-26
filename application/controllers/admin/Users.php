@@ -74,6 +74,9 @@ class Users extends Admin_Controller
         $this->template->admin_render('admin/users/index', $this->data);
     }
 
+
+
+
     public function create()
     {
         if (!$this->ion_auth->logged_in()) {
