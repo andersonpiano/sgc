@@ -625,6 +625,16 @@ class Profissionais extends Admin_Controller
         return $unidadeshospitalares;
     }
 
+    public function profissionais_por_setor($setor){
+        
+        if ($setor and $setor!= 0) {
+            $profissionais = $this->profissional_model->get_profissionais_por_setor($setor);
+        }
+
+        echo json_encode($profissionais);
+        exit;
+    }
+
     public function _get_vinculos()
     {
         $vinculos = $this->vinculo_model->get_all();

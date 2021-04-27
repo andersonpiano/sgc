@@ -353,6 +353,20 @@ class Plantoes extends Admin_Controller
                     'options' => $tipos_oferta,
                 );
 
+                $this->data['profissional_substituto'] = array(
+                    'name'  => 'profissional_substituto',
+                    'id'    => 'profissional_substituto',
+                    'type'  => 'select',
+                    'class' => 'form-control'
+                );
+
+                $this->data['frequencias_disponiveis'] = array(
+                    'name'  => 'frequencias_disponiveis',
+                    'id'    => 'frequencias_disponiveis',
+                    'type'  => 'select',
+                    'class' => 'form-control',
+                );
+
                 $this->load->helper('group_by');
                 $this->data['proximosplantoes'] = group_by("unidadehospitalar_razaosocial", $this->data['proximosplantoes']);
 
@@ -731,7 +745,7 @@ class Plantoes extends Admin_Controller
             'id'    => 'frequencias_disponiveis',
             'type'  => 'select',
             'class' => 'form-control',
-            'options' => $frequencias_disp
+            'options' => $frequencias_disponiveis
         );
 
         /* Load Template */
@@ -739,6 +753,114 @@ class Plantoes extends Admin_Controller
         
         $this->template->admin_render('admin/plantoes/tooffer', $this->data);
         
+    }
+
+    public function tooffer_by_javascript($id)
+    {
+        $id = (int) $id;
+
+        /* Load Data */
+        $plantao = $this->escala_model->get_escala_by_id($id);
+
+
+        $json = array();
+
+        $json["status"] = 1;
+        $json["error_list"] = array();
+
+
+        // Testando se o plantão ainda pode ser cedido ou trocado
+        $data_hora_atual = date('Y-m-d H:i:s');
+        $data_hora_plantao = $plantao->dataplantao . ' ' . $plantao->horainicialplantao;
+        if ($data_hora_atual > $data_hora_plantao) {
+            $json["error_list"]["#btn_confirmar_oferta"] = "O plantão não pode mais ser cedido ou trocado. As cessões ou trocas devem ser feitas até o horário do plantão.";
+        }
+
+        // Verificando se o plantão já foi passado e está pendente de confirmação
+        $passagens_pendentes = $this->escala_model->get_passagens_trocas_pendentes($plantao->id);
+        if (sizeof($passagens_pendentes) > 0) {
+            $json["error_list"]["#btn_confirmar_oferta"] = "Já existe uma cessão ou troca pendente para este plantão.";
+        }
+
+        $this->data = array_merge($this->data, $this->checkUserType());
+
+        /* Checando se o plantão pertence ao profissional */
+        if ($this->data['user_type'] == 0) {
+            if (!($plantao->profissional_id == $this->_profissional->id) and !($plantao->passagenstrocas_profissionalsubstituto_id == $this->_profissional->id)) {
+                $json["error_list"]["#btn_confirmar_oferta"] = "Este plantão não pertence ao profissional logado. Favor acessar o sistema com o profissional do plantão.";
+            }
+        }
+        
+        $profissionais = $this->profissional_model->get_profissionais_por_setor($plantao->setor_id);
+        $profissionais_setor = $this->_get_profissionais_setor($profissionais);
+  
+        // Removendo o profissional logado
+        unset($profissionais_setor[$plantao->passagenstrocas_profissionalsubstituto_id]);
+
+                
+                $tipodepassagem = $this->input->post('tipo_oferta');
+                $profissionaltroca_id = $this->input->post('profissional_substituto');
+                $plantao_troca = $this->input->post('frequencias_disponiveis');
+                $plantao_conflito = $this->escala_model->get_plantao_conflito($profissionaltroca_id, $plantao->dataplantao, $plantao->horainicialplantao);
+
+                $data = array();
+                
+                //var_dump('CESSAO - ', $data); exit;
+                if (!empty($plantao_conflito)) {
+                    $detalhe_plantao_conflito = date('d/m/Y', strtotime($plantao_conflito->dataplantao)) . " de " . date('H:i', strtotime($plantao_conflito->horainicialplantao));
+                    $detalhe_plantao_conflito .= " às " . date('H:i', strtotime($plantao_conflito->horafinalplantao)) . " no setor " . $plantao_conflito->nomesetor;
+                    $json["error_list"]["#btn_confirmar_oferta"] = 'O profissional selecionado já possui plantão neste dia e turno. Detalhes: ' . $detalhe_plantao_conflito;
+                }
+
+                // No caso de plantão já passado por outro profissional
+                $profissional_passagem_id = $plantao->profissional_id;
+                
+                if (isset($plantao->passagenstrocas_profissionalsubstituto_id)) {
+                    $profissional_passagem_id = $plantao->passagenstrocas_profissionalsubstituto_id;
+                }
+
+                if($tipodepassagem == 0){
+                    
+                    $data = array(
+                        'escala_id' => $plantao->id,
+                        'profissional_id' => $profissional_passagem_id,
+                        'tipopassagem' => 0,
+                        'profissionalsubstituto_id' => $profissionaltroca_id,
+                        'datahorapassagem' => date('Y-m-d H:i:s'),
+                        'statuspassagem' => 0,
+                        'escalatroca_id' => 0
+                    );
+
+                } else {
+
+                    $data = array(
+                        'escala_id' => $plantao->id,
+                        'profissional_id' => $profissional_passagem_id,
+                        'tipopassagem' => 1,
+                        'profissionalsubstituto_id' => $profissionaltroca_id,
+                        'datahorapassagem' => date('Y-m-d H:i:s'),
+                        'statuspassagem' => 0,
+                        'escalatroca_id' => $plantao_troca
+                    );
+                }
+                
+                
+                if ($this->passagemtroca_model->insert($data)) {
+                    /* Send notifications */
+                    $notification_send = $this->_sendNotifications(
+                        $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO
+                    );
+                    if ($notification_send) {
+                    } else {
+                    }
+
+                } else {
+                    $json["error_list"]["#btn_confirmar_oferta"] = $this->ion_auth->errors();
+
+                }
+                
+        echo json_encode($json);
+        exit;
     }
 
     public function cederplantaoeprocessar($id)

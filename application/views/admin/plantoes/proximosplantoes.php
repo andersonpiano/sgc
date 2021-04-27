@@ -58,9 +58,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($plantao->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($plantao->horainicialplantao)) . ' - ' . date('H:i', strtotime($plantao->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="dontprint text-center">
-                                                <button type="button" class="btn btn-primary btn-oferecer fa fa-share" data-dismiss="modal" plantao_id="<?php echo $plantao->id; ?>"><?php echo ' '.lang('actions_to_offer');?></button>&nbsp;
-                                                    <?php /*echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/proximosplantoes', lang('actions_to_offer'), 'class="btn btn-primary"'); */?> &nbsp;
-                                                    <?php echo anchor('admin/plantoes/view/'.$plantao->id, ' '.lang('actions_see'), 'class="btn btn-primary fa fa-eye"'); ?> &nbsp;
+                                                <button type="button" class="btn btn-primary btn-oferecer fa fa-share" data-dismiss="modal" plantao_id="<?php echo $plantao->id; ?>" setor_id="<?php echo $plantao->setor_id; ?>" ><?php echo ' '.lang('actions_to_offer');?></button>&nbsp;
+                                                    <?php //echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/proximosplantoes', lang('actions_to_offer'), 'class="btn btn-primary"'); ?> &nbsp;
+                                                    <?php //echo anchor('admin/plantoes/view/'.$plantao->id, ' '.lang('actions_see'), 'class="btn btn-primary fa fa-eye"'); ?> &nbsp;
                                                 </td>
                                             </tr>
                                         <?php endforeach;?>
@@ -87,8 +87,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="modal-body">
                     <form id="form_oferecer">
 
-                        <input id="folha_id" name="folha_id" hidden>
-
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Tipo</label>
                             <div class="col-lg-10">
@@ -100,21 +98,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Médico Substituto</label>
                             <div class="col-lg-10">
-                                    <?php echo form_dropdown($tipo_oferta);?>
+                                    <?php echo form_dropdown($profissional_substituto);?>
                                 <span class="help-block"></span>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="sumir">
                             <label class="col-lg-2 control-label">Plantão</label>
                             <div class="col-lg-10">
-                                    <?php echo form_dropdown($tipo_oferta);?>
+                                    <?php echo form_dropdown($frequencias_disponiveis);?>
                                 <span class="help-block"></span>
                             </div>
                         </div>
 
                         <div class="form-group text-center">
-                        <button type="submit" id="btn_save_folha" class="btn btn-primary text-center">
+                        <button type="submit" id="btn_confirmar_oferta" class="btn btn-primary text-center">
                             <i class="fa fa-money"></i>&nbsp;&nbsp;Confirmar</button>
                             <span class="help-block"></span>
                         </div>

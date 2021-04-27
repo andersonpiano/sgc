@@ -2159,9 +2159,9 @@ class Escalas extends Admin_Controller
         redirect('admin/escalas/conferencia', 'refresh');
     }
 
-    public function escala_por_profissional($data, $profissional_id, $setor_id){
+    public function escala_por_profissional($data, $profissional_id, $setor_id, $tipo_plantao){
 
-        $escalas = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $data, date('Y-m-d', strtotime($data . ' + 20 days')), $setor_id);
+        $escalas = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $data, date('Y-m-d', strtotime($data . ' + 20 days')), $setor_id, $tipo_plantao);
         if (empty($escalas)){
             $plantoes = array(
                  0 => 'Profissional não possui plantões para troca',
