@@ -1295,6 +1295,7 @@ class Escalas extends Admin_Controller
                 // Realizando a busca
 
                 $tipo_escala = $this->input->post('tipos');
+                $tipos_plantao_post = $this->input->post('tipo_plantao');
 
                 if ($tipo_escala != 0){
 
@@ -1305,8 +1306,10 @@ class Escalas extends Admin_Controller
                             'escalas.dataplantao >=' => $datainicial,
                             'escalas.dataplantao <=' => $datafinal,
                             'escalas.vinculo_id' => $vinculo_id,
-                            'escalas.tipo_escala' => $tipo_escala
+                            'escalas.tipo_escala' => $tipo_escala,
                         );
+
+                        
                         } else if ($vinculo_id == 4){
                             $where = array(
                                 'unidadehospitalar_id' => $unidadehospitalar_id,
@@ -1316,14 +1319,16 @@ class Escalas extends Admin_Controller
                                 'profissionais.vinculo_id' => null,
                                 'escalas.tipo_escala' => $tipo_escala
                             );
+
                         } else {
                             $where = array(
                                 'unidadehospitalar_id' => $unidadehospitalar_id,
                                 'escalas.setor_id' => $setor_id,
                                 'escalas.dataplantao >=' => $datainicial,
                                 'escalas.dataplantao <=' => $datafinal,
-                                'escalas.tipo_escala' => $tipo_escala,
+                                'escalas.tipo_escala' => $tipo_escala
                             );
+
                         };
 
                 } else {
@@ -1333,23 +1338,26 @@ class Escalas extends Admin_Controller
                             'escalas.setor_id' => $setor_id,
                             'escalas.dataplantao >=' => $datainicial,
                             'escalas.dataplantao <=' => $datafinal,
-                            'escalas.vinculo_id' => $vinculo_id,
+                            'escalas.vinculo_id' => $vinculo_id
                         );
+
                         } else if ($vinculo_id == 4){
                             $where = array(
                                 'unidadehospitalar_id' => $unidadehospitalar_id,
                                 'escalas.setor_id' => $setor_id,
                                 'escalas.dataplantao >=' => $datainicial,
                                 'escalas.dataplantao <=' => $datafinal,
-                                'profissionais.vinculo_id' => null,
+                                'profissionais.vinculo_id' => null
                             );
+
                         } else {
                             $where = array(
                                 'unidadehospitalar_id' => $unidadehospitalar_id,
                                 'escalas.setor_id' => $setor_id,
                                 'escalas.dataplantao >=' => $datainicial,
-                                'escalas.dataplantao <=' => $datafinal,
+                                'escalas.dataplantao <=' => $datafinal
                             );
+
                         };
                 }
                 
@@ -1367,6 +1375,11 @@ class Escalas extends Admin_Controller
                 if (!is_null($turno)) {
                     $where['escalas.horainicialplantao'] = $turno;
                 }
+
+
+                if ($tipos_plantao_post != 2){
+                    $where['escalas.tipo_plantao'] = $tipos_plantao_post;
+                };
 
                 // Dias da semana filtrados
                 $dias_semana = array();
@@ -1453,6 +1466,10 @@ class Escalas extends Admin_Controller
                 '0' => 'Fixo',
                 '1' => 'Volátil',
             );
+            $tipo_plantao = array(
+                '0' => 'Fixo',
+                '1' => 'Volátil',
+            );
 
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
@@ -1502,6 +1519,13 @@ class Escalas extends Admin_Controller
                 'type'  => 'select',
                 'class' => 'form-control',
                 'options' => $tipos_plantao,
+            );
+            $this->data['tipo_plantao2'] = array(
+                'name'  => 'tipo_plantao2',
+                'id'    => 'tipo_plantao2',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'options' => $tipo_plantao,
             );
             $this->data['vinculo'] = array(
                 'name'  => 'vinculo',

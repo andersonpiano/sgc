@@ -82,6 +82,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <section class="content">
                 <div class="print-header row">
                     <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
                     <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista de Frequência</h3></div>
                 </div>
                     <div class="row">

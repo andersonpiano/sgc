@@ -72,6 +72,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('id' => 'btn_submit', 'name' => 'btn_submit', 'type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_find'))); ?>
+                                                    <a href="<?php echo(current_url()); ?>" onclick="window.print(); return false;" class="btn btn-default btn-flat">Imprimir</a>&nbsp;
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/frequencias/listafrequenciasemescala', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
                                                 </div>
@@ -85,6 +86,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
 
                 <section class="content">
+                    <div class="print-header row">
+                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars($escalas[0]->setor_nome, ENT_QUOTES, 'UTF-8'); ?></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista frequência por Setor</h3></div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box">

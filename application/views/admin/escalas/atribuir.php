@@ -22,6 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="print-header row">
                         <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
                         <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars($escalas[0]->setor_nome, ENT_QUOTES, 'UTF-8'); ?></div>
                     </div>
                 <section class="content dontprint">
                     <div class="row dontprint">
@@ -57,6 +58,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
                                                 <?php echo form_dropdown($this->data['tipos']);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_tipo_plantao', 'tipo_plantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($tipo_plantao);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -228,8 +235,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_hidden('escala_id_' . $escala->id, $escala->id);?>
                                                 </td>
                                                 <td>
-                                                    <?php echo form_dropdown($tipo_plantao, null, $escala->tipo_plantao);?>
-                                                    <?php echo form_hidden('tipo_plantao_escala_id_' . $escala->id, $escala->id);?>
+                                                    <?php echo form_dropdown($this->data['tipo_plantao2']);?>
+                                                    <?php //echo form_hidden('tipo_plantao_escala_id_' . $escala->id, $escala->id);?>
                                                 </td>
                                                 <?php 
                                                     $tipos = '';
