@@ -648,7 +648,7 @@ class Escalas extends Admin_Controller
                     'escalas.dataplantao <=' => $datafinal,
                 );
 
-                $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal);
+                $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal, 1);
 
                 /** Processando batidas de 13:00:00 de saída e entrada automática */
                 $size = count($this->data['escalas']);
@@ -1297,42 +1297,7 @@ class Escalas extends Admin_Controller
                 $tipo_escala = $this->input->post('tipos');
                 $tipos_plantao_post = $this->input->post('tipo_plantao');
 
-                if ($tipo_escala != 0){
-
-                    if ($vinculo_id == 1 || $vinculo_id == 2) {
-                        $where = array(
-                            'unidadehospitalar_id' => $unidadehospitalar_id,
-                            'escalas.setor_id' => $setor_id,
-                            'escalas.dataplantao >=' => $datainicial,
-                            'escalas.dataplantao <=' => $datafinal,
-                            'escalas.vinculo_id' => $vinculo_id,
-                            'escalas.tipo_escala' => $tipo_escala,
-                        );
-
-                        
-                        } else if ($vinculo_id == 4){
-                            $where = array(
-                                'unidadehospitalar_id' => $unidadehospitalar_id,
-                                'escalas.setor_id' => $setor_id,
-                                'escalas.dataplantao >=' => $datainicial,
-                                'escalas.dataplantao <=' => $datafinal,
-                                'profissionais.vinculo_id' => null,
-                                'escalas.tipo_escala' => $tipo_escala
-                            );
-
-                        } else {
-                            $where = array(
-                                'unidadehospitalar_id' => $unidadehospitalar_id,
-                                'escalas.setor_id' => $setor_id,
-                                'escalas.dataplantao >=' => $datainicial,
-                                'escalas.dataplantao <=' => $datafinal,
-                                'escalas.tipo_escala' => $tipo_escala
-                            );
-
-                        };
-
-                } else {
-                    if ($vinculo_id == 1 || $vinculo_id == 2) {
+                     if ($vinculo_id == 1 || $vinculo_id == 2) {
                         $where = array(
                             'unidadehospitalar_id' => $unidadehospitalar_id,
                             'escalas.setor_id' => $setor_id,
@@ -1359,9 +1324,6 @@ class Escalas extends Admin_Controller
                             );
 
                         };
-                }
-                
-                
 
                 // Se escolhido o turno
                 $turno = null;
@@ -1379,6 +1341,10 @@ class Escalas extends Admin_Controller
 
                 if ($tipos_plantao_post != 2){
                     $where['escalas.tipo_plantao'] = $tipos_plantao_post;
+                };
+
+                if ($tipo_escala != 0){
+                    $where['escalas.tipo_escala'] = $tipo_escala;
                 };
 
                 // Dias da semana filtrados
@@ -2960,7 +2926,8 @@ class Escalas extends Admin_Controller
                 'datafinalplantao' => $datafinalplantao,
                 'horainicialplantao' => $horainicialplantao,
                 'horafinalplantao' => $horafinalplantao,
-                'tipo_escala' => $tipo
+                'tipo_escala' => $tipo,
+                'tipo_plantao' => 1
             );
 
             $datainicial = new DateTime($datainicialplantao);
@@ -3002,7 +2969,8 @@ class Escalas extends Admin_Controller
                     'horainicialplantao' => $hrinicialplantao,
                     'horafinalplantao' => $hrfinalplantao,
                     'duracao' => $duracao,
-                    'tipo_escala' => $tipo
+                    'tipo_escala' => $tipo,
+                    'tipo_plantao' => 1
                 );
                 $success = $this->escala_model->insert($insert_data);
             }

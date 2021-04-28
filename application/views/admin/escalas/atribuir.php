@@ -235,7 +235,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_hidden('escala_id_' . $escala->id, $escala->id);?>
                                                 </td>
                                                 <td>
-                                                    <?php echo form_dropdown($this->data['tipo_plantao2']);?>
+                                                    <?php echo form_dropdown($this->data['tipo_plantao2'], null, $escala->tipo_plantao);?>
                                                     <?php //echo form_hidden('tipo_plantao_escala_id_' . $escala->id, $escala->id);?>
                                                 </td>
                                                 <?php 
