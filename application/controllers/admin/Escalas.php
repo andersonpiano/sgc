@@ -1290,6 +1290,7 @@ class Escalas extends Admin_Controller
 
                 $setores = $this->_get_setores($unidadehospitalar_id);
                 $profissionais = $this->_get_profissionais($setor_id);
+                $tipovisualizacao = $this->input->post('tipovisualizacao');
                 //$profissionais = $this->get_profissionais($setor_id);
 
                 // Realizando a busca
@@ -1375,7 +1376,36 @@ class Escalas extends Admin_Controller
                     $where_in_column = 'dayofweek(escalas.dataplantao)';
                 }
 
-                $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, $where_in_column, $dias_semana, 'dataplantao, horainicialplantao');
+                //$this->data['escalas'] = $this->escala_model->get_escalas_originais($where, $where_in_column, $dias_semana, 'dataplantao, horainicialplantao');
+
+                // Lista
+                if ($tipovisualizacao == 0) {
+                    $this->data['escalas'] = $this->escala_model->get_escalas_originais($where, $where_in_column, $dias_semana, 'dataplantao, horainicialplantao'); // dataplantao, horainicialplantao');
+                } /*elseif ($tipoescala == 1 and $tipovisualizacao == 0) {
+                    $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas($where, null, null, 'profissional_nome, dataplantao'); //, dataplantao, horainicialplantao');
+                } elseif ($tipoescala == 2 and $tipovisualizacao == 0) {
+                    $this->data['escalas'] = $this->escala_model->get_passagens_trocas($where, null, null, 'profissional_nome, dataplantao'); //, dataplantao, horainicialplantao');
+                }*/
+
+                // Calendário
+                else {
+                    //if ($tipoescala == 0) {
+                        $this->data['escalas'] = $this->escala_model->get_escalas_originais_cal($setor_id, $datainicial, $datafinal);
+                    /*} elseif ($tipoescala == 1) {
+                        $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas_cal($setor_id, $datainicial, $datafinal);
+                    } elseif ($tipoescala == 2) {
+                        $this->data['escalas'] = $this->escala_model->get_passagens_trocas_cal($setor_id, $datainicial, $datafinal);
+                        //$this->data['escalas'] = null;
+                    }*/
+                    $this->load->library('calendar');
+                    if ($this->calendar->init($datainicial, $datafinal, $this->data['escalas'])) {
+                        $this->data["calendario"] = $this->calendar->generate();
+                    } else {
+                        $this->data["calendario"] = "Não há dados a exibir ou este relatório não é possível de exibir no calendário. Tente o tipo de visualização lista.";
+                    }
+                }
+
+
             } else {
                 $datainicial = date('Y-m-d', strtotime('-1 day'));
                 $datafinal = date('Y-m-d', strtotime('+1 day'));
@@ -1398,6 +1428,15 @@ class Escalas extends Admin_Controller
             );
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $tiposvisualizacao = $this->_get_tipos_visualizacao();
+            $this->data['tipovisualizacao'] = array(
+                'name'  => 'tipovisualizacao',
+                'id'    => 'tipovisualizacao',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipovisualizacao'),
+                'options' => $tiposvisualizacao,
+            );
             $tipos = array(
                 '0' => 'Todos',
                 '1' => 'Plantonista',
@@ -1486,9 +1525,9 @@ class Escalas extends Admin_Controller
                 'class' => 'form-control',
                 'options' => $tipos_plantao,
             );
-            $this->data['tipo_plantao2'] = array(
-                'name'  => 'tipo_plantao2',
-                'id'    => 'tipo_plantao2',
+            $this->data['tipos_plantao'] = array(
+                'name'  => 'tipos_plantao',
+                'id'    => 'tipos_plantao',
                 'type'  => 'select',
                 'class' => 'form-control',
                 'options' => $tipo_plantao,
@@ -2723,7 +2762,7 @@ class Escalas extends Admin_Controller
                     }
                 };
             } else {
-                //Manhã
+                //Manhã/Tarde
                 for ($i = $datainicial; $i <= $datafinal; $i->modify('+1 day')) {
                     $hrinicialplantaoM = $horainicialM->format('H:i:s');
                     $hrfinalplantaoM = $horafinalM->format('H:i:s');
@@ -2739,13 +2778,14 @@ class Escalas extends Admin_Controller
                             'dataplantao' => $dtinicialplantaoM,
                             'datafinalplantao' => $dtfinalplantaoM,
                             'horainicialplantao' => $hrinicialplantaoM,
-                            'horafinalplantao' => $hrfinalplantaoM,
+                            'horafinalplantao' => '19:00:00',
                             'duracao' => $duracaoM,
                             'tipo_escala' => $tipo
                         );
                         $success = $this->escala_model->insert($insert_dataM);
                         //var_dump($insert_dataM); exit; 
                     }
+                    /*
                     $hrinicialplantaoT = $horainicialT->format('H:i:s');
                     $hrfinalplantaoT = $horafinalT->format('H:i:s');
                     $dtinicialplantaoT = $i->format('Y-m-d');
@@ -2763,7 +2803,7 @@ class Escalas extends Admin_Controller
                         );
                         $success = $this->escala_model->insert($insert_dataT);
                         //var_dump($insert_dataT); exit;
-                    }
+                    }*/
                 };
             }
             //var_dump($success); exit;

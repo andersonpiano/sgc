@@ -520,14 +520,14 @@ class Plantoes extends Admin_Controller
             $url_origem = '';
         }
 
-        /*if (!$this->ion_auth->logged_in()) {
+        if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para utilizar esta funcionalidade.');
             redirect('auth/login', 'refresh');
         }
         if (!$this->ion_auth->in_group($this->_permitted_groups)) {
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/profissional/plantoes/' . $url_origem, 'refresh');
-        }*/
+        }
 
         /* Breadcrumbs */
         $this->breadcrumbs->unshift(2, lang('menu_plantoes_tooffer'), 'admin/plantoes/tooffer');
@@ -579,9 +579,9 @@ class Plantoes extends Admin_Controller
         
 
         if (isset($_POST) && !empty($_POST)) {
-           /* if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
+           if ($this->_valid_csrf_nonce() === false or $id != $this->input->post('id')) {
                 show_error($this->lang->line('error_csrf'));
-            }*/
+            }
             
             if ($this->form_validation->run() == true) {
                 
@@ -689,7 +689,7 @@ class Plantoes extends Admin_Controller
         }
 
         // display the edit user form
-        //$this->data['csrf'] = $this->_get_csrf_nonce();
+        $this->data['csrf'] = $this->_get_csrf_nonce();
 
         // set the flash data error message if there is one
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));

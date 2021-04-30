@@ -72,7 +72,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/frequencias_por_profissional.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/proximosplantoes.js'); ?>"></script>
-        
 <?php endif; ?>
 
 <?php if ($this->router->fetch_class() == 'proximosplantoes') : ?>

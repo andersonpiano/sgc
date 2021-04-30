@@ -110,7 +110,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_save'))); ?>
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/profissionais', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
-                                                    <?php echo anchor('admin/profissionais/createuser/' . $profissional->id, lang('actions_create_user'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                    <?php //echo anchor('admin/profissionais/createuser/' . $profissional->id, lang('actions_create_user'), array('class' => 'btn btn-default btn-flat')); ?>
                                                    <!-- <?php //echo anchor('admin/profissionais/linktosector/' . $profissional->id, lang('actions_link_user_sector'), array('class' => 'btn btn-default btn-flat')); ?>-->
                                                 </div>
                                             </div>

@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     if (document.getElementById("sumir")){
-        document.getElementById("sumir").style.display = 'block';
+        document.getElementById("sumir").style.display = 'none';
     }
     
 
