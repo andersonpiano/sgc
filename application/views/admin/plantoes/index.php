@@ -151,7 +151,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td class="text-center"><?php echo (($plantao->dt_frq_saida) ? htmlspecialchars(date('H:i', strtotime($plantao->dt_frq_saida)), ENT_QUOTES, 'UTF-8') : ' - '); ?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/create/index.php?'.'plantao_id='.$plantao->id.'&setor_id='.$plantao->idsetor.'&profissional_id='.'&data_plantao='.$plantao->dataplantao.'&hora_in='.date('H:i', strtotime($plantao->dt_frq_entrada)).'&hora_out='.date('H:i', strtotime($plantao->dt_frq_saida)), lang('actions_justificativa'), 'class="btn btn-primary"'); ?> &nbsp;
-                                                    <?php echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/index', lang('actions_to_offer'), 'class="btn btn-primary"'); ?> &nbsp;
+                                                    <?php //echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/index', lang('actions_to_offer'), 'class="btn btn-primary"'); ?> &nbsp;
                                                     <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-default"'); ?>
                                                 </td>
                                             </tr>
@@ -397,7 +397,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('H:i', strtotime($escala->horainicialplantao)) . " a " . date('H:i', strtotime($escala->horafinalplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="dontprint text-center">
-                                                    <?php echo anchor('admin/plantoes/toofferbyadmin/'.$escala->id, lang('actions_to_give_in'), 'class="btn btn-primary" target="_blank"'); ?> &nbsp;
+                                                    <?php //echo anchor('admin/plantoes/toofferbyadmin/'.$escala->id, lang('actions_to_give_in'), 'class="btn btn-primary" target="_blank"'); ?> &nbsp;
                                                     <?php echo anchor('admin/plantoes/exchangebyadmin/'.$escala->id, lang('actions_to_exchange'), 'class="btn btn-primary" target="_blank"'); ?> &nbsp;
                                                 </td>
                                             </tr>

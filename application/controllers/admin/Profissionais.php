@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Profissionais extends Admin_Controller
 {
-    private $_permitted_groups = array('admin', 'coordenadorplantao', 'sac');
-    private $_admin_groups = array('admin', 'coordenadorplantao', 'sac');
+    private $_permitted_groups = array('admin', 'coordenadorplantao', 'sac', 'profissionais');
+    private $_admin_groups = array('admin', 'coordenadorplantao', 'sac', 'profissionais');
 
     public function __construct()
     {
@@ -223,14 +223,14 @@ class Profissionais extends Admin_Controller
 
     public function createuser($id)
     {
-        /*if (!$this->ion_auth->logged_in()) {
+        if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os setores.');
             redirect('auth/login', 'refresh');
         }
         if (!$this->ion_auth->in_group($this->_admin_groups)) {
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/dashboard', 'refresh');
-        }*/
+        }
 
         $id = (int) $id;
 
@@ -247,13 +247,13 @@ class Profissionais extends Admin_Controller
             $group = array('3'); // Sets user to profissional group
 
             // Validate status
-            /*if ($profissional->active == 0) {
+            if ($profissional->active == 0) {
                 $this->session->set_flashdata('message', 'O profissional está inativo. Ative-o primeiro e depois crie seu usuário.');
                 redirect('admin/profissionais/edit/' . $id, 'refresh');
-            }*/
+            }
 
             // Validate email
-            /*if (trim($profissional->email) == "@") {
+            if (trim($profissional->email) == "@") {
                 $this->session->set_flashdata('message', 'O profissional não possui um e-mail válido cadastrado.');
                 redirect('admin/profissionais/edit/' . $id, 'refresh');
             }
@@ -262,7 +262,7 @@ class Profissionais extends Admin_Controller
             if ($this->ion_auth->email_check($email)) {
                 $this->session->set_flashdata('message', 'Já existe um usuário criado para este profissional. Favor editá-lo.');
                 redirect('admin/profissionais/edit/' . $id, 'refresh');
-            }*/
+            }
 
             $userCreated = $this->ion_auth->register($username, $password, $email, $additional_data, $group);
 
@@ -270,20 +270,20 @@ class Profissionais extends Admin_Controller
                 // Vincular usuário ao profissional
                 $this->load->model('cemerge/usuarioprofissional_model');
                 $usuarioprofissional = $this->usuarioprofissional_model->insert(array('profissional_id' => $id, 'user_id' => $userCreated));
-                /*if ($usuarioprofissional) {
+                if ($usuarioprofissional) {
                     $this->session->set_flashdata('message', 'Usuarío criado e vinculado ao profissional com sucesso.');
                 } else {
                     $this->session->set_flashdata('message', 'Houve um erro ao vincular o usuário ao profissional. Tente novamente.');
-                }*/
+                }
             } else {
-                //$this->session->set_flashdata('message', 'Houve um erro ao criar o usuário. Tente novamente.');
+                $this->session->set_flashdata('message', 'Houve um erro ao criar o usuário. Tente novamente.');
             }
         } else {
-            //$this->session->set_flashdata('message', 'Não foi encontrado profissional com o código informado ou o profissional não possui CPF cadastrado.');
+            $this->session->set_flashdata('message', 'Não foi encontrado profissional com o código informado ou o profissional não possui CPF cadastrado.');
         }
 
         /* Redirect to edit page */
-        //redirect('admin/profissionais/edit/' . $id, 'refresh');
+        redirect('admin/profissionais/edit/' . $id, 'refresh');
     }
 
     public function linktosector($id)
@@ -626,6 +626,15 @@ class Profissionais extends Admin_Controller
     }
 
     public function profissionais_por_setor($setor){
+
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os profissionais.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('auth/login', 'refresh');
+        }
         
         if ($setor and $setor!= 0) {
             $profissionais = $this->profissional_model->get_profissionais_por_setor($setor);
