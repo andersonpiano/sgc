@@ -68,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li class="<?=active_link_function('cessoestrocas')?>"><a href="<?php echo site_url('admin/profissional/plantoes/cessoestrocas'); ?>"><?php echo lang('menu_plantoes_exchange'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
-                                <li class="<?=active_link_function('frequencia')?>"><a href="<?php echo site_url('admin/plantoes/frequencia'); ?>"><?php echo lang('menu_plantoes_frequencia'); ?></a></li>
+                                <li class="<?=active_link_controller('escalas/buscarfrequenciaprofissional')?>"><a href="<?php echo site_url('admin/escalas/buscarfrequenciaprofissional'); ?>"><?php echo lang('menu_plantoes_frequencia'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('oportunidade')?>"><a href="<?php echo site_url('admin/escalas/listaroportunidades'); ?>"><?php echo lang('menu_oportunidades'); ?></a></li>

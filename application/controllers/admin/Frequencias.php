@@ -191,6 +191,75 @@ class Frequencias extends Admin_Controller
         $this->template->admin_render('admin/frequencias/listafrequenciaporprofissional', $this->data);
     }
 
+    public function buscarfrequenciamedico()
+    {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
+            redirect('auth/login', 'refresh');
+        }
+
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Reset */
+        $this->data['frequencias'] = array();
+
+        /* Variables */
+        $this->data['diasdasemana'] = $this->_diasdasemana;
+
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $this->load->model('cemerge/profissional_model');
+        $userId = $this->ion_auth->user()->row()->id;
+
+        /* Validate form input */        
+        $this->form_validation->set_rules('datainicial', 'lang:frequencias_datainicialplantao', 'required');
+        $this->form_validation->set_rules('datafinal', 'lang:frequencias_datafinalplantao', 'required');
+
+        if ($this->form_validation->run() == true) {
+            $unidadehospitalar_id = 1;
+            $profissional_id = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+            if ($profissional_id) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $profissional_id[0]->profissional_id])[0];
+            }
+            $datainicial = $this->input->post('datainicial');
+            $datafinal = $this->input->post('datafinal');
+
+            $this->load->model('cemerge/escala_model');
+            $frequencias = $this->escala_model->get_frequencias_por_profissional($unidadehospitalar_id, $this->_profissional->id, $datainicial, $datafinal);
+            $this->load->helper('group_by');
+            $this->data['frequencias'] = group_by('nome_profissional_frq', $frequencias);
+        } else {
+            $datainicial = date('Y-m-01');
+            $datafinal = date('Y-m-t');
+            $unidadehospitalar_id = 1;
+            $profissional_id = '';
+            $this->session->set_flashdata('message', validation_errors());
+        }
+
+        $this->data['datainicial'] = array(
+            'name'  => 'datainicial',
+            'id'    => 'datainicial',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $datainicial,
+        );
+        $this->data['datafinal'] = array(
+            'name'  => 'datafinal',
+            'id'    => 'datafinal',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $datafinal,
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/frequencias/listafrequenciamedico', $this->data);
+    }
+
     public function buscarfrequenciasemescala()
     {
         if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {

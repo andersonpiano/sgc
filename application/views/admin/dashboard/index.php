@@ -272,7 +272,7 @@ if ($url_exist) {
                 $text = 'O plantão do dia ' . date('d/m/Y', strtotime($justificativa->dataplantao));
                 $text .= ' Inicio: ' . date('H:i', strtotime($justificativa->horainicialplantao));
                 $text .= ' Fim ' . date('H:i', strtotime($justificativa->horafinalplantao));
-                $text .= ' Esta aguardando justificativa';
+                $text .= ' Esta aguardando justificativa. Clique aqui para Justificar';
                 
                 echo($text);
             ?></a>

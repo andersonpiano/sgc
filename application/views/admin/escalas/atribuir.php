@@ -215,6 +215,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </div>
         <?php endforeach;?>
                                 </div>
+                                </section>
     <?php else : ?>
         
 <?php if ($tipovisualizacao['value'] == 1) : ?>
@@ -225,20 +226,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Setor: ".$this->data['setor_nome']->nome); ?></h3></div>
     </div>
         <?php
-        if (isset($calendario)) {
-            echo($calendario);
+        if (isset($this->data["calendario"])) {
+            echo($this->data["calendario"]);
         }
         ?>
     </section>
 <?php endif;?>
 
 <?php if ($tipovisualizacao['value'] == 0) : ?>
-
+    <section>
                                 <div class="box-body">
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th><?php echo lang('escalas_profissional');?></th>
+                                                <th></th>
                                                 <th><?php echo lang('escalas_tipo_plantao');?></th>
                                                 <th><?php echo lang('escalas_tipoescala');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
@@ -257,6 +259,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo form_hidden('hora_plantao_'.$escala->id, $escala->horainicialplantao);?>
                                                     <?php echo form_dropdown($profissional_id, null, $escala->profissional_id);?>
                                                     <?php echo form_hidden('escala_id_' . $escala->id, $escala->id);?>
+                                                    </td>
+                                                    <td><button style="position: relative; float: right; color:red;" class="btn btn-link btn-remover-medico text-center" id="btn-remover-medico" escala=" <?php echo $escala->id; ?>" profissional=" <?php echo $escala->profissional_id; ?>"><i class="fa fa-eraser" aria-hidden="true"></i></button></span>
                                                 </td>
                                                 <td>
                                                     <?php echo form_dropdown($this->data['tipos_plantao'], null, $escala->tipo_plantao);?>

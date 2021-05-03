@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 		var setor = $(this).attr('setor_id');
 		var plantao = $(this).attr('plantao_id');
-        var url = '/sgc/admin/profissionais/profissionais_por_setor/' + setor;
+        var url = '/sgc/admin/profissionais/profissionais_por_setor/' + setor + '/' + plantao;
 
         $.ajax({
             url: url,

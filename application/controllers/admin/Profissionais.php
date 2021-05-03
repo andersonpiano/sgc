@@ -625,7 +625,7 @@ class Profissionais extends Admin_Controller
         return $unidadeshospitalares;
     }
 
-    public function profissionais_por_setor($setor){
+    public function profissionais_por_setor($setor, $plantao){
 
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para listar os profissionais.');
@@ -637,9 +637,9 @@ class Profissionais extends Admin_Controller
         }
         
         if ($setor and $setor!= 0) {
-            $profissionais = $this->profissional_model->get_profissionais_por_setor($setor);
+            $profissionais = $this->profissional_model->get_profissionais_por_setor_disponiveis($setor, $plantao);
         }
-
+        //var_dump($profissionais); exit;
         echo json_encode($profissionais);
         exit;
     }

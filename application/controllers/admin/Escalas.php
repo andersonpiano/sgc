@@ -564,7 +564,7 @@ class Escalas extends Admin_Controller
             $tipos_plantao = array(
                 '2' => 'Todos',
                 '0' => 'Fixo',
-                '1' => 'Volátil'
+                '1' => 'Extra'
             );
 
             $this->data['datainicial'] = array(
@@ -721,6 +721,166 @@ class Escalas extends Admin_Controller
 
             /* Load Template */
             $this->template->admin_render('admin/escalas/listaescalaprocessada', $this->data);
+        }
+    }
+    public function buscarfrequenciaprofissional()
+    {
+        if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
+            redirect('auth/login', 'refresh');
+        } else {
+            /* Breadcrumbs */
+            $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+            /* Reset */
+            $this->data['escalas'] = array();
+
+            /* Variables */
+            $this->data['diasdasemana'] = $this->_diasdasemana;
+            $this->load->model('cemerge/usuarioprofissional_model');
+
+            $userId = $this->ion_auth->user()->row()->id;
+            $profissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+            if ($profissional) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $profissional[0]->profissional_id])[0];
+                $profissional_id = $this->_profissional->id;
+            }
+
+            
+            /* Validate form input */
+            $this->form_validation->set_rules('unidadehospitalar2_id', 'lang:escalas_unidadehospitalar', 'required');
+            //$this->form_validation->set_rules('setor_id', 'lang:escalas_unidadehospitalar', 'required');
+            $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
+            $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
+
+            if ($this->form_validation->run() == true) {
+                $unidadehospitalar_id = $this->input->post('unidadehospitalar2_id');
+                $setor_id = $this->input->post('setor_id');
+                $datainicial = $this->input->post('datainicial');
+                $datafinal = $this->input->post('datafinal');
+                $tipo_escala = $this->input->post('tipos');
+                $order = $this->input->post('ordem');
+
+                $setores = $this->_get_setores_profissional($this->_profissional->id);
+
+                // Realizando a busca
+                $where = array(
+                    'unidadehospitalar_id' => $unidadehospitalar_id,
+                    'escalas.setor_id' => $setor_id,
+                    'escalas.dataplantao >=' => $datainicial,
+                    'escalas.dataplantao <=' => $datafinal,
+                    'escalas.tipo_escala' => $tipo_escala
+                );
+
+                if ($setor_id <> '' || $setor_id <> 0){
+                    $this->data['escalas'] = $this->escala_model->get_escala_processada_setor($profissional_id, $setor_id, $datainicial, $datafinal, $order);
+                } else {
+                    $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal, $order);
+                }
+
+                //var_dump($this->data['escalas']); exit;
+                /** Processando batidas de 13:00:00 de saída e entrada automática */
+                $size = count($this->data['escalas']);
+                for ($i = 0; $i <= $size-1; $i++) {
+                    $this->data['escalas'][$i]->batidasaida_inserida = false;
+                    $this->data['escalas'][$i]->batidaentrada_inserida = false;
+                    if (isset($this->data['escalas'][$i+1])) {
+                        if ($this->data['escalas'][$i]->horafinalplantao == '13:00:00'
+                            && $this->data['escalas'][$i]->nome_profissional == $this->data['escalas'][$i+1]->nome_profissional
+                            && $this->data['escalas'][$i]->dataplantao == $this->data['escalas'][$i+1]->dataplantao
+                            && is_null($this->data['escalas'][$i]->batidasaida)
+                            && !is_null($this->data['escalas'][$i]->batidaentrada)
+                        ) {
+                            $this->data['escalas'][$i]->batidasaida = '13:00:00';
+                            $this->data['escalas'][$i]->batidasaida_inserida = true;
+                        }
+                    }
+                    if (isset($this->data['escalas'][$i-1])) {
+                        if ($this->data['escalas'][$i]->horainicialplantao == '13:00:00'
+                            && $this->data['escalas'][$i]->nome_profissional == $this->data['escalas'][$i-1]->nome_profissional
+                            && $this->data['escalas'][$i]->dataplantao == $this->data['escalas'][$i-1]->dataplantao
+                            && is_null($this->data['escalas'][$i]->batidaentrada)
+                            && !is_null($this->data['escalas'][$i]->batidasaida)
+                        ) {
+                            $this->data['escalas'][$i]->batidaentrada = '13:00:00';
+                            $this->data['escalas'][$i]->batidaentrada_inserida = true;
+                        }
+                    }
+                }
+            } else {
+                $datainicial = date('Y-m-01');
+                $datafinal = date('Y-m-t');
+                $unidadehospitalar_id = '';
+                $profissional_id = $this->_profissional->id;
+                $setores = $this->_get_setores_profissional($this->_profissional->id);
+            }
+
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+            $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            
+            $tipos = array(
+                '0' => 'Todos',
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
+
+            $ordem = array(
+                '1' => 'Normal',
+                '2' => 'Setor',
+                '3' => 'Médico',
+                '4' => 'Dia da Semana'
+            );
+
+            $this->data['ordem'] = array(
+                'name'  => 'ordem',
+                'id'    => 'ordem',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('ordem'),
+                'options' => $ordem,
+            );
+
+            $this->data['datainicial'] = array(
+                'name'  => 'datainicial',
+                'id'    => 'datainicial',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datainicial,
+            );
+            $this->data['datafinal'] = array(
+                'name'  => 'datafinal',
+                'id'    => 'datafinal',
+                'type'  => 'date',
+                'class' => 'form-control',
+                'value' => $datafinal,
+            );
+            $this->data['unidadehospitalar2_id'] = array(
+                'name'  => 'unidadehospitalar2_id',
+                'id'    => 'unidadehospitalar2_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('unidadehospitalar2_id'),
+                'options' => $unidadeshospitalares,
+            );
+            $this->data['setor_id'] = array(
+                'name'  => 'setor_id',
+                'id'    => 'setor_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('setor_id'),
+                'options' => $setores,
+            );
+
+            /* Load Template */
+            $this->template->admin_render('admin/escalas/listafrequenciaprofissional', $this->data);
         }
     }
 
@@ -1291,7 +1451,6 @@ class Escalas extends Admin_Controller
                 $setores = $this->_get_setores($unidadehospitalar_id);
                 $profissionais = $this->_get_profissionais($setor_id);
                 $tipovisualizacao = $this->input->post('tipovisualizacao');
-                //$profissionais = $this->get_profissionais($setor_id);
 
                 // Realizando a busca
 
@@ -1469,11 +1628,11 @@ class Escalas extends Admin_Controller
             $tipos_plantao = array(
                 '2' => 'Todos',
                 '0' => 'Fixo',
-                '1' => 'Volátil',
+                '1' => 'Extra',
             );
             $tipo_plantao = array(
                 '0' => 'Fixo',
-                '1' => 'Volátil',
+                '1' => 'Extra',
             );
 
             $this->data['datainicial'] = array(
@@ -3171,7 +3330,7 @@ class Escalas extends Admin_Controller
                         if ((int)$escala->horainicialplantao > (int)$escala->horafinalplantao) {
                             $dtfinalplantao = date('Y-m-d', strtotime($dtfinalplantao . ' +1 day'));
                         }
-                        // Testando se é um plantão fixo ou volátil
+                        // Testando se é um plantão fixo ou Extra
                         // Plantões fixos são copiados, plantões voláteis são copiados sem profissional definido
                         if ($escala->tipo_plantao == 1) {
                             $escala->profissional_id = 0;
@@ -3538,7 +3697,7 @@ class Escalas extends Admin_Controller
         $setores_por_unidade = $this->setor_model->get_setores_por_profissional($profissional_id);
 
         $setores = array(
-            '' => 'Selecione um setor',
+            '' => 'Todos',
         );
         foreach ($setores_por_unidade as $setor) {
             $setores[$setor->id] = $setor->nome;

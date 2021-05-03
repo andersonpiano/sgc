@@ -24,6 +24,25 @@ class Profissional_model extends MY_Model
         return $query->result();
     }
 
+    public function get_profissionais_por_setor_disponiveis($setor_id, $plantao)
+    {
+        $fields = 'profissionais.id, profissionais.cd_pes_fis, profissionais.registro, profissionais.cpf, profissionais.nome, profissionais.nomecurto, profissionais.email';
+        $sql = "select ".$fields." from profissionais
+        join profissionalsetor on profissionais.id = profissionalsetor.profissional_id
+        join setores on setores.id = profissionalsetor.setor_id
+        where setor_id = " . $setor_id;
+        $sql .= " and profissionais.id not in (SELECT profissional_id FROM escalas 
+        Where dataplantao = (select dataplantao from escalas where id = ".$plantao.") 
+        and horainicialplantao = (select horainicialplantao from escalas where id = ".$plantao.") 
+        and profissional_id <> 0 )";
+
+        //$sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
     public function get_vinculo_por_profissional($profissional_id){
         
         $this->db->select('vinculo_id');
