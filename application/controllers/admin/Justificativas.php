@@ -7,6 +7,7 @@ class Justificativas extends Admin_Controller
     const STATUS_JUSTIFICATIVA_APROVADA = 1;
     const STATUS_JUSTIFICATIVA_NEGADA = 2;
     const STATUS_JUSTIFICATIVA_TODAS = 3;
+    const STATUS_JUSTIFICATIVA_PENDENTE = 4;
 
     private $_permitted_groups = array('admin', 'profissionais', 'coordenadorplantao', 'sac');
     private $_admin_groups = array('admin', 'coordenadorplantao', 'sac');
@@ -51,11 +52,11 @@ class Justificativas extends Admin_Controller
         $this->form_validation->set_rules('status', 'lang:justificativas_status', 'required');
 
         $tipos_status = array (
+            $this::STATUS_JUSTIFICATIVA_TODAS => 'Todas',
             $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
             $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
-            $this::STATUS_JUSTIFICATIVA_NEGADA => 'Pendentes',
-            $this::STATUS_JUSTIFICATIVA_TODAS => 'Todas',
+            
         );
 
         if ($this->form_validation->run() == true) {       
@@ -135,6 +136,126 @@ class Justificativas extends Admin_Controller
 
         /* Load Template */
         $this->template->admin_render('admin/justificativas/index', $this->data);
+    }
+
+    public function profissional()
+    {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para listar as justificativas.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('auth/login', 'refresh');
+        }
+
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $this->load->model('cemerge/profissional_model');
+
+            $userId = $this->ion_auth->user()->row()->id;
+            $profissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+            if ($profissional) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $profissional[0]->profissional_id])[0];
+                $profissional_id = $this->_profissional->id;
+            }
+
+        /* Breadcrumbs */
+        $this->data['breadcrumb'] = $this->breadcrumbs->show(); 
+        // Modulos Carregados  
+        $this->load->model('cemerge/FrequenciaAssessus_model');
+            $data_plantao_inicio = $this->input->post('data_plantao_inicio');
+            $data_plantao_fim = $this->input->post('data_plantao_fim');
+            $status = $this->input->post('status');
+        /* Validate form input */
+        $this->form_validation->set_rules('data_plantao_inicio', 'lang:justificativas_data_inicio', 'required');
+        $this->form_validation->set_rules('data_plantao_fim', 'lang:justificativas_data_fim', 'required');
+        $this->form_validation->set_rules('status', 'lang:justificativas_status', 'required');
+
+        $tipos_status = array (
+            $this::STATUS_JUSTIFICATIVA_TODAS => 'Todas',
+            $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
+            $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
+            $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
+            
+        );
+
+        if ($this->form_validation->run() == true) {       
+            /* Justificativas */
+            //$profissional_id = $this->session->userdata('profissional_id');
+            //$this->data['justificativas'] = $this->justificativa_model->get_where(array('profissional_id' => $profissional_id, 'data_plantao >='=>$data_plantao_inicio, 'data_plantao <='=>$data_plantao_fim));
+            $this->data['justificativas'] = $this->justificativa_model->get_justificativas_por_profissional($profissional_id, $data_plantao_inicio, $data_plantao_fim, $status);
+            //$this->data['justificativas'] = $this->justificativa_model->get_where(array('data_plantao >='=>$data_plantao_inicio, 'data_plantao <='=>$data_plantao_fim));
+
+            foreach ($this->data['justificativas'] as $ct) {
+                $ct->turno = '';
+                if ((int)$ct->hora_entrada >= 5 && (int)$ct->hora_entrada < 13) {
+                    $ct->turno = 'Manhã';
+                } else if ((int)$ct->hora_entrada >= 13 && (int)$ct->hora_entrada < 19) {
+                    $ct->turno = 'Tarde';
+                } else if ((int)$ct->hora_entrada >= 19 && (int)$ct->hora_entrada <= 23) {
+                    $ct->turno = 'Noite';
+                }
+                $ct->status_oportunidade = '';
+                switch ($ct->status) {
+                case $this::STATUS_JUSTIFICATIVA_APROVADA:
+                    $ct->status = 'Deferidas';
+                    break;
+                case $this::STATUS_JUSTIFICATIVA_NEGADA:
+                    $ct->status = 'Indeferidas';
+                    break;
+                case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
+                    $ct->status = 'Aguardando Aprovação';
+                    break;
+                }
+
+                $data_plantao = $ct->data_inicial_plantao;
+                $profissional_id = $ct->profissional_id;
+                $plantao_entrada = $ct->hora_entrada;
+                $plantao_saida = $ct->hora_saida;
+        
+                //$ct->entrada = $ct->hora_entrada;//$this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+                //$ct->saida = $ct->hora_saida;//$this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida); 
+            }
+
+        } else {
+            $this->data['justificativas'] = array();
+            $data_plantao_inicio = date('Y-m-d');
+            $data_plantao_fim = date('Y-m-d');
+            $status = $this->input->post('status');
+            
+        }
+
+        $this->data['data_plantao_inicio'] = array(
+            'name'  => 'data_plantao_inicio',
+            'id'    => 'data_plantao_inicio',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $data_plantao_inicio,
+        );
+
+        $this->data['data_plantao_fim'] = array(
+            'name'  => 'data_plantao_fim',
+            'id'    => 'data_plantao_fim',
+            'type'  => 'date',
+            'class' => 'form-control',
+            'value' => $data_plantao_fim,
+        );
+
+        $this->data['status'] = array(
+            'name'  => 'status',
+            'id'    => 'status',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'selected' => $status,
+            'options' => $tipos_status,
+        );
+
+        // Anderson
+        //var_dump($this->data['justificativas']);exit;
+        //exit;
+
+        /* Load Template */
+        $this->template->admin_render('admin/justificativas/profissional', $this->data);
     }
     
     public function create()
@@ -701,6 +822,49 @@ class Justificativas extends Admin_Controller
 
         /* Load Template */
         $this->template->admin_render('admin/justificativas/view', $this->data);
+    }
+
+    public function viewp($id)
+    {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        /* Load aditional models */
+        $this->load->model('cemerge/profissional_model');
+        $this->load->model('cemerge/setor_model');
+        $this->load->model('cemerge/FrequenciaAssessus_model');
+        $this->load->model('cemerge/Escala_model');
+
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_justificativas_view'), 'admin/justificativas/view');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Data */
+        $id = (int) $id;
+
+        $this->data['justificativa'] = $this->justificativa_model->get_by_id($id);
+        $this->data['profissional'] = $this->profissional_model->get_by_id($this->data['justificativa']->profissional_id);
+        $this->data['setor'] = $this->setor_model->get_by_id($this->data['justificativa']->setor_id);
+
+        $data_plantao = $this->data['justificativa']->data_plantao;
+        $profissional_id = $this->data['justificativa']->profissional_id;
+        $plantao_entrada = $this->data['justificativa']->hora_entrada;
+        $plantao_saida = $this->data['justificativa']->hora_saida;
+  
+
+        $this->data['batida_entrada'] = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+        $this->data['batida_saida'] = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+
+        //var_dump($this->data); exit;
+
+        /* Load Template */
+        $this->template->admin_render('admin/justificativas/viewp', $this->data);
     }
 
     public function _get_unidadeshospitalares()

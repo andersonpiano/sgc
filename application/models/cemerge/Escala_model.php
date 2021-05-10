@@ -406,7 +406,7 @@ class Escala_model extends MY_Model
         $sql .= "and ec.nome_profissional is not null ";
         $sql .= "and ec.id_profissional = $profissional_id ";
         if ($order == 1){
-        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq ";
+        $sql .= "order by ec.dataplantao ";
         } else if ($order == 2){
         $sql .= "order by ec.nomesetor, ec.dataplantao ";
         } else if ($order == 3){

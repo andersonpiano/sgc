@@ -53,7 +53,7 @@ class Batch extends CI_Controller
 
             foreach ($escalas as $escala) {
                 // Plantões manhã e tarde do dia solicitado
-                if ($escala->dataplantao == $data_final_escala and $escala->dataplantao == $escala->datafinalplantao) {
+                if ($escala->dataplantao == $escala->datafinalplantao) {
                     if (is_null($escala->frequencia_entrada_id)) {
                         $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->id_profissional, $unidadehospitalar_id);
                         if ($entradas) {
@@ -82,7 +82,7 @@ class Batch extends CI_Controller
                     }
                 }
                 // Plantões noite do dia anterior
-                if ($escala->dataplantao == $data_inicial_escala and $escala->horainicialplantao > $escala->horafinalplantao) {
+                if ($escala->dataplantao < $escala->datafinalplantao  and $escala->horainicialplantao > $escala->horafinalplantao) {
                     if (is_null($escala->frequencia_saida_id)) {
                         $saidas = $this->escala_model->get_frequencia_por_escala($escala->datafinalplantao, $escala->horafinalplantao, $escala->id_profissional, $unidadehospitalar_id);
                         if ($saidas) {
@@ -96,9 +96,7 @@ class Batch extends CI_Controller
                             echo('Frequencia de saída atualizada<br>');
                         }
                     }
-                }
-                // Plantões noite do dia solicitado
-                if ($escala->dataplantao == $data_final_escala and $escala->datafinalplantao > $escala->dataplantao and $escala->horainicialplantao > $escala->horafinalplantao) {
+
                     if (is_null($escala->frequencia_entrada_id)) {
                         $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->id_profissional, $unidadehospitalar_id);
                         if ($entradas) {
@@ -148,7 +146,7 @@ class Batch extends CI_Controller
 
             foreach ($escalas as $escala) {
                 // Plantões manhã e tarde do dia solicitado
-                if ($escala->dataplantao == $data_final_escala and $escala->dataplantao == $escala->datafinalplantao) {
+                if ($escala->dataplantao == $escala->datafinalplantao) {
                     if (is_null($escala->frequencia_entrada_id)) {
                         $batidas = $this->escala_model->get_frequencia_por_escala_prescricao($escala->dataplantao, $escala->id_profissional, $unidadehospitalar_id, $escala->setor_id);
                         if ($batidas) {

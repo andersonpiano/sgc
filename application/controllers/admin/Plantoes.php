@@ -333,11 +333,14 @@ class Plantoes extends Admin_Controller
                     $this->data['proximosplantoes'] = $this->escala_model->get_escalas_consolidadas_por_profissional(
                         $this->_profissional->id, $datainicial, $datafinal, $setor_id, 2
                     );
+                    
                 } elseif ($this->data['user_type'] == 1 or $this->data['user_type'] == 2) {
                     $this->data['proximosplantoes'] = $this->escala_model->get_escalas_consolidadas_por_setor_e_usuario(
                         $this->data['user_id'], $datainicial, $datafinal, $setor_id, 2
                     );
                 }
+
+                //var_dump($this->data['proximosplantoes']);exit;
 
                 $tipos_oferta = array(
                     '0' => 'Cessão',
@@ -372,7 +375,7 @@ class Plantoes extends Admin_Controller
 
                 /* Load Template */
                 if ($this->mobile_detect->isMobile()) {
-                    $this->template->admin_render('admin/plantoes/proximosplantoesmobile', $this->data);
+                    $this->template->admin_render('admin/plantoes/proximosplantoes', $this->data);
                 } else {
                     $this->template->admin_render('admin/plantoes/proximosplantoes', $this->data);
                 }

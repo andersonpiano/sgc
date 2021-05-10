@@ -263,7 +263,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <td><button style="position: relative; float: right; color:red;" class="btn btn-link btn-remover-medico text-center" id="btn-remover-medico" escala=" <?php echo $escala->id; ?>" profissional=" <?php echo $escala->profissional_id; ?>"><i class="fa fa-eraser" aria-hidden="true"></i></button></span>
                                                 </td>
                                                 <td>
-                                                    <?php echo form_dropdown($this->data['tipos_plantao'], null, $escala->tipo_plantao);?>
+                                                    <?php echo form_dropdown($this->data['tipos_plantao'], null, $escala->tipo_plantao, ['escala' => $escala->id]);?>
                                                     <?php //echo form_hidden('tipo_plantao_escala_id_' . $escala->id, $escala->id);?>
                                                 </td>
                                                 <?php 

@@ -185,7 +185,7 @@ $(".btn-remover-medico").click(function(){
         }*/
       })		
 });
-    
+
 $(document).on('change', '#profissional_id', function() {
     var profissional = $(this).val();
     var escala = $(this).next('input').val();
@@ -262,6 +262,40 @@ $(document).on('change', '#profissional_id', function() {
         }
     }); 
 });
+if ('#tipos_plantao'){
+    $(document).on('change', '#tipos_plantao', function() {
+        var tipo = $(this).val();
+        var escala = $(this).attr('escala');
+        var url = '/sgc/admin/escalas/troca_tipo_plantao';
+
+        // swal('Erro', 'escala - '+escala+' horaIN - '+hora_ini + 'Data - ' + data_ini ,'error');
+        $.ajax({
+            url: url,
+            method: 'post',
+            data: {
+                escala : escala,
+                tipo : tipo
+            },
+            success: function(responseData) {
+                // Se sucesso, remover ou travar o dropdown
+
+                $sucess = JSON.parse(responseData).sucesso;
+
+
+                if($sucess == 'certo'){
+                    swal("Sucesso","Troca realizada com sucesso","success");
+                } else {
+                    swal("Erro!","Ocorreu um erro na troca.", 'error');
+
+                };  
+            },
+            error: function(responseData) {
+                swal("Sucesso","Troca realizada com sucesso","success");
+                console.log(responseData);
+            }
+        }); 
+    });
+}
 
 
 });

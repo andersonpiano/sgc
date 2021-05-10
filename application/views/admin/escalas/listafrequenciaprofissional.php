@@ -139,8 +139,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php 
                                                 $entrada = new DateTime(date('Y-m-d H:i:s', strtotime($escala->batidaentrada)));
                                                 $saida = new DateTime(date('Y-m-d H:i:s', strtotime($escala->batidasaida)));
-                                                $horas_trab = $entrada->diff($saida); //->format('%H:%I:%S')
-                                                                                              
+                                                $horas_trab = $saida->diff($entrada); //->format('%H:%I:%S')
+                                                                                             
                                                     echo '<td><center>'.htmlspecialchars($escala->batidaentrada && $escala->batidasaida ? $horas_trab->format('%H:%I') : '-', ENT_QUOTES, 'UTF-8').'</center></td>';
                                                 ?>
                                                 <?php /*if (isset($escala->batidaentrada) && isset($escala->batidasaida)){

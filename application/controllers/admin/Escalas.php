@@ -1688,6 +1688,7 @@ class Escalas extends Admin_Controller
                 'name'  => 'tipos_plantao',
                 'id'    => 'tipos_plantao',
                 'type'  => 'select',
+                //'escala' => $escala->id,
                 'class' => 'form-control',
                 'options' => $tipo_plantao,
             );
@@ -3820,6 +3821,18 @@ class Escalas extends Admin_Controller
         };
 
         return $success;
+    }
+
+    public function troca_tipo_plantao(){
+
+        $escala_id = $this->input->post('escala');
+        $tipo = $this->input->post('tipo');
+        $success = 'errado';
+        if($this->escala_model->update($escala_id, ['tipo_plantao' => $tipo])){
+            $success = 'certo';
+        };
+
+        echo json_encode(['sucesso' => $success]);
     }
 
     private function _get_vinculos_atribuir()

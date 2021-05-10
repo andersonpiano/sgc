@@ -215,7 +215,8 @@ class Profissionais extends Admin_Controller
 
         foreach ($usuarios as $usuario) {
             if ($this->createuser($usuario->id)){
-                var_dump($usuario->id); exit;
+                //var_dump($usuario->id); exit;
+                $status = $usuario->id.' - ok';
             } else {
             }   
         }
@@ -249,19 +250,19 @@ class Profissionais extends Admin_Controller
             // Validate status
             if ($profissional->active == 0) {
                 $this->session->set_flashdata('message', 'O profissional está inativo. Ative-o primeiro e depois crie seu usuário.');
-                redirect('admin/profissionais/edit/' . $id, 'refresh');
+               // redirect('admin/profissionais/edit/' . $id, 'refresh');
             }
 
             // Validate email
             if (trim($profissional->email) == "@") {
                 $this->session->set_flashdata('message', 'O profissional não possui um e-mail válido cadastrado.');
-                redirect('admin/profissionais/edit/' . $id, 'refresh');
+                //redirect('admin/profissionais/edit/' . $id, 'refresh');
             }
 
             // User exists?
             if ($this->ion_auth->email_check($email)) {
                 $this->session->set_flashdata('message', 'Já existe um usuário criado para este profissional. Favor editá-lo.');
-                redirect('admin/profissionais/edit/' . $id, 'refresh');
+               // redirect('admin/profissionais/edit/' . $id, 'refresh');
             }
 
             $userCreated = $this->ion_auth->register($username, $password, $email, $additional_data, $group);
@@ -283,7 +284,7 @@ class Profissionais extends Admin_Controller
         }
 
         /* Redirect to edit page */
-        redirect('admin/profissionais/edit/' . $id, 'refresh');
+        //redirect('admin/profissionais/edit/' . $id, 'refresh');
     }
 
     public function linktosector($id)

@@ -73,6 +73,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('oportunidade')?>"><a href="<?php echo site_url('admin/escalas/listaroportunidades'); ?>"><?php echo lang('menu_oportunidades'); ?></a></li>
                             </ul>
+                            <ul class="treeview-menu">
+                                <li class="<?=active_link_function('justificativa')?>"><a href="<?php echo site_url('admin/justificativas/profissional'); ?>"><?php echo lang('menu_justificativas'); ?></a></li>
+                            </ul>
                         </li>
 <?php endif; ?>
 

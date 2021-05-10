@@ -47,8 +47,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 </div>
                                                 <div class="w3-container w3-white">
                                                     <h6>
-                                                        <?php echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-primary"'); ?> &nbsp;
-                                                        <?php echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/proximosplantoes', lang('actions_to_offer'), 'class="btn btn-default"'); ?>
+                                                    <button type="button" class="btn btn-primary btn-oferecer fa fa-share" data-dismiss="modal" plantao_id="<?php echo $plantao->id; ?>" setor_id="<?php echo $plantao->setor_id; ?>" ><?php echo ' '.lang('actions_to_offer');?></button>&nbsp;
+                                                        <?php //echo anchor('admin/plantoes/view/'.$plantao->id, lang('actions_see'), 'class="btn btn-primary"'); ?> &nbsp;
+                                                        <?php //echo anchor('admin/plantoes/tooffer/'.$plantao->id . '/proximosplantoes', lang('actions_to_offer'), 'class="btn btn-default"'); ?>
                                                     </h6>
                                                 </div>
                                             </div>
