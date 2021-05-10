@@ -129,7 +129,7 @@ class Processamento extends Admin_Controller {
         }
 
         $hash = md5("Cmg@2020");
-        $url = site_url("admin/batch/processarescala/") . $hash . "/" . $unidadehospitalar_id . "/" . $setor_id . "/" . $data_inicial. "/" . $data_final;
+        $url = site_url("admin/batch/processarescala/").$hash."/".$unidadehospitalar_id."/".$setor_id."/".$data_inicial."/".$data_final;
 
         // create curl resource
         $ch = curl_init();
@@ -174,7 +174,7 @@ class Processamento extends Admin_Controller {
         }
 
         $hash = md5("Cmg@2020");
-        $url = site_url("admin/batch/processarescalaprescricao/") . $hash . "/" . $unidadehospitalar_id . "/" . $data_inicial . "/" . $data_final;
+        $url = site_url("admin/batch/processarescalaprescricao/").$hash . "/" . $unidadehospitalar_id . "/" . $data_inicial . "/" . $data_final;
 
         // create curl resource
         $ch = curl_init();
