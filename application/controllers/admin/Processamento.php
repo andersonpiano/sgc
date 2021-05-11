@@ -48,7 +48,8 @@ class Processamento extends Admin_Controller {
             
             switch ($processo) {
             case 0:
-                $this->processar_escala_por_demanda($unidadehospitalar_id, 0, $data_inicial, $data_final);
+                $recriar = 1
+                $this->processar_escala_por_demanda($unidadehospitalar_id, 0, $data_inicial, $data_final, $recriar);
                 break;
             case 1:
                 $this->processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_inicial, $data_final);
@@ -117,7 +118,7 @@ class Processamento extends Admin_Controller {
         $this->template->admin_render('admin/processamento/index', $this->data);
     }
 
-    public function processar_escala_por_demanda($unidadehospitalar_id, $setor_id, $data_inicial, $data_final)
+    public function processar_escala_por_demanda($unidadehospitalar_id, $setor_id, $data_inicial, $data_final, $recriar)
     {
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
