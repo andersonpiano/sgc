@@ -728,10 +728,12 @@ class Escala_model extends MY_Model
         $sql .= "where idunidade = $unidadehospitalar_id ";
         if ($setor_id) {
             $sql .= "and idsetor = $setor_id ";
+        } else {
+            $sql .= "and idsetor in ( ";
+            $sql .= "select id from setores where prescricao = 0 and unidadehospitalar_id = $unidadehospitalar_id ";
+            $sql .= ") ";
         }
-        $sql .= "and idsetor in ( ";
-        $sql .= "select id from setores where prescricao = 0 and unidadehospitalar_id = $unidadehospitalar_id ";
-        $sql .= ") ";
+        
         $sql .= "and ec.dataplantao between '$datainicial' and '$datafinal' ";
         $sql .= "and (e.profissional_id is not null and e.profissional_id != 0) ";
         $sql .= "and (e.frequencia_entrada_id is null or e.frequencia_saida_id is null) ";
