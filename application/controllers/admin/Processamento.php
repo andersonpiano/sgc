@@ -38,18 +38,21 @@ class Processamento extends Admin_Controller {
         $this->form_validation->set_rules('unidadehospitalar_id', 'lang:processamento_unidadehospitalar', 'required');
         $this->form_validation->set_rules('data_inicial', 'lang:processamento_data_inicial', 'required');
         $this->form_validation->set_rules('data_final', 'lang:processamento_data_final', 'required');
-        $this->form_validation->set_rules('processo', 'lang:processamento_processo', 'required');
+        $this->form_validation->set_rules('setor_id', 'lang:processamento_setor', 'required');
+        //$this->form_validation->set_rules('processo', 'lang:processamento_processo', 'required');
 
         if ($this->form_validation->run() == true) {
             $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
             $data_inicial = $this->input->post('data_inicial');
             $data_final = $this->input->post('data_final');
-            $processo = $this->input->post('processo');
+            $setor_id = $this->input->post('setor_id');
+            //$processo = $this->input->post('processo');
+            $processo = 0;
             
             switch ($processo) {
             case 0:
-                $recriar = 1
-                $this->processar_escala_por_demanda($unidadehospitalar_id, 0, $data_inicial, $data_final, $recriar);
+                $recriar = 1;
+                $this->processar_escala_por_demanda($unidadehospitalar_id, $setor_id, $data_inicial, $data_final, $recriar);
                 break;
             case 1:
                 $this->processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_inicial, $data_final);
@@ -81,6 +84,7 @@ class Processamento extends Admin_Controller {
         );
 
         $unidadeshospitalares = $this->_get_unidadeshospitalares();
+        $setores = $this->_get_setores(1);
 
         $this->data['unidadehospitalar_id'] = array(
             'name'  => 'unidadehospitalar_id',
@@ -90,6 +94,16 @@ class Processamento extends Admin_Controller {
             'value' => $this->form_validation->set_value('unidadehospitalar_id', $unidadehospitalar_id),
             'options' => $unidadeshospitalares,
         );
+
+        $this->data['setor_id'] = array(
+            'name'  => 'setor_id',
+            'id'    => 'setor_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('setor_id'),
+            'options' => $setores,
+        );
+
         $this->data['data_inicial'] = array(
             'name'  => 'data_inicial',
             'id'    => 'data_inicial',
@@ -116,6 +130,22 @@ class Processamento extends Admin_Controller {
 
         /* Load Template */
         $this->template->admin_render('admin/processamento/index', $this->data);
+    }
+
+    public function _get_setores($unidadehospitalar_id)
+    {
+
+        $this->load->model('cemerge/setor_model');
+        $setores_por_unidade = $this->setor_model->get_where(['unidadehospitalar_id' => $unidadehospitalar_id]);
+
+        $setores = array(
+            '0' => 'Todos os Setores',
+        );
+        foreach ($setores_por_unidade as $setor) {
+            $setores[$setor->id] = $setor->nome;
+        }
+
+        return $setores;
     }
 
     public function processar_escala_por_demanda($unidadehospitalar_id, $setor_id, $data_inicial, $data_final, $recriar)

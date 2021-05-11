@@ -14,5 +14,6 @@ $lang['processamento_processo']            = 'Processos';
 $lang['processamento_data_inicial']         = 'Data Inicial';
 $lang['processamento_data_final']         = 'Data Final';
 $lang['processamento_unidadehospitalar']   = 'Unidade Hospitalar';
-$lang['processamento_execute']             = 'Executar processo';
+$lang['processamento_setor']   = 'Setor';
+$lang['processamento_execute']             = 'Executar processamento';
 $lang['processamento_box_title']           = 'Processo';
