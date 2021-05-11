@@ -53,6 +53,10 @@ class Processamento extends Admin_Controller {
             case 0:
                 $recriar = 1;
                 $this->processar_escala_por_demanda($unidadehospitalar_id, $setor_id, $data_inicial, $data_final, $recriar);
+                $this->processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_inicial, $data_final);
+                $this->processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_inicial, $data_final, $recriar);
+                //$this->processar_plantoes_mt_mesmo_medico_por_demanda($unidadehospitalar_id, $data_inicial, $data_final, $recriar);
+
                 break;
             case 1:
                 $this->processar_escala_prescricao_por_demanda($unidadehospitalar_id, $data_inicial, $data_final);

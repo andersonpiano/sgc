@@ -248,14 +248,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </ul>
                         </li>
                         <li class="treeview <?=active_link_controller('processamento') ? 'active' : ''?>">
-                            <a href="#">
+                            <a href="<?php echo site_url('admin/processamento'); ?>">
                                 <i class="fa fa-gears"></i>
                                 <span><?php echo lang('menu_processamento'); ?></span>
-                                <i class="fa fa-angle-left pull-right"></i>
+                                <!-- <i class="fa fa-angle-left pull-right"></i>-->
                             </a>
-                            <ul class="treeview-menu">
-                                <li class="<?=active_link_function('index')?>"><a href="<?php echo site_url('admin/processamento'); ?>"><?php echo lang('menu_processamento'); ?></a></li>
-                            </ul>
+
                         </li>
                         <li class="<?=active_link_controller('feriados')?>">
                             <a href="<?php echo site_url('admin/feriados'); ?>">

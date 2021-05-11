@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($data_final);?>
                                             </div>
                                         </div>
-                                        <!--- <div class="form-group">
+                                         <!--<div class="form-group">
                                             <?php //echo lang('processamento_processo', 'processo', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
                                                 <?php //echo form_dropdown($processo);?>
