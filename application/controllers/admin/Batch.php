@@ -32,6 +32,7 @@ class Batch extends CI_Controller
         $setor_id = (int)$setor_id;
         $datainicial = $datainicial ? $datainicial : date('Y-m-d');
         $datafinal = $datafinal ? $datafinal : date('Y-m-d');
+        
         if ($setor_id == 0) {
             $setor_id = null;
         }

@@ -50,6 +50,7 @@ class FrequenciaAssessus_model extends MY_Model
         
         return $query->row();
     }
+    
     public function get_batida_profissional_saida($data_plantao, $profissional_id, $entrada, $saida){
         
         $entrada_m = date('H:i:s', strtotime("+3 hour", strtotime($entrada)));
