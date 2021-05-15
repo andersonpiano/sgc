@@ -930,4 +930,79 @@ class Justificativas extends Admin_Controller
             return false;
         }
     }
+
+    public function ajax_justificativas_pendentes() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/profissional_model");
+        $this->load->model("cemerge/justificativa_model");
+
+        /* Profissional */
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $userId = $this->ion_auth->user()->row()->id;
+        if ($this->ion_auth->in_group('profissionais') && $userId) {
+            $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+            if ($usuarioProfissional) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional[0]->profissional_id])[0];
+            }
+        } else {
+            $this->_profissional = 1;
+        }
+
+        $profissionais = $this->justificativa_model->get_datatable($this->_profissional->id);
+        //var_dump($this->_profissional); exit;
+
+        $data = array();
+        foreach ($profissionais as $profissional) {
+    
+            $row = array();
+            //$row[] = '<center>'.$profissional->id.'</center>';
+            $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
+            $row[] = '<center>'.$profissional->setor_id.'</center>';
+            $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
+            
+            $row[] = '<center><div style="display: inline-block;">
+                        <button class="btn btn-link btn-add-profissional" 
+                            plantao='.$profissional->id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
+                            $profissional->id.
+                            '&setor_id='.$profissional->setor_id.
+                    '&profissional_id='.$profissional->profissional_id.
+                    '&data_plantao='.$profissional->dataplantao.
+                    '&hora_in='.$profissional->horainicialplantao.
+                    '&hora_out='.$profissional->horafinalplantao.'" <i class="fa fa-pencil-square-o">Justificar</i></a>
+                            
+                        </button>
+                    </div></center>';
+    
+                    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" =>$this->profissional_model->records_total(),
+            "recordsFiltered" => $this->profissional_model->records_filtered(),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
+    }
+
+    public function turno($i) {
+        $retorno = '';
+        if ($i == '07:00:00'){
+            $retorno = 'Manhã';
+        } else if ($i == '13:00:00'){
+            $retorno = 'Tarde';
+        }
+        else {
+            $retorno = 'Noite';
+        }
+
+        return $retorno;
+    }
 }

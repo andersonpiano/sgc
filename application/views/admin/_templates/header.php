@@ -98,6 +98,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['create'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/justificativa.js'); ?>"></script>
 <?php endif; ?>
+<?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['profissional'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/justificativas_create.js'); ?>"></script>
+<?php endif; ?>
 <?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['editarfrequencia', 'buscarfrequencias'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_assessus_por_unidade.js'); ?>"></script>
 <?php endif; ?>
