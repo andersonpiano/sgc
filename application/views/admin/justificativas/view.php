@@ -78,11 +78,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <th><?php echo(lang('justificativas_descricao')); ?></th>
                                                 <td><?php echo(htmlspecialchars(nl2br($justificativa->descricao), ENT_QUOTES, 'UTF-8')); ?></td> 
                                             </tr>
-                                            <?php if($justificativa->status == '2') {?> 
+                                            <?php //if($justificativa->status == '2') {?> 
                                             <tr>
                                                 <th><?php echo(lang('justificativas_recusa')); ?></th>
                                                 <td><?php echo(htmlspecialchars(nl2br($justificativa->motivo_recusa), ENT_QUOTES, 'UTF-8')); ?></td>
-                                            </tr><?php }; ?>
+                                            </tr><?php //}; ?>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_status')); ?></th>
                                                 <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>

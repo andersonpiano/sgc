@@ -97,9 +97,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                             <div class="box">
                                 <div class="box-header with-border">
                                     <h3 class="box-title dontprint">
-                                        <?php echo anchor('admin/justificativas/create', '<i class="fa fa-plus"></i> '. 
-                                            lang('justificativas_create'), 
-                                            array('class' => 'btn btn-block btn-primary btn-flat dontprint')); ?>
+                                            <button class="btn btn-block btn-primary btn-flat dontprint btn-justificativas-pendentes" id="justificativas-pendentes">Justificativas Pendentes</button>
                                     </h3>
                                 </div>
                                 <div class="box-body">
@@ -143,3 +141,31 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                         <img class="text-center" src="<?php echo base_url($frameworks_dir . '/cemerge/images/assinatura.png'); ?>"/><br>
                         <span class="text-center"><?php echo $dia[$numero_dia].', '.$dia_mes.' de '.$mes[$numero_mes].' de '.$ano ?></span>
                 </div>
+
+    <div id="modal_justificativas_pendentes" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title">Plantões com justificativa pendente</h4></center>
+                </div>
+
+                <div class="modal-body">
+                        <table id="dt_pendentes" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th style="width:20%" class="dt-center text-center">Data</th>
+                                <th style="width:40%" class="dt-center text-center">Setor</th>
+                                <th style="width:40%" class="dt-center text-center">Médico</th>
+                                <th style="width:20%" class="dt-center text-center">Turno</th>
+                                <th style="width:20%" class="dt-center no-sort text-center">Açoes</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -398,7 +398,7 @@ class Justificativas extends Admin_Controller
             redirect('admin/dashboard', 'refresh');
         }
 
-        $this->justificativa_model->update($id, ['status' => 1]);
+        $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
         $atual= $_SERVER["HTTP_REFERER"];;
         redirect($atual);
     }
@@ -708,10 +708,10 @@ class Justificativas extends Admin_Controller
                     'hora_entrada' => $this->input->post('hora_entrada'),
                     'hora_saida' => $this->input->post('hora_saida'),
                     'descricao' => $this->input->post('descricao'),
-                    'motivo_recusa' => $this->input->post('motivo_recusa'),
+                    //'motivo_recusa' => $this->input->post('motivo_recusa'),
                     'status' => 2,
                 );
-
+                
                 if ($this->justificativa_model->update($justificativa->id, $data)) {
                     $this->session->set_flashdata('message', 'Justificativa atualizada com sucesso.');
                 } else {
@@ -961,7 +961,7 @@ class Justificativas extends Admin_Controller
             $row = array();
             //$row[] = '<center>'.$profissional->id.'</center>';
             $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
-            $row[] = '<center>'.$profissional->setor_id.'</center>';
+            $row[] = '<center>'.$this->nome_setor($profissional->setor_id).'</center>';
             $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
             
             $row[] = '<center><div style="display: inline-block;">
@@ -990,6 +990,90 @@ class Justificativas extends Admin_Controller
         ); 
         echo json_encode($json);
         exit;
+    }
+
+    public function ajax_justificativas_pendentes_coordenador() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/profissional_model");
+        $this->load->model("cemerge/justificativa_model");
+
+        $profissionais = $this->justificativa_model->get_justificativas_pendentes();
+        //var_dump($this->_profissional); exit;
+
+        $data = array();
+        foreach ($profissionais as $profissional) {
+    
+            $row = array();
+            //$row[] = '<center>'.$profissional->id.'</center>';
+            $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
+            $row[] = '<center>'.$this->nome_setor($profissional->setor_id).'</center>';
+            $row[] = '<center>'.$this->nome_profissional($profissional->profissional_id).'</center>';
+            $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
+            
+            $row[] = '<center><div style="display: inline-block;">
+                        <button class="btn btn-link btn-add-profissional" 
+                            plantao='.$profissional->id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
+                            $profissional->id.
+                            '&setor_id='.$profissional->setor_id.
+                    '&profissional_id='.$profissional->profissional_id.
+                    '&data_plantao='.$profissional->dataplantao.
+                    '&hora_in='.$this->batida($profissional->id).
+                    '&hora_out='.$this->batida($profissional->id).'" <i class="fa fa-pencil-square-o">Justificar</i></a>
+                        </button>
+                    </div></center>';
+
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" =>$this->profissional_model->records_total(),
+            "recordsFiltered" => $this->profissional_model->records_filtered(),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
+    }
+
+    public function nome_setor($id){
+        $this->load->model("cemerge/setor_model");
+
+        $setor = $this->setor_model->get_by_id($id);
+
+        return $setor->nome;
+    }
+
+    public function nome_profissional($id){
+        $this->load->model("cemerge/profissional_model");
+
+        $profissional = $this->profissional_model->get_by_id($id);
+
+        return $profissional->nome;
+    }
+
+    public function batida($id, $tipo){
+        $this->load->model("cemerge/escala_model");
+
+        $batida = $this->escala_model->get_by_id($id);
+
+        if ($tipo == 'E'){
+            return $batida->frequencia_entrada_id;
+        } else {
+            return $batida->frequencia_saida_id;
+        }
+    }
+
+    public function frequencia($id){
+        $this->load->model("cemerge/FrequenciaAssessus_model");
+
+        $frequencia = $this->FrequenciaAssessus_model->get_by_id($id);
+
+        return $frequencia->DT_FRQ;
     }
 
     public function turno($i) {

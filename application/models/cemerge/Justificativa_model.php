@@ -126,4 +126,56 @@ class Justificativa_model extends MY_Model
         }
         return $this->db->get()->result();
     }
+
+    var $column_search2 = array('dataplantao');
+    var $column_order2 = array('dataplantao');
+
+    private function _get_justificativas_pendentes() {
+
+        $search = NULL;
+        if ($this->input->post("search")) {
+            $search = $this->input->post("search")["value"];
+        }
+        $order_column = NULL;
+        $order_dir = NULL;
+        $order = $this->input->post("order");
+        if (isset($order)) {
+            $order_column = $order[0]["column"];
+            $order_dir = $order[0]["dir"];
+        }
+
+        $this->db->from('escalas');
+        $this->db->where_in('justificativa', 1);
+
+        if (isset($search)) {
+            $first = TRUE;
+            foreach ($this->column_search2 as $field) {
+                if ($first) {
+                    $this->db->group_start();
+                    $this->db->like($field, $search);
+                    $first = FALSE;
+                } else {
+                    $this->db->or_like($field, $search);
+                }
+            }
+            if (!$first) {
+                $this->db->group_end();
+            }
+        }
+
+        if (isset($order)) {
+            $this->db->order_by($this->column_order2[$order_column], $order_dir);
+        }
+    }
+
+    public function get_justificativas_pendentes() {
+
+        $length = $this->input->post("length");
+        $start = $this->input->post("start");
+        $this->_get_justificativas_pendentes();
+        if (isset($length) && $length != -1) {
+            $this->db->limit($length, $start);
+        }
+        return $this->db->get()->result();
+    }
 }
