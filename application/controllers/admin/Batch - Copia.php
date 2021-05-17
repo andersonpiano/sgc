@@ -26,11 +26,13 @@ class Batch extends CI_Controller
         exit;
     }
 
-    public function processarescala($hash, $unidadehospitalar_id, $setor_id, $datainicial = null)
+    public function processarescala($hash, $unidadehospitalar_id, $setor_id, $datainicial = null, $datafinal = null)
     {
         $unidadehospitalar_id = (int)$unidadehospitalar_id;
         $setor_id = (int)$setor_id;
         $datainicial = $datainicial ? $datainicial : date('Y-m-d');
+        $datafinal = $datafinal ? $datafinal : date('Y-m-d');
+
         if ($setor_id == 0) {
             $setor_id = null;
         }
@@ -46,13 +48,13 @@ class Batch extends CI_Controller
 
         if ($datainicial && $unidadehospitalar_id) {
             $data_inicial_escala = date('Y-m-d', strtotime($datainicial . ' -1 day'));
-            $data_final_escala = date('Y-m-d', strtotime($datainicial));
+            $data_final_escala = date('Y-m-d', strtotime($datafinal));
 
             $escalas = $this->escala_model->get_escala_consolidada_a_processar($unidadehospitalar_id, $setor_id, $data_inicial_escala, $data_final_escala);
 
             foreach ($escalas as $escala) {
                 // Plantões manhã e tarde do dia solicitado
-                if ($escala->dataplantao == $data_final_escala and $escala->dataplantao == $escala->datafinalplantao) {
+                if ($escala->dataplantao == $escala->datafinalplantao) {
                     if (is_null($escala->frequencia_entrada_id)) {
                         $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->id_profissional, $unidadehospitalar_id);
                         if ($entradas) {
@@ -81,7 +83,7 @@ class Batch extends CI_Controller
                     }
                 }
                 // Plantões noite do dia anterior
-                if ($escala->dataplantao == $data_inicial_escala and $escala->horainicialplantao > $escala->horafinalplantao) {
+                if ($escala->dataplantao < $escala->datafinalplantao  and $escala->horainicialplantao > $escala->horafinalplantao) {
                     if (is_null($escala->frequencia_saida_id)) {
                         $saidas = $this->escala_model->get_frequencia_por_escala($escala->datafinalplantao, $escala->horafinalplantao, $escala->id_profissional, $unidadehospitalar_id);
                         if ($saidas) {
@@ -95,9 +97,7 @@ class Batch extends CI_Controller
                             echo('Frequencia de saída atualizada<br>');
                         }
                     }
-                }
-                // Plantões noite do dia solicitado
-                if ($escala->dataplantao == $data_final_escala and $escala->datafinalplantao > $escala->dataplantao and $escala->horainicialplantao > $escala->horafinalplantao) {
+
                     if (is_null($escala->frequencia_entrada_id)) {
                         $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->id_profissional, $unidadehospitalar_id);
                         if ($entradas) {
@@ -125,7 +125,7 @@ class Batch extends CI_Controller
         //redirect('admin/escalas/processarescala', 'refresh');
     }
 
-    public function processarescalaprescricao($hash, $unidadehospitalar_id, $datainicial = null)
+    public function processarescalaprescricao($hash, $unidadehospitalar_id, $datainicial = null, $datafinal = null)
     {
         $unidadehospitalar_id = (int)$unidadehospitalar_id;
         $datainicial = $datainicial ? $datainicial : date('Y-m-d');
@@ -141,13 +141,13 @@ class Batch extends CI_Controller
 
         if ($datainicial && $unidadehospitalar_id) {
             $data_inicial_escala = date('Y-m-d', strtotime($datainicial));
-            $data_final_escala = $data_inicial_escala;
+            $data_final_escala = date('Y-m-d', strtotime($datafinal));
 
             $escalas = $this->escala_model->get_escala_prescricao_a_processar($unidadehospitalar_id, $data_inicial_escala, $data_final_escala);
 
             foreach ($escalas as $escala) {
                 // Plantões manhã e tarde do dia solicitado
-                if ($escala->dataplantao == $data_final_escala and $escala->dataplantao == $escala->datafinalplantao) {
+                if ($escala->dataplantao == $escala->datafinalplantao) {
                     if (is_null($escala->frequencia_entrada_id)) {
                         $batidas = $this->escala_model->get_frequencia_por_escala_prescricao($escala->dataplantao, $escala->id_profissional, $unidadehospitalar_id, $escala->setor_id);
                         if ($batidas) {

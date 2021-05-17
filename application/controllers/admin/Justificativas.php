@@ -273,6 +273,7 @@ class Justificativas extends Admin_Controller
         $this->breadcrumbs->unshift(2, lang('menu_justificativas_create'), 'admin/justificativas/create');
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
         $this->load->model('cemerge/FrequenciaAssessus_model');
+        $this->load->model('cemerge/frequencia_model');
         $this->load->model('cemerge/escala_model');
 
         /* Variables */
@@ -314,6 +315,26 @@ class Justificativas extends Admin_Controller
             
             if ($justificativa_id) {
                 $this->escala_model->update($escala_id,['justificativa' => 0]);
+                if ($hora_entrada >= '18:00'){
+                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida']);
+                } else {
+                    $this->frequencia_model->insert([
+                        'unidadehospitalar_id' => 1, 
+                        'setor_id' => $setor_id, 
+                        'escala_id' => $escala_id, 
+                        'profissional_id' => $profissional_id, 
+                        'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 
+                        'tipobatida' => 5
+                    ]);
+                    $this->frequencia_model->insert([
+                        'unidadehospitalar_id' => 1, 
+                        'setor_id' => $setor_id, 
+                        'escala_id' => $escala_id, 
+                        'profissional_id' => $profissional_id, 
+                        'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida, 
+                        'tipobatida' => 6
+                       ]);
+                }
                 $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
                 redirect('admin/justificativas', 'refresh');
             } else {
@@ -398,7 +419,10 @@ class Justificativas extends Admin_Controller
             redirect('admin/dashboard', 'refresh');
         }
 
+        $this->load->model('cemerge/escala_model');
+        $escala = $this->justificativa_model->get_by_id($id);
         $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
+        $this->escala_model->update($escala->escala_id, ['status' => 4]);
         $atual= $_SERVER["HTTP_REFERER"];;
         redirect($atual);
     }
@@ -971,8 +995,9 @@ class Justificativas extends Admin_Controller
                             '&setor_id='.$profissional->setor_id.
                     '&profissional_id='.$profissional->profissional_id.
                     '&data_plantao='.$profissional->dataplantao.
-                    '&hora_in='.$profissional->horainicialplantao.
-                    '&hora_out='.$profissional->horafinalplantao.'" <i class="fa fa-pencil-square-o">Justificar</i></a>
+                    '&hora_in='.date('H:i', strtotime($this->batida($profissional->id, 'E'))).
+                    '&hora_out='.date('H:i', strtotime($this->batida($profissional->id, 'S'))).'" 
+                    <i class="fa fa-pencil-square-o">Justificar</i></a>
                             
                         </button>
                     </div></center>';
@@ -1021,14 +1046,16 @@ class Justificativas extends Admin_Controller
                             '&setor_id='.$profissional->setor_id.
                     '&profissional_id='.$profissional->profissional_id.
                     '&data_plantao='.$profissional->dataplantao.
-                    '&hora_in='.$this->batida($profissional->id).
-                    '&hora_out='.$this->batida($profissional->id).'" <i class="fa fa-pencil-square-o">Justificar</i></a>
+                    '&hora_in='.date('H:i', strtotime($this->batida($profissional->id, 'E'))).
+                    '&hora_out='.date('H:i', strtotime($this->batida($profissional->id, 'S'))).'" 
+                    <i class="fa fa-pencil-square-o">Justificar</i></a>
                         </button>
                     </div></center>';
 
             $data[] = $row;
-    
+            //var_dump($this->batida(22872, 'E')); exit;
         }
+        
         $json = array(
             "draw" => $this->input->post("draw"),
             "recordsTotal" =>$this->profissional_model->records_total(),
@@ -1062,18 +1089,21 @@ class Justificativas extends Admin_Controller
         $batida = $this->escala_model->get_by_id($id);
 
         if ($tipo == 'E'){
-            return $batida->frequencia_entrada_id;
+            return $this->frequencia($batida->frequencia_entrada_id);
         } else {
-            return $batida->frequencia_saida_id;
+            return $this->frequencia($batida->frequencia_saida_id);
         }
     }
 
     public function frequencia($id){
         $this->load->model("cemerge/FrequenciaAssessus_model");
 
-        $frequencia = $this->FrequenciaAssessus_model->get_by_id($id);
-
-        return $frequencia->DT_FRQ;
+        $frequencia = $this->FrequenciaAssessus_model->get_by_cdctlfrq($id);
+        if (isset($frequencia->DT_FRQ)){
+            return $frequencia->DT_FRQ;
+        } else {
+            return '1901-01-01 00:00:00';
+        }
     }
 
     public function turno($i) {

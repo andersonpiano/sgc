@@ -35,18 +35,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
+
                                         <div class="form-group">
-                                            <?php echo lang('processamento_data_escala', 'data_escala', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
-                                                <?php echo form_input($data_escala);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('processamento_processo', 'processo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <?php echo lang('processamento_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-4">
-                                                <?php echo form_dropdown($processo);?>
+                                                <?php echo form_dropdown($setor_id);?>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <?php echo lang('processamento_data_inicial', 'data_inicial', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_input($data_inicial);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('processamento_data_final', 'data_final', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_input($data_final);?>
+                                            </div>
+                                        </div>
+                                         <!--<div class="form-group">
+                                            <?php //echo lang('processamento_processo', 'processo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-4">
+                                                <?php //echo form_dropdown($processo);?>
+                                            </div>
+                                        </div> -->
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">
