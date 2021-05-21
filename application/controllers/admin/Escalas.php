@@ -1965,6 +1965,8 @@ class Escalas extends Admin_Controller
                             array_push($freq->trocas_passagens, $tp);
                         }
                     }
+
+                    $freq->tipo_escala = $this->tipo_escala($freq->id);
                 }
 
                 /*
@@ -2077,6 +2079,13 @@ class Escalas extends Admin_Controller
         }
     }
 
+    public function tipo_escala($id){
+
+        $escala = $this->escala_model->get_by_id($id);
+
+        return $escala->tipo_escala;
+    }
+
     public function corrigirfrequenciaescala($escala_id, $frequencia_id)
     {
         if (!$this->ion_auth->logged_in() OR !$this->ion_auth->in_group($this->_permitted_groups)) {
@@ -2144,7 +2153,7 @@ class Escalas extends Admin_Controller
                 $profissional = $this->input->post('profissional_id');
 
                 // Atualizar escala e frequência
-                if ($tipobatida == 3) {
+                if ($tipobatida == 1) {
                     $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
                     $this->escala_model->update($escala_id, ['frequencia_entrada_id' => $frequencia_id, 'profissional_id' => $profissional]);
                 } else {
@@ -3127,7 +3136,8 @@ class Escalas extends Admin_Controller
                 'horainicialplantao' => $horainicialplantao,
                 'horafinalplantao' => $horafinalplantao,
                 'tipo_escala' => $tipo,
-                'tipo_plantao' => 1
+                'tipo_plantao' => 1,
+                'extra' => 1
             );
 
             $datainicial = new DateTime($datainicialplantao);
@@ -3170,7 +3180,8 @@ class Escalas extends Admin_Controller
                     'horafinalplantao' => $hrfinalplantao,
                     'duracao' => $duracao,
                     'tipo_escala' => $tipo,
-                    'tipo_plantao' => 1
+                    'tipo_plantao' => 1,
+                    'extra' => 1
                 );
                 $success = $this->escala_model->insert($insert_data);
             }

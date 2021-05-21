@@ -247,14 +247,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li class="<?=active_link_function('justificativa')?>"><a href="<?php echo site_url('admin/justificativas'); ?>"><?php echo lang('menu_justificativas'); ?></a></li>
                             </ul>
                         </li>
-                        <li class="treeview <?=active_link_controller('processamento') ? 'active' : ''?>">
-                            <a href="<?php echo site_url('admin/processamento'); ?>">
-                                <i class="fa fa-gears"></i>
-                                <span><?php echo lang('menu_processamento'); ?></span>
-                                <!-- <i class="fa fa-angle-left pull-right"></i>-->
-                            </a>
 
-                        </li>
                         <li class="<?=active_link_controller('feriados')?>">
                             <a href="<?php echo site_url('admin/feriados'); ?>">
                                 <i class="fa fa-calendar-times-o"></i> <span><?php echo lang('menu_feriados'); ?></span>

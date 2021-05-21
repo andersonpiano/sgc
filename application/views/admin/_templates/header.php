@@ -95,7 +95,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php if ($this->router->fetch_class() == 'escalas') : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/escalas.js'); ?>"></script>
 <?php endif; ?>
-<?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['create'])) : ?>
+<?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['create', 'createbyadmin'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/justificativa.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['profissional'])) : ?>

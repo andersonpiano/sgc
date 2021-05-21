@@ -120,4 +120,27 @@ class Dashboard extends Admin_Controller
         //Setor em 12/09 das 13h às 19h
         return "Clique aqui para ver seus pr&oacute;ximos plant&otilde;es";
     }
+
+    public function batida($id, $tipo){
+        $this->load->model("cemerge/escala_model");
+
+        $batida = $this->escala_model->get_by_id($id);
+
+        if ($tipo == 'E'){
+            return $this->frequencia($batida->frequencia_entrada_id);
+        } else {
+            return $this->frequencia($batida->frequencia_saida_id);
+        }
+    }
+
+    public function frequencia($id){
+        $this->load->model("cemerge/FrequenciaAssessus_model");
+
+        $frequencia = $this->FrequenciaAssessus_model->get_by_cdctlfrq($id);
+        if (isset($frequencia->DT_FRQ)){
+            return $frequencia->DT_FRQ;
+        } else {
+            return '1901-01-01 00:00:00';
+        }
+    }
 }

@@ -178,6 +178,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <tr>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_dataplantao');?></th>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_turno');?></th>
+                                                <th scope="col" class="text-center w-5"><?php echo lang('escalas_tipoescala');?></th>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_horaentrada');?></th>
                                                 <th scope="col" class="text-center w-5"><?php echo lang('escalas_horasaida');?></th>
                                                 <th scope="col" class="w-15"><?php echo lang('escalas_profissional');?></th>
@@ -265,10 +266,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 array_push($trocas_passagens, $tp->profissional_titular_nomecurto . "&nbsp;para&nbsp;" . $tp->profissional_substituto_nomecurto);
                                             }
                                         }
+                                        $tipo = $freq->tipo_escala;
+                                                    $tipo_escala = '';
+                                                    if ($tipo == 1){
+                                                        $tipo_escala = 'Plantonista';
+                                                    } else if ($tipo == 2){
+                                                        $tipo_escala = 'Prescritor';
+                                                    } else {
+                                                        $tipo_escala = 'Diarista';
+                                                    }
                                         ?>
                                             <tr>                                                
                                                 <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center"><?php echo htmlspecialchars($turno, ENT_QUOTES, 'UTF-8'); ?></td>
+
+                                                <td class="text-center"><?php echo $tipo_escala; ?></td>
                                                 <td class="text-center" <?php echo($freq->escala_id_entrada ? 'bg-success' : 'bg-danger'); ?>>
                                                     <?php
                                                     if (!is_null($freq->dt_frq_entrada)) {
@@ -307,6 +319,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     }
                                                     ?>
                                                 </td>
+                                                
                                                 <td><span class="<?php echo(!empty($trocas_passagens) ? 'title_help' : '');?>" title="<?php echo(implode('&#10;', $trocas_passagens)); ?>">
                                                 <?php
                                                     echo($freq->nome_profissional ? $freq->nome_profissional . '<button style="font-size:19px; position: relative; float: right; color:red;" class="btn btn-link btn-remover-medico text-center" id="remover_medico" escala="'.$freq->id.'" profissional="'.$freq->id_profissional.'"><i class="fa fa-times" aria-hidden="true"></i></i></button>': '-'); ?></span></td>
@@ -423,8 +436,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="form-group">
                         <div>
                             <select id="tipobatida_aceitar" name="tipobatida_aceitar" type="select" class="form-control">
-                                <option value="3">Entrada</option>
-                                <option value="4">Saída</option>
+                                <option value="1">Entrada</option>
+                                <option value="2">Saída</option>
                             </select>
                         </div>
                         <br>

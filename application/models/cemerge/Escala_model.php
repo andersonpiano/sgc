@@ -17,6 +17,7 @@ class Escala_model extends MY_Model
         //$where .= 'and dataplantao < \'' . $datainicial . '\' ';
         $where .= 'and setor_id = ' . $setor_id . ' ';
         $where .= 'and (extra = 0 or extra is null) ';
+        $where .= 'and tipo_plantao = 0 ';
         $order_by = 'dataplantao, horainicialplantao, id';
 
         $this->db->select($fields);

@@ -263,6 +263,7 @@ class Profissionais extends Admin_Controller
             if ($this->ion_auth->email_check($email)) {
                 $this->session->set_flashdata('message', 'Já existe um usuário criado para este profissional. Favor editá-lo.');
                // redirect('admin/profissionais/edit/' . $id, 'refresh');
+               exit;
             }
 
             $userCreated = $this->ion_auth->register($username, $password, $email, $additional_data, $group);
@@ -282,6 +283,7 @@ class Profissionais extends Admin_Controller
         } else {
             $this->session->set_flashdata('message', 'Não foi encontrado profissional com o código informado ou o profissional não possui CPF cadastrado.');
         }
+        
 
         /* Redirect to edit page */
         //redirect('admin/profissionais/edit/' . $id, 'refresh');
