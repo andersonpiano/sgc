@@ -88,6 +88,9 @@ class Justificativas extends Admin_Controller
                     break;
                 }
 
+                $ct->entrada_sistema = date('H:i', strtotime($this->batida($ct->plantao, 'E')));
+                $ct->saida_sistema = date('H:i', strtotime($this->batida($ct->plantao, 'S')));
+
                 $data_plantao = $ct->data_inicial_plantao;
                 $profissional_id = $ct->profissional_id;
                 $plantao_entrada = $ct->hora_entrada;
@@ -985,9 +988,11 @@ class Justificativas extends Admin_Controller
 
         $data_plantao = $this->data['justificativa']->data_plantao;
         $profissional_id = $this->data['justificativa']->profissional_id;
-        $plantao_entrada = $this->data['justificativa']->hora_entrada;
-        $plantao_saida = $this->data['justificativa']->hora_saida;
-  
+        $plantao_entrada = date('H:i', strtotime($this->batida($this->data['justificativa']->escala_id, 'E')));
+        $plantao_saida = date('H:i', strtotime($this->batida($this->data['justificativa']->escala_id, 'S')));
+        $this->data['justificativa']->turno = $this->turno($this->hora_turno($this->data['justificativa']->escala_id));
+
+        //var_dump($turno); exit;
 
         $this->data['batida_entrada'] = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
         $this->data['batida_saida'] = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
@@ -1140,13 +1145,13 @@ class Justificativas extends Admin_Controller
             
             $row[] = '<center><div style="display: inline-block;">
                         <button class="btn btn-link btn-add-profissional" 
-                            plantao='.$profissional->id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
-                            $profissional->id.
+                            plantao='.$profissional->escala_id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
+                            $profissional->escala_id.
                             '&setor_id='.$profissional->setor_id.
                     '&profissional_id='.$profissional->profissional_id.
                     '&data_plantao='.$profissional->dataplantao.
-                    '&hora_in='.date('H:i', strtotime($this->batida($profissional->id, 'E'))).
-                    '&hora_out='.date('H:i', strtotime($this->batida($profissional->id, 'S'))).'" 
+                    '&hora_in='.date('H:i', strtotime($this->batida($profissional->escala_id, 'E'))).
+                    '&hora_out='.date('H:i', strtotime($this->batida($profissional->escala_id, 'S'))).'" 
                     <i class="fa fa-pencil-square-o">Justificar</i></a>
                             
                         </button>
@@ -1181,6 +1186,8 @@ class Justificativas extends Admin_Controller
 
         $data = array();
         foreach ($profissionais as $profissional) {
+
+            var_dump($profissional);exit;
     
             $row = array();
             //$row[] = '<center>'.$profissional->id.'</center>';
@@ -1243,6 +1250,14 @@ class Justificativas extends Admin_Controller
         } else {
             return $this->frequencia($batida->frequencia_saida_id);
         }
+    }
+
+    public function hora_turno($id){
+        $this->load->model("cemerge/escala_model");
+
+        $batida = $this->escala_model->get_by_id($id);
+        return date('H:i:s', strtotime($batida->horainicialplantao));
+
     }
 
     public function frequencia($id){

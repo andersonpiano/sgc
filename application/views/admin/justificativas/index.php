@@ -121,8 +121,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo htmlspecialchars($justificativa->turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo (date('H:i', strtotime($justificativa->hora_entrada)) ? date('H:i', strtotime($justificativa->hora_entrada)) : "Sem Registro"); ?></td> 
-                                                <td><?php echo (date('H:i', strtotime($justificativa->hora_saida)) && $justificativa->hora_saida != null ? date('H:i', strtotime($justificativa->hora_saida)) : "Sem Registro"); ?></td>
+                                                <td><?php echo (date('H:i', strtotime($justificativa->entrada_sistema)) && $justificativa->entrada_sistema != '00:00'? date('H:i', strtotime($justificativa->entrada_sistema)) : "Sem Registro"); ?></td> 
+                                                <td><?php echo (date('H:i', strtotime($justificativa->saida_sistema)) && $justificativa->saida_sistema != null && $justificativa->saida_sistema != '00:00' ? date('H:i', strtotime($justificativa->saida_sistema)) : "Sem Registro"); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
@@ -139,6 +139,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
             </div>
             <div class="print-footer text-center">
                         <img class="text-center" src="<?php echo base_url($frameworks_dir . '/cemerge/images/assinatura.png'); ?>"/><br>
+                        <span class="text-center ">____________________________<br><bold>Breno Douglas Dantas Oliveira</bold> <br> Coordenação Médica da Emergência
+                        <br>do Hospital de Messejana<br>CREMEC 15.461</span><br>
                         <span class="text-center"><?php echo $dia[$numero_dia].', '.$dia_mes.' de '.$mes[$numero_mes].' de '.$ano ?></span>
                 </div>
 

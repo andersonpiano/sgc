@@ -14,7 +14,7 @@ class Justificativa_model extends MY_Model
     public function get_justificativas_profissional($datainicial, $datafinal, $status)
     {
         $fields = "j.id as id, ";
-        $fields .= "e.dataplantao as data_inicial_plantao, ";
+        $fields .= "e.id as plantao, e.dataplantao as data_inicial_plantao, ";
         $fields .= "e.horainicialplantao as hora_entrada, ";
         $fields .= "e.horafinalplantao as hora_saida, ";
         $fields .= "p.id as profissional_id, ";
@@ -36,6 +36,7 @@ class Justificativa_model extends MY_Model
         } else {
             $sql .= "AND j.status = $status";
         }
+        $sql .= "order by e.dataplantao ";
         
         $query = $this->db->query($sql);
 
@@ -45,7 +46,7 @@ class Justificativa_model extends MY_Model
     public function get_justificativas_por_profissional($profissional, $datainicial, $datafinal, $status)
     {
         $fields = "j.id as id, ";
-        $fields .= "e.dataplantao as data_inicial_plantao, ";
+        $fields .= "e.id as plantao, e.dataplantao as data_inicial_plantao, ";
         $fields .= "e.horainicialplantao as hora_entrada, ";
         $fields .= "e.horafinalplantao as hora_saida, ";
         $fields .= "p.id as profissional_id, ";
@@ -60,6 +61,7 @@ class Justificativa_model extends MY_Model
         $sql .= "JOIN escalas e on (j.escala_id = e.id) ";
         $sql .= "JOIN profissionais p on (j.profissional_id = p.id) ";
         $sql .= "JOIN setores s on (j.setor_id = s.id) ";
+        $sql .= "JOIN setores s on (j.setor_id = s.id) ";
         $sql .= "WHERE ";
         $sql .= "p.id = $profissional ";
         $sql .= "AND j.data_plantao BETWEEN '$datainicial' and '$datafinal'";
@@ -68,14 +70,15 @@ class Justificativa_model extends MY_Model
         } else {
             $sql .= "AND j.status = $status";
         }
+        $sql .= "order by dataplantao desc";
         
         $query = $this->db->query($sql);
 
         return $query->result();
     }
 
-    var $column_search = array('dataplantao');
-    var $column_order = array('dataplantao');
+    var $column_search = array('escalas.dataplantao');
+    var $column_order = array('escalas.dataplantao');
 
     private function _get_datatable($profissional) {
 
@@ -91,9 +94,15 @@ class Justificativa_model extends MY_Model
             $order_dir = $order[0]["dir"];
         }
 
+        $this->db->select('*');
         $this->db->from('escalas');
-        $this->db->where_in('profissional_id', $profissional);
-        $this->db->where_in('justificativa', 1);
+        $this->db->join('passagenstrocas', 'passagenstrocas.escala_id = escalas.id and passagenstrocas.statuspassagem = 1','left');
+        $this->db->where_in('escalas.justificativa', 1);
+        $this->db->where('passagenstrocas.profissionalsubstituto_id', $profissional);
+        $this->db->or_where('escalas.profissional_id', $profissional);
+        $this->db->where_in('escalas.justificativa', 1);
+        $this->db->where_in('passagenstrocas.statuspassagem in', [0,'null']);
+
 
         if (isset($search)) {
             $first = TRUE;
