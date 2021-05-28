@@ -36,7 +36,7 @@ class Justificativa_model extends MY_Model
         } else {
             $sql .= "AND j.status = $status";
         }
-        $sql .= "order by e.dataplantao ";
+        $sql .= " order by e.dataplantao ";
         
         $query = $this->db->query($sql);
 
@@ -70,7 +70,7 @@ class Justificativa_model extends MY_Model
         } else {
             $sql .= "AND j.status = $status";
         }
-        $sql .= "order by dataplantao desc";
+        $sql .= " order by dataplantao desc";
         
         $query = $this->db->query($sql);
 
