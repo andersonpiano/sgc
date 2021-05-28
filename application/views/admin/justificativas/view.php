@@ -64,7 +64,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
-                                                <td><?php echo((isset($batida_entrada)) ? date('H:i', strtotime($batida_entrada)) : "Sem Registro"); ?></td>
+                                                <td><?php echo((isset($batida_entrada)) != '00:00:00' ? date('H:i', strtotime($batida_entrada)) : "Sem Registro"); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
@@ -72,11 +72,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>
-                                                <td><?php echo($justificativa->entrada_justificada && $justificativa->entrada_justificada != date('H:i', strtotime('00:00')) && $justificativa->entrada_justificada != "00:00" ? date('H:i', strtotime($justificativa->entrada_justificada)) : " - "); ?></td>
+                                                <td><?php echo($justificativa->entrada_justificada != "00:00:00"  ? date('H:i', strtotime($justificativa->entrada_justificada)) : " - "); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_saida'). " Justificada"); ?></th>
-                                                <td><?php echo($justificativa->saida_justificada && $justificativa->saida_justificada != '00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) : " - "); ?></td>
+                                                <td><?php echo($justificativa->saida_justificada && $justificativa->saida_justificada != '00:00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) : " - "); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_descricao')); ?></th>
