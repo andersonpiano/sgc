@@ -21,20 +21,7 @@ $(document).ready(function(){
         document.getElementById("data_plantao").readOnly = true;
         document.getElementById("data_plantao").value = data['data_plantao'];
 
-        if (data['hora_in'] != null){
-            if(data['hora_in'] != '21:00'){
-                document.getElementById("batida_entrada").value = data['hora_in'];
-            }
-            
-        }
-        if (data['hora_out'] != null){
-            if(data['hora_out'] != '21:00'){
-                document.getElementById("batida_saida").value = data['hora_out'];        
-            }
 
-
-            
-        }
 
         
     } else {

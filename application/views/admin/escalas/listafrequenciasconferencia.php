@@ -192,17 +192,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <?php
                                         $turno = '';
                                         $hora_inicial_plantao = date('H:i:s', strtotime($freq->horainicialplantao));
-                                        if ($hora_inicial_plantao == '06:00:00') {
+                                        if ($hora_inicial_plantao == '06:00:00' && $freq->tipo_escala == 1) {
                                             $turno = 'Manhã';
                                         }
-                                        if ($hora_inicial_plantao == '07:00:00') {
+                                        else if ($hora_inicial_plantao == '07:00:00' && $freq->tipo_escala == 1) {
                                             $turno = 'Manhã';
                                         }
-                                        if ($hora_inicial_plantao == '13:00:00') {
+                                        else if ($hora_inicial_plantao == '13:00:00' && $freq->tipo_escala == 1) {
                                             $turno = 'Tarde';
                                         }
-                                        if ($hora_inicial_plantao == '19:00:00') {
+                                        else if ($hora_inicial_plantao == '19:00:00' && $freq->tipo_escala == 1) {
                                             $turno = 'Noite';
+                                        } else {
+                                            $turno = 'Manhã/Tarde';
                                         }
                                         $tipo_batida_escala = 'Incompleto';
                                         // Frequências inseridas MT
@@ -267,14 +269,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             }
                                         }
                                         $tipo = $freq->tipo_escala;
-                                                    $tipo_escala = '';
-                                                    if ($tipo == 1){
-                                                        $tipo_escala = 'Plantonista';
-                                                    } else if ($tipo == 2){
-                                                        $tipo_escala = 'Prescritor';
-                                                    } else {
-                                                        $tipo_escala = 'Diarista';
-                                                    }
+                                        $tipo_escala = '';
+                                        if ($tipo == 1){
+                                            $tipo_escala = 'Plantonista';
+                                        } else if ($tipo == 2){
+                                            $tipo_escala = 'Prescritor';
+                                        } else {
+                                            $tipo_escala = 'Diarista';
+                                        }
                                         ?>
                                             <tr>                                                
                                                 <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>

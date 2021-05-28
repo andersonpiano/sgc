@@ -101,7 +101,7 @@ class Justificativa_model extends MY_Model
         $this->db->where('passagenstrocas.profissionalsubstituto_id', $profissional);
         $this->db->or_where('escalas.profissional_id', $profissional);
         $this->db->where_in('escalas.justificativa', 1);
-        $this->db->where_in('passagenstrocas.statuspassagem in', [0,'null']);
+        //$this->db->where_in('passagenstrocas.statuspassagem in', [0,'null']);
 
 
         if (isset($search)) {

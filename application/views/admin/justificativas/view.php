@@ -64,11 +64,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
-                                                <td><?php echo((isset($batida_entrada->entrada)) ? date('H:i', strtotime($batida_entrada->entrada)) : "Sem Registro"); ?></td>
+                                                <td><?php echo((isset($batida_entrada)) ? date('H:i', strtotime($batida_entrada)) : "Sem Registro"); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
-                                                <td><?php echo((isset($batida_saida->saida)) ? date('H:i', strtotime($batida_saida->saida)) : "Sem Registro"); ?></td>
+                                                <td><?php echo((isset($batida_saida)) ? date('H:i', strtotime($batida_saida)) : "Sem Registro"); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>

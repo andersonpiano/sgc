@@ -586,7 +586,7 @@ class Escala_model extends MY_Model
         $sql .= "f_saida.escala_id as escala_id_saida, f_saida.tipo_batida as tipo_batida_saida, ";
         $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
         $sql .= "ec.idsetor, ec.nomesetor, ec.prescricao, ec.idunidade, ec.nomeunidade, ec.status, ";
-        $sql .= "ec.id_profissional, ec.cd_pes_fis_profissional, ec.crm_profissional, ec.nome_profissional, ec.vinculo_id_profissional ";
+        $sql .= "ec.id_profissional, ec.cd_pes_fis_profissional, ec.crm_profissional, ec.nome_profissional, ec.vinculo_id_profissional, e_entrada.tipo_escala ";
         $sql .= "from vw_escalas_consolidadas ec ";
         $sql .= "join escalas e_entrada on (ec.id = e_entrada.id) ";
         $sql .= "join escalas e_saida on (ec.id = e_saida.id) ";

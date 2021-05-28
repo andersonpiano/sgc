@@ -994,10 +994,10 @@ class Justificativas extends Admin_Controller
 
         //var_dump($turno); exit;
 
-        $this->data['batida_entrada'] = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
-        $this->data['batida_saida'] = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+        $this->data['batida_entrada'] = date('H:i', strtotime($this->batida($this->data['justificativa']->escala_id, 'E')));
+        $this->data['batida_saida'] = date('H:i', strtotime($this->batida($this->data['justificativa']->escala_id, 'S')));
 
-        //var_dump($this->data); exit;
+        //var_dump($this->data['batida_entrada']); exit;
 
         /* Load Template */
         $this->template->admin_render('admin/justificativas/view', $this->data);
@@ -1037,8 +1037,8 @@ class Justificativas extends Admin_Controller
         $plantao_saida = $this->data['justificativa']->hora_saida;
   
 
-        $this->data['batida_entrada'] = $this->FrequenciaAssessus_model->get_batida_profissional_entrada($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
-        $this->data['batida_saida'] = $this->FrequenciaAssessus_model->get_batida_profissional_saida($data_plantao, $profissional_id, $plantao_entrada, $plantao_saida);
+        $this->data['batida_entrada'] = date('H:i', strtotime($this->batida($this->data['justificativa']->escala_id, 'E')));
+        $this->data['batida_saida'] = date('H:i', strtotime($this->batida($this->data['justificativa']->escala_id, 'S')));
 
         //var_dump($this->data); exit;
 
@@ -1187,7 +1187,7 @@ class Justificativas extends Admin_Controller
         $data = array();
         foreach ($profissionais as $profissional) {
 
-            var_dump($profissional);exit;
+            //var_dump($profissional);exit;
     
             $row = array();
             //$row[] = '<center>'.$profissional->id.'</center>';
