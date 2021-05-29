@@ -210,6 +210,8 @@ class Justificativas extends Admin_Controller
                     $ct->status = 'Aguardando Aprovação';
                     break;
                 }
+                $ct->entrada_sistema = date('H:i', strtotime($this->batida($ct->plantao, 'E')));
+                $ct->saida_sistema = date('H:i', strtotime($this->batida($ct->plantao, 'S')));
 
                 $data_plantao = $ct->data_inicial_plantao;
                 $profissional_id = $ct->profissional_id;
@@ -750,6 +752,7 @@ class Justificativas extends Admin_Controller
 
         /* Load Data */
         $justificativa = $this->justificativa_model->get_by_id($id);
+        
         $this->load->model('cemerge/profissional_model');
         $profissional = $this->profissional_model->get_by_id($justificativa->profissional_id);
         $this->load->model('cemerge/setor_model');
@@ -773,8 +776,8 @@ class Justificativas extends Admin_Controller
                     'profissional_id' => $this->input->post('profissional_id'),
                     'setor_id' => $this->input->post('setor_id'),
                     'data_plantao' => $this->input->post('data_plantao'),
-                    'hora_entrada' => $this->input->post('hora_entrada'),
-                    'hora_saida' => $this->input->post('hora_saida'),
+                    'entrada_justificada' => $this->input->post('hora_entrada'),
+                    'saida_justificada' => $this->input->post('hora_saida'),
                     'descricao' => $this->input->post('descricao'),
                 );
 
@@ -1192,8 +1195,8 @@ class Justificativas extends Admin_Controller
             $row = array();
             //$row[] = '<center>'.$profissional->id.'</center>';
             $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
-            $row[] = '<center>'.$this->nome_setor($profissional->setor_id).'</center>';
-            $row[] = '<center>'.$this->nome_profissional($profissional->profissional_id).'</center>';
+            $row[] = '<center>'.$profissional->setor_nome.'</center>';
+            $row[] = '<center>'.$profissional->profissional_nome.'</center>';
             $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
             
             $row[] = '<center><div style="display: inline-block;">
@@ -1214,9 +1217,9 @@ class Justificativas extends Admin_Controller
         }
         
         $json = array(
-            "draw" => $this->input->post("draw"),
-            "recordsTotal" =>$this->profissional_model->records_total(),
-            "recordsFiltered" => $this->profissional_model->records_filtered(),
+            "draw" => $this->input->post("deaw"),
+            "recordsTotal" =>$this->justificativa_model->records_pendentes_total(),
+            "recordsFiltered" => $this->justificativa_model->records_pendentes_filtered(),
             "status" => 1,
             "data" => $data,
         ); 

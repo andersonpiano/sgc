@@ -21,8 +21,8 @@ class Justificativa_model extends MY_Model
         $fields .= "s.nome as setor_nome, ";
         $fields .= "p.nome as nome_profissional, ";
         $fields .= "j.status as status, ";
-        $fields .= "j.hora_entrada as entrada_justificada, ";
-        $fields .= "j.hora_saida as saida_justificada ";
+        $fields .= "j.entrada_justificada as entrada_justificada, ";
+        $fields .= "j.saida_justificada as saida_justificada ";
 
 
         $sql = "SELECT $fields FROM justificativas as j ";
@@ -53,14 +53,13 @@ class Justificativa_model extends MY_Model
         $fields .= "s.nome as setor_nome, ";
         $fields .= "p.nome as nome_profissional, ";
         $fields .= "j.status as status, ";
-        $fields .= "j.hora_entrada as entrada_justificada, ";
-        $fields .= "j.hora_saida as saida_justificada ";
+        $fields .= "j.entrada_justificada as entrada_justificada, ";
+        $fields .= "j.saida_justificada as saida_justificada ";
 
 
         $sql = "SELECT $fields FROM justificativas as j ";
         $sql .= "JOIN escalas e on (j.escala_id = e.id) ";
         $sql .= "JOIN profissionais p on (j.profissional_id = p.id) ";
-        $sql .= "JOIN setores s on (j.setor_id = s.id) ";
         $sql .= "JOIN setores s on (j.setor_id = s.id) ";
         $sql .= "WHERE ";
         $sql .= "p.id = $profissional ";
@@ -136,8 +135,8 @@ class Justificativa_model extends MY_Model
         return $this->db->get()->result();
     }
 
-    var $column_search2 = array('dataplantao');
-    var $column_order2 = array('dataplantao');
+    var $column_search2 = array('setores.nome', 'profissionais.nome');
+    var $column_order2 = array('escalas.dataplantao','setores.nome', 'profissionais.nome');
 
     private function _get_justificativas_pendentes() {
 
@@ -146,14 +145,17 @@ class Justificativa_model extends MY_Model
             $search = $this->input->post("search")["value"];
         }
         $order_column = NULL;
-        $order_dir = NULL;
+        $order_dir = null;
         $order = $this->input->post("order");
         if (isset($order)) {
             $order_column = $order[0]["column"];
             $order_dir = $order[0]["dir"];
         }
 
+        $this->db->select('escalas.*, profissionais.nome as profissional_nome, setores.nome as setor_nome');
         $this->db->from('escalas');
+        $this->db->join('profissionais', 'escalas.profissional_id = profissionais.id');
+        $this->db->join('setores', 'escalas.setor_id = setores.id');
         $this->db->where_in('justificativa', 1);
 
         if (isset($search)) {
@@ -186,5 +188,19 @@ class Justificativa_model extends MY_Model
             $this->db->limit($length, $start);
         }
         return $this->db->get()->result();
+    }
+
+    public function records_pendentes_filtered() {
+
+        $this->_get_justificativas_pendentes();
+        return $this->db->get()->num_rows();
+
+    }
+
+    public function records_pendentes_total() {
+
+        $this->db->from($this->table);
+        return $this->db->count_all_results();
+
     }
 }
