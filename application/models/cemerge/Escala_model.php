@@ -1302,8 +1302,6 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-     
-
     public function get_escalas_consolidadas_por_profissional_mes_setor($mes, $setor_id, $profissional_id)
     {
         $sql = 'select escalas.id, escalas.dataplantao, escalas.datafinalplantao, ';

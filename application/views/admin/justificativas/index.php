@@ -28,8 +28,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                 </section>
                 <?php endif; ?>
                 <div class="print-header row">
-                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php 
+                    <div class="text-center"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div ><h3 class="text-center"><?php 
                         switch ($this->input->post('status')) {
                             case 0:
                                 echo ("Justificativas Aguardando Aprovação");  
@@ -45,7 +45,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                     break;
                         }               
                     
-                    ?></h3></div>
+                    ?></h3>
+                    <h3 class="text-center">Periodo: <?php echo date('d/m/Y', strtotime($this->input->post('data_plantao_inicio'))); ?> a <?php echo date('d/m/Y', strtotime($this->input->post('data_plantao_fim'))); ?> </h3></div>
                 </div>
                     <section class="content dontprint">
                     <div class="row dontprint">
@@ -150,10 +151,10 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                 </section>
             </div>
             <div class="print-footer text-center">
-                        <img class="text-center" src="<?php echo base_url($frameworks_dir . '/cemerge/images/assinatura.png'); ?>"/><br>
-                        <span class="text-center ">____________________________<br><bold>Breno Douglas Dantas Oliveira</bold> <br> Coordenação Médica da Emergência
+                        <img class="text-center" style="z-index: 1; top: 10px;" src="<?php echo base_url($frameworks_dir . '/cemerge/images/assinatura.png'); ?>"/><br>
+                        <span class="text-center "><bold>Breno Douglas Dantas Oliveira</bold> <br> Coordenação Médica da Emergência
                         <br>do Hospital de Messejana<br>CREMEC 15.461</span><br>
-                        <span class="text-center"><?php echo $dia[$numero_dia].', '.$dia_mes.' de '.$mes[$numero_mes].' de '.$ano ?></span>
+                        <span class="text-center"><?php echo $dia[$numero_dia].', <br>'.$dia_mes.' de '.$mes[$numero_mes].' de '.$ano ?></span>
                 </div>
 
     <div id="modal_justificativas_pendentes" class="modal fade">
@@ -169,7 +170,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                         <table id="dt_pendentes" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
-                                <th style="width:20%" class="dt-center text-center">Data</th>
+                                <th style="width:20%" data-sort='YYYYMMDD' class="dt-center text-center">Data</th>
                                 <th style="width:40%" class="dt-center text-center">Setor</th>
                                 <th style="width:40%" class="dt-center text-center">Médico</th>
                                 <th style="width:20%" class="dt-center no-sort text-center">Turno</th>

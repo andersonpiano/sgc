@@ -31,8 +31,13 @@ class Profissional_model extends MY_Model
         join profissionalsetor on profissionais.id = profissionalsetor.profissional_id
         join setores on setores.id = profissionalsetor.setor_id
         where setor_id = " . $setor_id;
-        $sql .= " and profissionais.id not in (SELECT profissional_id FROM escalas 
-        Where dataplantao = (select dataplantao from escalas where id = ".$plantao.") 
+        $sql .= " 
+        and profissionais.id not in (
+            SELECT profissional_id FROM escalas 
+            JOIN passagenstrocas on escalas.id = passagenstrocas.escala_id
+            WHERE passagentrocas.statuspassagem <> 1 
+            AND dataplantao = (select dataplantao from escalas where id = ".$plantao."
+        ) 
         and horainicialplantao = (select horainicialplantao from escalas where id = ".$plantao.") 
         and profissional_id <> 0 )";
 

@@ -78,7 +78,7 @@ class Justificativas extends Admin_Controller
                 $ct->status_oportunidade = '';
                 switch ($ct->status) {
                 case $this::STATUS_JUSTIFICATIVA_APROVADA:
-                    $ct->status = 'Deferidas';
+                    $ct->status = 'Deferida';
                     break;
                 case $this::STATUS_JUSTIFICATIVA_NEGADA:
                     $ct->status = 'Indeferidas';
@@ -1148,13 +1148,11 @@ class Justificativas extends Admin_Controller
             
             $row[] = '<center><div style="display: inline-block;">
                         <button class="btn btn-link btn-add-profissional" 
-                            plantao='.$profissional->escala_id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
-                            $profissional->escala_id.
+                            plantao='.$profissional->id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
+                            $profissional->id.
                             '&setor_id='.$profissional->setor_id.
                     '&profissional_id='.$profissional->profissional_id.
-                    '&data_plantao='.$profissional->dataplantao.
-                    '&hora_in='.date('H:i', strtotime($this->batida($profissional->escala_id, 'E'))).
-                    '&hora_out='.date('H:i', strtotime($this->batida($profissional->escala_id, 'S'))).'" 
+                    '&data_plantao='.$profissional->dataplantao.'" 
                     <i class="fa fa-pencil-square-o">Justificar</i></a>
                             
                         </button>
@@ -1166,8 +1164,8 @@ class Justificativas extends Admin_Controller
         }
         $json = array(
             "draw" => $this->input->post("draw"),
-            "recordsTotal" =>$this->profissional_model->records_total(),
-            "recordsFiltered" => $this->profissional_model->records_filtered(),
+            "recordsTotal" =>$this->justificativa_model->records_total(),
+            "recordsFiltered" => $this->justificativa_model->records_datatable_filtered($this->_profissional->id),
             "status" => 1,
             "data" => $data,
         ); 
@@ -1175,7 +1173,7 @@ class Justificativas extends Admin_Controller
         exit;
     }
 
-    public function ajax_justificativas_pendentes_coordenador() {
+    public function ajax_justificativas_pendentes_coordenador($data_ini, $data_fim) {
 
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
@@ -1184,17 +1182,16 @@ class Justificativas extends Admin_Controller
         $this->load->model("cemerge/profissional_model");
         $this->load->model("cemerge/justificativa_model");
 
-        $profissionais = $this->justificativa_model->get_justificativas_pendentes();
-        //var_dump($this->_profissional); exit;
+
+        $profissionais = $this->justificativa_model->get_justificativas_pendentes($data_ini, $data_fim);
 
         $data = array();
         foreach ($profissionais as $profissional) {
 
-            //var_dump($profissional);exit;
     
             $row = array();
             //$row[] = '<center>'.$profissional->id.'</center>';
-            $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
+            $row[] = '<center>'./*date('d/m/Y',strtotime(*/$profissional->dataplantao/*))*/.'</center>';
             $row[] = '<center>'.$profissional->setor_nome.'</center>';
             $row[] = '<center>'.$profissional->profissional_nome.'</center>';
             $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
@@ -1213,13 +1210,12 @@ class Justificativas extends Admin_Controller
                     </div></center>';
 
             $data[] = $row;
-            //var_dump($this->batida(22872, 'E')); exit;
         }
         
         $json = array(
             "draw" => $this->input->post("deaw"),
-            "recordsTotal" =>$this->justificativa_model->records_pendentes_total(),
-            "recordsFiltered" => $this->justificativa_model->records_pendentes_filtered(),
+            "recordsTotal" =>$this->justificativa_model->records_total(),
+            //"recordsFiltered" => $this->justificativa_model->records_pendentes_filtered(),
             "status" => 1,
             "data" => $data,
         ); 

@@ -9,6 +9,8 @@ $(document).ready(function(){
 		
 		
 	});
+	$data_ini = document.getElementById('data_plantao_inicio').value;
+	$data_fim = document.getElementById('data_plantao_fim').value;
 
 	var dt_pendentes = $("#dt_pendentes").DataTable({
 
@@ -41,7 +43,7 @@ $(document).ready(function(){
                 }
             }],
 		"ajax": {
-			"url": "/sgc/admin/justificativas/ajax_justificativas_pendentes_coordenador",
+			"url": "/sgc/admin/justificativas/ajax_justificativas_pendentes_coordenador/"+$data_ini+'/'+$data_fim,
 			"method": "POST",
 		},
 		"columnDefs": [
