@@ -291,9 +291,24 @@ class Justificativas extends Admin_Controller
         $hora_entrada =  $this->input->post("hora_entrada");
         $hora_saida =  $this->input->post("hora_saida");
         $descricao =  $this->input->post("descricao");
-
         
+        $plantao_entrada = '00:00';
+        $plantao_saida = '00:00';
 
+        $plantao = $this->input->get_post("plantao_id");
+            //var_dump($plantao); exit;
+        if($plantao){
+            $plantao_entrada = date('H:i', strtotime($this->batida($plantao, 'E')));
+            $plantao_saida = date('H:i', strtotime($this->batida($plantao, 'S')));
+            //var_dump($plantao_entrada); exit;  
+        }
+
+        if($plantao_entrada == '00:00'){
+            $plantao_entrada = '';
+        }
+        if($plantao_saida == '00:00'){
+            $plantao_saida = '';
+        }
 
         //Coletar dados da batida - Anderson
         //$this->data['entrada'] = $this->frequenciaassessus_model->get_batida($this->data['data_plantao'], $this->data['profissional_id'], 1, $this->data['hora_entrada'], $this->data['hora_saida' ]);
@@ -305,6 +320,8 @@ class Justificativas extends Admin_Controller
 
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true) {
+                
+            
 
             $insert_data = array(
                 'profissional_id' => $profissional_id,
@@ -321,7 +338,8 @@ class Justificativas extends Admin_Controller
             if ($justificativa_id) {
                 $this->escala_model->update($escala_id,['justificativa' => 0]);
                 if ($hora_entrada >= '18:00'){
-                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida']);
+                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada]);
+                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida]);
                 } else {
                     $this->frequencia_model->insert([
                         'unidadehospitalar_id' => 1, 
@@ -395,7 +413,7 @@ class Justificativas extends Admin_Controller
                 'id'    => 'batida_entrada',
                 'type'  => 'time',
                 'class' => 'form-control',
-                'value' => ''
+                'value' => $this->form_validation->set_value('batida_entrada', $plantao_entrada)
             );
             
             $this->data['batida_saida'] = array(
@@ -403,7 +421,7 @@ class Justificativas extends Admin_Controller
                 'id'    => 'batida_saida',
                 'type'  => 'time',
                 'class' => 'form-control',
-                'value' => ''
+                'value' => $this->form_validation->set_value('batida_saida', $plantao_saida)
             );
 
             /* Load Template */
@@ -828,14 +846,14 @@ class Justificativas extends Admin_Controller
             'id'    => 'hora_entrada',
             'type'  => 'time',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('hora_entrada', $justificativa->hora_entrada),
+            'value' => $this->form_validation->set_value('hora_entrada', $justificativa->entrada_justificada),
         );
         $this->data['hora_saida'] = array(
             'name'  => 'hora_saida',
             'id'    => 'hora_saida',
             'type'  => 'time',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('hora_saida', $justificativa->hora_saida),
+            'value' => $this->form_validation->set_value('hora_saida', $justificativa->saida_justificada),
         );
 
         /* Load Template */
@@ -1148,8 +1166,8 @@ class Justificativas extends Admin_Controller
             
             $row[] = '<center><div style="display: inline-block;">
                         <button class="btn btn-link btn-add-profissional" 
-                            plantao='.$profissional->id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
-                            $profissional->id.
+                            plantao='.$profissional->escala_id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
+                            $profissional->escala_id.
                             '&setor_id='.$profissional->setor_id.
                     '&profissional_id='.$profissional->profissional_id.
                     '&data_plantao='.$profissional->dataplantao.'" 

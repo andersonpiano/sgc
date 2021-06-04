@@ -91,7 +91,7 @@ class Justificativa_model extends MY_Model
             $order_dir = $order[0]["dir"];
         }
 
-        $this->db->select('*');
+        $this->db->select('*', 'escalas.id as escala_id');
         $this->db->from('escalas');
         $this->db->join('passagenstrocas', 'passagenstrocas.escala_id = escalas.id and passagenstrocas.statuspassagem = 1', 'left');
         $this->db->where('escalas.justificativa', 1);
