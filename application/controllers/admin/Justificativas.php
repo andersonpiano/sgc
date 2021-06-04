@@ -7,7 +7,7 @@ class Justificativas extends Admin_Controller
     const STATUS_JUSTIFICATIVA_APROVADA = 1;
     const STATUS_JUSTIFICATIVA_NEGADA = 2;
     const STATUS_JUSTIFICATIVA_TODAS = 3;
-    const STATUS_JUSTIFICATIVA_PENDENTE = 4;
+    const STATUS_JUSTIFICATIVA_IGNORADA = 4;
 
     private $_permitted_groups = array('admin', 'profissionais', 'coordenadorplantao', 'sac');
     private $_admin_groups = array('admin', 'coordenadorplantao', 'sac');
@@ -56,6 +56,7 @@ class Justificativas extends Admin_Controller
             $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
             $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
+            $this::STATUS_JUSTIFICATIVA_IGNORADA => 'Ignoradas',
             
         );
 
@@ -85,6 +86,9 @@ class Justificativas extends Admin_Controller
                     break;
                 case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
                     $ct->status = 'Aguardando Aprovação';
+                    break;
+                case $this::STATUS_JUSTIFICATIVA_IGNORADA:
+                    $ct->status = 'Ignorada';
                     break;
                 }
 
@@ -179,6 +183,7 @@ class Justificativas extends Admin_Controller
             $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
             $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
+            $this::STATUS_JUSTIFICATIVA_IGNORADA => 'Ignoradas'
             
         );
 
@@ -208,6 +213,9 @@ class Justificativas extends Admin_Controller
                     break;
                 case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
                     $ct->status = 'Aguardando Aprovação';
+                    break;
+                case $this::STATUS_JUSTIFICATIVA_IGNORADA:
+                    $ct->status = 'Ignorada';
                     break;
                 }
                 $ct->entrada_sistema = date('H:i', strtotime($this->batida($ct->plantao, 'E')));
@@ -597,6 +605,7 @@ class Justificativas extends Admin_Controller
         $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
         $this->escala_model->update($escala->escala_id, ['status' => 4]);
         $atual= $_SERVER["HTTP_REFERER"];;
+        $this->session->set_flashdata('message', 'Justificativa Aprovada com sucesso.');
         redirect($atual);
     }
 
@@ -613,6 +622,24 @@ class Justificativas extends Admin_Controller
 
         $this->justificativa_model->update($id, ['status' => 2]);
         $atual= $_SERVER["HTTP_REFERER"];;
+        $this->session->set_flashdata('message', 'Justificativa Negada com sucesso.');
+        redirect($atual);
+    }
+
+    public function ignorar($id){
+        
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma justificativa.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_coordenador_group)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->justificativa_model->update($id, ['status' => 4]);
+        $atual= $_SERVER["HTTP_REFERER"];;
+        $this->session->set_flashdata('message', 'Justificativa Ignorada com sucesso.');
         redirect($atual);
     }
     

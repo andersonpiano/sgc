@@ -90,8 +90,9 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             <tr>
                                                 <th><?php echo(lang('justificativas_status')); ?></th>
                                                 <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferida'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferida'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 4) ? htmlspecialchars(('Ignorada'), ENT_QUOTES, 'UTF-8') : ''); ?>
                                                 </td>
                                             </tr>
                                             <tr  class="dontprint">
@@ -100,6 +101,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
                                                 <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Indeferir', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;
                                                 <?php echo "<a href='" . $_SERVER['HTTP_REFERER'] . "' class='btn btn-primary btn-flat dontprint'>Voltar</a>";?></td>
+                                                <a href=<?php echo "/sgc/admin/justificativas/ignorar/$justificativa->id"; ?>>Ignorar</a>
                                             </tr>
                                         </tbody>
                                     </table>

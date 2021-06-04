@@ -86,8 +86,9 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             <tr>
                                                 <th><?php echo(lang('justificativas_status')); ?></th>
                                                 <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferida'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferida'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Ignorada'), ENT_QUOTES, 'UTF-8') : ''); ?>
                                                 </td>
                                             </tr>
                                             <tr  class="dontprint">
