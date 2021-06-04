@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Profissional_model extends MY_Model
 {
     protected $table = 'profissionais';
-
     public function __construct()
     {
         parent::__construct($this->table);
@@ -12,7 +11,6 @@ class Profissional_model extends MY_Model
 
     public function get_profissionais_por_setor($setor_id) {
         $fields = 'profissionais.id, profissionais.cd_pes_fis, profissionais.registro, profissionais.cpf, profissionais.nome, profissionais.nomecurto, profissionais.email';
-
         $this->db->select($fields);
         $this->db->from($this->table);
         $this->db->join('profissionalsetor', 'profissionais.id = profissionalsetor.profissional_id');
@@ -20,7 +18,6 @@ class Profissional_model extends MY_Model
         $this->db->where('setores.id', $setor_id);
         $this->db->order_by('profissionais.nome');
         $query = $this->db->get();
-
         return $query->result();
     }
 
@@ -32,37 +29,29 @@ class Profissional_model extends MY_Model
         join setores on setores.id = profissionalsetor.setor_id
         where setor_id = " . $setor_id;
         $sql .= " 
-        and profissionais.id not in (
-            SELECT profissional_id FROM escalas 
-            JOIN passagenstrocas on escalas.id = passagenstrocas.escala_id
-            WHERE passagentrocas.statuspassagem <> 1 
-            AND dataplantao = (select dataplantao from escalas where id = ".$plantao."
-        ) 
-        and horainicialplantao = (select horainicialplantao from escalas where id = ".$plantao.") 
-        and profissional_id <> 0 )";
-
+        AND profissionais.id not in (
+            SELECT escalas.profissional_id FROM escalas 
+            LEFT JOIN passagenstrocas on passagenstrocas.escala_id = escalas.id
+            WHERE passagenstrocas.statuspassagem <> 1 
+            AND dataplantao = (select dataplantao from escalas where id = ".$plantao.") 
+            AND horainicialplantao = (select horainicialplantao from escalas where id = ".$plantao.") 
+            AND escalas.profissional_id <> 0 
+            )";
         //$sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
-
         $query = $this->db->query($sql);
-
         return $query->result();
     }
 
     public function get_vinculo_por_profissional($profissional_id){
-        
         $this->db->select('vinculo_id');
         $this->db->from($this->table);
         $this->db->where('id', $profissional_id);
         $query = $this->db->get();
-
         return $query->result();
-
-
     }
 
     public function get_profissionais_por_unidade_hospitalar($unidadehospitalar_id) {
         $fields = 'profissionais.id, profissionais.nome, profissionais.nomecurto';
-
         $this->db->select($fields);
         $this->db->distinct();
         $this->db->from($this->table);
@@ -72,20 +61,17 @@ class Profissional_model extends MY_Model
         $this->db->where('unidadeshospitalares.id', $unidadehospitalar_id);
         $this->db->order_by('profissionais.nome');
         $query = $this->db->get();
-
         return $query->result();
     }
 
     public function get_by_user_id($user_id) {
         $fields = 'profissionais.id, profissionais.cd_pes_fis, profissionais.registro, profissionais.nome, profissionais.nomecurto, profissionais.email';
-
         $this->db->select($fields);
         $this->db->from($this->table);
         $this->db->join('usuariosprofissionais', 'profissionais.id = usuariosprofissionais.profissional_id');
         $this->db->join('users', 'users.id = usuariosprofissionais.user_id');
         $this->db->where('users.id', $user_id);
         $query = $this->db->get();
-
         return $query->row();
     }
 
@@ -94,7 +80,6 @@ class Profissional_model extends MY_Model
         $this->db->from($this->table);
         $this->db->where('id', $user_id);
         $query = $this->db->get();
-
         return $query->row();
     }
 
@@ -103,26 +88,21 @@ class Profissional_model extends MY_Model
         $this->db->from($this->table);
         $this->db->where('id', $profissional_id);
         $query = $this->db->get();
-
         return $query->row();
     }
 
     public function get_by_cd_pes_fis($cd_pes_fis) {
         $fields = 'id, cd_pes_fis, registro, nome, nomecurto';
-
         $this->db->select($fields);
         $this->db->from($this->table);
         $this->db->where('cd_pes_fis', $cd_pes_fis);
         $query = $this->db->get();
-
         return $query->row();
     }
-
     var $column_search = array('matricula',"nome","registro");
     var $column_order = array('id',"matricula", "nome", "registro", "email");
 
     private function _get_datatable() {
-
         $search = NULL;
         if ($this->input->post("search")) {
             $search = $this->input->post("search")["value"];
@@ -134,7 +114,6 @@ class Profissional_model extends MY_Model
             $order_column = $order[0]["column"];
             $order_dir = $order[0]["dir"];
         }
-
         $this->db->from($this->table);
         if (isset($search)) {
             $first = TRUE;
@@ -151,14 +130,11 @@ class Profissional_model extends MY_Model
                 $this->db->group_end();
             }
         }
-
         if (isset($order)) {
             $this->db->order_by($this->column_order[$order_column], $order_dir);
         }
     }
-
     public function get_datatable() {
-
         $length = $this->input->post("length");
         $start = $this->input->post("start");
         $this->_get_datatable();
@@ -167,18 +143,12 @@ class Profissional_model extends MY_Model
         }
         return $this->db->get()->result();
     }
-
     public function records_filtered() {
-
         $this->_get_datatable();
         return $this->db->get()->num_rows();
-
     }
-
     public function records_total() {
-
         $this->db->from($this->table);
         return $this->db->count_all_results();
-
     }
 }

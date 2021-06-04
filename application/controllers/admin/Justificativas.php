@@ -81,7 +81,7 @@ class Justificativas extends Admin_Controller
                     $ct->status = 'Deferida';
                     break;
                 case $this::STATUS_JUSTIFICATIVA_NEGADA:
-                    $ct->status = 'Indeferidas';
+                    $ct->status = 'Indeferida';
                     break;
                 case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
                     $ct->status = 'Aguardando Aprovação';

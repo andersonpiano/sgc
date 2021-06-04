@@ -202,8 +202,7 @@ class Escala_model extends MY_Model
         left join unidadeshospitalares on (unidadeshospitalares.id = setores.unidadehospitalar_id)
         where escalas.setor_id = 5
         and escalas.dataplantao between '2020-10-01' and '2020-10-31'
-        order by nome_profissional, escalas.dataplantao, escalas.horainicialplantao
-        ";
+        order by nome_profissional, escalas.dataplantao, escalas.horainicialplantao";
 
         // Escala de Janeiro
         /*

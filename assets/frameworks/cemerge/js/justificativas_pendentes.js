@@ -4,8 +4,21 @@ $(document).ready(function(){
 	$(".btn-justificativas-pendentes").click(function(){
 		
 		//var setor = $(this).attr('id');
-//		dt_pendentes.reload();
 		$("#modal_justificativas_pendentes").modal();
+		
+		
+	});
+	$(".btn-justificativas-view").click(function(){
+		
+		//var setor = $(this).attr('id');
+		$("#modal_justificativas_view").modal();
+		
+		
+	});
+	$(".btn-justificativas-edit").click(function(){
+		
+		//var setor = $(this).attr('id');
+		$("#modal_justificativas_edit").modal();
 		
 		
 	});

@@ -139,6 +139,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
                                                     <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
+                                                    <button class="btn btn-block btn-primary btn-flat dontprint btn-justificativas-view" id="justificativas-view" medico="<?php echo $justificativa->profissional_id?>">Ver Novo</button>
                                                 </td>
                                             </tr>
 <?php endforeach;?>
@@ -181,6 +182,165 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal_justificativas_view" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title">JUSTIFICATIVA DE AUSÊNCIA DE BIOMETRIA</h4></center>
+                </div>
+
+                <div class="box-body">
+                    <table class="table table-striped table-hover">
+                        <tbody>
+                            <tr>
+                                <th><?php echo(lang('justificativas_profissional')); ?></th>
+                                <td><?php echo('Nome'); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_setor')); ?></th>
+                                <td><?php echo('Setor'); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_data_plantao')); ?></th>
+                                <td><?php echo(date('d/m/Y', strtotime('2021-05-01'))); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_turno')); ?></th>
+                                <td><?php echo 'Turno'; ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
+                                <td><?php echo(date('H:i', strtotime('07:00')) != '00:00' ? date('H:i', strtotime('07:00')) : "-"); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
+                                <td><?php echo(date('H:i', strtotime('13:00')) != '00:00' ? date('H:i', strtotime('13:00')) : "-"); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>
+                                <td><?php echo($justificativa->entrada_justificada != "00:00:00"  ? date('H:i', strtotime($justificativa->entrada_justificada)) : " - "); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_hora_saida'). " Justificada"); ?></th>
+                                <td><?php echo($justificativa->saida_justificada != '00:00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) : " - "); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo(lang('justificativas_descricao')); ?></th>
+                                <td><?php echo(htmlspecialchars(nl2br('Descrição'), ENT_QUOTES, 'UTF-8')); ?></td> 
+                            </tr>
+                            <?php if($justificativa->status == '2') {?> 
+                            <tr>
+                                <th><?php echo(lang('justificativas_recusa')); ?></th>
+                                <td><?php echo(htmlspecialchars(nl2br('Motivo'), ENT_QUOTES, 'UTF-8')); ?></td>
+                            </tr><?php }; ?>
+                            <tr>
+                                <th><?php echo(lang('justificativas_status')); ?></th>
+                                <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                </td>
+                            </tr>
+                            <tr  class="dontprint">
+                                 <td colspan='2' class="text-center"><!--<a href="#" onclick="window.print();" class="btn btn-primary btn-flat dontprint">Imprimir</a>&nbsp; -->
+                                <?php //echo anchor('admin/justificativas/edit/'.$justificativa->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat dontprint btn-justificativas-edit')); ?>&nbsp;
+                                <button type="button" class="btn-justificativas-edit btn btn-primary btn-flat dontprint" data-dismiss="modal">Editar</button> 
+                                <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
+                                <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Indeferir', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;
+                                <button type="button" class="close btn btn-primary btn-flat dontprint" data-dismiss="modal">Voltar</button>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<div id="modal_justificativas_edit" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title">JUSTIFICATIVA DE AUSÊNCIA DE BIOMETRIA</h4></center>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-md-12">
+                             <div class="box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><?php echo lang('justificativas_edit'); ?></h3>
+                                </div>
+                                <div class="box-body">
+                                    <?php echo form_open(uri_string(), array('class' => 'form-horizontal', 'id' => 'form-edit_justificativas')); ?>
+                                        <?php //echo(form_hidden('profissional_id', $profissional_id)); ?>
+                                        <?php //echo form_hidden('id', $justificativa->id);?>
+                                        <?php //echo form_hidden($csrf); ?>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_profissional', 'profissional_nome', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-4">
+                                                <?php echo('Nome do Profissional');?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_cooperativa', 'cooperativa', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-4">
+                                                <?php echo('CEMERGE');?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_setor', 'setor_id', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-4">
+                                                <?php echo 'Setor';?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_data_plantao', 'data_plantao', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-3">
+                                                <input type="date" class="form-control" name="date_out">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_hora_entrada', 'hora_entrada', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control" name="time_in">
+                                            </div>
+                                            <span><cite><?php echo('Preencha caso esteja justificando o horário de entrada.'); ?></cite></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_hora_saida', 'hora_saida', array('class' => 'col-sm-2 text-right')); ?>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control" name="time_out">
+                                            </div>
+                                            <span><cite><?php echo('Preencha caso esteja justificando o horário de saída.'); ?></cite></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('justificativas_descricao', 'descricao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-6">
+                                                <input type="textarea" class="form-control" name="time_in">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <div class="btn-group">
+                                                    <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_save'))); ?>
+                                                    <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
+                                                    <?php echo anchor('admin/justificativas', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php echo form_close();?>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                </section>
+
             </div>
         </div>
     </div>
