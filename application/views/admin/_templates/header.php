@@ -210,7 +210,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery-3.6.0.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery.dataTables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.buttons.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jszip.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pdfmake.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/vfs_fonts.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/buttons.print.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.select.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_view.js'); ?>"></script>
+
+        <link rel="stylesheet" href="<?php echo 'https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css'; ?>">
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'setores' && $this->router->fetch_method() == 'index') : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.bootstrap.min.js'); ?>"></script> 
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery-3.6.0.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jquery.dataTables.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.buttons.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/jszip.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pdfmake.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/vfs_fonts.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/buttons.print.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/dataTables.select.min.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_vagos.js'); ?>"></script>
+
+        <link rel="stylesheet" href="<?php echo 'https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css'; ?>">
 <?php endif; ?>
 <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/pace.min.js'); ?>"></script>
 <script src="<?php echo base_url($frameworks_dir . '/moment/moment.min.js'); ?>"></script>

@@ -74,7 +74,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <tr>
                                                 <td><?php echo htmlspecialchars($setor->nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($setor->unidadehospitalar->razaosocial, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><center><a href="/sgc/admin/escalas/atribuir"><?php echo htmlspecialchars($setor->vagas, ENT_QUOTES, 'UTF-8'); ?></a></center></td>
+                                                <td><center><button class="btn-light btn btn-flat btn-vagas" setor="<?php echo $setor->id;?>" nome="<?php echo $setor->nome; ?>"><?php echo htmlspecialchars($setor->vagas, ENT_QUOTES, 'UTF-8'); ?></button></center></td>
                                                 <td class="dontprint text-center">
                                                     <?php echo anchor('admin/setores/edit/'.$setor->id, ' '/*lang('actions_edit')*/, array('class' => 'btn btn-primary btn-flat fa fa-edit')); ?> &nbsp;
                                                     <?php echo anchor('admin/setores/view/'.$setor->id, ' '/*lang('actions_see')*/, array('class' => 'btn btn-primary btn-flat fa fa-eye')); ?>
@@ -89,3 +89,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </section>
             </div>
+
+            <div id="modal_vagas_setor" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title" id="titulo"></h4></center>
+                </div>
+
+                <div class="modal-body">
+                        <table id="dt_vagas" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th style="width:20%" class="dt-center text-center" >Data</th>
+                                <th style="width:60%" class="dt-center text-center">Turno</th>
+                                <th style="width:20%" class="dt-center no-sort text-center">Tipo de Escala</th>
+                                <th style="width:60%" class="dt-center text-center">Condição</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

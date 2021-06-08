@@ -1109,6 +1109,64 @@ class Justificativas extends Admin_Controller
         return $unidadeshospitalares;
     }
 
+    public function justificativa_view(){
+        $this->load->model('cemerge/profissional_model');
+        $this->load->model('cemerge/setor_model');
+        $this->load->model('cemerge/escala_model');
+        $id = $this->input->post('justificativa');
+
+        $justificativa = $this->justificativa_model->get_by_id($id);
+        $justificativa->nome_profissional = $this->profissional_model->get_by_id($justificativa->profissional_id)->nome;
+        $justificativa->nome_setor = $this->setor_model->get_by_id($justificativa->setor_id)->nome;
+        $justificativa->data = date('d/m/Y', strtotime($justificativa->data_plantao));
+        $justificativa->hora_entrada = $this->escala_model->get_by_id($justificativa->escala_id)->horainicialplantao;
+        
+        $turno = '';
+        if ($justificativa->hora_entrada == '07:00:00'){
+            $turno = 'Manhã';
+        } else if ($justificativa->hora_entrada == '13:00:00'){
+            $turno = 'Tarde';
+        } else {
+            $turno = 'Noite';
+        }
+        
+        $entrada_sistema = date('H:i', strtotime($this->batida($justificativa->escala_id, 'E')));
+        $saida_sistema = date('H:i', strtotime($this->batida($justificativa->escala_id, 'S')));
+
+        if ($entrada_sistema == '00:00'){
+            $entrada_sistema = '-';
+        }
+        if ($saida_sistema == '00:00'){
+            $saida_sistema = '-';
+        }
+        if ($justificativa->entrada_justificada == '00:00:00'){
+            $justificativa->entrada_justificada = '-';
+        } else {
+            $justificativa->entrada_justificada = date('H:i', strtotime($justificativa->entrada_justificada));
+        }
+        if ($justificativa->saida_justificada == '00:00:00'){
+            $justificativa->saida_justificada = '-';
+        } else {
+            $justificativa->saida_justificada = date('H:i',strtotime($justificativa->saida_justificada));
+        }
+
+        echo json_encode([
+            'medico' => $justificativa->nome_profissional, 
+            'setor' => $justificativa->nome_setor, 
+            'data' => $justificativa->data, 
+            'turno' => $turno,
+            'entrada_sistema' => $entrada_sistema,
+            'saida_sistema' => $saida_sistema,
+            'entrada_justificada' => $justificativa->entrada_justificada,
+            'saida_justificada' => $justificativa->saida_justificada,
+            'descricao' => $justificativa->descricao,
+            'status' => $justificativa->status,
+            'motivo' =>$justificativa->motivo_recusa
+        ]);
+
+        exit;
+    }
+
     public function _get_setores_profissional($profissional_id)
     {
         $this->load->model('cemerge/setor_model');

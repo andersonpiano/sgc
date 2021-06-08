@@ -94,5 +94,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url($frameworks_dir . '/medino/assets/js/vendor/superfish.min.js'); ?>"></script>
     <script src="<?php echo base_url($frameworks_dir . '/medino/assets/js/main.js'); ?>"></script>
 
+    <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
+
 </body>
 </html>

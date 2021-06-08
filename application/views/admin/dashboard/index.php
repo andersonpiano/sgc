@@ -265,7 +265,7 @@ if ($url_exist) {
         <?php foreach($justificativas as $justificativa) :?>
                                             <span class="badge badge-success">Importante</span>&nbsp;
                                             
-                                            <a href="<?php echo ('/sgc/admin/justificativas/create/index.php?teste=1&plantao_id='.$justificativa->plantao_id.'&setor_id='.$justificativa->setor_id.
+                                            <a href="<?php echo ('/sgc/admin/justificativas/create/index.php?teste=1&plantao_id='.$justificativa->id.'&setor_id='.$justificativa->setor_id.
                                             '&profissional_id='.$justificativa->profissional_id.'&data_plantao='.$justificativa->dataplantao); ?>">
                                             <p class="text-justify">
             <?php

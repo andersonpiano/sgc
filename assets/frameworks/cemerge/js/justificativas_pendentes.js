@@ -9,8 +9,70 @@ $(document).ready(function(){
 		
 	});
 	$(".btn-justificativas-view").click(function(){
+		document.getElementById("sumir").style.display = 'none';
 		
-		//var setor = $(this).attr('id');
+		var justificativa = $(this).attr('justificativa');
+        $.ajax({
+            url: "/sgc/admin/justificativas/justificativa_view",
+            method: 'post',
+            data: {
+                justificativa : justificativa,
+            },
+            success: function(responseData) {
+                // Se sucesso, remover ou travar o dropdown
+                $profissional = JSON.parse(responseData).medico;
+				$setor = JSON.parse(responseData).setor;
+				$data = JSON.parse(responseData).data;
+				$turno = JSON.parse(responseData).turno;
+				$entrada_sistema = JSON.parse(responseData).entrada_sistema;
+				$saida_sistema = JSON.parse(responseData).saida_sistema;
+				$entrada_justificada = JSON.parse(responseData).entrada_justificada;
+				$saida_justificada = JSON.parse(responseData).saida_justificada;
+				$descricao = JSON.parse(responseData).descricao;
+				$status = JSON.parse(responseData).status;
+				$motivo = JSON.parse(responseData).motivo;
+
+				//console.log(responseData);
+				document.getElementById('nome_profissional').innerText = $profissional;
+				document.getElementById('nome_setor').innerText = $setor;
+				document.getElementById('data').innerText = $data;
+				document.getElementById('turno_plantao').innerText = $turno;
+				document.getElementById('hora_entrada_sistema').innerText = $entrada_sistema;
+				document.getElementById('hora_saida_sistema').innerText = $saida_sistema;
+				document.getElementById('hora_entrada_justificada').innerText = $entrada_justificada;
+				document.getElementById('hora_saida_justificada').innerText = $saida_justificada;
+				document.getElementById('descricao').innerText = $descricao;
+
+				if($status == "0"){
+					document.getElementById('condicao').innerText = 'Aguardando Aprovação';
+					document.getElementById("sumir").style.display = 'none';
+				} else if($status == "1"){
+					document.getElementById('condicao').innerText = 'Deferida';
+					document.getElementById("sumir").style.display = 'none';
+				} else if ($status == "2"){
+					document.getElementById('condicao').innerText = 'Indeferida';
+					document.getElementById("sumir").style.display = 'block';
+					document.getElementById('motivo').innerText = $motivo;
+					
+				} else if ($status == "4"){
+				 	document.getElementById('condicao').innerText = 'Ignorada';
+					 document.getElementById("sumir").style.display = 'none';
+				} else {
+					document.getElementById('condicao').innerText = 'Desconhecido';
+					document.getElementById("sumir").style.display = 'none';
+				}
+				
+				document.getElementById("aprovar").setAttribute("href", "/sgc/admin/justificativas/aprovar/"+justificativa);
+				document.getElementById("desaprovar").setAttribute("href", "/sgc/admin/justificativas/edit_recusa/"+justificativa);
+				document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
+				document.getElementById("ignorar").setAttribute("href", "/sgc/admin/justificativas/ignorar/"+justificativa);
+            },
+            error: function(responseData) {
+                //swal("Erro",$sucess, "error");
+                console.log(responseData);
+            }
+        }); 
+
 		$("#modal_justificativas_view").modal();
 		
 		
@@ -19,8 +81,6 @@ $(document).ready(function(){
 		
 		//var setor = $(this).attr('id');
 		$("#modal_justificativas_edit").modal();
-		
-		
 	});
 	$data_ini = document.getElementById('data_plantao_inicio').value;
 	$data_fim = document.getElementById('data_plantao_fim').value;

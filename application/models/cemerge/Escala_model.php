@@ -423,14 +423,25 @@ class Escala_model extends MY_Model
 
     public function get_justificativas_a_confirmar($profissional_id)
     {
-
+        /*
         $sql = "SELECT ec.id plantao_id, setor_id, profissional_id, dataplantao, nome,  justificativa, horainicialplantao, horafinalplantao FROM escalas as ec ";
         $sql .= "join profissionais p on (p.id = ec.profissional_id) ";
         $sql .= "WHERE ";
         $sql .= "p.id = ".$profissional_id;
         $sql .= " AND ec.justificativa = 1 ";
+        */
+
+        $this->db->select('*', 'escalas.id as plantao_id');
+        $this->db->from('escalas');
+        $this->db->join('passagenstrocas', 'passagenstrocas.escala_id = escalas.id and passagenstrocas.statuspassagem = 1', 'left');
+        $this->db->where('escalas.justificativa', 1);
+        $this->db->where_in('passagenstrocas.profissionalsubstituto_id', $profissional_id);
+        $this->db->where_in('passagenstrocas.statuspassagem', 1);
+        $this->db->or_where('escalas.profissional_id', $profissional_id);
+        $this->db->where_in('escalas.justificativa', 1);
+        $this->db->where_in('passagenstrocas.statuspassagem', null);
                 
-        $query = $this->db->query($sql);
+        $query = $this->db->get();
 
         return $query->result();
     }

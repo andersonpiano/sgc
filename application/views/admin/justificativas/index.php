@@ -138,8 +138,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 } ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
-                                                    <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
-                                                    <button class="btn btn-block btn-primary btn-flat dontprint btn-justificativas-view" id="justificativas-view" medico="<?php echo $justificativa->profissional_id?>">Ver Novo</button>
+                                                    <button class="btn btn-block btn-primary btn-flat dontprint btn-justificativas-view" id="justificativas-view" medico="<?php echo $justificativa->profissional_id?>" justificativa="<?php echo $justificativa->id?>">Ver</button>
                                                 </td>
                                             </tr>
 <?php endforeach;?>
@@ -193,64 +192,62 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                     <button type="button" class="close" data-dismiss="modal">X</button>
                     <center><h4 class="modal-title">JUSTIFICATIVA DE AUSÊNCIA DE BIOMETRIA</h4></center>
                 </div>
-
                 <div class="box-body">
                     <table class="table table-striped table-hover">
                         <tbody>
                             <tr>
                                 <th><?php echo(lang('justificativas_profissional')); ?></th>
-                                <td><?php echo('Nome'); ?></td>
+                                <td id="nome_profissional"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_setor')); ?></th>
-                                <td><?php echo('Setor'); ?></td>
+                                <td id="nome_setor"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_data_plantao')); ?></th>
-                                <td><?php echo(date('d/m/Y', strtotime('2021-05-01'))); ?></td>
+                                <td id="data"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_turno')); ?></th>
-                                <td><?php echo 'Turno'; ?></td>
+                                <td id="turno_plantao"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
-                                <td><?php echo(date('H:i', strtotime('07:00')) != '00:00' ? date('H:i', strtotime('07:00')) : "-"); ?></td>
+                                <td id="hora_entrada_sistema"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
-                                <td><?php echo(date('H:i', strtotime('13:00')) != '00:00' ? date('H:i', strtotime('13:00')) : "-"); ?></td>
+                                <td id="hora_saida_sistema"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>
-                                <td><?php echo($justificativa->entrada_justificada != "00:00:00"  ? date('H:i', strtotime($justificativa->entrada_justificada)) : " - "); ?></td>
+                                <td id="hora_entrada_justificada"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_saida'). " Justificada"); ?></th>
-                                <td><?php echo($justificativa->saida_justificada != '00:00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) : " - "); ?></td>
+                                <td id="hora_saida_justificada"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_descricao')); ?></th>
-                                <td><?php echo(htmlspecialchars(nl2br('Descrição'), ENT_QUOTES, 'UTF-8')); ?></td> 
+                                <td id="descricao"></td> 
                             </tr>
-                            <?php if($justificativa->status == '2') {?> 
-                            <tr>
+
+                            <tr id="sumir">
                                 <th><?php echo(lang('justificativas_recusa')); ?></th>
-                                <td><?php echo(htmlspecialchars(nl2br('Motivo'), ENT_QUOTES, 'UTF-8')); ?></td>
-                            </tr><?php }; ?>
+                                <td id="motivo"></td>
+                            </tr>
+
                             <tr>
                                 <th><?php echo(lang('justificativas_status')); ?></th>
-                                <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                </td>
+                                <td id="condicao"></td>
                             </tr>
                             <tr  class="dontprint">
                                  <td colspan='2' class="text-center"><!--<a href="#" onclick="window.print();" class="btn btn-primary btn-flat dontprint">Imprimir</a>&nbsp; -->
                                 <?php //echo anchor('admin/justificativas/edit/'.$justificativa->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat dontprint btn-justificativas-edit')); ?>&nbsp;
-                                <button type="button" class="btn-justificativas-edit btn btn-primary btn-flat dontprint" data-dismiss="modal">Editar</button> 
-                                <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
-                                <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Indeferir', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;
+                                <?php echo anchor('', 'Editar', array('class' => 'btn btn-primary btn-flat dontprint', 'id' => 'editar')) ?>&nbsp;
+                                <?php echo ($justificativa->status == 0) ? anchor('', 'Deferir', array('class' => 'btn btn-success btn-flat dontprint', 'id' => 'aprovar')) : '';?>&nbsp;
+                                <?php echo ($justificativa->status != 2) ? anchor('', 'Indeferir', array('class' => 'btn btn-danger btn-flat dontprint', 'id'=> 'desaprovar')) : anchor('', 'Deferir', array('class' => 'btn btn-success btn-flat dontprint', 'id' => 'aprovar'));?>&nbsp;
+                                <?php echo ($justificativa->status == 0) ? anchor('', 'Ignorar', array('class' => 'btn btn-light btn-flat dontprint', 'id' => 'ignorar')) : '';?>&nbsp;
                                 <button type="button" class="close btn btn-primary btn-flat dontprint" data-dismiss="modal">Voltar</button>
                             </tr>
                         </tbody>
