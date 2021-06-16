@@ -431,7 +431,7 @@ class Escala_model extends MY_Model
         $sql .= " AND ec.justificativa = 1 ";
         */
 
-        $this->db->select('*', 'escalas.id as plantao_id');
+        $this->db->select('escalas.id as plantao_id, escalas.setor_id, escalas.profissional_id, escalas.dataplantao, escalas.horainicialplantao, escalas.horafinalplantao');
         $this->db->from('escalas');
         $this->db->join('passagenstrocas', 'passagenstrocas.escala_id = escalas.id and passagenstrocas.statuspassagem = 1', 'left');
         $this->db->where('escalas.justificativa', 1);
@@ -439,7 +439,7 @@ class Escala_model extends MY_Model
         $this->db->where_in('passagenstrocas.statuspassagem', 1);
         $this->db->or_where('escalas.profissional_id', $profissional_id);
         $this->db->where_in('escalas.justificativa', 1);
-        $this->db->where_in('passagenstrocas.statuspassagem', null);
+        $this->db->where_in('passagenstrocas.statuspassagem is null');
                 
         $query = $this->db->get();
 
@@ -468,6 +468,28 @@ class Escala_model extends MY_Model
         $sql .= "order by ec.nome_profissional";   
         } else if ($order == 4){
         $sql .="order by DAYOFWEEK(ec.dataplantao) ";
+        }
+        
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    public function get_escalas_a_justificar_manha(){
+
+        $hora_atual = $sql = date('H:i:s');
+        
+        $sql = 'select * from escalas ';
+        $sql = 'WHERE dataplantao = "'.date('Y-m-d').'" ';
+        $sql = 'and tipo_escala = 1 ';
+
+        if ($hora_atual >= '07:00:00' && $hora_atual <= '13:00:00'){
+            $sql = 'and horainicialplantao = "07:00:00"';
+            $sql = 'AND frequencia_entrada_id is null ';
+        } else if ($hora_atual >= '13:00:01' && $hora_atual <= '19:00:00'){
+            $sql = 'and horainicialplantao = "07:00:00"';
+            $sql = 'AND frequencia_saida_id is null ';
         }
         
 
@@ -680,8 +702,8 @@ class Escala_model extends MY_Model
         $sql .= "from tb_ctl_frq f ";
         $sql .= "join profissionais p on (f.cd_pes_fis = p.cd_pes_fis) ";
         $sql .= "where date(f.dt_frq) = '$data_batida' ";
-        $sql .= "and (timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), f.dt_frq) >= -60 ";
-        $sql .= "     and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), f.dt_frq) <= 60) ";
+        $sql .= "and (timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), f.dt_frq) >= -120 ";
+        $sql .= "     and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), f.dt_frq) <= 120) ";
         $sql .= "and p.id = $id_profissional ";
         $sql .= "and f.cd_pes_jur = $id_unidadehospitalar ";
         $sql .= "and f.escala_id is null ";
@@ -1118,7 +1140,7 @@ class Escala_model extends MY_Model
 
     public function get_plantoes_recebidos_a_confirmar($profissional_id)
     {
-        $fields = 'escalas.*, ';
+        $fields = 'escalas.*,';
         $fields .= 'passagenstrocas.id as passagenstrocas_id, ';
         $fields .= 'profissional_passagem.registro as profissional_passagem_registro, ';
         $fields .= 'profissional_passagem.nome as profissional_passagem_nome, ';

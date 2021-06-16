@@ -151,10 +151,11 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                 </section>
             </div>
             <div class="print-footer text-center">
+                <span class="text-center"><?php echo /*$dia[$numero_dia].', <br>'.*/ $dia_mes.' de '.$mes[$numero_mes].' de '.$ano ?></span><br><br>
                         <img class="text-center" style="z-index: 1; top: 10px;" src="<?php echo base_url($frameworks_dir . '/cemerge/images/assinatura.png'); ?>"/><br>
                         <span class="text-center "><bold>Breno Douglas Dantas Oliveira</bold> <br> Coordenação Médica da Emergência
                         <br>do Hospital de Messejana<br>CREMEC 15.461</span><br>
-                        <span class="text-center"><?php echo $dia[$numero_dia].', <br>'.$dia_mes.' de '.$mes[$numero_mes].' de '.$ano ?></span>
+                        
                 </div>
 
     <div id="modal_justificativas_pendentes" class="modal fade">

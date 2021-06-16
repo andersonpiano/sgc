@@ -265,8 +265,7 @@ if ($url_exist) {
         <?php foreach($justificativas as $justificativa) :?>
                                             <span class="badge badge-success">Importante</span>&nbsp;
                                             
-                                            <a href="<?php echo ('/sgc/admin/justificativas/create/index.php?teste=1&plantao_id='.$justificativa->id.'&setor_id='.$justificativa->setor_id.
-                                            '&profissional_id='.$justificativa->profissional_id.'&data_plantao='.$justificativa->dataplantao); ?>">
+                                            <a href="<?php echo ('/sgc/admin/justificativas/create/'.$justificativa->plantao_id); ?>">
                                             <p class="text-justify">
             <?php
                 $text = 'O plantão do dia ' . date('d/m/Y', strtotime($justificativa->dataplantao));

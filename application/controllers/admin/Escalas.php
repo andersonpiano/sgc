@@ -896,6 +896,11 @@ class Escalas extends Admin_Controller
         }
     }
 
+    public function justificativa_automatica(){
+
+        //$escalas = $this->escala_model->
+    }
+
     public function buscarfrequenciaprocessada()
     {
         if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {

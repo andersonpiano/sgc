@@ -91,7 +91,7 @@ class Justificativa_model extends MY_Model
             $order_dir = $order[0]["dir"];
         }
 
-        $this->db->select('*', 'escalas.id as escala_id');
+        $this->db->select('escalas.id as escala_id, escalas.dataplantao, escalas.setor_id, escalas.profissional_id, escalas.horainicialplantao ');
         $this->db->from('escalas');
         $this->db->join('passagenstrocas', 'passagenstrocas.escala_id = escalas.id and passagenstrocas.statuspassagem = 1', 'left');
         $this->db->where('escalas.justificativa', 1);
@@ -99,7 +99,7 @@ class Justificativa_model extends MY_Model
         $this->db->where_in('passagenstrocas.statuspassagem', 1);
         $this->db->or_where('escalas.profissional_id', $profissional);
         $this->db->where_in('escalas.justificativa', 1);
-        $this->db->where_in('passagenstrocas.statuspassagem', null);
+        $this->db->where_in('passagenstrocas.statuspassagem is null');
 
 
         if (isset($search)) {
@@ -151,7 +151,7 @@ class Justificativa_model extends MY_Model
             $order_dir = $order[0]["dir"];
         }
 
-        $this->db->select('escalas.*, profissionais.nome as profissional_nome, setores.nome as setor_nome');
+        $this->db->select('escalas.id as escala_id, escalas.dataplantao, escalas.horainicialplantao, escalas.profissional_id, profissionais.nome as profissional_nome, setores.nome as setor_nome');
         $this->db->from('escalas');
         $this->db->join('profissionais', 'escalas.profissional_id = profissionais.id');
         $this->db->join('setores', 'escalas.setor_id = setores.id');
