@@ -32,13 +32,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php echo form_open(uri_string(), array('class' => 'form-horizontal', 'id' => 'form-edit_escala')); ?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-4 ">
+                                            <div class="col-sm-3">
                                                 <?php echo($escala->unidadehospitalar->razaosocial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_setor', 'setor', array('class' => 'col-sm-2 text-right')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo($escala->setor->nome); //echo form_dropdown($setor_id);?>
                                             </div>
                                         </div>
