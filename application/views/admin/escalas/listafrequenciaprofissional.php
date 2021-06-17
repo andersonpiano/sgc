@@ -30,14 +30,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($unidadehospitalar2_id);?>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($setor_id);?>
                                             </div>
                                         </div>

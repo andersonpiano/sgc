@@ -46,25 +46,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-frequencias_find')); ?>
                                         <div class="form-group">
                                             <?php echo lang('frequencias_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('frequencias_profissional', 'profissional_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($profissional_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('frequencias_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_input($datainicial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('frequencias_datafinalplantao', 'datafinal', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_input($datafinal);?>
                                             </div>
                                         </div>

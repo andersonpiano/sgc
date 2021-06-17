@@ -29,13 +29,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-buscarcessoesetrocas')); ?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'data_inicial', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_input($data_inicial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datafinalplantao', 'data_final', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_input($data_final);?>
                                             </div>
                                         </div>

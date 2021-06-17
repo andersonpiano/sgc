@@ -59,19 +59,19 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-find_justificativa')); ?>
                                         <div class="form-group dontprint">
                                             <?php echo lang('justificativas_data_inicio', 'data_plantao_inicio', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo(form_input($data_plantao_inicio));?>
                                             </div>
                                         </div>
                                         <div class="form-group dontprint">
                                             <?php echo lang('justificativas_data_fim', 'data_plantao_fim', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo(form_input($data_plantao_fim));?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('justificativas_status', 'status', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_dropdown($status);?>
                                             </div>
                                         </div>
