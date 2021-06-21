@@ -122,6 +122,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url($frameworks_dir . '/medino/assets/js/vendor/jquery.nice-select.min.js'); ?>"></script>
     <script src="<?php echo base_url($frameworks_dir . '/medino/assets/js/vendor/superfish.min.js'); ?>"></script>
     <script src="<?php echo base_url($frameworks_dir . '/medino/assets/js/main.js'); ?>"></script>
-
 </body>
 </html>

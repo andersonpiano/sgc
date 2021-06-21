@@ -94,9 +94,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <thead>
                             <tr class="tableheader">
                                 <th width="10%" class="dt-center text-center">ID</th>
-                                <th width="60%" class="dt-center text-center">Profissional</th>
-                                <th width="15%" class="dt-center text-center no-sort">Nível de Formação</th>
-                                <th width="15%" class="dt-center text-center no-sort">Especialidade</th>
+                                <th width="40%" class="dt-center text-center">Profissional</th>
+                                <th width="25%" class="dt-center text-center no-sort">Nível de Formação</th>
+                                <th width="25%" class="dt-center text-center no-sort">Especialidade</th>
                             </tr> 
                         </thead>
                         <tbody>

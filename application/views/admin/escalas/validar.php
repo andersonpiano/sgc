@@ -33,13 +33,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-validar_escala')); ?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($setor_id);?>
                                             </div>
                                         </div>
@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_mes', 'mes', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_dropdown($mes);?>
                                             </div>
                                         </div>

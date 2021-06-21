@@ -167,7 +167,19 @@ class Escalas extends Admin_Controller
 
             $tiposescala = $this->_get_tipos_escala();
             $tiposvisualizacao = $this->_get_tipos_visualizacao();
-
+            $tipos = array(
+                '0' => 'Todos',
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
                 'id'    => 'datainicial',
@@ -884,6 +896,11 @@ class Escalas extends Admin_Controller
         }
     }
 
+    public function justificativa_automatica(){
+
+        //$escalas = $this->escala_model->
+    }
+
     public function buscarfrequenciaprocessada()
     {
         if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
@@ -1563,8 +1580,6 @@ class Escalas extends Admin_Controller
                         $this->data["calendario"] = "Não há dados a exibir ou este relatório não é possível de exibir no calendário. Tente o tipo de visualização lista.";
                     }
                 }
-
-
             } else {
                 $datainicial = date('Y-m-d', strtotime('-1 day'));
                 $datafinal = date('Y-m-d', strtotime('+1 day'));
@@ -1579,13 +1594,11 @@ class Escalas extends Admin_Controller
                 $sabado = 7;
                 $turno_id = 0;
             }
-
             $this->data['message'] = (
                 validation_errors() ? validation_errors() : (
                     $this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')
                 )
             );
-
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tiposvisualizacao = $this->_get_tipos_visualizacao();
             $this->data['tipovisualizacao'] = array(
@@ -1602,7 +1615,6 @@ class Escalas extends Admin_Controller
                 '2' => 'Prescritor',
                 '3' => 'Diarista'
             );
-
             $this->data['tipos'] = array(
                 'name'  => 'tipos',
                 'id'    => 'tipos',
@@ -1610,7 +1622,6 @@ class Escalas extends Admin_Controller
                 'value' => $this->form_validation->set_value('tipos'),
                 'options' => $tipos,
             );
-
             $vinculos = array(
                 '3' => 'Todos',
                 '1' => 'CEMERGE',
@@ -1618,7 +1629,6 @@ class Escalas extends Admin_Controller
                 '4' => 'Vagos'
             );
             $vinculos_atribuir = $this->_get_vinculos_atribuir();
-
             $turnos = array(
                 '0' => 'Todos',
                 '1' => 'Manhã',
@@ -1634,7 +1644,6 @@ class Escalas extends Admin_Controller
                 '0' => 'Fixo',
                 '1' => 'Extra',
             );
-
             $this->data['datainicial'] = array(
                 'name'  => 'datainicial',
                 'id'    => 'datainicial',
@@ -1739,12 +1748,10 @@ class Escalas extends Admin_Controller
     {
         $this->load->model('cemerge/vinculo_model');
         $vinculos = $this->vinculo_model->get_all();
-
         $v = array();
         foreach ($vinculos as $vinculo) {
             $v[$vinculo->id] = $vinculo->nome;
         }
-
         return $v;
     }
 
@@ -1753,18 +1760,14 @@ class Escalas extends Admin_Controller
         /* Initialize email */
         $ci_mail_config = $this->config->item('mail');
         $this->email->initialize($ci_mail_config);
-
         $subject = 'CEMERGE - Nova Escala Publicada';
-
         $message = $this->load->view(
             'admin/_templates/email/escala-publicada.tpl.php', $data, true
         );
             $this->email->to($destinatario);
             $this->email->subject($subject);
             $this->email->message($message);
-
             $email_enviado = $this->email->send();
-
             return $email_enviado;
     }
 

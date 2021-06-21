@@ -16,7 +16,7 @@ $(document).ready(function(){
 		"autoWidth": false,
 		"processing": true,
 		"serverSide": true,
-		dom: 'Brt',
+		dom: 'Brtip',
 		"ajax": {
 			"url": "/sgc/admin/justificativas/ajax_justificativas_pendentes",
 			"method": "POST",

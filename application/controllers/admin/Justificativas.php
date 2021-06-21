@@ -7,7 +7,7 @@ class Justificativas extends Admin_Controller
     const STATUS_JUSTIFICATIVA_APROVADA = 1;
     const STATUS_JUSTIFICATIVA_NEGADA = 2;
     const STATUS_JUSTIFICATIVA_TODAS = 3;
-    const STATUS_JUSTIFICATIVA_PENDENTE = 4;
+    const STATUS_JUSTIFICATIVA_IGNORADA = 4;
 
     private $_permitted_groups = array('admin', 'profissionais', 'coordenadorplantao', 'sac');
     private $_admin_groups = array('admin', 'coordenadorplantao', 'sac');
@@ -56,6 +56,7 @@ class Justificativas extends Admin_Controller
             $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
             $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
+            $this::STATUS_JUSTIFICATIVA_IGNORADA => 'Ignoradas',
             
         );
 
@@ -78,13 +79,16 @@ class Justificativas extends Admin_Controller
                 $ct->status_oportunidade = '';
                 switch ($ct->status) {
                 case $this::STATUS_JUSTIFICATIVA_APROVADA:
-                    $ct->status = 'Deferidas';
+                    $ct->status = 'Deferida';
                     break;
                 case $this::STATUS_JUSTIFICATIVA_NEGADA:
-                    $ct->status = 'Indeferidas';
+                    $ct->status = 'Indeferida';
                     break;
                 case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
                     $ct->status = 'Aguardando Aprovação';
+                    break;
+                case $this::STATUS_JUSTIFICATIVA_IGNORADA:
+                    $ct->status = 'Ignorada';
                     break;
                 }
 
@@ -179,6 +183,7 @@ class Justificativas extends Admin_Controller
             $this::STATUS_JUSTIFICATIVA_AGUARDANDO => 'Aguardando Aprovação',
             $this::STATUS_JUSTIFICATIVA_APROVADA => 'Deferidas',
             $this::STATUS_JUSTIFICATIVA_NEGADA => 'Indeferidas',
+            $this::STATUS_JUSTIFICATIVA_IGNORADA => 'Ignoradas'
             
         );
 
@@ -209,7 +214,12 @@ class Justificativas extends Admin_Controller
                 case $this::STATUS_JUSTIFICATIVA_AGUARDANDO:
                     $ct->status = 'Aguardando Aprovação';
                     break;
+                case $this::STATUS_JUSTIFICATIVA_IGNORADA:
+                    $ct->status = 'Ignorada';
+                    break;
                 }
+                $ct->entrada_sistema = date('H:i', strtotime($this->batida($ct->plantao, 'E')));
+                $ct->saida_sistema = date('H:i', strtotime($this->batida($ct->plantao, 'S')));
 
                 $data_plantao = $ct->data_inicial_plantao;
                 $profissional_id = $ct->profissional_id;
@@ -261,7 +271,7 @@ class Justificativas extends Admin_Controller
         $this->template->admin_render('admin/justificativas/profissional', $this->data);
     }
     
-    public function create()
+    public function create($escala_id)
     {
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma justificativa.');
@@ -279,30 +289,37 @@ class Justificativas extends Admin_Controller
         $this->load->model('cemerge/frequencia_model');
         $this->load->model('cemerge/escala_model');
 
+        $escala_id = (int) $escala_id;
         /* Variables */
         $profissional_id = $this->session->userdata('profissional_id');
         $profissional_nome = $this->session->userdata('nome');
         $setores_profissional = $this->_get_setores_profissional($profissional_id);
-        $escala_id = $this->input->post('escala_id');
         $setor_id = $this->input->get_post('setor_id');
         $data_plantao_inicio = $this->input->get_post("data_plantao");
         $hora_entrada =  $this->input->post("hora_entrada");
         $hora_saida =  $this->input->post("hora_saida");
         $descricao =  $this->input->post("descricao");
-
         
+            $plantao_entrada = date('H:i', strtotime($this->batida($escala_id, 'E')));
+            $plantao_saida = date('H:i', strtotime($this->batida($escala_id, 'S')));
 
+        if($plantao_entrada == '00:00'){
+            $plantao_entrada = '';
+        }
+        if($plantao_saida == '00:00'){
+            $plantao_saida = '';
+        }
 
-        //Coletar dados da batida - Anderson
-        //$this->data['entrada'] = $this->frequenciaassessus_model->get_batida($this->data['data_plantao'], $this->data['profissional_id'], 1, $this->data['hora_entrada'], $this->data['hora_saida' ]);
-        //$this->data['saida'] = $this->frequenciaassessus_model->get_batida($this->data['data_plantao'], $this->data['profissional_id'], 1, $this->data['hora_entrada'], $this->data['hora_saida' ]);
+        $escala = $this->escala_model->get_by_id($escala_id);
 
+        //var_dump($plantao_entrada); exit;
         /* Validate form input */
         $this->form_validation->set_rules('descricao', 'lang:justificativas_descricao', 'required');
-        $this->form_validation->set_rules('escala_id', 'escala_id', 'required');
 
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true) {
+                
+            
 
             $insert_data = array(
                 'profissional_id' => $profissional_id,
@@ -319,8 +336,10 @@ class Justificativas extends Admin_Controller
             if ($justificativa_id) {
                 $this->escala_model->update($escala_id,['justificativa' => 0]);
                 if ($hora_entrada >= '18:00'){
-                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida']);
+                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada]);
+                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida]);
                 } else {
+
                     $this->frequencia_model->insert([
                         'unidadehospitalar_id' => 1, 
                         'setor_id' => $setor_id, 
@@ -329,6 +348,7 @@ class Justificativas extends Admin_Controller
                         'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 
                         'tipobatida' => 5
                     ]);
+
                     $this->frequencia_model->insert([
                         'unidadehospitalar_id' => 1, 
                         'setor_id' => $setor_id, 
@@ -337,6 +357,7 @@ class Justificativas extends Admin_Controller
                         'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida, 
                         'tipobatida' => 6
                        ]);
+
                 }
                 $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
                 redirect('admin/justificativas', 'refresh');
@@ -355,7 +376,8 @@ class Justificativas extends Admin_Controller
                 'id'    => 'setor_id',
                 'type'  => 'select',
                 'class' => 'form-control',
-                'value' => $this->input->post('setor_id'),
+                'value' => $this->form_validation->set_value('setor_id'),
+                'selected' => $escala->setor_id,
                 'options' => $setores_profissional,
             );
             $this->data['descricao'] = array(
@@ -371,7 +393,7 @@ class Justificativas extends Admin_Controller
                 'id'    => 'data_plantao',
                 'type'  => 'date',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('data_plantao'),
+                'value' => $this->form_validation->set_value('data_plantao', $escala->dataplantao),
             );
             $this->data['hora_entrada'] = array(
                 'name'  => 'hora_entrada',
@@ -393,7 +415,8 @@ class Justificativas extends Admin_Controller
                 'id'    => 'batida_entrada',
                 'type'  => 'time',
                 'class' => 'form-control',
-                'value' => ''
+                'value' => $this->form_validation->set_value('batida_entrada', $plantao_entrada),
+                'readonly' => true
             );
             
             $this->data['batida_saida'] = array(
@@ -401,7 +424,8 @@ class Justificativas extends Admin_Controller
                 'id'    => 'batida_saida',
                 'type'  => 'time',
                 'class' => 'form-control',
-                'value' => ''
+                'value' => $this->form_validation->set_value('batida_saida', $plantao_saida),
+                'readonly' => true
             );
 
             /* Load Template */
@@ -411,7 +435,7 @@ class Justificativas extends Admin_Controller
         }
     }
 
-    public function createbyadmin()
+    public function createbyadmin($escala_id, $profissional_id)
     {
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma justificativa.');
@@ -430,17 +454,28 @@ class Justificativas extends Admin_Controller
         $this->load->model('cemerge/escala_model');
 
         /* Variables */
-        $profissional_id = $this->input->get_post('profissional_id');
+
         $profissional_nome = $this->nome_profissional($profissional_id);
-        $setores_profissional = $this->_get_setores_profissional($profissional_id);
-        $escala_id = $this->input->post('escala_id');
-        $setor_id = $this->input->get_post('setor_id');
-        $data_plantao_inicio = $this->input->get_post("data_plantao");
+       $setores_profissional = $this->_get_setores_profissional($profissional_id);
+        $setor_id = $this->input->post('setor_id');
+        $data_plantao_inicio = $this->input->post("data_plantao");
         $hora_entrada =  $this->input->post("hora_entrada");
         $hora_saida =  $this->input->post("hora_saida");
         $descricao =  $this->input->post("descricao");
 
-        
+        $escala_id = (int) $escala_id;
+        $plantao_entrada = date('H:i', strtotime($this->batida($escala_id, 'E')));
+        $plantao_saida = date('H:i', strtotime($this->batida($escala_id, 'S')));
+
+        if($plantao_entrada == '00:00'){
+            $plantao_entrada = '';
+        }
+        if($plantao_saida == '00:00'){
+            $plantao_saida = '';
+        }
+
+        $escala = $this->escala_model->get_by_id($escala_id);
+
 
 
         //Coletar dados da batida - Anderson
@@ -505,7 +540,8 @@ class Justificativas extends Admin_Controller
                 'id'    => 'setor_id',
                 'type'  => 'select',
                 'class' => 'form-control',
-                'value' => $this->input->post('setor_id'),
+                'value' => $this->form_validation->set_value('setor_id'),
+                'selected' => $escala->setor_id,
                 'options' => $setores_profissional,
             );
             $this->data['descricao'] = array(
@@ -521,7 +557,7 @@ class Justificativas extends Admin_Controller
                 'id'    => 'data_plantao',
                 'type'  => 'date',
                 'class' => 'form-control',
-                'value' => $this->form_validation->set_value('data_plantao'),
+                'value' => $this->form_validation->set_value('data_plantao', $escala->dataplantao),
             );
             $this->data['hora_entrada'] = array(
                 'name'  => 'hora_entrada',
@@ -543,7 +579,8 @@ class Justificativas extends Admin_Controller
                 'id'    => 'batida_entrada',
                 'type'  => 'time',
                 'class' => 'form-control',
-                'value' => ''
+                'value' => $this->form_validation->set_value('batida_entrada', $plantao_entrada),
+                'readonly' => true
             );
             
             $this->data['batida_saida'] = array(
@@ -551,7 +588,8 @@ class Justificativas extends Admin_Controller
                 'id'    => 'batida_saida',
                 'type'  => 'time',
                 'class' => 'form-control',
-                'value' => ''
+                'value' => $this->form_validation->set_value('batida_saida', $plantao_saida),
+                'readonly' => true
             );
 
             /* Load Template */
@@ -577,6 +615,7 @@ class Justificativas extends Admin_Controller
         $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
         $this->escala_model->update($escala->escala_id, ['status' => 4]);
         $atual= $_SERVER["HTTP_REFERER"];;
+        $this->session->set_flashdata('message', 'Justificativa Aprovada com sucesso.');
         redirect($atual);
     }
 
@@ -593,6 +632,24 @@ class Justificativas extends Admin_Controller
 
         $this->justificativa_model->update($id, ['status' => 2]);
         $atual= $_SERVER["HTTP_REFERER"];;
+        $this->session->set_flashdata('message', 'Justificativa Negada com sucesso.');
+        redirect($atual);
+    }
+
+    public function ignorar($id){
+        
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma justificativa.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_coordenador_group)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        $this->justificativa_model->update($id, ['status' => 4]);
+        $atual= $_SERVER["HTTP_REFERER"];;
+        $this->session->set_flashdata('message', 'Justificativa Ignorada com sucesso.');
         redirect($atual);
     }
     
@@ -750,6 +807,15 @@ class Justificativas extends Admin_Controller
 
         /* Load Data */
         $justificativa = $this->justificativa_model->get_by_id($id);
+
+        if ($justificativa->entrada_justificada == '00:00:00'){
+            $justificativa->entrada_justificada = '';
+        }
+
+        if ($justificativa->saida_justificada == '00:00:00'){
+            $justificativa->saida_justificada = '';
+        }
+        
         $this->load->model('cemerge/profissional_model');
         $profissional = $this->profissional_model->get_by_id($justificativa->profissional_id);
         $this->load->model('cemerge/setor_model');
@@ -773,8 +839,8 @@ class Justificativas extends Admin_Controller
                     'profissional_id' => $this->input->post('profissional_id'),
                     'setor_id' => $this->input->post('setor_id'),
                     'data_plantao' => $this->input->post('data_plantao'),
-                    'hora_entrada' => $this->input->post('hora_entrada'),
-                    'hora_saida' => $this->input->post('hora_saida'),
+                    'entrada_justificada' => $this->input->post('hora_entrada'),
+                    'saida_justificada' => $this->input->post('hora_saida'),
                     'descricao' => $this->input->post('descricao'),
                 );
 
@@ -825,14 +891,14 @@ class Justificativas extends Admin_Controller
             'id'    => 'hora_entrada',
             'type'  => 'time',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('hora_entrada', $justificativa->hora_entrada),
+            'value' => $this->form_validation->set_value('hora_entrada', $justificativa->entrada_justificada),
         );
         $this->data['hora_saida'] = array(
             'name'  => 'hora_saida',
             'id'    => 'hora_saida',
             'type'  => 'time',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('hora_saida', $justificativa->hora_saida),
+            'value' => $this->form_validation->set_value('hora_saida', $justificativa->saida_justificada),
         );
 
         /* Load Template */
@@ -1061,6 +1127,64 @@ class Justificativas extends Admin_Controller
         return $unidadeshospitalares;
     }
 
+    public function justificativa_view(){
+        $this->load->model('cemerge/profissional_model');
+        $this->load->model('cemerge/setor_model');
+        $this->load->model('cemerge/escala_model');
+        $id = $this->input->post('justificativa');
+
+        $justificativa = $this->justificativa_model->get_by_id($id);
+        $justificativa->nome_profissional = $this->profissional_model->get_by_id($justificativa->profissional_id)->nome;
+        $justificativa->nome_setor = $this->setor_model->get_by_id($justificativa->setor_id)->nome;
+        $justificativa->data = date('d/m/Y', strtotime($justificativa->data_plantao));
+        $justificativa->hora_entrada = $this->escala_model->get_by_id($justificativa->escala_id)->horainicialplantao;
+        
+        $turno = '';
+        if ($justificativa->hora_entrada == '07:00:00'){
+            $turno = 'Manhã';
+        } else if ($justificativa->hora_entrada == '13:00:00'){
+            $turno = 'Tarde';
+        } else {
+            $turno = 'Noite';
+        }
+        
+        $entrada_sistema = date('H:i', strtotime($this->batida($justificativa->escala_id, 'E')));
+        $saida_sistema = date('H:i', strtotime($this->batida($justificativa->escala_id, 'S')));
+
+        if ($entrada_sistema == '00:00'){
+            $entrada_sistema = '-';
+        }
+        if ($saida_sistema == '00:00'){
+            $saida_sistema = '-';
+        }
+        if ($justificativa->entrada_justificada == '00:00:00'){
+            $justificativa->entrada_justificada = '-';
+        } else {
+            $justificativa->entrada_justificada = date('H:i', strtotime($justificativa->entrada_justificada));
+        }
+        if ($justificativa->saida_justificada == '00:00:00'){
+            $justificativa->saida_justificada = '-';
+        } else {
+            $justificativa->saida_justificada = date('H:i',strtotime($justificativa->saida_justificada));
+        }
+
+        echo json_encode([
+            'medico' => $justificativa->nome_profissional, 
+            'setor' => $justificativa->nome_setor, 
+            'data' => $justificativa->data, 
+            'turno' => $turno,
+            'entrada_sistema' => $entrada_sistema,
+            'saida_sistema' => $saida_sistema,
+            'entrada_justificada' => $justificativa->entrada_justificada,
+            'saida_justificada' => $justificativa->saida_justificada,
+            'descricao' => $justificativa->descricao,
+            'status' => $justificativa->status,
+            'motivo' =>$justificativa->motivo_recusa
+        ]);
+
+        exit;
+    }
+
     public function _get_setores_profissional($profissional_id)
     {
         $this->load->model('cemerge/setor_model');
@@ -1142,16 +1266,13 @@ class Justificativas extends Admin_Controller
             $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
             $row[] = '<center>'.$this->nome_setor($profissional->setor_id).'</center>';
             $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
+
+            //var_dump($profissional);exit;
             
             $row[] = '<center><div style="display: inline-block;">
                         <button class="btn btn-link btn-add-profissional" 
-                            plantao='.$profissional->escala_id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/index.php?plantao_id='.
-                            $profissional->escala_id.
-                            '&setor_id='.$profissional->setor_id.
-                    '&profissional_id='.$profissional->profissional_id.
-                    '&data_plantao='.$profissional->dataplantao.
-                    '&hora_in='.date('H:i', strtotime($this->batida($profissional->escala_id, 'E'))).
-                    '&hora_out='.date('H:i', strtotime($this->batida($profissional->escala_id, 'S'))).'" 
+                            plantao='.$profissional->escala_id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/'.
+                            $profissional->escala_id.'" 
                     <i class="fa fa-pencil-square-o">Justificar</i></a>
                             
                         </button>
@@ -1163,8 +1284,8 @@ class Justificativas extends Admin_Controller
         }
         $json = array(
             "draw" => $this->input->post("draw"),
-            "recordsTotal" =>$this->profissional_model->records_total(),
-            "recordsFiltered" => $this->profissional_model->records_filtered(),
+            "recordsTotal" =>$this->justificativa_model->records_total(),
+            //"recordsFiltered" => $this->justificativa_model->records_datatable_filtered($this->_profissional->id),
             "status" => 1,
             "data" => $data,
         ); 
@@ -1172,51 +1293,44 @@ class Justificativas extends Admin_Controller
         exit;
     }
 
-    public function ajax_justificativas_pendentes_coordenador() {
+    public function ajax_justificativas_pendentes_coordenador($data_ini, $data_fim) {
 
-        if (!$this->input->is_ajax_request()) {
+        /*if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
-        }
+        }*/
             
         $this->load->model("cemerge/profissional_model");
         $this->load->model("cemerge/justificativa_model");
 
-        $profissionais = $this->justificativa_model->get_justificativas_pendentes();
-        //var_dump($this->_profissional); exit;
+
+        $profissionais = $this->justificativa_model->get_justificativas_pendentes($data_ini, $data_fim);
 
         $data = array();
         foreach ($profissionais as $profissional) {
 
-            //var_dump($profissional);exit;
     
             $row = array();
             //$row[] = '<center>'.$profissional->id.'</center>';
-            $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
-            $row[] = '<center>'.$this->nome_setor($profissional->setor_id).'</center>';
-            $row[] = '<center>'.$this->nome_profissional($profissional->profissional_id).'</center>';
+            $row[] = '<center>'.$profissional->dataplantao.'</center>';
+            $row[] = '<center>'.$profissional->setor_nome.'</center>';
+            $row[] = '<center>'.$profissional->profissional_nome.'</center>';
             $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
             
             $row[] = '<center><div style="display: inline-block;">
                         <button class="btn btn-link btn-add-profissional" 
-                            plantao='.$profissional->id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/createbyadmin/index.php?plantao_id='.
-                            $profissional->id.
-                            '&setor_id='.$profissional->setor_id.
-                    '&profissional_id='.$profissional->profissional_id.
-                    '&data_plantao='.$profissional->dataplantao.
-                    '&hora_in='.date('H:i', strtotime($this->batida($profissional->id, 'E'))).
-                    '&hora_out='.date('H:i', strtotime($this->batida($profissional->id, 'S'))).'" 
-                    <i class="fa fa-pencil-square-o">Justificar</i></a>
+                            plantao='.$profissional->escala_id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/createbyadmin/'.
+                            $profissional->escala_id.'/'.$profissional->profissional_id.
+                    '"<i class="fa fa-pencil-square-o">Justificar</i></a>
                         </button>
                     </div></center>';
 
             $data[] = $row;
-            //var_dump($this->batida(22872, 'E')); exit;
         }
         
         $json = array(
-            "draw" => $this->input->post("draw"),
-            "recordsTotal" =>$this->profissional_model->records_total(),
-            "recordsFiltered" => $this->profissional_model->records_filtered(),
+            "draw" => $this->input->post("deaw"),
+            "recordsTotal" =>$this->justificativa_model->records_total(),
+            //"recordsFiltered" => $this->justificativa_model->records_pendentes_filtered(),
             "status" => 1,
             "data" => $data,
         ); 

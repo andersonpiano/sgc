@@ -64,11 +64,13 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
-                                                <td><?php echo((isset($batida_entrada)) != '00:00:00' ? date('H:i', strtotime($batida_entrada)) : "Sem Registro"); ?></td>
+                                                <td><?php echo(date('H:i', strtotime($batida_entrada)) != '00:00' ? date('H:i', strtotime($batida_entrada)) : "-"); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
-                                                <td><?php echo((isset($batida_saida)) != '00:00:00' ? date('H:i', strtotime($batida_saida)) : "Sem Registro"); ?></td>
+
+                                                <td><?php echo(date('H:i', strtotime($batida_saida)) != '00:00' ? date('H:i', strtotime($batida_saida)) : "-"); ?></td>
+
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>
@@ -76,7 +78,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_saida'). " Justificada"); ?></th>
-                                                <td><?php echo($justificativa->saida_justificada && $justificativa->saida_justificada != '00:00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) : " - "); ?></td>
+                                                <td><?php echo($justificativa->saida_justificada != '00:00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) : " - "); ?></td>
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_descricao')); ?></th>
@@ -90,8 +92,9 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             <tr>
                                                 <th><?php echo(lang('justificativas_status')); ?></th>
                                                 <td><?php echo(($justificativa->status == 0) ? htmlspecialchars(('Aguardando Aprovação'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
-                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferidas'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 1) ? htmlspecialchars(('Deferida'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 2) ? htmlspecialchars(('Indeferida'), ENT_QUOTES, 'UTF-8') : ''); ?>
+                                                    <?php echo(($justificativa->status == 4) ? htmlspecialchars(('Ignorada'), ENT_QUOTES, 'UTF-8') : ''); ?>
                                                 </td>
                                             </tr>
                                             <tr  class="dontprint">
@@ -100,6 +103,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
                                                 <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Indeferir', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;
                                                 <?php echo "<a href='" . $_SERVER['HTTP_REFERER'] . "' class='btn btn-primary btn-flat dontprint'>Voltar</a>";?></td>
+                                                <a href=<?php echo "/sgc/admin/justificativas/ignorar/$justificativa->id"; ?>>Ignorar</a>
                                             </tr>
                                         </tbody>
                                     </table>

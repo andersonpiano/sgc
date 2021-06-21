@@ -478,6 +478,74 @@ class Setores extends Admin_Controller {
         exit;
     }
 
+    public function ajax_setores_vagas($setor_id) {
+
+        $setor_id = (int) $setor_id;
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+            
+        $this->load->model("cemerge/setor_model");
+
+        $vagas = $this->setor_model->get_datatable_vagas($setor_id);
+
+        $data = array();
+        //$turno = '';
+        foreach ($vagas as $vaga) {
+            $turno = '';
+            if ($vaga->horainicialplantao == "07:00:00"){
+                $turno = "Manhã";
+            } else if ($vaga->horainicialplantao == "13:00:00"){
+                $turno = "Tarde";
+            } else{
+                $turno = "Noite";
+            }
+            
+            $tipo_escala = '';
+            if ($vaga->tipo_escala == "1"){
+                $tipo_escala = "Plantonista";
+            } else if ($vaga->tipo_escala == "2"){
+                $tipo_escala = "Prescritor";
+            } else{
+                $tipo_escala = "Diarista";
+            }
+
+            $condicao = '';
+            if($vaga->publicada == '1'){
+                $condicao = 'Publicada';
+            } else {
+                $condicao = 'Despublicada';
+            }
+
+
+            $row = array();
+            $row[] = '<center>'.date('d/m/Y',strtotime($vaga->dataplantao)).'</center>';
+            $row[] = '<center>'.$turno.'</center>';
+            $row[] = '<center>'.$tipo_escala.'</center>';
+            $row[] = '<center>'.$condicao.'</center>';
+            /*
+            $row[] = '<center><div style="display: inline-block;">
+                        <button onclick="window.location.href='."'/sgc/admin/profissionais/unlinkfromsector/".$vaga->profissional_id.'/'.$vaga->profissional_id."'".'" style="color:red; font-size:20px;" class="btn btn-link btn-remover-profissional" 
+                            id='.$vaga->profissional_id.'>
+                            <i class="fa fa-times">&nbsp; Remover</i>
+                        </button>
+                    </div></center>';
+    */  
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" =>$this->setor_model->records_total_vagas($setor_id),
+            "recordsFiltered" => $this->setor_model->records_filtered_vagas($setor_id),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
+    }
+
     public function ajax_setores() {
 
 

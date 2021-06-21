@@ -209,6 +209,8 @@ $(document).on('change', '#profissional_id', function() {
             $sucess = JSON.parse(responseData).sucess;
             $vinculo = JSON.parse(responseData).vinculo;
 
+            //swal('sucesso', $vinculo);
+
             if($vinculo == '3'){
                 $("#modal_vinculo").modal();
                 $('.btn-vinculo').click(function(){

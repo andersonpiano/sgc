@@ -30,20 +30,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
                                         
                                         <div class="form-group">
                                             <?php echo lang('escalas_profissional', 'profissional_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($profissional_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($setor_id);?>
                                             </div>
                                         </div>
@@ -62,13 +62,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_input($datainicial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datafinalplantao', 'datafinal', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_input($datafinal);?>
                                             </div>
                                         </div>
@@ -115,8 +115,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_setor');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_horaentrada');?></th>
                                                 <th class="text-center"><?php echo lang('escalas_horasaida');?></th>
-                                                <th class="text-center">Horas Trabalhadas</th>
-                                                <th class="text-center">Valor do Plantão</th>
+                                                <!--<th class="text-center">Horas Trabalhadas</th>
+                                                <th class="text-center">Valor do Plantão</th>-->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -148,12 +148,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 $saida = new DateTime(date('Y-m-d H:i:s', strtotime($escala->batidasaida)));
                                                 $horas_trab = $entrada->diff($saida); //->format('%H:%I:%S')
                                                                                               
-                                                    echo '<td><center>'.htmlspecialchars($escala->batidaentrada && $escala->batidasaida ? $horas_trab->format('%H:%I') : '-', ENT_QUOTES, 'UTF-8').'</center></td>';
+                                                    //echo '<td><center>'.htmlspecialchars($escala->batidaentrada && $escala->batidasaida ? $horas_trab->format('%H:%I') : '-', ENT_QUOTES, 'UTF-8').'</center></td>';
                                                 ?>
-                                                <?php if (isset($escala->batidaentrada) && isset($escala->batidasaida)){
+                                                <!--<?php if (isset($escala->batidaentrada) && isset($escala->batidasaida)){
                                                 echo '<td><center>R$ 220,00</center></td>';
                                                     //echo anchor('admin/escalas/view/'.$escala->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat'));
-                                                } else { echo '<td><center>R$ 0,00</center></td>'; } ?>
+                                                } else { echo '<td><center>R$ 0,00</center></td>'; } ?>-->
                                             </tr>
     <?php endforeach;?>
                                         </tbody>

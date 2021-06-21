@@ -29,13 +29,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_escala')); ?>
                                         <div class="form-group">
                                             <?php echo lang('escalas_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($setor_id);?>
                                             </div>
                                         </div>
@@ -52,14 +52,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('escalas_tipo_plantao', 'tipo_plantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($tipos);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <?php echo lang('escalas_tipoescala', 'tipoescala', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_dropdown($tipoescala);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_tipovisualizacao', 'tipovisualizacao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <?php echo form_dropdown($tipovisualizacao);?>
                                             </div>
                                         </div>
@@ -115,6 +121,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
+                                                <th><?php echo lang('escalas_tipo_plantao');?></th>
                                                 <th><?php echo lang('escalas_setor');?></th>
                                                 <th><?php echo lang('escalas_profissional');?></th>
                                                 <th><?php echo lang('escalas_dataplantao');?></th>
@@ -126,6 +133,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <tbody>
     <?php foreach ($escalas as $escala) : ?>
                                             <tr>
+                                            <?php 
+                                                    $tipos = '';
+                                                    if($escala->tipo_escala == 1){ 
+                                                        $tipos = 'Plantonista';
+                                                    } else if($escala->tipo_escala == 2){
+                                                        $tipos = 'Prescritor';
+                                                    } else {
+                                                        $tipos = 'Diarista';
+                                                    }?>
+                                                <td><?php echo htmlspecialchars($tipos, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($escala->profissional_nome ? $escala->profissional_nome : '-', ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($escala->dataplantao)), ENT_QUOTES, 'UTF-8'); ?></td>
