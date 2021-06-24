@@ -68,7 +68,9 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
+
                                                 <td><?php echo(date('H:i', strtotime($batida_saida)) != '00:00' ? date('H:i', strtotime($batida_saida)) : "-"); ?></td>
+
                                             </tr>
                                             <tr>
                                                 <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>

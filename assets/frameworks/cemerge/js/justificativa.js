@@ -20,6 +20,7 @@ $(document).ready(function(){
         
         document.getElementById("data_plantao").readOnly = true;
         document.getElementById("data_plantao").value = data['data_plantao'];
+
     } else {
         
     
