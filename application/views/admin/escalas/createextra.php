@@ -49,26 +49,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($this->data['tipos']);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicialplantao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datainicialplantao);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datafinalplantao', 'datafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datafinalplantao);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_turno', 'turno_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($turno_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class='col-sm-2 control-label'>Quantidade</label>
+                                            <div class="col-sm-3">
+                                                <input name="quantidade" id="quantidade" type="number" class="form-control"></input>
                                             </div>
                                         </div>
                                         <div class="form-group">

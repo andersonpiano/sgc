@@ -559,6 +559,24 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function get_frequencia_sem_escala_nova($unidadehospitalar_id, $datainicial, $datafinal)
+    {
+        $sql = "select f.id, f.datahorabatida, ";
+        $sql .= "p.id as id_profissional, p.registro as crm, p.nome as nome_profissional, p.nomecurto as nome_curto_profissional, setor_nome_temp as nome_setor_sgc ";
+        $sql .= "from frequencias f ";
+        $sql .= "join profissionais p on (f.profissional_id = p.id) ";
+        $sql .= "where f.escala_id is null ";
+        $sql .= "and date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
+        $sql .= "and (f.ignorar = 0 or f.ignorar is null) ";
+        $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
+
+        $sql .= "order by f.datahorabatida";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
     public function get_profissional_escalado($data, $hora, $profissional_id){
 
         $sql = "SELECT * FROM escalas ";
@@ -643,6 +661,45 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function get_escalas_frequencias_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana)
+    {
+        // Considerar join
+        $sql = "select ";
+        $sql .= "f_entrada.id as cd_ctl_frq_entrada, f_entrada.unidadehospitalar_id as cd_pes_jur_entrada, ";
+        $sql .= "f_entrada.profissional_id as cd_pes_fis_entrada, f_entrada.datahorabatida as dt_frq_entrada, ";
+        $sql .= "f_entrada.datahorabatida as hr_frq_entrada, f_entrada.tipobatida as tp_frq_entrada, ";
+        $sql .= "f_entrada.escala_id as escala_id_entrada, f_entrada.tipobatida as tipo_batida_entrada, ";
+        $sql .= "f_saida.id as cd_ctl_frq_saida, f_saida.unidadehospitalar_id as cd_pes_jur_saida, ";
+        $sql .= "f_saida.profissional_id as cd_pes_fis_saida, f_saida.datahorabatida as dt_frq_saida, ";
+        $sql .= "f_saida.datahorabatida as hr_frq_saida, f_saida.tipobatida as tp_frq_saida, ";
+        $sql .= "f_saida.escala_id as escala_id_saida, f_saida.tipobatida as tipo_batida_saida, ";
+        $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
+        $sql .= "ec.idsetor, ec.nomesetor, ec.prescricao, ec.idunidade, ec.nomeunidade, ec.status, ";
+        $sql .= "ec.id_profissional, ec.cd_pes_fis_profissional, ec.crm_profissional, ec.nome_profissional, ec.vinculo_id_profissional, e_entrada.tipo_escala ";
+        $sql .= "from vw_escalas_consolidadas ec ";
+        $sql .= "join escalas e_entrada on (ec.id = e_entrada.id) ";
+        $sql .= "join escalas e_saida on (ec.id = e_saida.id) ";
+        $sql .= "left join frequencias f_entrada on (e_entrada.frequencia_entrada_id = f_entrada.id) ";
+        $sql .= "left join frequencias f_saida on (e_saida.frequencia_saida_id = f_saida.id) ";
+        $sql .= "where ec.dataplantao between '$datainicial' and '$datafinal' ";
+        $sql .= "and ec.idunidade = $unidadehospitalar_id ";
+        //$sql .= "and ec.nome_profissional is not null ";
+        if ($setor_id) {
+            $sql .= "and ec.idsetor = $setor_id ";
+        }
+        if (!empty($turnos)) {
+            $sql .= "and ec.horainicialplantao in (" . implode(', ', $turnos) . ") ";
+        }
+        if (!empty($dias_semana)) {
+            $sql .= "and dayofweek(ec.dataplantao) in (" . implode(', ', $dias_semana) . ") ";
+        }
+        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.horainicialplantao, ec.nome_profissional";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
     public function get_escalas_frequencias_plantao($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id)
     {
         // Considerar join
@@ -697,17 +754,16 @@ class Escala_model extends MY_Model
 
     public function get_frequencia_por_escala($data_batida, $hora_batida, $id_profissional, $id_unidadehospitalar)
     {
-        $sql = "select cd_ctl_frq, cd_pes_jur, cd_set, f.cd_pes_fis, ";
-        $sql .= "dt_frq, hr_frq, tp_frq, cd_hor_tra, cd_ctl_frq_ant, escala_id, tipo_batida ";
-        $sql .= "from tb_ctl_frq f ";
-        $sql .= "join profissionais p on (f.cd_pes_fis = p.cd_pes_fis) ";
-        $sql .= "where date(f.dt_frq) = '$data_batida' ";
-        $sql .= "and (timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), f.dt_frq) >= -120 ";
-        $sql .= "     and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), f.dt_frq) <= 120) ";
-        $sql .= "and p.id = $id_profissional ";
-        $sql .= "and f.cd_pes_jur = $id_unidadehospitalar ";
-        $sql .= "and f.escala_id is null ";
-        $sql .= "order by f.dt_frq";
+        $sql = "select frequencias.id as frequencia_id, unidadehospitalar_id, setor_id, profissional_id, datahorabatida, escala_id, tipobatida ";
+        $sql .= "from frequencias ";
+        $sql .= "join profissionais p on (p.id = frequencias.profissional_id) ";
+        $sql .= "where date(datahorabatida) = '$data_batida' ";
+        $sql .= "and (timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), datahorabatida) >= -120 ";
+        $sql .= " and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), datahorabatida) <= 120) ";
+        $sql .= "and frequencias.profissional_id = $id_profissional ";
+        $sql .= "and unidadehospitalar_id = $id_unidadehospitalar ";
+        $sql .= "and escala_id is null ";
+        $sql .= "order by datahorabatida ";
 
         $query = $this->db->query($sql);
 
@@ -810,6 +866,25 @@ class Escala_model extends MY_Model
         $sql .= "where date(f.dt_frq) between '$datainicial' and '$datafinal' ";
         $sql .= "and f.cd_pes_jur = $unidadehospitalar_id ";
         $sql .= "and p.id = $profissional_id ";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    public function get_frequencias_por_profissional_nova($unidadehospitalar_id, $profissional_id, $datainicial, $datafinal)
+    {
+        $sql = "select p.nome as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_nome_temp, ";
+        $sql .= "f.profissional_id, f.datahorabatida, f.escala_id, f.tipobatida, ";
+        $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
+        $sql .= "ec.id_profissional, ec.crm_profissional, ec.nome_profissional ";
+        $sql .= "from frequencias f ";
+        $sql .= "left join vw_escalas_consolidadas ec on (f.escala_id = ec.id) ";
+        $sql .= "join profissionais p on (f.profissional_id = p.id) ";
+        $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
+        $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
+        $sql .= "and p.id = $profissional_id ";
+        $sql .= "order by f.datahorabatida ";
 
         $query = $this->db->query($sql);
 

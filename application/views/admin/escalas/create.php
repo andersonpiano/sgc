@@ -48,14 +48,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicialplantao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datainicialplantao);?>
                                             </div>
                                         </div>
                                         
                                         <div class="form-group">
                                             <?php echo lang('escalas_datafinalplantao', 'datafinalplantao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datafinalplantao);?>
                                             </div>
                                         </div>
@@ -63,33 +63,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                                         <div class="form-group">
                                             <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($this->data['tipos']);?>
                                             </div>
                                         </div>
 
                                         <div id="diaria_div" class="form-group">
                                             <?php echo lang('escalas_diaria', 'diaria', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($this->data['diaria']);?>
                                             </div>
                                         </div>
 
                                         <div id="manha" class="form-group">
                                             <?php echo lang('escalas_manha', 'manha', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($this->data['manha']);?>
                                             </div>
                                         </div>
                                         <div id="tarde" class="form-group">
                                             <?php echo lang('escalas_tarde', 'tarde', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($this->data['tarde']);?>
                                             </div>
                                         </div>
                                         <div id="noite" class="form-group">
                                             <?php echo lang('escalas_noite', 'noite', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($this->data['noite']);?>
                                             </div>
                                         </div>

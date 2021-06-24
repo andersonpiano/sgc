@@ -330,22 +330,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 </td>
                                                 <td class="dontprint">
                                                     <?php
-                                                    if ($tipo_batida_escala != "OK") {
-                                                        foreach ($freq->frequencias_sem_escala as $f) {
-                                                            echo('<div class="frequenciassemescala">');
-                                                            echo(date('d/m/Y H:i:s', strtotime($f->dt_frq)) . " - " . $f->nome_curto_profissional);
-                                                            if ($f->crm == $freq->crm_profissional) {
-                                                                $url_corrigir = "corrigirfrequenciaescala/" . $freq->id . "/" . $f->cd_ctl_frq;
-                                                                //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente aceitar e processar esta batida?\");' href='" . $url_corrigir . "' class='label label-success' target='_blank'>Aceitar</a><br>");
-                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
-                                                            } else {
-                                                                $url_extra = "criarplantaoextra/" . $freq->id . "/" . $f->cd_ctl_frq . "/" . $f->id_profissional;
-                                                                //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente criar um plantão extra neste setor a partir desta batida?\");' href='" . $url_extra . "' class='label label-info' target='_blank'>Extra</a>");
-                                                                echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
-                                                                $url_ignorar = "ignorarbatida/" . $f->cd_ctl_frq;
-                                                                echo("&nbsp;<a onclick='return confirm(\"Deseja realmente ignorar esta batida?\");' href='" . $url_ignorar . "' class='label label-warning' target='_blank'>Ignorar</a><br>");
+                                                    if($this->input->post('datainicial') <= '2021-06-20'){
+                                                        if ($tipo_batida_escala != "OK") {
+                                                            foreach ($freq->frequencias_sem_escala as $f) {
+                                                                echo('<div class="frequenciassemescala">');
+                                                                echo(date('d/m/Y H:i:s', strtotime($f->dt_frq)) . " - " . $f->nome_curto_profissional);
+                                                                if ($f->crm == $freq->crm_profissional) {
+                                                                    $url_corrigir = "corrigirfrequenciaescala/" . $freq->id . "/" . $f->cd_ctl_frq;
+                                                                    //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente aceitar e processar esta batida?\");' href='" . $url_corrigir . "' class='label label-success' target='_blank'>Aceitar</a><br>");
+                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
+                                                                } else {
+                                                                    $url_extra = "criarplantaoextra/" . $freq->id . "/" . $f->cd_ctl_frq . "/" . $f->id_profissional;
+                                                                    //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente criar um plantão extra neste setor a partir desta batida?\");' href='" . $url_extra . "' class='label label-info' target='_blank'>Extra</a>");
+                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
+                                                                    $url_ignorar = "ignorarbatida/" . $f->cd_ctl_frq;
+                                                                    echo("&nbsp;<a onclick='return confirm(\"Deseja realmente ignorar esta batida?\");' href='" . $url_ignorar . "' class='label label-warning' target='_blank'>Ignorar</a><br>");
+                                                                }
+                                                                echo('</div>');
                                                             }
-                                                            echo('</div>');
+                                                        }
+                                                    } else {
+                                                        if ($tipo_batida_escala != "OK") {
+                                                            foreach ($freq->frequencias_sem_escala as $f) {
+                                                                echo('<div class="frequenciassemescala">');
+                                                                echo(date('d/m/Y H:i:s', strtotime($f->dt_frq)) . " - " . $f->nome_curto_profissional);
+                                                                if ($f->crm == $freq->crm_profissional) {
+                                                                    $url_corrigir = "corrigirfrequenciaescala/" . $freq->id . "/" . $f->cd_ctl_frq;
+                                                                    //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente aceitar e processar esta batida?\");' href='" . $url_corrigir . "' class='label label-success' target='_blank'>Aceitar</a><br>");
+                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
+                                                                } else {
+                                                                    $url_extra = "criarplantaoextra/" . $freq->id . "/" . $f->cd_ctl_frq . "/" . $f->id_profissional;
+                                                                    //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente criar um plantão extra neste setor a partir desta batida?\");' href='" . $url_extra . "' class='label label-info' target='_blank'>Extra</a>");
+                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
+                                                                    $url_ignorar = "ignorarbatida/" . $f->cd_ctl_frq;
+                                                                    echo("&nbsp;<a onclick='return confirm(\"Deseja realmente ignorar esta batida?\");' href='" . $url_ignorar . "' class='label label-warning' target='_blank'>Ignorar</a><br>");
+                                                                }
+                                                                echo('</div>');
+                                                            }
                                                         }
                                                     }
                                                     ?>
@@ -356,7 +377,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo(($tipo_batida_escala != "OK" && $tipo_batida_escala != "Vago" && $freq->status != 1 && strtotime(date($freq->dataplantao)) < strtotime(date('Y-m-d')) ) ? anchor('admin/escalas/aguardarjustificativa/'.$freq->id, lang('actions_justificativa'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank', 'title' => 'Aguardar justificativa')) . '&nbsp;' : ''); ?>
                                                     <?php echo(($tipo_batida_escala != "OK" && $tipo_batida_escala != "Falta" && $tipo_batida_escala != "Vago" && $freq->status != 1 && strtotime(date($freq->dataplantao)) < strtotime(date('Y-m-d'))) ? anchor('admin/escalas/registrarfalta/'.$freq->id, lang('actions_falta'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank', 'title' => 'Registrar falta')) . '&nbsp;' : ''); ?>
                                                     <?php echo(($tipo_batida_escala == "Falta" && $freq->status == 3) ? anchor('admin/escalas/retirarfalta/'.$freq->id, lang('actions_removerfalta'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank', 'title' => 'Remover falta', 'onclick' => 'return confirm(\'Tem certeza que deseja remover a falta do usuário '.$freq->nome_profissional.'?\');')) . '&nbsp;' : ''); ?>
-                                                    <?php echo(($tipo_batida_escala != "Vago" && strtotime(date($freq->dataplantao)) <= strtotime(date('Y-m-d'))) ? anchor('admin/escalas/desvincularescalaefrequencias/'.$freq->id, lang('actions_desvincular'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank', 'title' => 'Desvincular a escala das frequências e vice-versa', 'onclick' => 'return confirm(\'Tem certeza que deseja desvincular esta escala de suas frequências e vice-versa?\');')).'&nbsp;': ''); ?>
+                                                     
+                                                    <?php 
+                                                    if($freq->dataplantao >= '2021-06-21'){
+                                                        echo(($tipo_batida_escala != "Vago" && strtotime(date($freq->dataplantao)) <= strtotime(date('Y-m-d'))) ? anchor('admin/escalas/desvincularescalaefrequencias_nova/'.$freq->id, lang('actions_desvincular'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank', 'title' => 'Desvincular a escala das frequências e vice-versa', 'onclick' => 'return confirm(\'Tem certeza que deseja desvincular esta escala de suas frequências e vice-versa?\');')).'&nbsp;': ''); 
+                                                    } else {
+                                                        echo(($tipo_batida_escala != "Vago" && strtotime(date($freq->dataplantao)) <= strtotime(date('Y-m-d'))) ? anchor('admin/escalas/desvincularescalaefrequencias/'.$freq->id, lang('actions_desvincular'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank', 'title' => 'Desvincular a escala das frequências e vice-versa', 'onclick' => 'return confirm(\'Tem certeza que deseja desvincular esta escala de suas frequências e vice-versa?\');')).'&nbsp;': ''); 
+                                                    }
+                                                    
+                                                    ?>
                                                 </td>
                                             </tr>
                                     <?php endforeach;?>

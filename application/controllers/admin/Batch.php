@@ -49,33 +49,37 @@ class Batch extends CI_Controller
             $data_final_escala = date('Y-m-d', strtotime($datainicial));
 
             $escalas = $this->escala_model->get_escala_consolidada_a_processar($unidadehospitalar_id, $setor_id, $data_inicial_escala, $data_final_escala);
+            //var_dump($escalas); exit;
 
             foreach ($escalas as $escala) {
                 // Plantões manhã e tarde do dia solicitado
                 if ($escala->dataplantao == $data_final_escala and $escala->dataplantao == $escala->datafinalplantao) {
                     if (is_null($escala->frequencia_entrada_id)) {
                         $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->id_profissional, $unidadehospitalar_id);
+                        //echo ('Entradas');
+                        //var_dump($entradas); exit;
                         if ($entradas) {
                             if (sizeof($entradas) > 1) {
                                 $entrada = $entradas[1]; // Acho que no caso de prescrição deve pegar a primeira[0] para entrada e a segunda[1] para saída
                             } else {
                                 $entrada = $entradas[0];
                             }
-                            $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->cd_ctl_frq]);
-                            $this->frequenciaassessus_model->update($entrada->cd_ctl_frq, ['escala_id' => $escala->escala_id, 'tipo_batida' => 1]);
+                            $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->frequencia_id]);
+                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1]);
                             echo('Frequencia de entrada atualizada<br>');
                         }
                     }
                     if (is_null($escala->frequencia_saida_id)) {
                         $saidas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horafinalplantao, $escala->id_profissional, $unidadehospitalar_id);
+                        //var_dump($saidas); exit;
                         if ($saidas) {
                             if (sizeof($saidas) > 1) {
                                 $saida = $saidas[0]; // Acho que no caso de prescrição deve pegar a primeira[0] para entrada e a segunda[1] para saída
                             } else {
                                 $saida = $saidas[0];
                             }
-                            $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->cd_ctl_frq]);
-                            $this->frequenciaassessus_model->update($saida->cd_ctl_frq, ['escala_id' => $escala->escala_id, 'tipo_batida' => 2]);
+                            $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->frequencia_id]);
+                            $this->frequencia_model->update($saida->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 2]);
                             echo('Frequencia de saída atualizada<br>');
                         }
                     }
@@ -90,8 +94,8 @@ class Batch extends CI_Controller
                             } else {
                                 $saida = $saidas[0];
                             }
-                            $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->cd_ctl_frq]);
-                            $this->frequenciaassessus_model->update($saida->cd_ctl_frq, ['escala_id' => $escala->escala_id, 'tipo_batida' => 2]);
+                            $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->frequencia_id]);
+                            $this->frequencia_model->update($saida->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 2]);
                             echo('Frequencia de saída atualizada<br>');
                         }
                     }
@@ -106,8 +110,8 @@ class Batch extends CI_Controller
                             } else {
                                 $entrada = $entradas[0];
                             }
-                            $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->cd_ctl_frq]);
-                            $this->frequenciaassessus_model->update($entrada->cd_ctl_frq, ['escala_id' => $escala->escala_id, 'tipo_batida' => 1]);
+                            $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->frequencia_id]);
+                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1]);
                             echo('Frequencia de entrada atualizada<br>');
                         }
                     }

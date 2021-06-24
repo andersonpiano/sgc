@@ -1887,9 +1887,15 @@ class Escalas extends Admin_Controller
                 }
 
                 // Obtendo as escalas e suas frequências
-                $frequencias = $this->escala_model->get_escalas_frequencias($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
-                // Obtendo as frequências sem escala para exibição
-                $frequencias_sem_escala = $this->escala_model->get_frequencia_sem_escala($unidadehospitalar_id, $setor_id, $datainicial, $datafinal);
+                if ($datainicial >= '2021-06-21'){
+                    $frequencias = $this->escala_model->get_escalas_frequencias_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
+                    $frequencias_sem_escala = $this->escala_model->get_frequencia_sem_escala_nova($unidadehospitalar_id, $datainicial, $datafinal);
+                } else{
+                    $frequencias = $this->escala_model->get_escalas_frequencias($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
+                    // Obtendo as frequências sem escala para exibição
+                    $frequencias_sem_escala = $this->escala_model->get_frequencia_sem_escala($unidadehospitalar_id, $setor_id, $datainicial, $datafinal);
+                }
+
                 // Obtendo as trocas e passagens para exibição
                 $trocas_passagens = $this->escala_model->get_trocas_passagens_por_setor_periodo($setor_id, $datainicial, $datafinal);
 
@@ -1930,33 +1936,67 @@ class Escalas extends Admin_Controller
                     
                     // Vinculando as frequências sem escala às escalas, por dia e setor
                     $freq->frequencias_sem_escala = array();
-                    foreach ($frequencias_sem_escala as $fse) {
-                        $data_fse = date('Y-m-d', strtotime($fse->dt_frq));
-                        $hora_fse = date('H:i:s', strtotime($fse->dt_frq));
-                        if ($freq->prescricao == 0) {
-                            if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
-                                && $data_fse == $data_plantao
-                                && ($hora_fse >= $hora_inicial_plantao && $hora_fse <= $hora_final_plantao)
-                                && $freq->nomesetor == $fse->nome_setor_sgc
-                            ) {
-                                array_push($freq->frequencias_sem_escala, $fse);
-                            } else if ($freq->id_profissional == $fse->id_profissional
-                                && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
-                                && $freq->nomesetor == $fse->nome_setor_sgc
-                            ) {
-                                array_push($freq->frequencias_sem_escala, $fse);
+
+                    if ($datainicial <= '2021-06-20'){
+                        foreach ($frequencias_sem_escala as $fse) {
+                            $data_fse = date('Y-m-d', strtotime($fse->dt_frq));
+                            $hora_fse = date('H:i:s', strtotime($fse->dt_frq));
+                            if ($freq->prescricao == 0) {
+                                if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
+                                    && $data_fse == $data_plantao
+                                    && ($hora_fse >= $hora_inicial_plantao && $hora_fse <= $hora_final_plantao)
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                } else if ($freq->id_profissional == $fse->id_profissional
+                                    && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                }
+                            } else if ($freq->prescricao == 1) {
+                                if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
+                                    && $data_fse == $data_plantao
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                } else if ($freq->id_profissional == $fse->id_profissional
+                                    && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                }
                             }
-                        } else if ($freq->prescricao == 1) {
-                            if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
-                                && $data_fse == $data_plantao
-                                && $freq->nomesetor == $fse->nome_setor_sgc
-                            ) {
-                                array_push($freq->frequencias_sem_escala, $fse);
-                            } else if ($freq->id_profissional == $fse->id_profissional
-                                && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
-                                && $freq->nomesetor == $fse->nome_setor_sgc
-                            ) {
-                                array_push($freq->frequencias_sem_escala, $fse);
+                        }
+                    } else {
+                        foreach ($frequencias_sem_escala as $fse) {
+                            $data_fse = date('Y-m-d', strtotime($fse->datahorabatida));
+                            $hora_fse = date('H:i:s', strtotime($fse->datahorabatida));
+                            if ($freq->prescricao == 0) {
+                                if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
+                                    && $data_fse == $data_plantao
+                                    && ($hora_fse >= $hora_inicial_plantao && $hora_fse <= $hora_final_plantao)
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                } else if ($freq->id_profissional == $fse->id_profissional
+                                    && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                }
+                            } else if ($freq->prescricao == 1) {
+                                if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
+                                    && $data_fse == $data_plantao
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                } else if ($freq->id_profissional == $fse->id_profissional
+                                    && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
+                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                ) {
+                                    array_push($freq->frequencias_sem_escala, $fse);
+                                }
                             }
                         }
                     }
@@ -2157,10 +2197,10 @@ class Escalas extends Admin_Controller
 
                 // Atualizar escala e frequência
                 if ($tipobatida == 1) {
-                    $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
+                    $this->frequencia_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipobatida' => $tipobatida]);
                     $this->escala_model->update($escala_id, ['frequencia_entrada_id' => $frequencia_id, 'profissional_id' => $profissional]);
                 } else {
-                    $this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida]);
+                    $this->frequencia_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipobatida' => $tipobatida]);
                     $this->escala_model->update($escala_id, ['frequencia_saida_id' => $frequencia_id, 'profissional_id' => $profissional]);
                 }
                 //$this->frequenciaassessus_model->update($frequencia_id, ['escala_id' => $escala_id, 'tipo_batida' => $tipobatida, 'profissional_id' => $profissional]);
@@ -2534,6 +2574,55 @@ class Escalas extends Admin_Controller
                 }
                 if ($frequencia_saida) {
                     $this->frequenciaassessus_model->update($frequencia_saida->CD_CTL_FRQ, ['escala_id' => null, 'tipo_batida' => null]);
+                    $this->escala_model->update($escala->id, ['frequencia_saida_id' => null, 'status' => 0]);
+                }
+                $this->session->set_flashdata('message', 'A escala foi desvinculada das frequências com sucesso. Feche esta janela e volte para a janela anterior.');
+            } catch (Exception $e) {
+                $this->session->set_flashdata('message', 'Ocorreu um erro ao tentar desvincular a escala das frequências. Feche esta janela e tente novamente.');
+            }
+        } else {
+            $this->session->set_flashdata('message', 'Não foi possível realizar a operação. A escala informada é inválida.');
+        }
+
+        redirect('admin/escalas/conferencia', 'refresh');
+    }
+
+    public function desvincularescalaefrequencias_nova($escala_id)
+    {
+        $escala_id = (int)$escala_id;
+
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
+            redirect('auth/login', 'refresh');
+        }
+        if (!$this->ion_auth->in_group($this->_admin_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->breadcrumbs->unshift(2, lang('menu_plantoes_tooffer'), 'admin/escalas/desvincularescalaefrequencias');
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Load Data */
+        $escala = $this->escala_model->get_escala_by_id($escala_id);
+        $frequencia_entrada = null;
+        $frequencia_saida = null;
+        if ($escala && $escala->frequencia_entrada_id) {
+            $frequencia_entrada = $this->frequencia_model->get_by_id($escala->frequencia_entrada_id);
+        }
+        if ($escala && $escala->frequencia_saida_id) {
+            $frequencia_saida = $this->frequencia_model->get_by_id($escala->frequencia_saida_id);
+        }
+
+        if ($escala) {
+            try {
+                if ($frequencia_entrada) {
+                    $this->frequencia_model->update($frequencia_entrada->id, ['escala_id' => null, 'tipobatida' => null]);
+                    $this->escala_model->update($escala->id, ['frequencia_entrada_id' => null, 'status' => 0]);
+                }
+                if ($frequencia_saida) {
+                    $this->frequencia_model->update($frequencia_saida->id, ['escala_id' => null, 'tipobatida' => null]);
                     $this->escala_model->update($escala->id, ['frequencia_saida_id' => null, 'status' => 0]);
                 }
                 $this->session->set_flashdata('message', 'A escala foi desvinculada das frequências com sucesso. Feche esta janela e volte para a janela anterior.');
@@ -3105,6 +3194,7 @@ class Escalas extends Admin_Controller
         $this->form_validation->set_rules('setor_id', 'lang:escalas_setor', 'required');
         $this->form_validation->set_rules('datainicialplantao', 'lang:escalas_datainicialplantao', 'required');
         $this->form_validation->set_rules('datafinalplantao', 'lang:escalas_datafinalplantao', 'required');
+        $this->form_validation->set_rules('quantidade', 'Quantidade', 'required');
 
 
         if ($this->form_validation->run() == true) {
@@ -3112,6 +3202,7 @@ class Escalas extends Admin_Controller
             $setor_id = $this->input->post('setor_id');
             $datainicialplantao = $this->input->post('datainicialplantao');
             $datafinalplantao = $this->input->post('datafinalplantao');
+            $quantidade = $this->input->post('quantidade');
             
             $tipo = $this->input->post('tipos');
             $turno = $this->input->post('turno_id');
@@ -3175,6 +3266,8 @@ class Escalas extends Admin_Controller
                 if ((int)$hrinicialplantao > (int)$hrfinalplantao) {
                     $dtfinalplantao = date('Y-m-d', strtotime($dtinicialplantao . ' +1 day'));
                 }
+
+                for ($j=1; $j <= $quantidade; $j++) { 
                 $insert_data = array(
                     'setor_id' => $additional_data['setor_id'],
                     'dataplantao' => $dtinicialplantao,
@@ -3187,6 +3280,8 @@ class Escalas extends Admin_Controller
                     'extra' => 1
                 );
                 $success = $this->escala_model->insert($insert_data);
+            }
+                
             }
 
             if ($success) {

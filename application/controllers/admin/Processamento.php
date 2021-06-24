@@ -142,11 +142,6 @@ class Processamento extends Admin_Controller {
         // close curl resource to free up system resources
         curl_close($ch);
 
-        /*
-        var_dump($info);
-        exit;
-        */
-
         $this->session->set_flashdata('message', $message);
         redirect('admin/processamento', 'refresh');
     }

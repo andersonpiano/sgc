@@ -114,11 +114,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php foreach ($freqs as $freq) : ?>
                                         <?php
                                         $tipo_batida_escala = 'Sem escala';
-                                        if ($freq->tipo_batida == 1) {
-                                            $tipo_batida_escala = 'Entrada';
-                                        } else if ($freq->tipo_batida == 2) {
-                                            $tipo_batida_escala = 'Saída';
+                                        if($this->input->post('datainicial') <= '2021-06-20'){
+                                            if ($freq->tipo_batida == 1) {
+                                                $tipo_batida_escala = 'Entrada';
+                                            } else if ($freq->tipo_batida == 2) {
+                                                $tipo_batida_escala = 'Saída';
+                                            }
+                                        } else {
+                                            if ($freq->tipobatida == 1) {
+                                                $tipo_batida_escala = 'Entrada';
+                                            } else if ($freq->tipobatida == 2) {
+                                                $tipo_batida_escala = 'Saída';
+                                            }
                                         }
+                                        if($this->input->post('datainicial') <= '2021-06-20'){
                                         ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($freq->nm_set, ENT_QUOTES, 'UTF-8'); ?></td>
@@ -129,6 +138,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <?php echo anchor('admin/frequencias/editarfrequencia/'.$freq->cd_ctl_frq, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); ?>
                                                 </td>
                                             </tr>
+                                        <?php } else { ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($freq->setor_nome_temp, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->datahorabatida)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="text-center"><?php echo htmlspecialchars(date('H:i:s', strtotime($freq->datahorabatida)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="text-center <?php echo($freq->escala_id ? 'bg-success' : 'bg-danger'); ?>"><?php echo($tipo_batida_escala); ?></td>
+                                                <td class="dontprint text-center">
+                                                    <?php echo anchor('admin/frequencias/editarfrequencia/'.$freq->frequencia_id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); ?>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
                                     <?php endforeach;?>
                                         </tbody>
                                     </table>

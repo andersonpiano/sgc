@@ -142,7 +142,11 @@ class Frequencias extends Admin_Controller
             $datafinal = $this->input->post('datafinal');
 
             $this->load->model('cemerge/escala_model');
-            $frequencias = $this->escala_model->get_frequencias_por_profissional($unidadehospitalar_id, $profissional_id, $datainicial, $datafinal);
+            if($datainicial >= '2021-06-21'){
+                $frequencias = $this->escala_model->get_frequencias_por_profissional_nova($unidadehospitalar_id, $profissional_id, $datainicial, $datafinal);
+            } else {
+                $frequencias = $this->escala_model->get_frequencias_por_profissional($unidadehospitalar_id, $profissional_id, $datainicial, $datafinal);    
+            }
             $this->load->helper('group_by');
             $this->data['frequencias'] = group_by('nome_profissional_frq', $frequencias);
         } else {
@@ -353,12 +357,102 @@ class Frequencias extends Admin_Controller
 
         /* Buscando frequência */
         $frequencia_id = (int)$frequencia_id;
+        
         $frequencia = $this->frequenciaassessus_model->get_by_cdctlfrq($frequencia_id);
         $this->data['frequencia'] = $frequencia;
 
         /* Buscando dados do profissional */
         $this->load->model('cemerge/profissional_model');
         $this->data['frequencia']->profissional = $this->profissional_model->get_by_cd_pes_fis($frequencia->CD_PES_FIS);
+
+        /* Validate form input */
+        $this->form_validation->set_rules('setor_id', 'lang:frequencias_setor', 'required');
+        $this->form_validation->set_rules('tipo_batida', 'lang:frequencias_tipobatida', 'required');
+
+        if (isset($_POST) && !empty($_POST)) {
+            if ($this->form_validation->run() == true) {
+                $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
+                $setor_id = $this->input->post('setor_id');
+                $tipo_batida = $this->input->post('tipo_batida');
+
+                $data_update = array(
+                    'CD_PES_JUR' => $unidadehospitalar_id,
+                    'CD_SET' => $setor_id,
+                    'TP_FRQ' => $tipo_batida,
+                    'tipo_batida' =>$tipo_batida
+                );
+
+                $this->load->model('cemerge/frequenciaassessus_model');
+                $sucesso = $this->frequenciaassessus_model->update($frequencia_id, $data_update);
+                if ($sucesso) {
+                    $this->session->set_flashdata('message', 'A frequência foi atualizada com sucesso.');
+                } else {
+                    $this->session->set_flashdata('message', 'Houve um erro ao atualizar a frequência.');
+                }
+
+                redirect('admin/frequencias/buscarfrequencias', 'refresh');
+            }
+        } else {
+            $setores = $this->_get_setores_assessus($frequencia->CD_PES_JUR);
+        }
+
+        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+        $unidadeshospitalares = $this->_get_unidadeshospitalares_assessus();
+
+        $this->data['unidadehospitalar_id'] = array(
+            'name'  => 'unidadehospitalar_id',
+            'id'    => 'unidadehospitalar_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'selected' => $this->form_validation->set_value('unidadehospitalar_id', $frequencia->CD_PES_JUR),
+            'options' => $unidadeshospitalares,
+        );
+        $this->data['setor_id'] = array(
+            'name'  => 'setor_id',
+            'id'    => 'setor_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'selected' => $this->form_validation->set_value('setor_id', $frequencia->CD_SET),
+            'options' => $setores,
+        );
+        $this->data['tipo_batida'] = array(
+            'name'  => 'tipo_batida',
+            'id'    => 'tipo_batida',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'selected' => $this->form_validation->set_value('tipo_batida', $frequencia->TP_FRQ),
+            'options' => $this->_get_tipos_batidas(),
+        );
+
+        /* Load Template */
+        $this->template->admin_render('admin/frequencias/edit', $this->data);
+    }
+
+    public function editarfrequencia_nova($frequencia_id)
+    {
+        if (!$this->ion_auth->logged_in()) {
+            $this->session->set_flashdata('message', 'Você deve estar autenticado para usar esta função.');
+            redirect('auth/login', 'refresh');
+        }
+
+        if (!$this->ion_auth->in_group($this->_permitted_groups)) {
+            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
+            redirect('admin/dashboard', 'refresh');
+        }
+
+        /* Breadcrumbs */
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+
+        /* Buscando frequência */
+        $frequencia_id = (int)$frequencia_id;
+        
+        $frequencia = $this->frequencia_model->get_by_id($frequencia_id);
+        $this->data['frequencia'] = $frequencia;
+
+        /* Buscando dados do profissional */
+        $this->load->model('cemerge/profissional_model');
+        $this->data['frequencia']->profissional = $this->profissional_model->get_by_id($frequencia->profissional_id);
 
         /* Validate form input */
         $this->form_validation->set_rules('setor_id', 'lang:frequencias_setor', 'required');
