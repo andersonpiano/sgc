@@ -660,8 +660,11 @@ class Escalas extends Admin_Controller
                     'escalas.dataplantao <=' => $datafinal,
                 );
 
-                $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal, 1);
-
+                if($datainicial <= '2021-06-20'){
+                    $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal, 1);
+                }else{
+                    $this->data['escalas'] = $this->escala_model->get_escala_processada_nova($setor_id, $datainicial, $datafinal, 1);
+                }                    
                 /** Processando batidas de 13:00:00 de saída e entrada automática */
                 $size = count($this->data['escalas']);
                 for ($i = 0; $i <= $size-1; $i++) {
