@@ -580,13 +580,13 @@ class Frequencias extends Admin_Controller
     public function _get_setores_assessus($cd_pes_jur)
     {
         $this->load->model('cemerge/setor_model');
-        $setores = $this->setor_model->get_setores_assessus_por_cd_pes_jur($cd_pes_jur);
+        $setores = $this->setor_model->get_setores_por_unidade($cd_pes_jur);
 
         $setores_assessus = array(
             '' => 'Selecione um setor',
         );
         foreach ($setores as $setor) {
-            $setores_assessus[$setor->cd_set] = $setor->nm_set;
+            $setores_assessus[$setor->id] = $setor->nome;
         }
 
         return $setores_assessus;
