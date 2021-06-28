@@ -67,6 +67,7 @@ $(document).ready(function(){
 				document.getElementById("editar").setAttribute("justificativa", justificativa);
 				document.getElementById("ignorar").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_ignorar").setAttribute("justificativa", justificativa);
+				document.getElementById("justificativa_aprovar").setAttribute("justificativa", justificativa);
             },
             error: function(responseData) {
                 //swal("Erro",$sucess, "error");
@@ -85,14 +86,38 @@ $(document).ready(function(){
 	});
 
 	$(".btn-deferir").click(function(){
-		
-		//var setor = $(this).attr('id');
-		$("#modal_justificativas_edit").modal();
+		var id = $(this).attr('justificativa');
+		$.ajax({
+			type: "POST",
+			url: "/sgc/admin/justificativas/aprovar/",
+			dataType: 'json',
+			data: {
+				"justificativa": id,
+			},
+			success: function(response) {
+				swal("Sucesso!", 'Justificativa deferida com Sucesso','success');
+			},
+			error: function(response){
+				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+			}
+		})
 	});
 	$(".btn-indeferir").click(function(){
-		
-		//var setor = $(this).attr('id');
-		$("#modal_justificativas_edit").modal();
+		var id = $(this).attr('justificativa');
+		$.ajax({
+			type: "POST",
+			url: "/sgc/admin/justificativas/ignorar/",
+			dataType: 'json',
+			data: {
+				"justificativa": id,
+			},
+			success: function(response) {
+				swal("Sucesso!", 'Justificativa ignorada com Sucesso','success');
+			},
+			error: function(response){
+				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+			}
+		})
 	});
 	$(".btn-ignorar").click(function(){
 		var id = $(this).attr('justificativa');
