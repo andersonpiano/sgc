@@ -353,16 +353,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         if ($tipo_batida_escala != "OK") {
                                                             foreach ($freq->frequencias_sem_escala as $f) {
                                                                 echo('<div class="frequenciassemescala">');
-                                                                echo(date('d/m/Y H:i:s', strtotime($f->dt_frq)) . " - " . $f->nome_curto_profissional);
+                                                                echo(date('d/m/Y H:i:s', strtotime($f->datahorabatida)) . " - " . $f->nome_curto_profissional);
                                                                 if ($f->crm == $freq->crm_profissional) {
-                                                                    $url_corrigir = "corrigirfrequenciaescala/" . $freq->id . "/" . $f->cd_ctl_frq;
+                                                                    $url_corrigir = "corrigirfrequenciaescala/" . $freq->id . "/" . $f->id;
                                                                     //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente aceitar e processar esta batida?\");' href='" . $url_corrigir . "' class='label label-success' target='_blank'>Aceitar</a><br>");
-                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
+                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->id.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
                                                                 } else {
-                                                                    $url_extra = "criarplantaoextra/" . $freq->id . "/" . $f->cd_ctl_frq . "/" . $f->id_profissional;
+                                                                    $url_extra = "criarplantaoextra/" . $freq->id . "/" . $f->id . "/" . $f->id_profissional;
                                                                     //echo("&nbsp;<a onclick='return confirm(\"Deseja realmente criar um plantão extra neste setor a partir desta batida?\");' href='" . $url_extra . "' class='label label-info' target='_blank'>Extra</a>");
-                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->cd_ctl_frq.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
-                                                                    $url_ignorar = "ignorarbatida/" . $f->cd_ctl_frq;
+                                                                    echo('&nbsp;<button class="btn btn-link btn-batidas-aceitar text-center label label-success" id="btn-batidas-aceitar" profissional="'.$f->id_profissional.'" frequencia="'.$f->id.'" escala="'.$freq->id.'">&nbsp;Aceitar</button>');
+                                                                    $url_ignorar = "ignorarbatida/" . $f->id;
                                                                     echo("&nbsp;<a onclick='return confirm(\"Deseja realmente ignorar esta batida?\");' href='" . $url_ignorar . "' class='label label-warning' target='_blank'>Ignorar</a><br>");
                                                                 }
                                                                 echo('</div>');
