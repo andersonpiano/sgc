@@ -391,6 +391,35 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
+    public function get_escala_processada_nova($setor_id, $datainicial, $datafinal, $order)
+    {
+        $sql = "select ec.dataplantao, ec.horainicialplantao, ec.horafinalplantao, ";
+        $sql .= "ec.nomesetor, ec.nomeunidade, ec.crm_profissional, ec.nome_profissional, ";
+        $sql .= "f_entrada.datahorabatida as batidaentrada, f_saida.datahorabatida as batidasaida ";
+        $sql .= "from vw_escalas_consolidadas ec ";
+        $sql .= "join escalas e_entrada on (ec.id = e_entrada.id) ";
+        $sql .= "join escalas e_saida on (ec.id = e_saida.id) ";
+        $sql .= "left join frequencias f_entrada on (e_entrada.frequencia_entrada_id = f_entrada.id) ";
+        $sql .= "left join frequencias f_saida on (e_saida.frequencia_saida_id = f_saida.id) ";
+        $sql .= "where ec.dataplantao between '$datainicial' and '$datafinal' ";
+        $sql .= "and ec.idsetor = $setor_id ";
+        $sql .= "and ec.nome_profissional is not null ";
+        if ($order == 1){
+        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq ";
+        } else if ($order == 2){
+        $sql .= "order by ec.nomesetor, ec.dataplantao ";
+        } else if ($order == 3){
+        $sql .= "order by ec.nome_profissional, ec.dataplantao ";   
+        } else if ($order == 4){
+        $sql .="order by DAYOFWEEK(ec.dataplantao) ";
+        }
+        //$sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
     public function get_escala_processada_setor($profissional_id, $setor_id, $datainicial, $datafinal, $order)
     {
         $sql = "select ec.dataplantao, ec.horainicialplantao, ec.horafinalplantao, ";
@@ -401,6 +430,36 @@ class Escala_model extends MY_Model
         $sql .= "join escalas e_saida on (ec.id = e_saida.id) ";
         $sql .= "left join tb_ctl_frq f_entrada on (e_entrada.frequencia_entrada_id = f_entrada.cd_ctl_frq) ";
         $sql .= "left join tb_ctl_frq f_saida on (e_saida.frequencia_saida_id = f_saida.cd_ctl_frq) ";
+        $sql .= "where ec.dataplantao between '$datainicial' and '$datafinal' ";
+        $sql .= "and ec.idsetor = $setor_id ";
+        $sql .= "and ec.nome_profissional is not null ";
+        $sql .= "and ec.id_profissional = $profissional_id ";
+        if ($order == 1){
+        $sql .= "order by ec.dataplantao ";
+        } else if ($order == 2){
+        $sql .= "order by ec.nomesetor, ec.dataplantao ";
+        } else if ($order == 3){
+        $sql .= "order by ec.nome_profissional, ec.dataplantao ";   
+        } else if ($order == 4){
+        $sql .="order by DAYOFWEEK(ec.dataplantao) ";
+        }
+        //$sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    public function get_escala_processada_setor_nova($profissional_id, $setor_id, $datainicial, $datafinal, $order)
+    {
+        $sql = "select ec.dataplantao, ec.horainicialplantao, ec.horafinalplantao, ";
+        $sql .= "ec.nomesetor, ec.nomeunidade, ec.crm_profissional, ec.nome_profissional, ";
+        $sql .= "f_entrada.datahorabatida as batidaentrada, f_saida.datahorabatida as batidasaida ";
+        $sql .= "from vw_escalas_consolidadas ec ";
+        $sql .= "join escalas e_entrada on (ec.id = e_entrada.id) ";
+        $sql .= "join escalas e_saida on (ec.id = e_saida.id) ";
+        $sql .= "left join frequencias f_entrada on (e_entrada.frequencia_entrada_id = f_entrada.id) ";
+        $sql .= "left join frequencias f_saida on (e_saida.frequencia_saida_id = f_saida.id) ";
         $sql .= "where ec.dataplantao between '$datainicial' and '$datafinal' ";
         $sql .= "and ec.idsetor = $setor_id ";
         $sql .= "and ec.nome_profissional is not null ";
@@ -462,6 +521,36 @@ class Escala_model extends MY_Model
         $sql .= "and ec.nome_profissional is not null ";
         if ($order == 1){
         $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq";
+        } else if ($order == 2){
+        $sql .= "order by ec.nomesetor";
+        } else if ($order == 3){
+        $sql .= "order by ec.nome_profissional";   
+        } else if ($order == 4){
+        $sql .="order by DAYOFWEEK(ec.dataplantao) ";
+        }
+        
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    public function get_escala_processada_profissional_nova($profissional_id, $datainicial, $datafinal, $order)
+    {
+
+        $sql = "select ec.dataplantao, ec.horainicialplantao, ec.horafinalplantao, ";
+        $sql .= "ec.nomesetor, ec.nomeunidade, ec.crm_profissional, ec.nome_profissional, ";
+        $sql .= "f_entrada.datahorabatida as batidaentrada, f_saida.datahorabatida as batidasaida ";
+        $sql .= "from vw_escalas_consolidadas ec ";
+        $sql .= "join escalas e_entrada on (ec.id = e_entrada.id) ";
+        $sql .= "join escalas e_saida on (ec.id = e_saida.id) ";
+        $sql .= "left join frequencias f_entrada on (e_entrada.frequencia_entrada_id = f_entrada.id) ";
+        $sql .= "left join frequencias f_saida on (e_saida.frequencia_saida_id = f_saida.id) ";
+        $sql .= "where ec.dataplantao between '$datainicial' and '$datafinal' ";
+        $sql .= "and ec.id_profissional = $profissional_id ";
+        $sql .= "and ec.nome_profissional is not null ";
+        if ($order == 1){
+        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.id";
         } else if ($order == 2){
         $sql .= "order by ec.nomesetor";
         } else if ($order == 3){

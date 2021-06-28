@@ -783,11 +783,21 @@ class Escalas extends Admin_Controller
                     'escalas.tipo_escala' => $tipo_escala
                 );
 
-                if ($setor_id <> '' || $setor_id <> 0){
-                    $this->data['escalas'] = $this->escala_model->get_escala_processada_setor($profissional_id, $setor_id, $datainicial, $datafinal, $order);
-                } else {
-                    $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal, $order);
+                if($datainicial <= '2021-06-20'){
+                    if ($setor_id <> '' || $setor_id <> 0){
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada_setor($profissional_id, $setor_id, $datainicial, $datafinal, $order);
+                    } else {
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal, $order);
+                    }
+                } else{
+                    if ($setor_id <> '' || $setor_id <> 0){
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada_setor_nova($profissional_id, $setor_id, $datainicial, $datafinal, $order);
+                    } else {
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional_nova($profissional_id, $datainicial, $datafinal, $order);
+                    }
                 }
+                
+
 
                 //var_dump($this->data['escalas']); exit;
                 /** Processando batidas de 13:00:00 de saída e entrada automática */
@@ -939,13 +949,21 @@ class Escalas extends Admin_Controller
                     'escalas.dataplantao <=' => $datafinal,
                     'escalas.tipo_escala' => $tipo_escala
                 );
-//                var_dump($profissional_id); exit;
-                if ($profissional_id <> '' || $profissional_id <> 0){
-                    $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal, $order);
-                } else {
-                $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal, $order);
-                }
 
+                if($datainicial <= '2021-06-20'){
+                    if ($profissional_id <> '' || $profissional_id <> 0){
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional($profissional_id, $datainicial, $datafinal, $order);
+                    } else {
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada($setor_id, $datainicial, $datafinal, $order);
+                    }
+                    //var_dump($datainicial); exit;
+                }else{
+                    if ($profissional_id <> '' || $profissional_id <> 0){
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada_profissional_nova($profissional_id, $datainicial, $datafinal, $order);
+                    } else {
+                        $this->data['escalas'] = $this->escala_model->get_escala_processada_nova($setor_id, $datainicial, $datafinal, $order);
+                    }
+                }    
                 //var_dump($this->data['escalas']); exit;
                 /** Processando batidas de 13:00:00 de saída e entrada automática */
                 $size = count($this->data['escalas']);
