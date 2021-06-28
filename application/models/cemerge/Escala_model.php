@@ -405,7 +405,7 @@ class Escala_model extends MY_Model
         $sql .= "and ec.idsetor = $setor_id ";
         $sql .= "and ec.nome_profissional is not null ";
         if ($order == 1){
-        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.cd_ctl_frq ";
+        $sql .= "order by ec.dataplantao, ec.horainicialplantao, f_entrada.id, ec.nomesetor, ec.nome_profissional";
         } else if ($order == 2){
         $sql .= "order by ec.nomesetor, ec.dataplantao ";
         } else if ($order == 3){
@@ -550,7 +550,7 @@ class Escala_model extends MY_Model
         $sql .= "and ec.id_profissional = $profissional_id ";
         $sql .= "and ec.nome_profissional is not null ";
         if ($order == 1){
-        $sql .= "order by ec.nomesetor, ec.dataplantao, ec.nome_profissional, ec.horainicialplantao, f_entrada.id";
+        $sql .= "order by ec.dataplantao, ec.horainicialplantao, f_entrada.id, ec.nomesetor, ec.nome_profissional";
         } else if ($order == 2){
         $sql .= "order by ec.nomesetor";
         } else if ($order == 3){
