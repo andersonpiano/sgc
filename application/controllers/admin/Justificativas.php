@@ -616,7 +616,8 @@ class Justificativas extends Admin_Controller
         $this->escala_model->update($escala->escala_id, ['status' => 4]);
         $atual= $_SERVER["HTTP_REFERER"];;
         $this->session->set_flashdata('message', 'Justificativa Aprovada com sucesso.');
-        redirect($atual);
+        //redirect($atual);
+        echo json_encode("sucesso");
     }
 
     public function negar($id){
@@ -633,24 +634,18 @@ class Justificativas extends Admin_Controller
         $this->justificativa_model->update($id, ['status' => 2]);
         $atual= $_SERVER["HTTP_REFERER"];;
         $this->session->set_flashdata('message', 'Justificativa Negada com sucesso.');
-        redirect($atual);
+        //redirect($atual);
+        echo json_encode("sucesso");
     }
 
-    public function ignorar($id){
+    public function ignorar(){
         
-        if (!$this->ion_auth->logged_in()) {
-            $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma justificativa.');
-            redirect('auth/login', 'refresh');
-        }
-        if (!$this->ion_auth->in_group($this->_coordenador_group)) {
-            $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
-            redirect('admin/dashboard', 'refresh');
-        }
+        $id = $this->input->get_post('justificativa');
 
         $this->justificativa_model->update($id, ['status' => 4]);
-        $atual= $_SERVER["HTTP_REFERER"];;
-        $this->session->set_flashdata('message', 'Justificativa Ignorada com sucesso.');
-        redirect($atual);
+        //$atual= $_SERVER["HTTP_REFERER"];;
+        //$this->session->set_flashdata('message', 'Justificativa Ignorada com sucesso.');
+        echo json_encode("sucesso"); exit;
     }
     
     public function validar()

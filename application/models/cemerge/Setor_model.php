@@ -142,6 +142,16 @@ class Setor_model extends MY_Model {
         return $query->result();
     }
 
+    public function setor_assessus($setor_id){
+        $sql = "select s.nm_set ";
+        $sql .= "from tb_set s ";
+        $sql .= "where cd_set = $setor_id ";
+
+        $query = $this->db->query($sql);
+
+        return $query->row();
+    }
+
     public function vagas($setor){
 
         $sql  = "SELECT * ";

@@ -62,10 +62,11 @@ $(document).ready(function(){
 					document.getElementById("sumir").style.display = 'none';
 				}
 				
-				document.getElementById("aprovar").setAttribute("href", "/sgc/admin/justificativas/aprovar/"+justificativa);
-				document.getElementById("desaprovar").setAttribute("href", "/sgc/admin/justificativas/edit_recusa/"+justificativa);
-				document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
-				document.getElementById("ignorar").setAttribute("href", "/sgc/admin/justificativas/ignorar/"+justificativa);
+				document.getElementById("aprovar").setAttribute("justificativa", justificativa);
+				document.getElementById("desaprovar").setAttribute("justificativa", justificativa);
+				document.getElementById("editar").setAttribute("justificativa", justificativa);
+				document.getElementById("ignorar").setAttribute("justificativa", justificativa);
+				document.getElementById("justificativa_ignorar").setAttribute("justificativa", justificativa);
             },
             error: function(responseData) {
                 //swal("Erro",$sucess, "error");
@@ -81,6 +82,34 @@ $(document).ready(function(){
 		
 		//var setor = $(this).attr('id');
 		$("#modal_justificativas_edit").modal();
+	});
+
+	$(".btn-deferir").click(function(){
+		
+		//var setor = $(this).attr('id');
+		$("#modal_justificativas_edit").modal();
+	});
+	$(".btn-indeferir").click(function(){
+		
+		//var setor = $(this).attr('id');
+		$("#modal_justificativas_edit").modal();
+	});
+	$(".btn-ignorar").click(function(){
+		var id = $(this).attr('justificativa');
+		$.ajax({
+			type: "POST",
+			url: "/sgc/admin/justificativas/ignorar/",
+			dataType: 'json',
+			data: {
+				"justificativa": id,
+			},
+			success: function(response) {
+				swal("Sucesso!", 'Justificativa ignorada com Sucesso','success');
+			},
+			error: function(response){
+				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+			}
+		})
 	});
 	$data_ini = document.getElementById('data_plantao_inicio').value;
 	$data_fim = document.getElementById('data_plantao_fim').value;

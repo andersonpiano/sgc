@@ -452,6 +452,7 @@ class Frequencias extends Admin_Controller
 
         /* Buscando dados do profissional */
         $this->load->model('cemerge/profissional_model');
+        $this->load->model('cemerge/setor_model');
         $this->data['frequencia']->profissional = $this->profissional_model->get_by_id($frequencia->profissional_id);
 
         /* Validate form input */
@@ -463,16 +464,19 @@ class Frequencias extends Admin_Controller
                 $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
                 $setor_id = $this->input->post('setor_id');
                 $tipo_batida = $this->input->post('tipo_batida');
+                $setor_nome = $this->setor_model->setor_assessus($setor_id)->nm_set;
+                //var_dump($setor_nome); exit;
+
 
                 $data_update = array(
-                    'CD_PES_JUR' => $unidadehospitalar_id,
-                    'CD_SET' => $setor_id,
-                    'TP_FRQ' => $tipo_batida,
-                    'tipo_batida' =>$tipo_batida
+                    'unidadehospitalar_id' => $unidadehospitalar_id,
+                    'setor_id' => $setor_id,
+                    'tipobatida' => $tipo_batida,
+                    'setor_nome_temp' => $setor_nome
                 );
 
                 $this->load->model('cemerge/frequenciaassessus_model');
-                $sucesso = $this->frequenciaassessus_model->update($frequencia_id, $data_update);
+                $sucesso = $this->frequencia_model->update($frequencia_id, $data_update);
                 if ($sucesso) {
                     $this->session->set_flashdata('message', 'A frequência foi atualizada com sucesso.');
                 } else {
@@ -482,7 +486,7 @@ class Frequencias extends Admin_Controller
                 redirect('admin/frequencias/buscarfrequencias', 'refresh');
             }
         } else {
-            $setores = $this->_get_setores_assessus($frequencia->CD_PES_JUR);
+            $setores = $this->_get_setores_assessus($frequencia->unidadehospitalar_id);
         }
 
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -494,7 +498,7 @@ class Frequencias extends Admin_Controller
             'id'    => 'unidadehospitalar_id',
             'type'  => 'select',
             'class' => 'form-control',
-            'selected' => $this->form_validation->set_value('unidadehospitalar_id', $frequencia->CD_PES_JUR),
+            'selected' => $this->form_validation->set_value('unidadehospitalar_id', $frequencia->unidadehospitalar_id),
             'options' => $unidadeshospitalares,
         );
         $this->data['setor_id'] = array(
@@ -502,7 +506,7 @@ class Frequencias extends Admin_Controller
             'id'    => 'setor_id',
             'type'  => 'select',
             'class' => 'form-control',
-            'selected' => $this->form_validation->set_value('setor_id', $frequencia->CD_SET),
+            'selected' => $this->form_validation->set_value('setor_id', $frequencia->setor_id),
             'options' => $setores,
         );
         $this->data['tipo_batida'] = array(
@@ -510,12 +514,12 @@ class Frequencias extends Admin_Controller
             'id'    => 'tipo_batida',
             'type'  => 'select',
             'class' => 'form-control',
-            'selected' => $this->form_validation->set_value('tipo_batida', $frequencia->TP_FRQ),
+            'selected' => $this->form_validation->set_value('tipo_batida', $frequencia->tipobatida),
             'options' => $this->_get_tipos_batidas(),
         );
 
         /* Load Template */
-        $this->template->admin_render('admin/frequencias/edit', $this->data);
+        $this->template->admin_render('admin/frequencias/edit_sgc', $this->data);
     }
 
     public function _get_tipos_batidas()
