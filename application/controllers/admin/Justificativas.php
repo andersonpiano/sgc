@@ -599,7 +599,7 @@ class Justificativas extends Admin_Controller
         }
     }    
 
-    public function aprovar($id){
+    public function aprovar(){
         
         if (!$this->ion_auth->logged_in()) {
             $this->session->set_flashdata('message', 'Você deve estar autenticado para criar uma justificativa.');
@@ -609,7 +609,7 @@ class Justificativas extends Admin_Controller
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/dashboard', 'refresh');
         }
-
+        $id = $this->input->get_post('justificativa');
         $this->load->model('cemerge/escala_model');
         $escala = $this->justificativa_model->get_by_id($id);
         $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
@@ -617,7 +617,7 @@ class Justificativas extends Admin_Controller
         $atual= $_SERVER["HTTP_REFERER"];;
         $this->session->set_flashdata('message', 'Justificativa Aprovada com sucesso.');
         //redirect($atual);
-        echo json_encode("sucesso");
+        echo json_encode("sucesso"); exit;
     }
 
     public function negar($id){
@@ -632,10 +632,10 @@ class Justificativas extends Admin_Controller
         }
 
         $this->justificativa_model->update($id, ['status' => 2]);
-        $atual= $_SERVER["HTTP_REFERER"];;
-        $this->session->set_flashdata('message', 'Justificativa Negada com sucesso.');
+        //$atual= $_SERVER["HTTP_REFERER"];;
+        //$this->session->set_flashdata('message', 'Justificativa Negada com sucesso.');
         //redirect($atual);
-        echo json_encode("sucesso");
+        echo json_encode("sucesso"); exit;
     }
 
     public function ignorar(){
