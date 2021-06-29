@@ -464,7 +464,7 @@ class Frequencias extends Admin_Controller
                 $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
                 $setor_id = $this->input->post('setor_id');
                 $tipo_batida = $this->input->post('tipo_batida');
-                $setor_nome = $this->setor_model->setor_assessus($setor_id)->nm_set;
+                $setor_nome = $this->setor_model->get_by_id($setor_id)->nome;
                 //var_dump($setor_nome); exit;
 
 
