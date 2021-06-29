@@ -609,9 +609,10 @@ class Escala_model extends MY_Model
         $sql .= "join escalas e on (ec.id = e.id and ((e.horainicialplantao = '07:00:00' and e.frequencia_entrada_id is not null) or e.horainicialplantao = '13:00:00')) ";
         $sql .= "where (ec.horainicialplantao = '07:00:00' or ec.horainicialplantao = '13:00:00') ";
         $sql .= "and ec.dataplantao = '$dataplantao' ";
+        $sql .= "and ec.idunidade = '$unidadehospitalar_id' ";
         $sql .= "and ec.id_profissional is not null ";
-        $sql .= "and ec.id not in (select escala_id from frequencias where escala_id is not null) ";
-        $sql .= "order by ec.idsetor, ec.nome_profissional, ec.horainicialplantao";
+        $sql .= "and ec.id not in (select escala_id from frequencias where escala_id is not null and tipobatida in (3, 4)) ";
+        $sql .= "order by ec.idsetor, ec.nome_profissional, ec.horainicialplantao ";
 
         $query = $this->db->query($sql);
 
