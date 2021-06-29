@@ -65,7 +65,7 @@ class Batch extends CI_Controller
                                 $entrada = $entradas[0];
                             }
                             $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->frequencia_id]);
-                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1]);
+                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1, 'setor_id' => $escala->setor_id]);
                             echo('Frequencia de entrada atualizada<br>');
                         }
                     }
