@@ -69,6 +69,7 @@ $(document).ready(function(){
 				document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
 				document.getElementById("editar").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_ignorar").setAttribute("justificativa", justificativa);
+				document.getElementById("justificativa_indeferir").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_edit").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_aprovar").setAttribute("justificativa", justificativa);
             },
@@ -144,6 +145,7 @@ $(document).ready(function(){
 				document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
 				document.getElementById("editar").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_ignorar").setAttribute("justificativa", justificativa);
+				document.getElementById("justificativa_indeferir").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_aprovar").setAttribute("justificativa", justificativa);
             },
             error: function(responseData) {
@@ -195,20 +197,48 @@ $(document).ready(function(){
 	});
 	$(".btn-indeferir").click(function(){
 		var id = $(this).attr('justificativa');
-		$.ajax({
-			type: "POST",
-			url: "/sgc/admin/justificativas/ignorar/",
-			dataType: 'json',
-			data: {
-				"justificativa": id,
+		Swal.fire({
+			type: 'info',
+			title: 'Informe o motivo do indeferimento',
+			input: 'text',
+			inputAttributes: {
+			  autocapitalize: 'off'
 			},
-			success: function(response) {
-				$("#modal_justificativas_view").modal("hide");
-				swal("Sucesso!", 'Justificativa ignorada com Sucesso','success');
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Remover',
+			cancelButtonText: 'Cancelar',
+			showLoaderOnConfirm: true,
+			preConfirm: (motivo) => {
+        		$.ajax({
+            		url: '/sgc/admin/justificativas/edit_recusa/',
+            		method: 'post',
+            	data: {
+					justificativa: id,
+     				motivo : motivo,
+					},
+				success: function(responseData) {
+					Swal.fire({
+						title: 'Justificativa indeferida com Sucesso!',
+						type: 'success',
+						showDenyButton: false,
+						showCancelButton: false,
+					  }).then((result) => {
+						/* Read more about isConfirmed, isDenied below */
+						if (result.value) {
+							document.location.reload(true);
+						} else if (result.isDenied) {
+							document.location.reload(true);
+						}
+					})
+					},
+				error: function(responseData){
+					swal('Erro','Log não pode ser gravado.','error');
+					}
+				})
 			},
-			error: function(response){
-				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
-			}
+			allowOutsideClick: () => !Swal.isLoading()
 		})
 	});
 	$(".btn-ignorar").click(function(){
@@ -222,7 +252,19 @@ $(document).ready(function(){
 			},
 			success: function(response) {
 				$("#modal_justificativas_view").modal("hide");
-				swal("Sucesso!", 'Justificativa ignorada com Sucesso','success');
+				Swal.fire({
+					title: 'Justificativa ignorada com Sucesso!',
+					type: 'success',
+					showDenyButton: false,
+					showCancelButton: false,
+				  }).then((result) => {
+					/* Read more about isConfirmed, isDenied below */
+					if (result.value) {
+						document.location.reload(true);
+					} else if (result.isDenied) {
+						document.location.reload(true);
+					}
+				})
 			},
 			error: function(response){
 				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');

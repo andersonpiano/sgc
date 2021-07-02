@@ -72,6 +72,7 @@ class Setor_model extends MY_Model {
         $this->db->join('profissionalsetor', 'setores.id = profissionalsetor.setor_id', 'left');
         $this->db->join('profissionais', 'profissionais.id = profissionalsetor.profissional_id', 'left');
         $this->db->where('unidadehospitalar_id', $unidade);
+        $this->db->where_in('setores.active', 1);
         $query = $this->db->get();
 
         return $query->result();

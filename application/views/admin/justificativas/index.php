@@ -254,7 +254,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                     <?php echo anchor('', 'Editar Antigo', array('class' => 'btn btn-primary btn-flat dontprint', 'id' => 'editar', 'justificativa' => '')) ?>&nbsp;
                                     <a id="justificativa_edit" class="btn btn-primary btn-flat dontprint btn-justificativas-edit">Editar</a>&nbsp;
                                     <a id="justificativa_aprovar" justificativa="" class="btn btn-success btn-flat dontprint btn-deferir">Deferir</a>&nbsp;
-                                    <a class="btn btn-warning btn-flat dontprint">Indeferir</a>&nbsp;
+                                    <a id="justificativa_indeferir" justificativa="" class="btn btn-warning btn-flat dontprint btn-indeferir">Indeferir</a>&nbsp;
                                     <a id="justificativa_ignorar" justificativa="" class="btn btn-light btn-flat dontprint btn-ignorar">Ignorar</a>&nbsp;
                                     <button type="button" class="close btn btn-primary btn-flat dontprint" data-dismiss="modal">Voltar</button></td>
                             </tr>
@@ -335,7 +335,6 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                     <?php echo anchor('', 'Editar Antigo', array('class' => 'btn btn-primary btn-flat dontprint', 'id' => 'editar', 'justificativa' => '')) ?>&nbsp;
                                     <a id="justificativa_edit" class="btn btn-primary btn-flat dontprint btn-justificativas-edit">Editar</a>&nbsp;
                                     <a id="justificativa_aprovar" justificativa="" class="btn btn-success btn-flat dontprint btn-deferir">Deferir</a>&nbsp;
-                                    <a class="btn btn-warning btn-flat dontprint">Indeferir</a>&nbsp;
                                     <a id="justificativa_ignorar" justificativa="" class="btn btn-light btn-flat dontprint btn-ignorar">Ignorar</a>&nbsp;
                                     <button type="button" class="close btn btn-primary btn-flat dontprint" data-dismiss="modal">Voltar</button></td>
                             </tr>

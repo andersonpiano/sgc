@@ -393,7 +393,7 @@ class Frequencias extends Admin_Controller
                 redirect('admin/frequencias/buscarfrequencias', 'refresh');
             }
         } else {
-            $setores = $this->_get_setores_assessus($frequencia->CD_PES_JUR);
+            $setores = $this->get_setores_assessus_por_cd_pes_jur($frequencia->CD_PES_JUR);
         }
 
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -486,7 +486,7 @@ class Frequencias extends Admin_Controller
                 redirect('admin/frequencias/buscarfrequencias', 'refresh');
             }
         } else {
-            $setores = $this->_get_setores_assessus($frequencia->unidadehospitalar_id);
+            $setores = $this->_get_setores($frequencia->unidadehospitalar_id);
         }
 
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -577,7 +577,22 @@ class Frequencias extends Admin_Controller
         return $profissionais;
     }
 
-    public function _get_setores_assessus($cd_pes_jur)
+    public function get_setores_assessus_por_cd_pes_jur($cd_pes_jur)
+    {
+        $this->load->model('cemerge/setor_model');
+        $setores = $this->setor_model->get_setores_assessus_por_cd_pes_jur($cd_pes_jur);
+
+        $setores_assessus = array(
+            '' => 'Selecione um setor',
+        );
+        foreach ($setores as $setor) {
+            $setores_assessus[$setor->cd_set] = $setor->nm_set;
+        }
+
+        return $setores_assessus;
+    }
+
+    public function _get_setores($cd_pes_jur)
     {
         $this->load->model('cemerge/setor_model');
         $setores = $this->setor_model->get_setores_por_unidade($cd_pes_jur);

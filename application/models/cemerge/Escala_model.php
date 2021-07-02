@@ -848,7 +848,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_frequencia_por_escala($data_batida, $hora_batida, $id_profissional, $id_unidadehospitalar)
+    public function get_frequencia_por_escala($data_batida, $hora_batida, $setor_id, $id_profissional, $id_unidadehospitalar)
     {
         $sql = "select frequencias.id as frequencia_id, unidadehospitalar_id, setor_id, profissional_id, datahorabatida, escala_id, tipobatida ";
         $sql .= "from frequencias ";
@@ -858,6 +858,7 @@ class Escala_model extends MY_Model
         $sql .= " and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), datahorabatida) <= 120) ";
         $sql .= "and frequencias.profissional_id = $id_profissional ";
         $sql .= "and unidadehospitalar_id = $id_unidadehospitalar ";
+        $sql .= "and setor_id = $setor_id ";
         $sql .= "and escala_id is null ";
         $sql .= "order by datahorabatida ";
 
@@ -907,7 +908,7 @@ class Escala_model extends MY_Model
     public function get_escala_consolidada_a_processar($unidadehospitalar_id, $setor_id, $datainicial, $datafinal)
     {
         $sql = "SELECT ec.id as escala_id, ec.nomesetor, ec.id_profissional, ec.nome_profissional, ec.dataplantao, ";
-        $sql .= "ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, e.frequencia_entrada_id, e.frequencia_saida_id ";
+        $sql .= "ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, e.frequencia_entrada_id, e.frequencia_saida_id, e.setor_id as idsetor ";
         $sql .= "FROM vw_escalas_consolidadas ec ";
         $sql .= "join escalas e on (e.id = ec.id) ";
         $sql .= "where idunidade = $unidadehospitalar_id ";
@@ -937,10 +938,11 @@ class Escala_model extends MY_Model
         $sql .= "join escalas e on (e.id = ec.id) ";
         $sql .= "where idunidade = $unidadehospitalar_id ";
         $sql .= "and idsetor in ( ";
-        $sql .= "select id from setores where prescricao = 1 and unidadehospitalar_id = $unidadehospitalar_id ";
+        $sql .= "select id from setores where unidadehospitalar_id = $unidadehospitalar_id ";
         $sql .= ") ";
         $sql .= "and ec.dataplantao between '$datainicial' and '$datafinal' ";
         $sql .= "and (e.profissional_id is not null and e.profissional_id != 0) ";
+        $sql .= "and (e.tipo_escala != 1) ";
         $sql .= "and (e.frequencia_entrada_id is null or e.frequencia_saida_id is null) ";
         $sql .= "order by ec.dataplantao, ec.horainicialplantao ";
 

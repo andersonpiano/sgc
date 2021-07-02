@@ -24,6 +24,15 @@ class Frequencia_model extends MY_Model {
         return $query->result();
     }
 
+    public function ajusta_setor_id()
+    {
+        $sql = "update frequencias set setor_id = (SELECT setores.id FROM setores where setores.nome = frequencias.setor_nome_temp) where setor_id is null and setor_nome_temp <> '' ";
+
+        $query = $this->db->query($sql);
+        
+        return $query->result();
+    }
+
     public function get_frequencias_justificadas($unidadehospitalar_id, $setor_id, $data_plantao)
     {
         $sql = "select f.id, f.unidadehospitalar_id, f.setor_id, f.escala_id, ";

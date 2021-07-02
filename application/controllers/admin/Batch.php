@@ -48,6 +48,8 @@ class Batch extends CI_Controller
             $data_inicial_escala = date('Y-m-d', strtotime($datainicial . ' -1 day'));
             $data_final_escala = date('Y-m-d', strtotime($datainicial));
 
+            //$corrigir_setor_id = $this->frequencia_model->ajusta_setor_id();
+
             $escalas = $this->escala_model->get_escala_consolidada_a_processar($unidadehospitalar_id, $setor_id, $data_inicial_escala, $data_final_escala);
             //var_dump($escalas); exit;
 
@@ -55,7 +57,7 @@ class Batch extends CI_Controller
                 // Plantões manhã e tarde do dia solicitado
                 if ($escala->dataplantao == $data_final_escala and $escala->dataplantao == $escala->datafinalplantao) {
                     if (is_null($escala->frequencia_entrada_id)) {
-                        $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->id_profissional, $unidadehospitalar_id);
+                        $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->idsetor, $escala->id_profissional, $unidadehospitalar_id);
                         //echo ('Entradas');
                         //var_dump($entradas); exit;
                         if ($entradas) {
@@ -65,12 +67,12 @@ class Batch extends CI_Controller
                                 $entrada = $entradas[0];
                             }
                             $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->frequencia_id]);
-                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1, 'setor_id' => $escala->setor_id]);
+                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1, 'setor_id' => $escala->idsetor]);
                             echo('Frequencia de entrada atualizada<br>');
                         }
                     }
                     if (is_null($escala->frequencia_saida_id)) {
-                        $saidas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horafinalplantao, $escala->id_profissional, $unidadehospitalar_id);
+                        $saidas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horafinalplantao, $escala->idsetor, $escala->id_profissional, $unidadehospitalar_id);
                         //var_dump($saidas); exit;
                         if ($saidas) {
                             if (sizeof($saidas) > 1) {
@@ -79,7 +81,7 @@ class Batch extends CI_Controller
                                 $saida = $saidas[0];
                             }
                             $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->frequencia_id]);
-                            $this->frequencia_model->update($saida->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 2]);
+                            $this->frequencia_model->update($saida->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 2, 'setor_id' => $escala->idsetor]);
                             echo('Frequencia de saída atualizada<br>');
                         }
                     }
@@ -87,7 +89,7 @@ class Batch extends CI_Controller
                 // Plantões noite do dia anterior
                 if ($escala->dataplantao == $data_inicial_escala and $escala->horainicialplantao > $escala->horafinalplantao) {
                     if (is_null($escala->frequencia_saida_id)) {
-                        $saidas = $this->escala_model->get_frequencia_por_escala($escala->datafinalplantao, $escala->horafinalplantao, $escala->id_profissional, $unidadehospitalar_id);
+                        $saidas = $this->escala_model->get_frequencia_por_escala($escala->datafinalplantao, $escala->horafinalplantao, $escala->idsetor, $escala->id_profissional, $unidadehospitalar_id);
                         if ($saidas) {
                             if (sizeof($saidas) > 1) {
                                 $saida = $saidas[0];
@@ -95,7 +97,7 @@ class Batch extends CI_Controller
                                 $saida = $saidas[0];
                             }
                             $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->frequencia_id]);
-                            $this->frequencia_model->update($saida->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 2]);
+                            $this->frequencia_model->update($saida->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 2, 'setor_id' => $escala->idsetor]);
                             echo('Frequencia de saída atualizada<br>');
                         }
                     }
@@ -103,7 +105,7 @@ class Batch extends CI_Controller
                 // Plantões noite do dia solicitado
                 if ($escala->dataplantao == $data_final_escala and $escala->datafinalplantao > $escala->dataplantao and $escala->horainicialplantao > $escala->horafinalplantao) {
                     if (is_null($escala->frequencia_entrada_id)) {
-                        $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->id_profissional, $unidadehospitalar_id);
+                        $entradas = $this->escala_model->get_frequencia_por_escala($escala->dataplantao, $escala->horainicialplantao, $escala->idsetor, $escala->id_profissional, $unidadehospitalar_id);
                         if ($entradas) {
                             if (sizeof($entradas) > 1) {
                                 $entrada = $entradas[1];
@@ -111,7 +113,7 @@ class Batch extends CI_Controller
                                 $entrada = $entradas[0];
                             }
                             $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->frequencia_id]);
-                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1]);
+                            $this->frequencia_model->update($entrada->frequencia_id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1, 'setor_id' => $escala->idsetor]);
                             echo('Frequencia de entrada atualizada<br>');
                         }
                     }
@@ -156,8 +158,8 @@ class Batch extends CI_Controller
                         $batidas = $this->escala_model->get_frequencia_por_escala_prescricao($escala->dataplantao, $escala->id_profissional, $unidadehospitalar_id, $escala->setor_id);
                         if ($batidas) {
                             $entrada = $batidas[0];
-                            $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->cd_ctl_frq]);
-                            $this->frequenciaassessus_model->update($entrada->cd_ctl_frq, ['escala_id' => $escala->escala_id, 'tipo_batida' => 1]);
+                            $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->id]);
+                            $this->frequencia_model->update($entrada->id, ['escala_id' => $escala->escala_id, 'tipo_batida' => 1, 'setor_id' => $escala->setor_id]);
                         }
                     }
                     if (is_null($escala->frequencia_saida_id)) {
@@ -168,8 +170,8 @@ class Batch extends CI_Controller
                             } else {
                                 $saida = $batidas[0];
                             }
-                            $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->cd_ctl_frq]);
-                            $this->frequenciaassessus_model->update($saida->cd_ctl_frq, ['escala_id' => $escala->escala_id, 'tipo_batida' => 2]);
+                            $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->id]);
+                            $this->frequencia_model->update($saida->id, ['escala_id' => $escala->escala_id, 'tipo_batida' => 2, 'setor_id' => $escala->setor_id]);
                         }
                     }
                 }
