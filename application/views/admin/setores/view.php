@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </tr>
                                             <tr>
                                                 <th><?php echo lang('setores_status'); ?></th>
-                                                <td><?php echo ($setor->active) ? '<span class="label label-success">'.lang('setores_active').'</span>' : '<span class="label label-default">'.lang('setores_inactive').'</span>'; ?></td>
+                                                <td><a class="btn-ativar" setor="<?php echo $setor->id; ?>"><?php echo ($setor->active) ? lang('setores_active') : lang('setores_inactive'); ?></a></td>
                                             </tr>
                                         </tbody>
                                     </table>

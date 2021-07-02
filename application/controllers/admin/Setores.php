@@ -677,6 +677,20 @@ class Setores extends Admin_Controller {
         exit;
     }
 
+    public function ativar(){
+        $id = $this->input->get_post('id');
+        $setor = $this->setor_model->get_by_id($id);
+        //var_dump(); exit;
+        if ($setor->active == '0'){
+            $this->setor_model->update($id, ['active' => '1']);
+            
+        } else {
+            $this->setor_model->update($id, ['active' => '0']);
+        }
+
+        echo json_encode("sucesso"); exit;
+    }
+
     public function setor_por_profissional($profissional_id)
     {
         $this->load->model('cemerge/setor_model');

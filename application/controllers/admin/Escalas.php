@@ -1910,7 +1910,7 @@ class Escalas extends Admin_Controller
                 // Obtendo as escalas e suas frequências
                 if ($datainicial >= '2021-06-21'){
                     $frequencias = $this->escala_model->get_escalas_frequencias_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
-                    $frequencias_sem_escala = $this->escala_model->get_frequencia_sem_escala_nova($unidadehospitalar_id, $datainicial, $datafinal);
+                    $frequencias_sem_escala = $this->escala_model->get_frequencia_sem_escala_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal);
                 } else{
                     $frequencias = $this->escala_model->get_escalas_frequencias($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
                     // Obtendo as frequências sem escala para exibição
@@ -1997,24 +1997,24 @@ class Escalas extends Admin_Controller
                                 if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
                                     && $data_fse == $data_plantao
                                     && ($hora_fse >= $hora_inicial_plantao && $hora_fse <= $hora_final_plantao)
-                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                    && $freq->idsetor == $fse->setor_id
                                 ) {
                                     array_push($freq->frequencias_sem_escala, $fse);
                                 } else if ($freq->id_profissional == $fse->id_profissional
                                     && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
-                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                    && $freq->idsetor == $fse->setor_id
                                 ) {
                                     array_push($freq->frequencias_sem_escala, $fse);
                                 }
                             } else if ($freq->prescricao == 1) {
                                 if ((is_null($freq->dt_frq_entrada) or is_null($freq->dt_frq_saida))
                                     && $data_fse == $data_plantao
-                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                    && $freq->idsetor == $fse->setor_id
                                 ) {
                                     array_push($freq->frequencias_sem_escala, $fse);
                                 } else if ($freq->id_profissional == $fse->id_profissional
                                     && ($data_fse == $data_plantao or ($data_fse == $data_final_plantao && $hora_fse <= $hora_final_plantao))
-                                    && $freq->nomesetor == $fse->nome_setor_sgc
+                                    && $freq->idsetor == $fse->setor_id
                                 ) {
                                     array_push($freq->frequencias_sem_escala, $fse);
                                 }

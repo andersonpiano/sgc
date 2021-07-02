@@ -41,6 +41,39 @@ $(document).ready(function(){
 		
 	});
 
+	$(".btn-ativar").click(function(){
+		var id = $(this).attr('setor');
+		$.ajax({
+			type: "POST",
+			url: "/sgc/admin/setores/ativar/",
+			dataType: 'json',
+			data:{
+				id: id
+			},
+			success: function(response) {
+				clearErrors();
+				//swal("Sucesso!", 'Status do setor alterado com sucesso','success');
+				Swal.fire({
+					title: 'Status do setor alterado com sucesso!',
+					type: 'info',
+					showDenyButton: false,
+					showCancelButton: false,
+				  }).then((result) => {
+					/* Read more about isConfirmed, isDenied below */
+					if (result.value) {
+						document.location.reload(true);
+					} else if (result.isDenied) {
+						document.location.reload(true);
+					}
+				  })
+			},
+			error: function(response){
+				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+			}
+		})
+		//
+	});
+
 	function active_btn_profissional() {
 		$(".btn-add-profissional").click(function(){
 			var profissional = $(this).attr('id');
@@ -67,7 +100,7 @@ $(document).ready(function(){
 				}
 			})
 		});
-		
+
 	};
 
 	$(".btn-selecionar-coordenador").click(function(){

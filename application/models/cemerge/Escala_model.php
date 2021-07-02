@@ -649,14 +649,20 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_frequencia_sem_escala_nova($unidadehospitalar_id, $datainicial, $datafinal)
+    public function get_frequencia_sem_escala_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal)
     {
-        $sql = "select f.id, f.datahorabatida, ";
+        $sql = "select f.id, f.datahorabatida, f.setor_id, ";
         $sql .= "p.id as id_profissional, p.registro as crm, p.nome as nome_profissional, p.nomecurto as nome_curto_profissional, setor_nome_temp as nome_setor_sgc ";
         $sql .= "from frequencias f ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where f.escala_id is null ";
         $sql .= "and date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
+        if ($setor_id == ''){
+
+        } else {
+            $sql .= "and f.setor_id = $setor_id ";
+        }
+        
         $sql .= "and (f.ignorar = 0 or f.ignorar is null) ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
 
