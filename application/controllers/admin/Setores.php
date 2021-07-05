@@ -226,6 +226,7 @@ class Setores extends Admin_Controller {
         // pass unidades to the dropdown
         $unidadeshospitalares = $this->_get_unidadeshospitalares();
         $setores = $this->_get_setores_assessus();
+        $setores = $this->_get_setores_sgc();
         $profissionais = $this->_get_responsavel($setor->id);
 
         $this->data['nome'] = array(

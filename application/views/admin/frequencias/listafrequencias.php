@@ -89,7 +89,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="print-header row">
                         <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
                         <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
-                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars($escalas[0]->setor_nome, ENT_QUOTES, 'UTF-8'); ?></div>
                         <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista frequência por Setor</h3></div>
                     </div>
                     <div class="row">
@@ -116,19 +115,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php foreach ($freqs as $freq) : ?>
                                         <?php
                                         $tipo_batida_escala = 'Sem escala';
-                                        if ($freq->tp_frq == 1) {
+                                        if ($freq->tipobatida == 1) {
                                             $tipo_batida_escala = 'Entrada';
-                                        } else if ($freq->tp_frq == 2) {
+                                        } else if ($freq->tipobatida == 2) {
                                             $tipo_batida_escala = 'Saída';
                                         }
                                         ?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($freq->nm_set, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->dt_frq)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td class="text-center"><?php echo htmlspecialchars(date('H:i:s', strtotime($freq->dt_frq)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($freq->nome_setor, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->datahorabatida)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="text-center"><?php echo htmlspecialchars(date('H:i:s', strtotime($freq->datahorabatida)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center <?php echo($freq->escala_id ? 'bg-success' : 'bg-danger'); ?>"><?php echo($tipo_batida_escala); ?></td>
                                                 <td class="dontprint text-center">
-                                                    <?php echo anchor('admin/frequencias/editarfrequencia/'.$freq->cd_ctl_frq, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); ?>
+                                                    <?php echo anchor('admin/frequencias/editarfrequencia_nova/'.$freq->frequencia_id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); ?>
                                                 </td>
                                             </tr>
                                     <?php endforeach;?>

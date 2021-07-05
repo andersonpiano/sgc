@@ -57,10 +57,10 @@ class Frequencias extends Admin_Controller
             $datafinal = $this->input->post('datafinal');
             $setor_id = $this->input->post('setor_id');
 
-            $setores = $this->_get_setores_assessus($unidadehospitalar_id);
+            $setores = $this->_get_setores($unidadehospitalar_id);
 
             $this->load->model('cemerge/escala_model');
-            $frequencias = $this->escala_model->get_frequencias_escalas($unidadehospitalar_id, $setor_id, $datainicial, $datafinal);
+            $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal);
             $this->load->helper('group_by');
             $this->data['frequencias'] = group_by('nome_profissional_frq', $frequencias);
         } else {
