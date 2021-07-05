@@ -48,7 +48,13 @@ class Batch extends CI_Controller
             $data_inicial_escala = date('Y-m-d', strtotime($datainicial . ' -1 day'));
             $data_final_escala = date('Y-m-d', strtotime($datainicial));
 
-            //$corrigir_setor_id = $this->frequencia_model->ajusta_setor_id();
+            $corrigir_setor_id = $this->frequencia_model->ajusta_setor_id();
+
+            //var_dump($corrigir_setor_id); exit;
+
+            foreach ($corrigir_setor_id as $setor){
+                $this->frequencia_model->update($setor->frequencia_id, ['setor_id' => $setor->setor_id]);
+            }
 
             $escalas = $this->escala_model->get_escala_consolidada_a_processar($unidadehospitalar_id, $setor_id, $data_inicial_escala, $data_final_escala);
             //var_dump($escalas); exit;
@@ -159,7 +165,7 @@ class Batch extends CI_Controller
                         if ($batidas) {
                             $entrada = $batidas[0];
                             $this->escala_model->update($escala->escala_id, ['frequencia_entrada_id' => $entrada->id]);
-                            $this->frequencia_model->update($entrada->id, ['escala_id' => $escala->escala_id, 'tipo_batida' => 1, 'setor_id' => $escala->setor_id]);
+                            $this->frequencia_model->update($entrada->id, ['escala_id' => $escala->escala_id, 'tipobatida' => 1]);
                         }
                     }
                     if (is_null($escala->frequencia_saida_id)) {
@@ -171,7 +177,7 @@ class Batch extends CI_Controller
                                 $saida = $batidas[0];
                             }
                             $this->escala_model->update($escala->escala_id, ['frequencia_saida_id' => $saida->id]);
-                            $this->frequencia_model->update($saida->id, ['escala_id' => $escala->escala_id, 'tipo_batida' => 2, 'setor_id' => $escala->setor_id]);
+                            $this->frequencia_model->update($saida->id, ['escala_id' => $escala->escala_id, 'tipobatida' => 2]);
                         }
                     }
                 }

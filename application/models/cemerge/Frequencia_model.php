@@ -26,7 +26,7 @@ class Frequencia_model extends MY_Model {
 
     public function ajusta_setor_id()
     {
-        $sql = "update frequencias set setor_id = (SELECT setores.id FROM setores where setores.nome = frequencias.setor_nome_temp) where setor_id is null and setor_nome_temp <> '' ";
+        $sql = "select frequencias.id as frequencia_id, setores.id setor_id from frequencias join setores on setores.nome = frequencias.setor_nome_temp where frequencias.setor_id is null and setor_nome_temp <> '' ";
 
         $query = $this->db->query($sql);
         

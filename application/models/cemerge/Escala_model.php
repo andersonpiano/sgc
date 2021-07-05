@@ -855,7 +855,7 @@ class Escala_model extends MY_Model
         $sql .= "join profissionais p on (p.id = frequencias.profissional_id) ";
         $sql .= "where date(datahorabatida) = '$data_batida' ";
         $sql .= "and (timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), datahorabatida) >= -120 ";
-        $sql .= " and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), datahorabatida) <= 120) ";
+        $sql .= "and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), datahorabatida) <= 120) ";
         $sql .= "and frequencias.profissional_id = $id_profissional ";
         $sql .= "and unidadehospitalar_id = $id_unidadehospitalar ";
         $sql .= "and setor_id = $setor_id ";
@@ -886,19 +886,16 @@ class Escala_model extends MY_Model
 
     public function get_frequencia_por_escala_prescricao($data_batida, $id_profissional, $id_unidadehospitalar, $id_setor)
     {
-        $sql = "select cd_ctl_frq, cd_pes_jur, cd_set, f.cd_pes_fis, ";
-        $sql .= "dt_frq, hr_frq, tp_frq, cd_hor_tra, cd_ctl_frq_ant, escala_id, tipo_batida ";
-        $sql .= "from tb_ctl_frq f ";
-        $sql .= "join profissionais p on (f.cd_pes_fis = p.cd_pes_fis) ";
-        $sql .= "where date(f.dt_frq) = '$data_batida' ";
+        $sql = "select f.id , unidadehospitalar_id, setor_id, f.profissional_id, ";
+        $sql .= "datahorabatida, tipobatida, escala_id ";
+        $sql .= "from frequencias f ";
+        $sql .= "join profissionais p on (f.profissional_id = p.id) ";
+        $sql .= "where date(f.datahorabatida) = '$data_batida' ";
         $sql .= "and p.id = $id_profissional ";
-        $sql .= "and f.cd_pes_jur = $id_unidadehospitalar ";
-        $sql .= "and f.cd_set in ";
-        $sql .= "(select cd_set ";
-        $sql .= "from grupos_setores ";
-        $sql .= "where setor_id = $id_setor) ";
+        $sql .= "and f.unidadehospitalar_id = $id_unidadehospitalar ";
+        $sql .= "and setor_id = $id_setor ";
         $sql .= "and f.escala_id is null ";
-        $sql .= "order by f.dt_frq";
+        $sql .= "order by f.datahorabatida ";
 
         $query = $this->db->query($sql);
 
@@ -916,11 +913,12 @@ class Escala_model extends MY_Model
             $sql .= "and idsetor = $setor_id ";
         } else {
             $sql .= "and idsetor in ( ";
-            $sql .= "select id from setores where prescricao = 0 and unidadehospitalar_id = $unidadehospitalar_id ";
+            $sql .= "select id from setores where unidadehospitalar_id = $unidadehospitalar_id ";
             $sql .= ") ";
         }
         
         $sql .= "and ec.dataplantao between '$datainicial' and '$datafinal' ";
+        $sql .= "and e.tipo_escala = 1 ";
         $sql .= "and (e.profissional_id is not null and e.profissional_id != 0) ";
         $sql .= "and (e.frequencia_entrada_id is null or e.frequencia_saida_id is null) ";
         $sql .= "order by ec.dataplantao, ec.horainicialplantao ";
