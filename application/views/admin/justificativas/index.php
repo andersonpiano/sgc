@@ -191,7 +191,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">X</button>
-                    <center><h4 class="modal-title">JUSTIFICATIVA DE AUSÊNCIA DE BIOMETRIA</h4></center>
+                    <center><h4 class="modal-title">VER - JUSTIFICATIVA DE AUSÊNCIA DE BIOMETRIA</h4></center>
                 </div>
                 <div class="box-body">
                     <table class="table table-striped table-hover">
@@ -271,7 +271,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">X</button>
-                    <center><h4 class="modal-title">JUSTIFICATIVA DE AUSÊNCIA DE BIOMETRIA</h4></center>
+                    <center><h4 class="modal-title">EDITAR - JUSTIFICATIVA DE AUSÊNCIA DE BIOMETRIA</h4></center>
                 </div>
 
                 <div class="box-body">
@@ -279,49 +279,49 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                         <tbody>
                             <tr>
                                 <th><?php echo(lang('justificativas_profissional')); ?></th>
-                                <td id="nome_profissional"></td>
+                                <td id="nome_profissional_edit"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_setor')); ?></th>
-                                <td id="nome_setor"></td>
+                                <td id="nome_setor_edit"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_data_plantao')); ?></th>
-                                <td id="data"></td>
+                                <td id="data_edit"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_turno')); ?></th>
-                                <td id="turno_plantao"></td>
+                                <td id="turno_plantao_edit"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_entrada').' Registrada'); ?></th>
-                                <td id="hora_entrada_sistema"></td>
+                                <td id="hora_entrada_sistema_edit"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_saida').' Registrada'); ?></th>
-                                <td id="hora_saida_sistema"></td>
+                                <td id="hora_saida_sistema_edit"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_entrada'). " Justificada"); ?></th>
-                                <td id="hora_entrada_justificada"></td>
+                                <td><input type="time" id="hora_entrada_edit" class="form-control"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_hora_saida'). " Justificada"); ?></th>
-                                <td id="hora_saida_justificada"></td>
+                                <td><input type="time" id="hora_saida_edit" class="form-control"></td>
                             </tr>
                             <tr>
                                 <th><?php echo(lang('justificativas_descricao')); ?></th>
-                                <td id="descricao"></td> 
+                                <td id="descricao_edit"></td> 
                             </tr>
 
                             <tr id="sumir">
                                 <th><?php echo(lang('justificativas_recusa')); ?></th>
-                                <td id="motivo"></td>
+                                <td id="motivo_edit"></td>
                             </tr>
 
                             <tr>
                                 <th><?php echo(lang('justificativas_status')); ?></th>
-                                <td id="condicao"></td>
+                                <td id="condicao_edit"></td>
                             </tr>
                             <!--<tr  class="dontprint">
                                  <td colspan='2' class="text-center"><a href="#" onclick="window.print();" class="btn btn-primary btn-flat dontprint">Imprimir</a>&nbsp; -->

@@ -109,15 +109,13 @@ $(document).ready(function(){
 				$motivo = JSON.parse(responseData).motivo;
 
 				//console.log(responseData);
-				document.getElementById('nome_profissional').innerText = $profissional;
-				document.getElementById('nome_setor').innerText = $setor;
-				document.getElementById('data').innerText = $data;
-				document.getElementById('turno_plantao').innerText = $turno;
-				document.getElementById('hora_entrada_sistema').innerText = $entrada_sistema;
-				document.getElementById('hora_saida_sistema').innerText = $saida_sistema;
-				document.getElementById('hora_entrada_justificada').innerText = $entrada_justificada;
-				document.getElementById('hora_saida_justificada').innerText = $saida_justificada;
-				document.getElementById('descricao').innerText = $descricao;
+				document.getElementById('nome_profissional_edit').innerText = $profissional;
+				document.getElementById('nome_setor_edit').innerText = $setor;
+				document.getElementById('data_edit').innerText = $data;
+				document.getElementById('turno_plantao_edit').innerText = $turno;
+				document.getElementById('hora_entrada_sistema_edit').innerText = $entrada_sistema;
+				document.getElementById('hora_saida_sistema_edit').innerText = $saida_sistema;
+				document.getElementById('descricao_edit').innerText = $descricao;
 
 				if($status == "0"){
 					document.getElementById('condicao').innerText = 'Aguardando Aprovação';
@@ -142,11 +140,11 @@ $(document).ready(function(){
 				document.getElementById("desaprovar").setAttribute("justificativa", justificativa);
 				document.getElementById("editar").setAttribute("justificativa", justificativa);
 				document.getElementById("ignorar").setAttribute("justificativa", justificativa);*/
-				document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
+				/*document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
 				document.getElementById("editar").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_ignorar").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_indeferir").setAttribute("justificativa", justificativa);
-				document.getElementById("justificativa_aprovar").setAttribute("justificativa", justificativa);
+				document.getElementById("justificativa_aprovar").setAttribute("justificativa", justificativa);*/
             },
             error: function(responseData) {
                 //swal("Erro",$sucess, "error");
