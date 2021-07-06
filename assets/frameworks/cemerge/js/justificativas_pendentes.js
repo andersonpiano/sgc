@@ -66,8 +66,8 @@ $(document).ready(function(){
 				document.getElementById("desaprovar").setAttribute("justificativa", justificativa);
 				document.getElementById("editar").setAttribute("justificativa", justificativa);
 				document.getElementById("ignorar").setAttribute("justificativa", justificativa);*/
-				document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
-				document.getElementById("editar").setAttribute("justificativa", justificativa);
+				/*document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
+				document.getElementById("editar").setAttribute("justificativa", justificativa);*/
 				document.getElementById("justificativa_ignorar").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_indeferir").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_edit").setAttribute("justificativa", justificativa);
@@ -115,29 +115,32 @@ $(document).ready(function(){
 				document.getElementById('turno_plantao_edit').innerText = $turno;
 				document.getElementById('hora_entrada_sistema_edit').innerText = $entrada_sistema;
 				document.getElementById('hora_saida_sistema_edit').innerText = $saida_sistema;
+				document.getElementById('hora_entrada_edit').value = $entrada_justificada;
+				document.getElementById('hora_saida_edit').value = $saida_justificada;
 				document.getElementById('descricao_edit').innerText = $descricao;
 
 				if($status == "0"){
-					document.getElementById('condicao').innerText = 'Aguardando Aprovação';
-					document.getElementById("sumir").style.display = 'none';
+					document.getElementById('condicao_edit').innerText = 'Aguardando Aprovação';
+					document.getElementById("sumir_edit").style.display = 'none';
 				} else if($status == "1"){
-					document.getElementById('condicao').innerText = 'Deferida';
-					document.getElementById("sumir").style.display = 'none';
+					document.getElementById('condicao_edit').innerText = 'Deferida';
+					document.getElementById("sumir_edit").style.display = 'none';
 				} else if ($status == "2"){
-					document.getElementById('condicao').innerText = 'Indeferida';
-					document.getElementById("sumir").style.display = 'block';
-					document.getElementById('motivo').innerText = $motivo;
+					document.getElementById('condicao_edit').innerText = 'Indeferida';
+					document.getElementById("sumir_edit").style.display = 'block';
+					document.getElementById('motivo_edit').innerText = $motivo;
 					
 				} else if ($status == "4"){
-				 	document.getElementById('condicao').innerText = 'Ignorada';
-					 document.getElementById("sumir").style.display = 'none';
+				 	document.getElementById('condicao_edit').innerText = 'Ignorada';
+					 document.getElementById("sumir_edit").style.display = 'none';
 				} else {
-					document.getElementById('condicao').innerText = 'Desconhecido';
-					document.getElementById("sumir").style.display = 'none';
+					document.getElementById('condicao_edit').innerText = 'Desconhecido';
+					document.getElementById("sumir_edit").style.display = 'none';
 				}
 				
-				/*document.getElementById("aprovar").setAttribute("justificativa", justificativa);
-				document.getElementById("desaprovar").setAttribute("justificativa", justificativa);
+				document.getElementById("salvar-edit").setAttribute("justificativa", justificativa);
+				/*document.getElementById("salvar-edit").setAttribute("href", "/sgc/admin/justificativas/save/"+justificativa);*/
+				/*document.getElementById("desaprovar").setAttribute("justificativa", justificativa);
 				document.getElementById("editar").setAttribute("justificativa", justificativa);
 				document.getElementById("ignorar").setAttribute("justificativa", justificativa);*/
 				/*document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
@@ -152,15 +155,11 @@ $(document).ready(function(){
             }
         }); 
 
-		$("#modal_justificativas_view").modal();
-		
-		
-	});
-	$(".btn-justificativas-edit").click(function(){
-		
-		//var setor = $(this).attr('id');
 		$("#modal_justificativas_edit").modal();
+		
+		
 	});
+
 
 	$(".btn-deferir").click(function(){
 		var id = $(this).attr('justificativa');
@@ -193,6 +192,42 @@ $(document).ready(function(){
 			}
 		})
 	});
+
+	$(".btn-save-edit").click(function(){
+		var id = $(this).attr('justificativa');
+		$.ajax({
+			type: "POST",
+			url: "/sgc/admin/justificativas/save/",
+			dataType: 'json',
+			data: {
+				"justificativa": id,
+				"hora_entrada" : document.getElementById("hora_entrada_edit").value,
+				"hora_saida" : document.getElementById("hora_saida_edit").value,
+			},
+			success: function(response) {
+				$("#modal_justificativas_view").modal("hide");
+
+				Swal.fire({
+					title: 'Justificativa salva com Sucesso!',
+					type: 'success',
+					showDenyButton: false,
+					showCancelButton: false,
+				  }).then((result) => {
+					/* Read more about isConfirmed, isDenied below */
+					if (result.value) {
+						document.getElementById('hora_entrada_justificada').innerText = document.getElementById("hora_entrada_edit").value;
+						document.getElementById('hora_saida_justificada').innerText = document.getElementById("hora_saida_edit").value;
+						$("#modal_justificativas_edit").modal("hide");
+						$("#modal_justificativas_view").modal();
+					} else if (result.isDenied) {
+					}
+				})
+			},
+			error: function(response){
+				swal("Erro!", 'Ocorreu um erro ao executar essa ação','error');
+			}
+		})
+	});
 	$(".btn-indeferir").click(function(){
 		var id = $(this).attr('justificativa');
 		Swal.fire({
@@ -205,7 +240,7 @@ $(document).ready(function(){
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Remover',
+			confirmButtonText: 'Indeferir',
 			cancelButtonText: 'Cancelar',
 			showLoaderOnConfirm: true,
 			preConfirm: (motivo) => {
@@ -214,7 +249,7 @@ $(document).ready(function(){
             		method: 'post',
             	data: {
 					justificativa: id,
-     				motivo : motivo,
+     				motivo_recusa : motivo,
 					},
 				success: function(responseData) {
 					Swal.fire({
@@ -229,7 +264,7 @@ $(document).ready(function(){
 						} else if (result.isDenied) {
 							document.location.reload(true);
 						}
-					})
+					});
 					},
 				error: function(responseData){
 					swal('Erro','Log não pode ser gravado.','error');

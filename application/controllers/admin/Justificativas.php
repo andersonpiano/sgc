@@ -329,7 +329,8 @@ class Justificativas extends Admin_Controller
                 'entrada_justificada' => $hora_entrada,
                 'saida_justificada' => $hora_saida,
                 'descricao' => $descricao,
-                'status' => 0
+                'status' => 0,
+                'create_at' => date('Y-m-d H:m:i')
             );
             $justificativa_id = $this->justificativa_model->insert($insert_data);
             
@@ -606,6 +607,17 @@ class Justificativas extends Admin_Controller
         $escala = $this->justificativa_model->get_by_id($id);
         $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
         $this->escala_model->update($escala->escala_id, ['status' => 4]);
+        echo json_encode("sucesso"); exit;
+    }
+
+    public function save(){
+        
+        $id = $this->input->get_post('justificativa');
+        $hora_entrada = $this->input->get_post('hora_entrada');
+        $hora_saida = $this->input->get_post('hora_saida');
+        $this->load->model('cemerge/escala_model');
+        $escala = $this->justificativa_model->get_by_id($id);
+        $this->justificativa_model->update($id, ['entrada_justificada' => $hora_entrada, 'saida_justificada' => $hora_saida]);
         echo json_encode("sucesso"); exit;
     }
 
