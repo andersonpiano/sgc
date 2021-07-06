@@ -720,7 +720,7 @@ class Escala_model extends MY_Model
 
     public function get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal)
     {
-        $sql = "select p.nome as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_id, s.nome as nome_setor, ";
+        $sql = "select CONCAT(p.nome, ' Matricula: ', if(p.matricula is null, ' Sem Matricula', p.matricula)) as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_id, s.nome as nome_setor, ";
         $sql .= "f.profissional_id, f.datahorabatida, f.tipobatida, f.escala_id, ";
         $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
         $sql .= "ec.idsetor, ec.nomesetor, ec.idunidade, ec.nomeunidade, ";
@@ -744,7 +744,7 @@ class Escala_model extends MY_Model
             $sql .= "where setor_id = $setor_id) ";
             */
         }
-        $sql .= "order by p.nome, f.datahorabatida";
+        $sql .= "order by p.matricula, f.datahorabatida";
 
         $query = $this->db->query($sql);
 
@@ -1003,13 +1003,14 @@ class Escala_model extends MY_Model
 
     public function get_frequencias_por_profissional_nova($unidadehospitalar_id, $profissional_id, $datainicial, $datafinal)
     {
-        $sql = "select p.nome as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_nome_temp, ";
+        $sql = "select p.nome as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, s.nome as setor_nome_temp, ";
         $sql .= "f.profissional_id, f.datahorabatida, f.escala_id, f.tipobatida, ";
         $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
         $sql .= "ec.id_profissional, ec.crm_profissional, ec.nome_profissional ";
         $sql .= "from frequencias f ";
         $sql .= "left join vw_escalas_consolidadas ec on (f.escala_id = ec.id) ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
+        $sql .= "join setores s on (f.setor_id = s.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         $sql .= "and p.id = $profissional_id ";

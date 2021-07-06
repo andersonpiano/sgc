@@ -86,21 +86,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
 
                 <section class="content">
-                    <div class="print-header row">
-                        <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-                        <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
-                        <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista frequência por Setor</h3></div>
-                    </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="box">
+                            <div class="box" >
                                 <?php foreach ($frequencias as $profissional => $freqs) : ?>
                                 <div class="box-header with-border">
+                                <div class="print-header row">
+                                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                                    <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista frequência por Setor</h3></div>
+                                </div>
                                     <h3 class="box-title">
-                                        <?php echo(lang('frequencias_profissional') . ": " . $profissional); ?>
+                                        <?php echo(lang('frequencias_profissional') . ": " .  $profissional); ?>
                                     </h3>
                                 </div>
-                                <div class="box-body">
+                                <div class="box-body"  style="page-break-after:always;">
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>

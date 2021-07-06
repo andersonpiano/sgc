@@ -457,7 +457,7 @@ class Justificativas extends Admin_Controller
         /* Variables */
 
         $profissional_nome = $this->nome_profissional($profissional_id);
-       $setores_profissional = $this->_get_setores_profissional($profissional_id);
+        $setores_profissional = $this->_get_setores_profissional($profissional_id);
         $setor_id = $this->input->post('setor_id');
         $data_plantao_inicio = $this->input->post("data_plantao");
         $hora_entrada =  $this->input->post("hora_entrada");
@@ -1335,9 +1335,9 @@ class Justificativas extends Admin_Controller
         $batida = $this->escala_model->get_by_id($id);
 
         if ($tipo == 'E'){
-            return $this->frequencia($batida->frequencia_entrada_id);
+            return $this->frequencia($batida->dataplantao, $batida->frequencia_entrada_id);
         } else {
-            return $this->frequencia($batida->frequencia_saida_id);
+            return $this->frequencia($batida->dataplantao, $batida->frequencia_saida_id);
         }
     }
 
@@ -1349,14 +1349,23 @@ class Justificativas extends Admin_Controller
 
     }
 
-    public function frequencia($id){
+    public function frequencia($dataplantao, $id){
         $this->load->model("cemerge/FrequenciaAssessus_model");
-
-        $frequencia = $this->FrequenciaAssessus_model->get_by_cdctlfrq($id);
-        if (isset($frequencia->DT_FRQ)){
-            return $frequencia->DT_FRQ;
+        $this->load->model("cemerge/Frequencia_model");
+        if($dataplantao >= '2021-06-21'){
+            $frequencia = $this->Frequencia_model->get_by_id($id);
+                if (isset($frequencia->datahorabatida)){
+                    return $frequencia->datahorabatida;
+                } else {
+                    return '1901-01-01 00:00:00';
+                }
         } else {
-            return '1901-01-01 00:00:00';
+            $frequencia = $this->FrequenciaAssessus_model->get_by_cdctlfrq($id);
+                if (isset($frequencia->DT_FRQ)){
+                    return $frequencia->DT_FRQ;
+                } else {
+                    return '1901-01-01 00:00:00';
+                }
         }
     }
 
