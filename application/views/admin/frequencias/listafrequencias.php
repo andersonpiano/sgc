@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="col-md-12">
                              <div class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title"><?php echo lang('frequencias_find'); ?></h3>
+                                    <h3 class="box-title"><?php echo lang('frequencias_por_setor'); ?></h3>
                                 </div>
                                 <div class="box-body">
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-frequencias_find')); ?>
