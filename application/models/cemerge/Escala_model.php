@@ -1498,7 +1498,7 @@ class Escala_model extends MY_Model
         $sql .= 'and escalas.id not in ';
         $sql .= '(select escala_id ';
         $sql .= 'from passagenstrocas ';
-        $sql .= 'where escala_id = escalas.id) ';
+        $sql .= 'where escala_id = escalas.id and passagenstrocas.statuspassagem = 1) ';
         $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
         if ($tipo_plantao != null && $tipo_plantao != 2){
             $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao . ' ';

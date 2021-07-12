@@ -66,7 +66,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('setores_nome');?></th>
                                                 <th><?php echo lang('setores_unidadehospitalar');?></th>
                                                 <th><center><?php echo lang('setores_vagas');?></center></th>
-                                                <th><?php //echo lang('setores_action');?></th>
+                                                <th><center><?php echo lang('setores_fopag');?></center></th>
+                                                <th><?php echo lang('setores_action');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>

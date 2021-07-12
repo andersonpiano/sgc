@@ -104,6 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             lang('escalas_create'), 
                                             array('class' => 'btn btn-block btn-primary btn-flat')); ?>
                                     </h3>
+                                    <button style="float: right; color: white;" onclick="window.location.href='downloadFile/'$freqs" class="btn btn-primary text-center gera-arquivo"><i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></button>
                                 </div>
                                 <div class="box-body">
                                     <table class="table table-striped table-hover">

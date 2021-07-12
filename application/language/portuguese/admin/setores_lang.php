@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['setores_create']              = 'Criar setor';
 $lang['setores_edit']                = 'Editar setor';
+$lang['setores_fopag']                = 'COD Fopag';
 $lang['setores_nome']                = 'Nome';
 $lang['setores_unidadehospitalar']   = 'Unidade Hospitalar';
 $lang['setores_maximoprofissionais']   = 'Máximo de profissionais por turno';
