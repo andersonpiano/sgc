@@ -3906,7 +3906,7 @@ class Escalas extends Admin_Controller
         exit;
     }
 
-    public function atribuirescala()
+    public function novo_escala()
     {
         $profissional_id = $this->input->post('profissional', 0);
         $escala_id = $this->input->post('escala', 0);
@@ -3920,20 +3920,20 @@ class Escalas extends Admin_Controller
 
         $this->load->model('cemerge/passagemtroca_model');
 
-        $sessoes = $this->passagemtroca_model->get_where(['escala_id' => $escala_id], null);
+        $sessoes = $this->passagemtroca_model->get_where(['escala_id' => $escala_id, 'statuspassagem' => 1], null);
         $sucess = false;
         $escalado = $this->escala_model->get_profissional_escalado($data_ini, $hora_ini, $profissional_id);
         $vinculo = $this->profissional_model->get_vinculo_por_profissional($profissional_id);
         //var_dump($escalado); exit;
 
-        //if (empty($sessoes) && $escalado < 1){
+        if (empty($sessoes) && $escalado < 1){
             try {
                 $this->escala_model->update($escala_id, ['profissional_id' => $profissional_id]);
                 $sucess = true;
             } catch (Exception $ex) {
                 echo(json_encode($ex));
             }
-        //}
+        }
 
         //echo json_encode($profissional);
         //echo json_encode($escala);

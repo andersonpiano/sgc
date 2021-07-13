@@ -139,15 +139,6 @@ $(document).ready(function(){
 				}
 				
 				document.getElementById("salvar-edit").setAttribute("justificativa", justificativa);
-				/*document.getElementById("salvar-edit").setAttribute("href", "/sgc/admin/justificativas/save/"+justificativa);*/
-				/*document.getElementById("desaprovar").setAttribute("justificativa", justificativa);
-				document.getElementById("editar").setAttribute("justificativa", justificativa);
-				document.getElementById("ignorar").setAttribute("justificativa", justificativa);*/
-				/*document.getElementById("editar").setAttribute("href", "/sgc/admin/justificativas/edit/"+justificativa);
-				document.getElementById("editar").setAttribute("justificativa", justificativa);
-				document.getElementById("justificativa_ignorar").setAttribute("justificativa", justificativa);
-				document.getElementById("justificativa_indeferir").setAttribute("justificativa", justificativa);
-				document.getElementById("justificativa_aprovar").setAttribute("justificativa", justificativa);*/
             },
             error: function(responseData) {
                 //swal("Erro",$sucess, "error");
@@ -206,7 +197,6 @@ $(document).ready(function(){
 			},
 			success: function(response) {
 				$("#modal_justificativas_view").modal("hide");
-
 				Swal.fire({
 					title: 'Justificativa salva com Sucesso!',
 					type: 'success',
@@ -215,8 +205,17 @@ $(document).ready(function(){
 				  }).then((result) => {
 					/* Read more about isConfirmed, isDenied below */
 					if (result.value) {
-						document.getElementById('hora_entrada_justificada').innerText = document.getElementById("hora_entrada_edit").value;
-						document.getElementById('hora_saida_justificada').innerText = document.getElementById("hora_saida_edit").value;
+						if(document.getElementById("hora_entrada_edit").value == ''){
+							document.getElementById('hora_entrada_justificada').innerText = '-';
+						} else {
+							document.getElementById('hora_entrada_justificada').innerText = document.getElementById("hora_entrada_edit").value;
+						}
+						
+						if(document.getElementById("hora_saida_edit").value == ''){
+							document.getElementById('hora_saida_justificada').innerText = '-';
+						} else {
+							document.getElementById('hora_saida_justificada').innerText = document.getElementById("hora_saida_edit").value;
+						}
 						$("#modal_justificativas_edit").modal("hide");
 						$("#modal_justificativas_view").modal();
 					} else if (result.isDenied) {

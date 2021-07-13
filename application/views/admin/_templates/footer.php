@@ -42,7 +42,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($plugins_dir . '/colorpickersliders/colorpickersliders.min.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'escalas' && $this->router->fetch_method() == 'atribuir'): ?>
-        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/escalas.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/onchange_tipo_plantao.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'plantoes'): ?>
