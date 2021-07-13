@@ -11,7 +11,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['frequencias_edit']                = 'Editar frequência';
-$lang['frequencias_por_setor']           = 'Buscar Frequência por Setor';
+$lang['frequencias_por_setor']           = 'Buscar Frequência Geral';
 $lang['frequencias_find']                = 'Buscar Frequência por Profissional';
 $lang['frequencias_tipofrequencia']          = 'Tipo de Frequência';
 $lang['frequencias_diasdasemana']        = 'Dias da semana';
