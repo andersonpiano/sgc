@@ -19,6 +19,7 @@ $lang['escalas_create_extra_description']        = 'Utilize essa forma de criar 
 $lang['escalas_edit']                = 'Editar escala';
 $lang['escalas_find']                = 'Buscar escala por Profissional';
 $lang['escalas_frequencias']         = 'Buscar Frequência Processada';
+$lang['escalas_frequencias_nao_processadas']         = 'Buscar Frequência não Processada';
 $lang['escalas_find_processada']     = 'Buscar Escala Processada';
 $lang['escalas_attribute']           = 'Buscar escala';
 $lang['escalas_attribute_description'] = 'Aqui você pode alterar a escala original e essas mudanças refletirão na próxima escala copiada. Caso a mudança seja temporária, utilize as cessões e trocas.';

@@ -221,19 +221,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('conferencia')?>"><a href="<?php echo site_url('admin/escalas/conferencia'); ?>"><?php echo lang('menu_conferencias_conferencia'); ?></a></li>
-                            </ul>
-                            <ul class="treeview-menu">
-                                <li class="<?=active_link_function('buscarescalaprocessada')?>"><a href="<?php echo site_url('admin/escalas/buscarescalaprocessada'); ?>"><?php echo lang('menu_conferencias_buscar_processadas'); ?></a></li>
-                            </ul>
+                            </ul>                            
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('buscarfrequenciaprocessada')?>"><a href="<?php echo site_url('admin/escalas/buscarfrequenciaprocessada'); ?>"><?php echo lang('menu_conferencias_frequencia_processada'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('buscarfrequencias')?>"><a href="<?php echo site_url('admin/frequencias/buscarfrequencias'); ?>"><?php echo lang('menu_conferencias_buscar_frequencias'); ?></a></li>
                             </ul>
-                            <ul class="treeview-menu">
-                                <li class="<?=active_link_function('buscarfrequenciaporprofissional')?>"><a href="<?php echo site_url('admin/frequencias/buscarfrequenciaporprofissional'); ?>"><?php echo lang('menu_conferencias_buscar_frequencias_por_profissional'); ?></a></li>
-                            </ul>
+
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('buscarescalaporprofissional')?>"><a href="<?php echo site_url('admin/escalas/buscarescalaporprofissional'); ?>"><?php echo lang('menu_conferencias_buscar_escalas_por_profissional'); ?></a></li>
                             </ul>

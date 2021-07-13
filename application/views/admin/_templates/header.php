@@ -120,8 +120,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
         
 <?php endif; ?>
-<?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['editarfrequencia', 'buscarfrequencias'])) : ?>
+<?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['editarfrequencia'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_assessus_por_unidade.js'); ?>"></script>
+<?php endif; ?>
+<?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['buscarfrequencias'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_assessus_por_unidade.js'); ?>"></script>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/listafrequencias.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'frequencias' && in_array($this->router->fetch_method(), ['buscarfrequenciaporprofissional'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/profissionais_por_unidade.js'); ?>"></script>

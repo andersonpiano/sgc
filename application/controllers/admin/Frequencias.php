@@ -54,24 +54,40 @@ class Frequencias extends Admin_Controller
         if ($this->form_validation->run() == true) {
             $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
             $datainicial = $this->input->post('datainicial');
+            $profissional_id = $this->input->post('profissional_id');
             $datafinal = $this->input->post('datafinal');
             $setor_id = $this->input->post('setor_id');
 
+            $profissionais = $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
             $setores = $this->_get_setores($unidadehospitalar_id);
 
             $this->load->model('cemerge/escala_model');
-            $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal);
+            if ($setor_id <> '' && $profissional_id == ''){
+               $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null); 
+            } else if ($setor_id == '' && $profissional_id <> ''){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id); 
+            } else if ($setor_id == '' && $profissional_id == ''){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null); 
+            }else {
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id); 
+            }
+            $this->load->helper('group_by');
+            $this->data['frequencias'] = group_by('nome_profissional_frq', $frequencias);
+            
             $this->load->helper('group_by');
             $this->data['frequencias'] = group_by('nome_profissional_frq', $frequencias);
         } else {
             $datainicial = date('Y-m-01');
             $datafinal = date('Y-m-t');
-            $setores = array('0' => 'Selecione um setor');
+            //$setores = array('0' => 'Selecione um setor');
+            $profissionais = $this->_get_profissionais_por_unidade_hospitalar(1);
+            $setores = $this->_get_setores(1);
         }
 
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
         $unidadeshospitalares = $this->_get_unidadeshospitalares_assessus();
+        
 
         $this->data['datainicial'] = array(
             'name'  => 'datainicial',
@@ -102,6 +118,14 @@ class Frequencias extends Admin_Controller
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('setor_id'),
             'options' => $setores,
+        );
+        $this->data['profissional_id'] = array(
+            'name'  => 'profissional_id',
+            'id'    => 'profissional_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('profissional_id'),
+            'options' => $profissionais,
         );
 
         /* Load Template */
@@ -193,6 +217,22 @@ class Frequencias extends Admin_Controller
 
         /* Load Template */
         $this->template->admin_render('admin/frequencias/listafrequenciaporprofissional', $this->data);
+    }
+
+    public function deletar_frequencia(){
+        $sucess = false;
+
+        $frequencia = $this->input->post('frequencia');
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        } else {
+            if ($this->frequencia_model->delete(['id' => $frequencia])){
+                $sucess = true;
+            }
+        }
+        echo json_encode(['sucess' => $sucess]); exit;
+
     }
 
     public function buscarfrequenciamedico()

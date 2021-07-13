@@ -40,37 +40,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="col-md-12">
                              <div class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title"><?php echo lang('frequencias_por_setor'); ?></h3>
+                                    <h3 class="box-title"><?php echo lang('frequencias_find'); ?></h3>
                                 </div>
                                 <div class="box-body">
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-frequencias_find')); ?>
                                         <div class="form-group">
                                             <?php echo lang('frequencias_unidadehospitalar', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <?php echo form_dropdown($unidadehospitalar_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <?php echo lang('frequencias_profissional', 'profissional_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
-                                                <?php echo form_dropdown($profissional_id);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('frequencias_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
-                                                <?php echo form_dropdown($setor_id);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <?php echo lang('frequencias_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datainicial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('frequencias_datafinalplantao', 'datafinal', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datafinal);?>
                                             </div>
                                         </div>
@@ -92,28 +80,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </section>
 
                 <section class="content">
+                <div class="print-header row">
+                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista de Frequência</h3></div>
+                </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="box" >
+                            <div class="box">
                                 <?php foreach ($frequencias as $profissional => $freqs) : ?>
                                 <div class="box-header with-border">
-                                <div class="print-header row">
-                                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-                                    <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
-                                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista frequência por Setor</h3></div>
-                                </div>
                                     <h3 class="box-title">
-                                        <?php echo(lang('frequencias_profissional') . ": " .  $profissional); ?>
+                                        <?php echo(lang('frequencias_profissional') . ": " . $profissional); ?>
                                     </h3>
                                 </div>
-                                <div class="box-body"  style="page-break-after:always;">
+                                <div class="box-body">
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th class="w-20"><?php echo lang('frequencias_setor');?></th>
                                                 <th class="text-center w-10"><?php echo lang('frequencias_dataplantao');?></th>
                                                 <th class="text-center w-10"><?php echo lang('frequencias_horafrequencia');?></th>
-                                                <th class="text-center w-10"><?php echo('Tipo');?></th>
+                                                <th class="text-center w-10"><?php echo('Status / Tipo');?></th>
                                                 <th class="text-center w-20 dontprint"><?php echo lang('frequencias_action');?></th>
                                             </tr>
                                         </thead>
@@ -121,23 +109,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php foreach ($freqs as $freq) : ?>
                                         <?php
                                         $tipo_batida_escala = 'Sem escala';
-                                        if ($freq->tipobatida == 1) {
+                                        if ($freq->tipo_batida == 1) {
                                             $tipo_batida_escala = 'Entrada';
-                                        } else if ($freq->tipobatida == 2) {
+                                        } else if ($freq->tipo_batida == 2) {
                                             $tipo_batida_escala = 'Saída';
                                         }
                                         ?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($freq->nome_setor, ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->datahorabatida)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td class="text-center"><?php echo htmlspecialchars(date('H:i:s', strtotime($freq->datahorabatida)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($freq->nm_set, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="text-center"><?php echo htmlspecialchars(date('d/m/Y', strtotime($freq->dt_frq)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td class="text-center"><?php echo htmlspecialchars(date('H:i:s', strtotime($freq->dt_frq)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center <?php echo($freq->escala_id ? 'bg-success' : 'bg-danger'); ?>"><?php echo($tipo_batida_escala); ?></td>
-                                                <td class="dontprint text-center">
-                                                    <?php echo anchor('admin/frequencias/editarfrequencia_nova/'.$freq->frequencia_id, '<i class="fa fa-pencil" aria-hidden="true"></i>', array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); 
-                                                    if ($tipo_batida_escala == 'Sem escala' && $freq->escala_id == null){
-                                                        echo '<button style="margin-left: 10px;" class="btn btn-danger fa fa-close btn-excluir-frequencia" frequencia="'.$freq->frequencia_id.'"></button>';
-                                                    }
-                                                    ?>
+                                                <td>
+                                                    <?php echo anchor('admin/frequencias/editarfrequencia/'.$freq->cd_ctl_frq, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat')); ?>
                                                 </td>
                                             </tr>
                                     <?php endforeach;?>

@@ -1082,67 +1082,6 @@ class Escalas extends Admin_Controller
         }
     }
 
-    function downloadFile($frequencia){
-        $yourFile = "Sample-CSV-Format.txt";
-        $file = @fopen($yourFile, "rb");
-
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename=TheNameYouWant.txt');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($yourFile));
-        while (!feof($file)) {
-            print(@fread($file, 1024 * 8));
-            ob_flush();
-            flush();
-        }
-    }
-    // Export data in CSV format 
-    public function exportTXT(){ 
-        // file name 
-        header("Content-Description: File Transfer"); 
-        header("Content-Disposition: attachment; filename=batidas.txt"); 
-        header("Content-Type: application/octet-stream; ");
-        
-        // get data 
-        $usersData = $this->_get_profissionais_por_unidade_hospitalar_frequencia(1);
-    
-        // file creation 
-        $file = fopen('php://output', 'w');
-    
-        $header = array("Username","Name","Gender","Email"); 
-        fputcsv($file, $header);
-        foreach ($usersData as $key=>$line){ 
-        fputcsv($file,$line); 
-        }
-        fclose($file); 
-        exit; 
-    }
-    // Export data in CSV format 
-    public function exportCSV(){ 
-        // file name 
-        $filename = 'users_'.date('Ymd').'.csv'; 
-        header("Content-Description: File Transfer"); 
-        header("Content-Disposition: attachment; filename=$filename"); 
-        header("Content-Type: application/csv; ");
-        
-        // get data 
-        $usersData = $this->Main_model->getUserDetails();
-    
-        // file creation 
-        $file = fopen('php://output', 'w');
-    
-        $header = array("Username","Name","Gender","Email"); 
-        fputcsv($file, $header);
-        foreach ($usersData as $key=>$line){ 
-        fputcsv($file,$line); 
-        }
-        fclose($file); 
-        exit; 
-    }
-
     public function validar()
     {
         if (!$this->ion_auth->logged_in()) {
