@@ -718,7 +718,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal)
+    public function get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id)
     {
         $sql = "select CONCAT(p.nome, ' Matricula: ', if(p.matricula is null, ' Sem Matricula', p.matricula)) as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_id, s.nome as nome_setor, ";
         $sql .= "f.profissional_id, f.datahorabatida, f.tipobatida, f.escala_id, ";
@@ -737,6 +737,15 @@ class Escala_model extends MY_Model
         */
         if ($setor_id) {
             $sql .= "and f.setor_id = $setor_id ";
+            /*
+            $sql .= "and f.cd_set in ";
+            $sql .= "(select cd_set ";
+            $sql .= "from grupos_setores ";
+            $sql .= "where setor_id = $setor_id) ";
+            */
+        }
+        if ($profissional_id) {
+            $sql .= "and f.profissional_id = $profissional_id ";
             /*
             $sql .= "and f.cd_set in ";
             $sql .= "(select cd_set ";
@@ -1498,7 +1507,7 @@ class Escala_model extends MY_Model
         $sql .= 'and escalas.id not in ';
         $sql .= '(select escala_id ';
         $sql .= 'from passagenstrocas ';
-        $sql .= 'where escala_id = escalas.id and passagenstrocas.statuspassagem = 1) ';
+        $sql .= 'where escala_id = escalas.id) ';
         $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
         if ($tipo_plantao != null && $tipo_plantao != 2){
             $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao . ' ';
