@@ -22,7 +22,7 @@ class Justificativa_model extends MY_Model
         $fields .= "p.nome as nome_profissional, ";
         $fields .= "j.status as status, ";
         $fields .= "j.entrada_justificada as entrada_justificada, ";
-        $fields .= "j.saida_justificada as saida_justificada ";
+        $fields .= "j.saida_justificada as saida_justificada, j.create_at ";
 
 
         $sql = "SELECT $fields FROM justificativas as j ";

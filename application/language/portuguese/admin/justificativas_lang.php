@@ -18,6 +18,7 @@ $lang['justificativas_profissional']        = 'Médico(a)';
 $lang['justificativas_cooperativa']         = 'Cooperativa';
 $lang['justificativas_setor']               = 'Setor / Serviço';
 $lang['justificativas_data_plantao']        = 'Data';
+$lang['justificativas_data_criacao']        = 'Data de Criação';
 $lang['justificativas_hora_entrada']        = 'Entrada';
 $lang['justificativas_hora_saida']          = 'Saída';
 $lang['justificativas_hora_entrada_registrada']        = 'Hora de Entrada Registrada';

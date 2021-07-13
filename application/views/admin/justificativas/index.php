@@ -106,6 +106,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                         <thead>
                                             <tr>
                                                 <th><?php echo lang('justificativas_data_plantao');?></th>
+                                                <th><?php echo lang('justificativas_data_criacao');?></th>
                                                 <th><?php echo lang('justificativas_turno');?></th>
                                                 <th><?php echo lang('justificativas_setor');?></th>
                                                 <th><?php echo lang('justificativas_profissional');?></th>
@@ -119,6 +120,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
 <?php foreach ($justificativas as $justificativa):?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($justificativa->data_inicial_plantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo ($justificativa->create_at) ? htmlspecialchars(date('d/m/Y', strtotime($justificativa->create_at)), ENT_QUOTES, 'UTF-8'). '<br>'. htmlspecialchars(date('H:m:s', strtotime($justificativa->create_at)), ENT_QUOTES, 'UTF-8') : 'Sem data de criação'; ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>
