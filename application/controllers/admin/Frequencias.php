@@ -66,7 +66,9 @@ class Frequencias extends Admin_Controller
                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null); 
             } else if ($setor_id == '' && $profissional_id <> ''){
                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id); 
-            } else {
+            } else if ($setor_id == '' && $profissional_id == ''){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null); 
+            }else {
                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id); 
             }
             $this->load->helper('group_by');
@@ -215,6 +217,22 @@ class Frequencias extends Admin_Controller
 
         /* Load Template */
         $this->template->admin_render('admin/frequencias/listafrequenciaporprofissional', $this->data);
+    }
+
+    public function deletar_frequencia(){
+        $sucess = false;
+
+        $frequencia = $this->input->post('frequencia');
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        } else {
+            if ($this->frequencia_model->delete(['id' => $frequencia])){
+                $sucess = true;
+            }
+        }
+        echo json_encode(['sucess' => $sucess]); exit;
+
     }
 
     public function buscarfrequenciamedico()

@@ -753,7 +753,7 @@ class Escala_model extends MY_Model
             $sql .= "where setor_id = $setor_id) ";
             */
         }
-        $sql .= "order by p.matricula, f.datahorabatida";
+        $sql .= "order by p.matricula, f.datahorabatida, ec.nomesetor";
 
         $query = $this->db->query($sql);
 
