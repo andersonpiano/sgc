@@ -92,9 +92,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php if ($this->router->fetch_class() == 'plantoes') : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/plantoes.js'); ?>"></script>
 <?php endif; ?>
-<?php if ($this->router->fetch_class() == 'escalas') : ?>
-        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/escalas.js'); ?>"></script>
-<?php endif; ?>
+
 <?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['profissional'])) : ?>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
@@ -133,6 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/setores_por_profissional.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['atribuir'])) : ?>
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/escalas_atribuir.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'escalas' && in_array($this->router->fetch_method(), ['create'])) : ?>

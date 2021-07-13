@@ -187,82 +187,125 @@ $(".btn-remover-medico").click(function(){
 });
 
 $(document).on('change', '#profissional_id', function() {
-    var profissional = $(this).val();
-    var escala = $(this).next('input').val();
-    var hora_ini = $(this).prev('input').val();
-    var data_ini = document.getElementById("data_plantao_"+escala).value;
-    var url = '/sgc/admin/escalas/atribuirescala/';
-    var sucess = false;
+   
     // swal('Erro', 'escala - '+escala+' horaIN - '+hora_ini + 'Data - ' + data_ini ,'error');
-    $.ajax({
-        url: url,
-        method: 'post',
-        data: {
-            profissional : profissional,
-            escala : escala,
-            data_ini : data_ini,
-            hora_ini : hora_ini
-        },
-        success: function(responseData) {
-            // Se sucesso, remover ou travar o dropdown
+    var profissional = $(this).val();
+        var escala = $(this).next('input').val();
+        var hora_ini = $(this).prev('input').val();
+        var data_ini = document.getElementById("data_plantao_"+escala).value;
+        var hora_ini = document.getElementById("hora_plantao_"+escala).value;
+        var url = '/sgc/admin/escalas/novo_escala/';
+    $data_atual = new Date();
+    $data_atualM = $data_atual.getFullYear()+'-'+String($data_atual.getMonth() + 1).padStart(2, '0')+'-'+$data_atual.getDate();
+    hora_atualM = $data_atual.getHours().padStart(2, '0')+':'+$data_atual.getMinutes().padStart(2, '0')+':'+$data_atual.getSeconds();
+    alert(hora_atualM);
+    if(data_ini <= $data_atualM) {
+        swal("Erro", "Não é possivel alterar um plantão que ja foi finalizado ou que esta em andamento", "error");
+    //} else if () {
+        
+    } else {
+        
+        $.ajax({
+            url: url,
+            method: 'post',
+            data: {
+                profissional : profissional,
+                escala : escala,
+                data_ini : data_ini,
+                hora_ini : hora_ini
+            },
+            success: function(responseData) {
+                // Se sucesso, remover ou travar o dropdown
 
-            $sucess = JSON.parse(responseData).sucess;
-            $vinculo = JSON.parse(responseData).vinculo;
+                $sucess = JSON.parse(responseData).sucess;
+                $vinculo = JSON.parse(responseData).vinculo;
 
-            //swal('sucesso', $vinculo);
+                //swal('sucesso', $vinculo);
+                
+                //alert($data_atualM);
 
-            if($vinculo == '3'){
-                $("#modal_vinculo").modal();
-                $('.btn-vinculo').click(function(){
-                    $("#modal_vinculo").modal("hide");
+                if($vinculo == '3'){
+                    $("#modal_vinculo").modal();
+                    $('.btn-vinculo').click(function(){
+                        $("#modal_vinculo").modal("hide");
+                        if ($sucess == true){
+                            /*$('#row_id_' + escala).fadeOut('slow', 
+                            function(here){ 
+                                $('#row_id_' + escala).remove();
+                            });*/
+                            $.ajax({
+                                url: '/sgc/admin/escalas/troca_vinculo_escala/',
+                                method: 'post',
+                                data: {
+                                    vinculo_id : document.getElementById('vinculos_atribuir').value,
+                                    escala : escala
+                                },
+                            success: function(responseData) {
+                            swal("Sucesso","Troca realizada com sucesso","success");
+                            }, 
+                            error: function(responseData){
+                                swal("Erro!","Erro ao atribuir vinculo.", 'error');
+                            }
+                        });
+                        } else {
+                            swal("Erro!","Este plantão não pode ser alterado.", 'error');
+                            //document.getElementById('profissional_id').value = JSON.parse(responseData).profissional;
+                            //console.log($('[name="escala_id_' + escala + '"]').prev('select').val());
+                            selectProfissional = $('[name="escala_id_' + escala + '"]').prev('select');
+                            selectProfissional.val(JSON.parse(responseData).profissional_ant);
+                        };
+                    });
+                } else  {
+                   // alert($sucess);
                     if ($sucess == true){
                         /*$('#row_id_' + escala).fadeOut('slow', 
                         function(here){ 
                             $('#row_id_' + escala).remove();
                         });*/
-                        $.ajax({
-                            url: '/sgc/admin/escalas/troca_vinculo_escala/',
-                            method: 'post',
-                            data: {
-                                vinculo_id : document.getElementById('vinculos_atribuir').value,
-                                escala : escala
-                            },
-                        success: function(responseData) {
-                        swal("Sucesso","Troca realizada com sucesso","success");
-                        }, 
-                        error: function(responseData){
-                            swal("Erro!","Erro ao atribuir vinculo.", 'error');
-                        }
-                    });
+                        //swal("Sucesso","Troca realizada com sucesso","success");
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Troca realizada com sucesso',
+                            type: 'success',
+                            showDenyButton: false,
+                            showCancelButton: false,
+                          }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.value) {
+                                document.location.reload(true);
+                            } else if (result.isDenied) {
+                                document.location.reload(true);
+                            }
+                        });
                     } else {
-                        swal("Erro!","Este plantão já foi repassado a outro profissional ou profissional selecionado ja está escalado em outro plantão.", 'error');
+                        Swal.fire({
+                            title: 'Erro!',
+                            text: 'O médico ja esta em outro plantão, ou este plantão já possui uma troca ou cessão realizada.',
+                            type: 'error',
+                            showDenyButton: false,
+                            showCancelButton: false,
+                        }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.value) {
+                                document.location.reload(true);
+                            } else if (result.isDenied) {
+                                document.location.reload(true);
+                            }
+                        });
                         //document.getElementById('profissional_id').value = JSON.parse(responseData).profissional;
                         //console.log($('[name="escala_id_' + escala + '"]').prev('select').val());
-                        selectProfissional = $('[name="escala_id_' + escala + '"]').prev('select');
-                        selectProfissional.val(JSON.parse(responseData).profissional_ant);
+                        
                     };
-                });
-            } else {
-                if ($sucess == true){
-                    /*$('#row_id_' + escala).fadeOut('slow', 
-                    function(here){ 
-                        $('#row_id_' + escala).remove();
-                    });*/
-                    swal("Sucesso","Troca realizada com sucesso","success");
-                } else {
-                    swal("Erro!","Este plantão já foi repassado a outro profissional ou profissional selecionado ja está escalado em outro plantão.", 'error');
-                    //document.getElementById('profissional_id').value = JSON.parse(responseData).profissional;
-                    //console.log($('[name="escala_id_' + escala + '"]').prev('select').val());
-                    selectProfissional = $('[name="escala_id_' + escala + '"]').prev('select');
-                    selectProfissional.val(JSON.parse(responseData).profissional);
-                };
-            };  
-        },
-        error: function(responseData) {
-            swal("Erro!","Ocorreu um erro ao atribuir a escala ao profissional. Por favor, tente novamente mais tarde","error");
-            console.log(responseData);
-        }
-    }); 
+                };  
+            },
+            error: function(responseData) {
+                swal("Erro!","Ocorreu um erro ao atribuir a escala ao profissional. Por favor, tente novamente mais tarde","error");
+                selectProfissional = $('[name="escala_id_' + escala + '"]').prev('select');
+                selectProfissional.val(JSON.parse(responseData).profissional);
+                console.log(responseData);
+            }
+        }); 
+    };
 });
 if ('#tipos_plantao'){
     $(document).on('change', '#tipos_plantao', function() {

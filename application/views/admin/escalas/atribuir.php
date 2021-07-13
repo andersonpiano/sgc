@@ -256,7 +256,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td>
                                                     <?php //echo form_dropdown($profissional_id);?>
                                                     <?php echo form_input(array('type'=>'hidden','id'=>'data_plantao_'.$escala->id, 'value'=>$escala->dataplantao));?>
-                                                    <?php echo form_hidden('hora_plantao_'.$escala->id, $escala->horainicialplantao);?>
+                                                    <?php echo form_input(['type'=>'hidden', 'id'=>'hora_plantao_'.$escala->id, 'value'=>$escala->horainicialplantao]);?>
                                                     <?php echo form_dropdown($profissional_id, null, $escala->profissional_id);?>
                                                     <?php echo form_hidden('escala_id_' . $escala->id, $escala->id);?>
                                                     </td>
