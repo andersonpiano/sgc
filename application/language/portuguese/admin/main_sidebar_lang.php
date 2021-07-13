@@ -60,7 +60,6 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_conferencias_conferencia'] = 'Conferência de Plantão';
 /* *********** */$lang['menu_conferencias_buscar_processadas'] = 'Buscar escalas Processadas';
 /* *********** */$lang['menu_conferencias_frequencia_processada'] = 'Buscar frequência Processada';
-/* *********** */$lang['menu_conferencias_frequencia_nao_processada'] = 'Buscar frequência não Processada';
 /* *********** */$lang['menu_conferencias_buscar_escalas_por_profissional'] = 'Buscar escalas por Profissional';
 /* *********** */$lang['menu_conferencias_buscar_frequencias'] = 'Buscar frequência Geral';
 /* *********** */$lang['menu_conferencias_buscar_frequencias_por_profissional'] = 'Buscar frequências por Profissional';
