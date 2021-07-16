@@ -228,7 +228,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('buscarfrequencias')?>"><a href="<?php echo site_url('admin/frequencias/buscarfrequencias'); ?>"><?php echo lang('menu_conferencias_buscar_frequencias'); ?></a></li>
                             </ul>
-
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('buscarescalaporprofissional')?>"><a href="<?php echo site_url('admin/escalas/buscarescalaporprofissional'); ?>"><?php echo lang('menu_conferencias_buscar_escalas_por_profissional'); ?></a></li>
                             </ul>

@@ -10,18 +10,18 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['escalas_create']              = 'Criar escala inicial';
+$lang['escalas_create']              = 'Criar Grade de Escala';
 $lang['escalas_create_description']              = 'Utilize essa forma de criar escala para cadastrar a primeira escala do setor. Nos meses seguintes, recomendamos utilizar a criação de escala por cópia.';
-$lang['escalas_create_fixed']        = 'Criar escala por cópia';
+$lang['escalas_create_fixed']        = 'Criar Escala por cópia';
 $lang['escalas_create_fixed_description']        = 'Utilize essa forma de criar escala para copiar a escala do mês anterior, inclusive com os profissionais alocados.';
-$lang['escalas_create_extra']        = 'Criar plantão extra';
+$lang['escalas_create_extra']        = 'Criar Plantão Extra';
 $lang['escalas_create_extra_description']        = 'Utilize essa forma de criar escala caso precise adicionar um horário a uma escala já existente.';
 $lang['escalas_edit']                = 'Editar escala';
-$lang['escalas_find']                = 'Buscar escala por Profissional';
+$lang['escalas_find']                = 'Buscar Escalas';
 $lang['escalas_frequencias']         = 'Buscar Frequência Processada';
 $lang['escalas_frequencias_nao_processadas']         = 'Buscar Frequência não Processada';
 $lang['escalas_find_processada']     = 'Buscar Escala Processada';
-$lang['escalas_attribute']           = 'Buscar escala';
+$lang['escalas_attribute']           = 'Inserir Escala';
 $lang['escalas_attribute_description'] = 'Aqui você pode alterar a escala original e essas mudanças refletirão na próxima escala copiada. Caso a mudança seja temporária, utilize as cessões e trocas.';
 $lang['escalas_corrigir']      = 'Corrigir frequência';
 $lang['escalas_corrigir_description']      = 'Aqui você pode aceitar e corrigir uma batida de ponto que não tenha sido reconhecida automaticamente pelo sistema.';

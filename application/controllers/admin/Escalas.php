@@ -575,7 +575,7 @@ class Escalas extends Admin_Controller
 
             /* Validate form input */
             $this->form_validation->set_rules('unidadehospitalar_id', 'lang:escalas_unidadehospitalar', 'required');
-            $this->form_validation->set_rules('profissional_id', 'lang:escalas_profissional', 'required');
+            //$this->form_validation->set_rules('profissional_id', 'lang:escalas_profissional', 'required');
             $this->form_validation->set_rules('datainicial', 'lang:escalas_datainicialplantao', 'required');
             $this->form_validation->set_rules('datafinal', 'lang:escalas_datafinalplantao', 'required');
             $this->form_validation->set_rules('tipo_plantao', 'lang:escalas_tipo_plantao', 'required');
@@ -587,16 +587,28 @@ class Escalas extends Admin_Controller
             if ($this->form_validation->run() == true) {
                 $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
                 $profissional_id = $this->input->post('profissional_id');
+                $setor_id = $this->input->post('setor_id');
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
                 $tipo_plantao = $this->input->post('tipo_plantao');
+                $tipo_escala = $this->input->post('tipos');
 
-                $profissionais = $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
+                $setores = $this->_get_setores($unidadehospitalar_id);
+                $profissionais = $this->_get_profissionais($setor_id);
 
-                $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, null, $tipo_plantao);    
+                if($profissional_id == ''){
+                    $profissional_id = 0;
+                }
+
+                if($setor_id == ''){
+                    $setor_id = 0;
+                }
+
+                $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas2($datainicial, $datafinal, $setor_id, $tipo_plantao, $tipo_escala, $profissional_id);    
             } else {
-                $unidadehospitalar_id = 0;
-                $profissional_id = 0;
+                $unidadehospitalar_id = 1;
+                $setores = array('Todos os Setores');
+                $profissionais = array('Todos os Profissionais');
                 $datainicial = date('Y-m-01');
                 $datafinal = date('Y-m-t');
                 $profissionais = array('' => 'Selecione um profissional');
@@ -607,10 +619,33 @@ class Escalas extends Admin_Controller
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
             $tiposescala = $this->_get_tipos_escala();
+            
             $tipos_plantao = array(
                 '2' => 'Todos',
                 '0' => 'Fixo',
                 '1' => 'Extra'
+            );
+            $tipos = array(
+                '0' => 'Todos',
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
+
+            $this->data['setor_id'] = array(
+                'name'  => 'setor_id',
+                'id'    => 'setor_id',
+                'type'  => 'select',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('setor_id'),
+                'options' => $setores,
             );
 
             $this->data['datainicial'] = array(
