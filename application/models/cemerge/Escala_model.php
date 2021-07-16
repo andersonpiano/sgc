@@ -1489,7 +1489,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, $setor_id = null, $tipo_plantao = null)
+    public function get_escalas_consolidadas_por_profissional($profissional_id, $datainicial, $datafinal, $setor_id = null, $tipo_plantao = null, $tipo_escala = null)
     {
         $sql = 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
         $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
@@ -1511,6 +1511,9 @@ class Escala_model extends MY_Model
         $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
         if ($tipo_plantao != null && $tipo_plantao != 2){
             $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao . ' ';
+        }
+        if ($tipo_escala != null && $tipo_escala != 0){
+            $sql .= 'and escalas.tipo_escala =  '. $tipo_escala . ' ';
         }
         if ($setor_id != null) {
             $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
@@ -1538,12 +1541,88 @@ class Escala_model extends MY_Model
         if ($tipo_plantao != 2){
             $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao .' ';
         }
+        if ($tipo_escala != null && $tipo_escala != 0){
+            $sql .= 'and escalas.tipo_escala =  '. $tipo_escala . ' ';
+        }
         if ($setor_id != null) {
             $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
         }
+        
         $sql .= 'order by dataplantao, horainicialplantao';
 
         $query = $this->db->query($sql, array($profissional_id, $profissional_id));
+
+        return $query->result();
+    }
+
+    public function get_escalas_consolidadas2($datainicial, $datafinal, $setor_id, $tipo_plantao, $tipo_escala, $profissional_id)
+    {
+        $sql = 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
+        $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
+        $sql .= 'escalas.duracao, escalas.profissional_id, escalas.setor_id, ';
+        $sql .= 'profissionais.registro as profissional_registro, ';
+        $sql .= 'profissionais.nome as profissional_nome, ';
+        $sql .= 'setores.nome as setor_nome, ';
+        $sql .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial, ';
+        $sql .= '\'Original\' as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join profissionais on (escalas.profissional_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
+        $sql .= 'where escalas.publicada = 1 ';
+        if($profissional_id != 0 && $profissional_id != null){
+            $sql .= 'and profissionais.id = '.$profissional_id.' ';
+        }
+        
+        $sql .= 'and escalas.id not in ';
+        $sql .= '(select escala_id ';
+        $sql .= 'from passagenstrocas ';
+        $sql .= 'where escala_id = escalas.id) ';
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
+        if ($tipo_plantao != null && $tipo_plantao != 2){
+            $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao . ' ';
+        }
+        if ($tipo_escala != null && $tipo_escala != 0){
+            $sql .= 'and escalas.tipo_escala =  '. $tipo_escala . ' ';
+        }
+        if ($setor_id != 0 && $setor_id != null) {
+            $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
+        }
+        $sql .= 'union ';
+        $sql .= 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
+        $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
+        $sql .= 'escalas.duracao, escalas.profissional_id, escalas.setor_id, ';
+        $sql .= 'profissionais.registro as profissional_registro, ';
+        $sql .= 'profissionais.nome as profissional_nome, ';
+        $sql .= 'setores.nome as setor_nome, ';
+        $sql .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial, ';
+        $sql .= 'case ';
+        $sql .= 'when passagenstrocas.tipopassagem=0 then \'Cessão\' ';
+        $sql .= 'when passagenstrocas.tipopassagem=1 then \'Troca\' ';
+        $sql .= 'end as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join passagenstrocas on (escalas.id = passagenstrocas.escala_id) ';
+        $sql .= 'join profissionais on (passagenstrocas.profissionalsubstituto_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
+        if($profissional_id != 0 && $profissional_id != null){
+            $sql .= 'and profissionais.id = '.$profissional_id.' ';
+        }
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
+        $sql .= 'and passagenstrocas.statuspassagem = 1 ';
+        if ($tipo_plantao != 2){
+            $sql .= 'and escalas.tipo_plantao =  '. $tipo_plantao .' ';
+        }
+        if ($tipo_escala != null && $tipo_escala != 0){
+            $sql .= 'and escalas.tipo_escala =  '. $tipo_escala . ' ';
+        }
+        if ($setor_id != 0 && $setor_id != null) {
+            $sql .= 'and escalas.setor_id = ' . $setor_id . ' ';
+        }
+        
+        $sql .= 'order by dataplantao, horainicialplantao';
+
+        $query = $this->db->query($sql);
 
         return $query->result();
     }
