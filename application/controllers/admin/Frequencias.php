@@ -227,12 +227,28 @@ class Frequencias extends Admin_Controller
         if (!$this->input->is_ajax_request()) {
             exit("Nenhum acesso de script direto permitido!");
         } else {
-            if ($this->frequencia_model->delete(['id' => $frequencia])){
+            if ($this->frequencia_model->update($frequencia, ['deletado' => 1])){
                 $sucess = true;
             }
         }
         echo json_encode(['sucess' => $sucess]); exit;
 
+    }
+
+    public function exportaFolha()
+    {
+        $this->load->helper('file');
+        header("Content-Description: File Transfer"); 
+        header("Content-Disposition: attachment; filename=batidas.txt"); 
+        header("Content-Type: application/octet-stream; ");
+        $file = fopen('php://output', 'w');
+
+        $data = $this->escala_model->get_frequencias_escalas_nova(1, null, '2021-07-01', '2021-07-31', null);
+        foreach($data as $linha){
+            fwrite($file, $linha);
+        } 
+        fclose($file); 
+        exit; 
     }
 
     public function buscarfrequenciamedico()

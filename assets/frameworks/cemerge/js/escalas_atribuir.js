@@ -197,13 +197,12 @@ $(document).on('change', '#profissional_id', function() {
         var url = '/sgc/admin/escalas/novo_escala/';
     $data_atual = new Date();
     $data_atualM = $data_atual.getFullYear()+'-'+String($data_atual.getMonth() + 1).padStart(2, '0')+'-'+$data_atual.getDate();
-    hora_atualM = $data_atual.getHours().padStart(2, '0')+':'+$data_atual.getMinutes().padStart(2, '0')+':'+$data_atual.getSeconds();
-    alert(hora_atualM);
-    if(data_ini <= $data_atualM) {
+    //hora_atualM = $data_atual.getHours().padStart(2, '0')+':'+$data_atual.getMinutes().padStart(2, '0')+':'+$data_atual.getSeconds();
+    /*if(data_ini <= $data_atualM) {
         swal("Erro", "Não é possivel alterar um plantão que ja foi finalizado ou que esta em andamento", "error");
     //} else if () {
         
-    } else {
+    } else {*/
         
         $.ajax({
             url: url,
@@ -305,7 +304,7 @@ $(document).on('change', '#profissional_id', function() {
                 console.log(responseData);
             }
         }); 
-    };
+    //};
 });
 if ('#tipos_plantao'){
     $(document).on('change', '#tipos_plantao', function() {

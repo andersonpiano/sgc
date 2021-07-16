@@ -31,4 +31,24 @@ $(document).ready(function(){
 			}
 		})
 	});
+
+	$(".gera-arquivo").click(function(){
+		unidade = document.getElementById('unidadehospitalar_id').value;
+		setor = document.getElementById('setor_id').value;
+		datainicial = document.getElementById('datainicial').value;
+		datafinal = document.getElementById('datafinal').value;
+		profissional = document.getElementById('profissional_id').value;
+		if (profissional == ''){
+			profissional = 0;
+		}
+		if (setor == ''){
+			setor = 0;
+		}
+
+		if(unidade == ''){
+			swal('Aviso', 'Ops, você não selecionou a unidade hospitalar', 'info');
+		} else {
+			window.location.href='/sgc/admin/escalas/exportaFolha/'+unidade+'/'+setor+'/'+datainicial+'/'+datafinal+'/'+profissional;
+		}
+	});
 })

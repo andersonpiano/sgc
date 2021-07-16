@@ -81,6 +81,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <a href="<?php echo(current_url()); ?>" onclick="window.print(); return false;" class="btn btn-default btn-flat">Imprimir</a>&nbsp;
                                                     <?php echo form_button(array('type' => 'reset', 'class' => 'btn btn-warning btn-flat', 'content' => lang('actions_reset'))); ?>
                                                     <?php echo anchor('admin/frequencias/listafrequenciasemescala', lang('actions_cancel'), array('class' => 'btn btn-default btn-flat')); ?>
+                                                    <a style="float: right; color: white; padding-top: 1px; padding-bottom: 1px; padding-left: 3px; padding-right: 3px;" class="btn btn-primary text-center gera-arquivo"><i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -93,8 +94,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 <section class="content">
                     <div class="row">
+                    
                         <div class="col-md-12">
                             <div class="box" >
+                            
                                 <?php foreach ($frequencias as $profissional => $freqs) : ?>
                                 <div class="box-header with-border">
                                 <div class="print-header row">

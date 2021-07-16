@@ -731,6 +731,49 @@ class Escala_model extends MY_Model
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
+        $sql .= " and f.deletado <> 1 ";
+        /*
+        $sql .= "and f.cd_pes_jur in ";
+        $sql .= "(select cd_pes_jur from grupos_unidadeshospitalares where unidadehospitalar_id = $unidadehospitalar_id) ";
+        */
+        if ($setor_id) {
+            $sql .= "and f.setor_id = $setor_id ";
+            /*
+            $sql .= "and f.cd_set in ";
+            $sql .= "(select cd_set ";
+            $sql .= "from grupos_setores ";
+            $sql .= "where setor_id = $setor_id) ";
+            */
+        }
+        if ($profissional_id) {
+            $sql .= "and f.profissional_id = $profissional_id ";
+            /*
+            $sql .= "and f.cd_set in ";
+            $sql .= "(select cd_set ";
+            $sql .= "from grupos_setores ";
+            $sql .= "where setor_id = $setor_id) ";
+            */
+        }
+        $sql .= "order by p.matricula, f.datahorabatida, ec.nomesetor";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    public function get_frequencias_export_txt($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id)
+    {
+        $sql = "select CONCAT(p.nome, ' Matricula: ', if(p.matricula is null, ' Sem Matricula', p.matricula)) as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_id, s.nome as nome_setor, ";
+        $sql .= "f.profissional_id, f.datahorabatida, f.tipobatida, f.escala_id, s.id_assessus, ";
+        $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
+        $sql .= "ec.idsetor, ec.nomesetor, ec.idunidade, ec.nomeunidade, ";
+        $sql .= "ec.id_profissional, ec.cd_pes_fis_profissional, ec.crm_profissional, p.registro as crm, ec.nome_profissional ";
+        $sql .= "from frequencias f "; 
+        $sql .= "left join vw_escalas_consolidadas ec on (f.escala_id = ec.id) ";
+        $sql .= "join setores s on (s.id = f.setor_id) ";
+        $sql .= "join profissionais p on (f.profissional_id = p.id) ";
+        $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
+        $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         /*
         $sql .= "and f.cd_pes_jur in ";
         $sql .= "(select cd_pes_jur from grupos_unidadeshospitalares where unidadehospitalar_id = $unidadehospitalar_id) ";

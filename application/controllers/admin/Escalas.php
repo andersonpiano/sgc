@@ -323,6 +323,40 @@ class Escalas extends Admin_Controller
         $this->pdf->stream("welcome.pdf");
     }
 
+    public function exportaFolha($unidadehospitalar_id, $setor_id,  $dataini, $datafinal, $profissional_id)
+    {
+        //var_dump($profissional_id); exit;
+        $this->load->helper('file');
+        header("Content-Description: File Transfer"); 
+        header("Content-Disposition: attachment; filename=batidas.txt"); 
+        header("Content-Type: application/octet-stream; ");
+        $file = fopen('php://output', 'w');
+
+        if($setor_id == '0'){
+            $setor_id = null;
+        }
+
+        if($profissional_id == '0'){
+            $profissional_id = null;
+        }
+
+        $data = $this->escala_model->get_frequencias_export_txt($unidadehospitalar_id, $setor_id,  $dataini, $datafinal, $profissional_id);//$this->_get_frequencias('1', null,  '2021-07-01', '2021-07-31', null);
+        //var_dump($data); exit;
+        foreach($data as $linha){
+            
+            if($linha->tipobatida == 1){
+                $tp = 'E';
+            } else if($linha->tipobatida == 2){
+                $tp = 'S';
+            } else {
+                $tp = '';
+            }
+            fwrite($file, (str_pad($linha->unidadehospitalar_id, 3, 0, STR_PAD_LEFT).str_pad($linha->id_assessus, 3, 0, STR_PAD_LEFT).date('Ymd', strtotime($linha->datahorabatida)). date('His', strtotime($linha->datahorabatida)) .str_pad($linha->crm, 6, 0, STR_PAD_LEFT).$tp).PHP_EOL);
+        } 
+        fclose($file); 
+        exit; 
+    }
+
     public function listaroportunidades()
     {
         if (!$this->ion_auth->logged_in()) {
@@ -3862,6 +3896,18 @@ class Escalas extends Admin_Controller
             $profissionais[$profissional->id] = $profissional->nome;
         }
 
+        return $profissionais;
+    }
+
+    public function _get_frequencias($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id)
+    {
+        $profissionais_por_unidade_hospitalar = $this->escala_model->get_frequencias_export_txt($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id);
+        //var_dump($profissionais_por_unidade_hospitalar); exit;
+        $profissionais = array();
+        foreach ($profissionais_por_unidade_hospitalar as $profissional) {
+            $profissionais[$profissional->id] = $profissional->nome;
+        }
+        //Anderson
         return $profissionais;
     }
 
