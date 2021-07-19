@@ -773,6 +773,7 @@ class Escala_model extends MY_Model
         $sql .= "join setores s on (s.id = f.setor_id) ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
+        $sql .= "and tipobatida is not null and deletado = 0 ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         /*
         $sql .= "and f.cd_pes_jur in ";
@@ -1596,6 +1597,99 @@ class Escala_model extends MY_Model
         $query = $this->db->query($sql, array($profissional_id, $profissional_id));
 
         return $query->result();
+    }
+    var $column_search = array("profissional_nome", "setor_nome");
+    var $column_order = array("dataplantao", "profissional_nome", "setor_nome");
+
+    public function get_escalas_consolidadas_datatable($profissional_id, $datainicial, $datafinal) {
+
+        $length = $this->input->post("length");
+        $start = $this->input->post("start");
+        $this->_get_escalas_consolidadas_por_profissional_datatables($profissional_id, $datainicial, $datafinal);
+        if (isset($length) && $length != -1) {
+            $this->db->limit($length, $start);
+        }
+        return $this->db->get()->result();
+    }
+
+    public function _get_escalas_consolidadas_por_profissional_datatables($profissional_id, $datainicial, $datafinal)
+    {
+
+        $search = NULL;
+        if ($this->input->post("search")) {
+            $search = $this->input->post("search")["value"];
+        }
+        $order_column = NULL;
+        $order_dir = NULL;
+        $order = $this->input->post("order");
+        if (isset($order)) {
+            $order_column = $order[0]["column"];
+            $order_dir = $order[0]["dir"];
+        }
+
+        $sql = 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
+        $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
+        $sql .= 'escalas.duracao, escalas.profissional_id, escalas.setor_id, ';
+        $sql .= 'profissionais.registro as profissional_registro, ';
+        $sql .= 'profissionais.nome as profissional_nome, ';
+        $sql .= 'setores.nome as setor_nome, ';
+        $sql .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial, ';
+        $sql .= '\'Original\' as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join profissionais on (escalas.profissional_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
+        $sql .= 'where escalas.publicada = 1 and profissionais.id = ? ';
+        $sql .= 'and escalas.id not in ';
+        $sql .= '(select escala_id ';
+        $sql .= 'from passagenstrocas ';
+        $sql .= 'where escala_id = escalas.id) ';
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
+
+        $sql .= 'union ';
+        $sql .= 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
+        $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
+        $sql .= 'escalas.duracao, escalas.profissional_id, escalas.setor_id, ';
+        $sql .= 'profissionais.registro as profissional_registro, ';
+        $sql .= 'profissionais.nome as profissional_nome, ';
+        $sql .= 'setores.nome as setor_nome, ';
+        $sql .= 'unidadeshospitalares.razaosocial as unidadehospitalar_razaosocial, ';
+        $sql .= 'case ';
+        $sql .= 'when passagenstrocas.tipopassagem=0 then \'Cessão\' ';
+        $sql .= 'when passagenstrocas.tipopassagem=1 then \'Troca\' ';
+        $sql .= 'end as tipoescala ';
+        $sql .= 'from escalas ';
+        $sql .= 'join passagenstrocas on (escalas.id = passagenstrocas.escala_id) ';
+        $sql .= 'join profissionais on (passagenstrocas.profissionalsubstituto_id = profissionais.id) ';
+        $sql .= 'join setores on (escalas.setor_id = setores.id) ';
+        $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
+        $sql .= 'where profissionais.id = ? ';
+        $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
+        $sql .= 'and passagenstrocas.statuspassagem = 1 ';
+
+        $sql .= 'order by dataplantao, horainicialplantao';
+
+        $this->db->query($sql, array($profissional_id, $profissional_id));
+
+        if (isset($search)) {
+            $first = TRUE;
+            foreach ($this->column_search as $field) {
+                if ($first) {
+                    $this->db->group_start();
+                    $this->db->like($field, $search);
+                    $first = FALSE;
+                } else {
+                    $this->db->or_like($field, $search);
+                }
+            }
+            if (!$first) {
+                $this->db->group_end();
+            }
+        }
+
+        if (isset($order)) {
+            $this->db->order_by($this->column_order[$order_column], $order_dir);
+        }
     }
 
     public function get_escalas_consolidadas2($datainicial, $datafinal, $setor_id, $tipo_plantao, $tipo_escala, $profissional_id)

@@ -63,6 +63,66 @@ class Escalas extends Admin_Controller
         $this->breadcrumbs->unshift(1, lang('menu_escalas'), 'admin/escalas');
     }
 
+
+    public function ajax_escalas_consolidadas_profissional() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+
+        $profissional_id = $this->input-get_post("profissional_id");
+        $datainicial = $this->input-get_post("datainicial");
+        $datafinal = $this->input-get_post("datafinal");
+
+        $plantoes = $this->escala_model->get_escalas_consolidadas_datatable($profissional_id, $datainicial, $datafinal);
+
+        $data = array();
+        foreach ($plantoes as $plantao) {
+    
+            $row = array();
+            $row[] = '<center>'.$plantao->id_evento.'</center>';
+            $row[] = '<center>'.$this->Evento_model->get_evento_by_id($plantao->id_evento)->nome.'</center>';
+            $row[] = '<center>'.$plantao->tp_plantao.'</center>';
+            if($this->Evento_model->get_evento_by_id($plantao->id_evento)->percentual == 1){
+                $row[] = '<center>'.$plantao->valor_ref.'%</center>';
+            } else {
+                $row[] = '<center>'.$plantao->valor_ref.'</center>';
+            }
+            
+
+            if($plantao->tipo == 'C'){
+                $row[] = '<center>'.($plantao->quantidade*$plantao->valor_ref).'</center>';
+                $row[] = '';
+            } else {
+                $row[] = '';
+                $row[] = '<center>'.($plantao->quantidade*$plantao->valor_ref).'</center>';
+            }
+    
+            $row[] = '<center><div style="display: inline-block;">
+                        <button class="btn btn-primary btn-edit-evento-plantao" 
+                            id='.$plantao->id.'>
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-del-evento_plantao" 
+                            id='.$plantao->id.'>
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div></center>';
+    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" =>$this->Folha_model->records_total(),
+            "recordsFiltered" => $this->Folha_model->records_filtered(),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
+    }
+
     public function index()
     {
         if (!$this->ion_auth->logged_in() or !$this->ion_auth->in_group($this->_permitted_groups)) {
@@ -348,9 +408,16 @@ class Escalas extends Admin_Controller
                 $tp = 'E';
             } else if($linha->tipobatida == 2){
                 $tp = 'S';
-            } else {
-                $tp = '';
+            } else if($linha->tipobatida == 3){
+                $tp = 'E';
+            } else if($linha->tipobatida == 4){
+                $tp = 'S';
+            } else if($linha->tipobatida == 5){
+                $tp = 'E';
+            } else if($linha->tipobatida == 6){
+                $tp = 'S';
             }
+
             fwrite($file, (str_pad($linha->unidadehospitalar_id, 3, 0, STR_PAD_LEFT).str_pad($linha->id_assessus, 3, 0, STR_PAD_LEFT).date('Ymd', strtotime($linha->datahorabatida)). date('His', strtotime($linha->datahorabatida)) .str_pad($linha->crm, 6, 0, STR_PAD_LEFT).$tp).PHP_EOL);
         } 
         fclose($file); 
