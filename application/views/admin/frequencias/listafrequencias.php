@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-3">
                                                 <?php echo form_dropdown($setor_id);?>
                                             </div>
-                                        </div>
+                                        </div>                                       
                                         <div class="form-group">
                                             <?php echo lang('frequencias_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">

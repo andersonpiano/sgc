@@ -47,6 +47,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <?php echo lang('escalas_tipo_plantao', 'tipo_plantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($tipo_plantao);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($this->data['tipos']);?>
+                                            </div>
+                                        </div>                                        
+                                        <div class="form-group">
                                             <?php echo lang('escalas_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
                                                 <?php echo form_input($datainicial);?>
@@ -58,18 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($datafinal);?>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <?php echo lang('escalas_tipo_plantao', 'tipo_plantao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
-                                                <?php echo form_dropdown($tipo_plantao);?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <?php echo lang('escalas_tipoescala', 'tipo', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
-                                                <?php echo form_dropdown($this->data['tipos']);?>
-                                            </div>
-                                        </div>
+
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">

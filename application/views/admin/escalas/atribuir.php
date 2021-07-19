@@ -127,13 +127,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_turno', 'turno_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($turno_id);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('escalas_tipovisualizacao', 'tipovisualizacao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($tipovisualizacao);?>
                                             </div>
                                         </div>
@@ -247,7 +247,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <th><?php echo lang('escalas_diadasemana');?></th>
                                                 <th><?php echo lang('escalas_turno');?></th>
                                                 <th><?php echo lang('escalas_horario');?></th>
-                                                <th><?php echo lang('escalas_status');?></th>
+                                                <th class="dontprint"><?php echo lang('escalas_status');?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -307,7 +307,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                                                     
                                                 ?>
-                                                <td><?php echo htmlspecialchars($condição, ENT_QUOTES, 'UTF-8'); ?>
+                                                <td class="dontprint"><?php echo htmlspecialchars($condição, ENT_QUOTES, 'UTF-8'); ?>
                                                 <button style="font-size:19px; position: relative; float: right; color:red;" class="btn btn-link btn-remover-plantao text-center" id="remover_plantao" escala=" <?php echo $escala->id; ?>"><i class="fa fa-times" aria-hidden="true"></i></i></button></span></td>
                                                 </td></tr>
         <?php endforeach;?>
