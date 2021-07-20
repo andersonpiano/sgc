@@ -74,6 +74,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <?php echo form_input($datafinal);?>
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <?php echo lang('frequencias_tipoescala', 'tipo_plantao', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-2">
+                                                <?php echo form_dropdown($tipos);?>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="btn-group">

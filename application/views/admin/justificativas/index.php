@@ -99,7 +99,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                 <div class="box-header with-border">
                                     <h3 class="box-title dontprint">
                                         <button class="btn btn-primary btn-flat dontprint btn-justificativas-pendentes" id="justificativas-pendentes">Justificativas Pendentes</button>
-                                        <button class="mx-sm-4 btn btn-primary btn-flat dontprint btn-justificativa-avulsa" id="justificativa-avulsa">Justificativa Avulsa</button>
+                                        
                                     </h3>
                                 </div>
                                 <div class="box-body">
@@ -128,16 +128,16 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                 <td><?php 
                                                 if (date('H:i', strtotime($justificativa->entrada_sistema)) != '00:00')
                                                 { 
-                                                    echo (date('H:i', strtotime($justificativa->entrada_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->entrada_justificada)) : date('H:i', strtotime($justificativa->entrada_sistema)) ); 
+                                                    echo (date('H:i', strtotime($justificativa->entrada_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->entrada_justificada)).' **' : date('H:i', strtotime($justificativa->entrada_sistema)) ); 
                                                 } else {
-                                                    echo (date('H:i', strtotime($justificativa->entrada_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->entrada_justificada)) : '-' ); 
+                                                    echo (date('H:i', strtotime($justificativa->entrada_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->entrada_justificada)).' **' : '-' ); 
                                                 }?></td> 
                                                 <td><?php 
                                                 if (date('H:i', strtotime($justificativa->saida_sistema)) != '00:00')
                                                 { 
-                                                    echo (date('H:i', strtotime($justificativa->saida_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) :  date('H:i', strtotime($justificativa->saida_sistema)) ); 
+                                                    echo (date('H:i', strtotime($justificativa->saida_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->saida_justificada)).' **' :  date('H:i', strtotime($justificativa->saida_sistema)) ); 
                                                 } else { 
-                                                    echo (date('H:i', strtotime($justificativa->saida_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->saida_justificada)) :  '-'); 
+                                                    echo (date('H:i', strtotime($justificativa->saida_justificada)) != '00:00' ? date('H:i', strtotime($justificativa->saida_justificada)).' **' :  '-'); 
                                                 } ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">

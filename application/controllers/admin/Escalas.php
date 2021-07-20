@@ -2004,6 +2004,7 @@ class Escalas extends Admin_Controller
                 $manha = $this->input->post('manha');
                 $tarde = $this->input->post('tarde');
                 $noite = $this->input->post('noite');
+                $tipoescala = $this->input->post('tipos');
 
                 $setores = $this->_get_setores($unidadehospitalar_id);
                 $profissionais = $this->_get_profissionais($setor_id);
@@ -2050,7 +2051,7 @@ class Escalas extends Admin_Controller
 
                 // Obtendo as escalas e suas frequências
                 if ($datainicial >= '2021-06-21'){
-                    $frequencias = $this->escala_model->get_escalas_frequencias_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
+                    $frequencias = $this->escala_model->get_escalas_frequencias_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana, $tipoescala);
                     $frequencias_sem_escala = $this->escala_model->get_frequencia_sem_escala_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal);
                 } else{
                     $frequencias = $this->escala_model->get_escalas_frequencias($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $turnos, $dias_semana);
@@ -2221,6 +2222,20 @@ class Escalas extends Admin_Controller
             );
 
             $unidadeshospitalares = $this->_get_unidadeshospitalares();
+            $tipos = array(
+                '0' => 'Todos',
+                '1' => 'Plantonista',
+                '2' => 'Prescritor',
+                '3' => 'Diarista'
+            );
+            $this->data['tipos'] = array(
+                'name'  => 'tipos',
+                'id'    => 'tipos',
+                'class' => 'form-control',
+                'value' => $this->form_validation->set_value('tipos'),
+                'options' => $tipos,
+            );
+
             $turnos = array(
                 '0' => 'Todos',
                 '1' => 'Manhã',

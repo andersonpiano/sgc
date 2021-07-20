@@ -45,3 +45,4 @@ $lang['frequencias_deactivate_question'] = 'Tem certeza que deseja desativar a f
 $lang['frequencias_inactive']            = 'Inativo';
 $lang['frequencias_status']              = 'Condição';
 $lang['frequencias_box_title']           = 'Frequência';
+$lang['frequencias_tipoescala']          = 'Tipo de escala';

@@ -57,19 +57,20 @@ class Frequencias extends Admin_Controller
             $profissional_id = $this->input->post('profissional_id');
             $datafinal = $this->input->post('datafinal');
             $setor_id = $this->input->post('setor_id');
+            $tipoescala = $this->input->post('tipos');
 
             $profissionais = $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
             $setores = $this->_get_setores($unidadehospitalar_id);
 
             $this->load->model('cemerge/escala_model');
             if ($setor_id <> '' && $profissional_id == ''){
-               $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null); 
+               $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null, $tipoescala); 
             } else if ($setor_id == '' && $profissional_id <> ''){
-                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id); 
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id, $tipoescala); 
             } else if ($setor_id == '' && $profissional_id == ''){
-                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null); 
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null, $tipoescala); 
             }else {
-                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id); 
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $tipoescala); 
             }
             $this->load->helper('group_by');
             $this->data['frequencias'] = group_by('nome_profissional_frq', $frequencias);
@@ -87,7 +88,19 @@ class Frequencias extends Admin_Controller
         $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
         $unidadeshospitalares = $this->_get_unidadeshospitalares_assessus();
-        
+        $tipos = array(
+            '0' => 'Todos',
+            '1' => 'Plantonista',
+            '2' => 'Prescritor',
+            '3' => 'Diarista'
+        );
+        $this->data['tipos'] = array(
+            'name'  => 'tipos',
+            'id'    => 'tipos',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('tipos'),
+            'options' => $tipos,
+        );
 
         $this->data['datainicial'] = array(
             'name'  => 'datainicial',
