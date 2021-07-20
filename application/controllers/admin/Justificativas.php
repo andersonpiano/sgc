@@ -1219,6 +1219,7 @@ class Justificativas extends Admin_Controller
         $this->load->model("cemerge/justificativa_model");
 
         /* Profissional */
+        $this->load->model("cemerge/profissional_model");
         $this->load->model('cemerge/usuarioprofissional_model');
         $userId = $this->ion_auth->user()->row()->id;
         if ($this->ion_auth->in_group('profissionais') && $userId) {
@@ -1235,6 +1236,66 @@ class Justificativas extends Admin_Controller
 
         $data = array();
         foreach ($profissionais as $profissional) {
+    
+            $row = array();
+            //$row[] = '<center>'.$profissional->id.'</center>';
+            $row[] = '<center>'.date('d/m/Y',strtotime($profissional->dataplantao)).'</center>';
+            $row[] = '<center>'.$this->nome_setor($profissional->setor_id).'</center>';
+            $row[] = '<center>'.$this->turno($profissional->horainicialplantao).'</center>';
+
+            //var_dump($profissional);exit;
+            
+            $row[] = '<center><div style="display: inline-block;">
+                        <button class="btn btn-link btn-add-profissional" 
+                            plantao='.$profissional->escala_id.'><a style="color:green; font-size:20px;" href="/sgc/admin/justificativas/create/'.
+                            $profissional->escala_id.'" 
+                    <i class="fa fa-pencil-square-o">Justificar</i></a>
+                            
+                        </button>
+                    </div></center>';
+    
+                    
+            $data[] = $row;
+    
+        }
+        $json = array(
+            "draw" => $this->input->post("draw"),
+            "recordsTotal" =>$this->justificativa_model->records_total(),
+            //"recordsFiltered" => $this->justificativa_model->records_datatable_filtered($this->_profissional->id),
+            "status" => 1,
+            "data" => $data,
+        ); 
+        echo json_encode($json);
+        exit;
+    }
+
+
+    public function ajax_escalas_consolidadas_profissional() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit("Nenhum acesso de script direto permitido!");
+        }
+
+        /* Profissional */
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $userId = $this->ion_auth->user()->row()->id;
+        if ($this->ion_auth->in_group('profissionais') && $userId) {
+            $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+            if ($usuarioProfissional) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional[0]->profissional_id])[0];
+            }
+        } else {
+            $this->_profissional = 1;
+        }
+
+        $profissional_id = $this->_profissional->id;
+        $datainicial = $this->input->get_post("datainicial");
+        $datafinal = $this->input->get_post("datafinal");
+
+        $plantoes = $this->escala_model->get_escalas_consolidadas_datatable($profissional_id, $datainicial, $datafinal);
+
+        $data = array();
+        foreach ($plantoes as $plantao) {
     
             $row = array();
             //$row[] = '<center>'.$profissional->id.'</center>';

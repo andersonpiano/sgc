@@ -70,9 +70,21 @@ class Escalas extends Admin_Controller
             exit("Nenhum acesso de script direto permitido!");
         }
 
-        $profissional_id = $this->input-get_post("profissional_id");
-        $datainicial = $this->input-get_post("datainicial");
-        $datafinal = $this->input-get_post("datafinal");
+        /* Profissional */
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $userId = $this->ion_auth->user()->row()->id;
+        if ($this->ion_auth->in_group('profissionais') && $userId) {
+            $usuarioProfissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+            if ($usuarioProfissional) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $usuarioProfissional[0]->profissional_id])[0];
+            }
+        } else {
+            $this->_profissional = 1;
+        }
+
+        $profissional_id = $this->_profissional->id;
+        $datainicial = $this->input->get_post("datainicial");
+        $datafinal = $this->input->get_post("datafinal");
 
         $plantoes = $this->escala_model->get_escalas_consolidadas_datatable($profissional_id, $datainicial, $datafinal);
 
@@ -80,24 +92,10 @@ class Escalas extends Admin_Controller
         foreach ($plantoes as $plantao) {
     
             $row = array();
-            $row[] = '<center>'.$plantao->id_evento.'</center>';
-            $row[] = '<center>'.$this->Evento_model->get_evento_by_id($plantao->id_evento)->nome.'</center>';
-            $row[] = '<center>'.$plantao->tp_plantao.'</center>';
-            if($this->Evento_model->get_evento_by_id($plantao->id_evento)->percentual == 1){
-                $row[] = '<center>'.$plantao->valor_ref.'%</center>';
-            } else {
-                $row[] = '<center>'.$plantao->valor_ref.'</center>';
-            }
-            
-
-            if($plantao->tipo == 'C'){
-                $row[] = '<center>'.($plantao->quantidade*$plantao->valor_ref).'</center>';
-                $row[] = '';
-            } else {
-                $row[] = '';
-                $row[] = '<center>'.($plantao->quantidade*$plantao->valor_ref).'</center>';
-            }
-    
+            $row[] = '<center>'.date('d/m/Y',strtotime($plantao->dataplantao)).'</center>';
+            $row[] = '<center>'.$plantao->setor_nome.'</center>';
+            $row[] = '<center>'.$this->turno($plantao->horainicialplantao).'</center>';
+                
             $row[] = '<center><div style="display: inline-block;">
                         <button class="btn btn-primary btn-edit-evento-plantao" 
                             id='.$plantao->id.'>
@@ -114,13 +112,27 @@ class Escalas extends Admin_Controller
         }
         $json = array(
             "draw" => $this->input->post("draw"),
-            "recordsTotal" =>$this->Folha_model->records_total(),
-            "recordsFiltered" => $this->Folha_model->records_filtered(),
+            "recordsTotal" => 1,
+            "recordsFiltered" => 1,
             "status" => 1,
             "data" => $data,
         ); 
         echo json_encode($json);
         exit;
+    }
+
+    public function turno($i) {
+        $retorno = '';
+        if ($i == '07:00:00'){
+            $retorno = 'Manhã';
+        } else if ($i == '13:00:00'){
+            $retorno = 'Tarde';
+        }
+        else {
+            $retorno = 'Noite';
+        }
+
+        return $retorno;
     }
 
     public function index()

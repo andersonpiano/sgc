@@ -97,7 +97,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                             <div class="box">
                                 <div class="box-header with-border">
                                     <h3 class="box-title dontprint">
-                                        <button class="btn btn-block btn-primary btn-flat dontprint btn-add-justificativa" id="add_justificativa"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Nova Justificativa</i></button>
+                                        <button class="btn btn-primary btn-flat dontprint btn-add-justificativa" id="add_justificativa"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Nova Justificativa</button>&nbsp;&nbsp;
+                                        <button class="mx-sm-4 btn btn-primary btn-flat dontprint btn-justificativa-avulsa" id="justificativa-avulsa"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Justificativa Avulsa</button>
                                     </h3>
                                 </div>
                                 <div class="box-body">
@@ -167,6 +168,33 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
 
                 <div class="modal-body">
                         <table id="dt_pendentes" class="table table-striped table-bordered">
+                        <thead>
+                            <tr class="tableheader">
+                                <th style="width:20%" class="dt-center text-center">Data</th>
+                                <th style="width:40%" class="dt-center text-center">Setor</th>
+                                <th style="width:20%" class="dt-center text-center">Turno</th>
+                                <th style="width:20%" class="dt-center no-sort text-center">Açoes</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_add_justificativa_avulsa" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <center><h4 class="modal-title">Selecione o Plantão</h4></center>
+                </div>
+
+                <div class="modal-body">
+                        <table id="dt_plantoes" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
                                 <th style="width:20%" class="dt-center text-center">Data</th>

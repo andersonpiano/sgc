@@ -1598,25 +1598,21 @@ class Escala_model extends MY_Model
 
         return $query->result();
     }
-    var $column_search = array("profissional_nome", "setor_nome");
-    var $column_order = array("dataplantao", "profissional_nome", "setor_nome");
+
 
     public function get_escalas_consolidadas_datatable($profissional_id, $datainicial, $datafinal) {
 
-        $length = $this->input->post("length");
-        $start = $this->input->post("start");
-        $this->_get_escalas_consolidadas_por_profissional_datatables($profissional_id, $datainicial, $datafinal);
-        if (isset($length) && $length != -1) {
-            $this->db->limit($length, $start);
-        }
-        return $this->db->get()->result();
+
+        $query = $this->_get_escalas_consolidadas_por_profissional_datatables($profissional_id, $datainicial, $datafinal);
+
+        return $query;
     }
 
     public function _get_escalas_consolidadas_por_profissional_datatables($profissional_id, $datainicial, $datafinal)
     {
 
         $search = NULL;
-        if ($this->input->post("search")) {
+        /*if ($this->input->post("search")) {
             $search = $this->input->post("search")["value"];
         }
         $order_column = NULL;
@@ -1625,7 +1621,7 @@ class Escala_model extends MY_Model
         if (isset($order)) {
             $order_column = $order[0]["column"];
             $order_dir = $order[0]["dir"];
-        }
+        }*/
 
         $sql = 'select escalas.id, escalas.dataplantao, escalas.tipo_plantao, escalas.datafinalplantao, ';
         $sql .= 'escalas.horainicialplantao, escalas.horafinalplantao, ';
@@ -1641,8 +1637,7 @@ class Escala_model extends MY_Model
         $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
         $sql .= 'where escalas.publicada = 1 and profissionais.id = ? ';
         $sql .= 'and escalas.id not in ';
-        $sql .= '(select escala_id ';
-        $sql .= 'from passagenstrocas ';
+        $sql .= '(select escala_id from passagenstrocas ';
         $sql .= 'where escala_id = escalas.id) ';
         $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
 
@@ -1668,9 +1663,10 @@ class Escala_model extends MY_Model
         $sql .= 'and passagenstrocas.statuspassagem = 1 ';
 
         $sql .= 'order by dataplantao, horainicialplantao';
-
-        $this->db->query($sql, array($profissional_id, $profissional_id));
-
+        //var_dump($sql); exit;
+        $query = $this->db->query($sql, array($profissional_id, $profissional_id));
+        return $query->result();
+/*
         if (isset($search)) {
             $first = TRUE;
             foreach ($this->column_search as $field) {
@@ -1689,7 +1685,7 @@ class Escala_model extends MY_Model
 
         if (isset($order)) {
             $this->db->order_by($this->column_order[$order_column], $order_dir);
-        }
+        }*/
     }
 
     public function get_escalas_consolidadas2($datainicial, $datafinal, $setor_id, $tipo_plantao, $tipo_escala, $profissional_id)
