@@ -37,9 +37,11 @@ $(document).ready(function(){
 	});
 
 	$data_ini = document.getElementById('data_plantao_inicio').value;
+	$data_atual = new Date();
+    $data_atualM = $data_atual.getFullYear()+'-'+String($data_atual.getMonth() + 1).padStart(2, '0')+'-'+$data_atual.getDate();
 	$data_fim = document.getElementById('data_plantao_fim').value;
 
-	
+
 
 	var dt_plantoes = $("#dt_plantoes").DataTable({
 
@@ -76,7 +78,7 @@ $(document).ready(function(){
 			"method": "POST",
 			"data" : {
 				datainicial : $data_ini,
-				datafinal : $data_fim
+				datafinal : $data_atualM
 			}
 		},
 		"columnDefs": [

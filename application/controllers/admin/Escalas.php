@@ -97,14 +97,7 @@ class Escalas extends Admin_Controller
             $row[] = '<center>'.$this->turno($plantao->horainicialplantao).'</center>';
                 
             $row[] = '<center><div style="display: inline-block;">
-                        <button class="btn btn-primary btn-edit-evento-plantao" 
-                            id='.$plantao->id.'>
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button class="btn btn-danger btn-del-evento_plantao" 
-                            id='.$plantao->id.'>
-                            <i class="fa fa-times"></i>
-                        </button>
+                        <a class="btn btn-primary btn-edit-evento-plantao" href="/sgc/admin/justificativas/create/'.$plantao->id.'" id='.$plantao->id.'><i class="fa fa-pencil-square-o">Justificar</i></a>
                     </div></center>';
     
             $data[] = $row;

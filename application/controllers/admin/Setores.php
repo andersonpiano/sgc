@@ -670,7 +670,7 @@ class Setores extends Admin_Controller {
         } elseif ($user_id and $user_id != 0) {
             $setores = $this->setor_model->get_by_unidade_usuario($id, $user_id);
         } else {
-            $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id], null, 'nome');
+            $setores = $this->setor_model->get_where(['unidadehospitalar_id' => $id, 'active' => 1], null, 'nome');
         }
         array_unshift($setores, ['id' => '', 'nome' => 'Todos os Setores']);
 
