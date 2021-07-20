@@ -731,7 +731,7 @@ class Escala_model extends MY_Model
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
-        //$sql .= " and f.deletado <> 1 ";
+        $sql .= " and f.deletado <> 1 ";
         /*
         $sql .= "and f.cd_pes_jur in ";
         $sql .= "(select cd_pes_jur from grupos_unidadeshospitalares where unidadehospitalar_id = $unidadehospitalar_id) ";
