@@ -144,7 +144,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td class="text-center <?php echo($freq->escala_id ? 'bg-success' : 'bg-danger'); ?>"><?php echo($tipo_batida_escala); ?></td>
                                                 <td class="dontprint text-center">
                                                     <?php echo anchor('admin/frequencias/editarfrequencia_nova/'.$freq->frequencia_id, '<i class="fa fa-pencil" aria-hidden="true"> Editar</i>', array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); 
-                                                    if ($tipo_batida_escala == 'Sem escala' && $freq->escala_id == null){
+                                                    if ($freq->escala_id == null){
                                                         echo '<button style="margin-left: 10px;" class="btn btn-danger fa fa-close btn-excluir-frequencia" frequencia="'.$freq->frequencia_id.'"> Excluir</button>';
                                                     }
                                                     ?>

@@ -728,14 +728,14 @@ class Escala_model extends MY_Model
         $sql .= "from frequencias f "; 
         $sql .= "left join vw_escalas_consolidadas ec on (f.escala_id = ec.id) ";
         $sql .= "join setores s on (s.id = f.setor_id) ";
-        $sql .= "join escalas e on (e.id = ec.id) ";
+        $sql .= "left join escalas e on (e.id = ec.id) ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         if ($tipo_escala != 0){
             $sql .= "and e.tipo_escala = $tipo_escala ";
         }
-        $sql .= "and f.deletado <> 1 ";
+        $sql .= " and f.deletado <> 1 ";
         /*
         $sql .= "and f.cd_pes_jur in ";
         $sql .= "(select cd_pes_jur from grupos_unidadeshospitalares where unidadehospitalar_id = $unidadehospitalar_id) ";
