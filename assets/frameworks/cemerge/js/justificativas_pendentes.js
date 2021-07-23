@@ -154,12 +154,17 @@ $(document).ready(function(){
 
 	$(".btn-deferir").click(function(){
 		var id = $(this).attr('justificativa');
+
+		entrada = document.getElementById('hora_entrada_justificada').innerText;
+		saida = document.getElementById('hora_saida_justificada').innerText;
 		$.ajax({
 			type: "POST",
 			url: "/sgc/admin/justificativas/aprovar/",
 			dataType: 'json',
 			data: {
 				"justificativa": id,
+				"entrada": entrada+':00',
+				"saida": saida+':00',
 			},
 			success: function(response) {
 				$("#modal_justificativas_view").modal("hide");

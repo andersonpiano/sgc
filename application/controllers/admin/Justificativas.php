@@ -337,8 +337,8 @@ class Justificativas extends Admin_Controller
             if ($justificativa_id) {
                 $this->escala_model->update($escala_id,['justificativa' => 0]);
                 if ($hora_entrada >= '18:00'){
-                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada]);
-                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida]);
+                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 'tipobatida' => 5]);
+                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => strtotime("+1 day", $data_plantao_inicio) . ' ' . $hora_saida, 'tipobatida' => 6]);
                 } else {
 
                     $this->frequencia_model->insert([
@@ -505,25 +505,34 @@ class Justificativas extends Admin_Controller
             if ($justificativa_id) {
                 $this->escala_model->update($escala_id,['justificativa' => 0]);
                 if ($hora_entrada >= '18:00'){
-                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida']);
+                    if($hora_entrada != '00:00'){
+                        $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 'tipobatida' => 5]);     
+                    } 
+                    if($hora_saida != '00:00'){
+                        $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => strtotime("+1 day", $data_plantao_inicio) . ' ' . $hora_saida, 'tipobatida' => 6]);
+                    }
                 } else {
-                    $this->frequencia_model->insert([
-                        'unidadehospitalar_id' => 1, 
-                        'setor_id' => $setor_id, 
-                        'escala_id' => $escala_id, 
-                        'profissional_id' => $profissional_id, 
-                        'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 
-                        'tipobatida' => 5
-                    ]);
-                    $this->frequencia_model->insert([
-                        'unidadehospitalar_id' => 1, 
-                        'setor_id' => $setor_id, 
-                        'escala_id' => $escala_id, 
-                        'profissional_id' => $profissional_id, 
-                        'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida, 
-                        'tipobatida' => 6
-                       ]);
-                }
+                    if ($hora_entrada != '00:00'){
+                        $this->frequencia_model->insert([
+                            'unidadehospitalar_id' => 1, 
+                            'setor_id' => $setor_id, 
+                            'escala_id' => $escala_id, 
+                            'profissional_id' => $profissional_id, 
+                            'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 
+                            'tipobatida' => 5
+                        ]);
+                    }
+                    if($hora_saida != '00:00'){
+                        $this->frequencia_model->insert([
+                            'unidadehospitalar_id' => 1, 
+                            'setor_id' => $setor_id, 
+                            'escala_id' => $escala_id, 
+                            'profissional_id' => $profissional_id, 
+                            'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida, 
+                            'tipobatida' => 6
+                        ]);
+                    }
+                } 
                 $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
                 redirect('admin/justificativas', 'refresh');
             } else {
@@ -603,10 +612,30 @@ class Justificativas extends Admin_Controller
     public function aprovar(){
         
         $id = $this->input->get_post('justificativa');
+        $entrada_justificada = $this->input->get_post('entrada');
+        $saida_justificada = $this->input->get_post('saida');
+
         $this->load->model('cemerge/escala_model');
+        $this->load->model('cemerge/frequencia_model');
+
         $escala = $this->justificativa_model->get_by_id($id);
+        $entrada = $this->frequencia_model->get_where(['escala_id' => $escala->escala_id, 'tipobatida' => 5])[0];
+        $saida = $this->frequencia_model->get_where(['escala_id' => $escala->escala_id, 'tipobatida' => 6])[0];
+        //var_dump(date('Y-m-d', strtotime($entrada->datahorabatida)) . ' ' . $entrada_justificada); exit;
         $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
         $this->escala_model->update($escala->escala_id, ['status' => 4]);
+        if ($entrada_justificada != '-:00'){
+            $this->frequencia_model->update($entrada->id, ['datahorabatida' => date('Y-m-d', strtotime($entrada->datahorabatida)) . ' ' . $entrada_justificada]);
+        } else {
+            $this->frequencia_model->delete(['id' => $entrada->id]);
+        }
+        if($saida_justificada != '-:00'){
+            $this->frequencia_model->update($saida->id, ['datahorabatida' => date('Y-m-d', strtotime($entrada->datahorabatida)) . ' ' . $saida_justificada]);
+        } else {
+            $this->frequencia_model->delete(['id' => $saida->id]);
+        }
+        
+
         echo json_encode("sucesso"); exit;
     }
 

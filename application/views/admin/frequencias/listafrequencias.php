@@ -135,6 +135,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             $tipo_batida_escala = 'Entrada';
                                         } else if ($freq->tipobatida == 2) {
                                             $tipo_batida_escala = 'Saída';
+                                        } else if ($freq->tipobatida == 3) {
+                                            $tipo_batida_escala = 'Entrada *';
+                                        } else if ($freq->tipobatida == 4) {
+                                            $tipo_batida_escala = 'Saída *';
+                                        } else if ($freq->tipobatida == 5) {
+                                            $tipo_batida_escala = 'Entrada **';
+                                        } else if ($freq->tipobatida == 6) {
+                                            $tipo_batida_escala = 'Saída **';
                                         }
                                         ?>
                                             <tr>
@@ -143,7 +151,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <td class="text-center"><?php echo htmlspecialchars(date('H:i:s', strtotime($freq->datahorabatida)), ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center <?php echo($freq->escala_id ? 'bg-success' : 'bg-danger'); ?>"><?php echo($tipo_batida_escala); ?></td>
                                                 <td class="dontprint text-center">
-                                                    <?php echo anchor('admin/frequencias/editarfrequencia_nova/'.$freq->frequencia_id, '<i class="fa fa-pencil" aria-hidden="true"> Editar</i>', array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); 
+                                                    <?php if($freq->tipobatida <= 2){
+                                                        echo anchor('admin/frequencias/editarfrequencia_nova/'.$freq->frequencia_id, '<i class="fa fa-pencil" aria-hidden="true"> Editar</i>', array('class' => 'btn btn-primary btn-flat', 'target' => '_blank')); 
+                                                    }
                                                     if ($freq->escala_id == null){
                                                         echo '<button style="margin-left: 10px;" class="btn btn-danger fa fa-close btn-excluir-frequencia" frequencia="'.$freq->frequencia_id.'"> Excluir</button>';
                                                     }
