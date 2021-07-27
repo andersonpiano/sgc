@@ -731,6 +731,7 @@ class Escala_model extends MY_Model
         $sql .= "left join escalas e on (e.id = ec.id) ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
+        $sql .= "and tipobatida not in (3, 4) and deletado = 0 ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         if ($tipo_escala != 0){
             $sql .= "and e.tipo_escala = $tipo_escala ";
@@ -777,7 +778,7 @@ class Escala_model extends MY_Model
         $sql .= "join setores s on (s.id = f.setor_id) ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
-        $sql .= "and tipobatida is not null and deletado = 0 ";
+        $sql .= "and tipobatida is not null and tipobatida not in (3, 4) and deletado = 0 ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         /*
         $sql .= "and f.cd_pes_jur in ";

@@ -630,12 +630,11 @@ class Justificativas extends Admin_Controller
             $this->frequencia_model->delete(['id' => $entrada->id]);
         }
         if($saida_justificada != '-:00'){
-            $this->frequencia_model->update($saida->id, ['datahorabatida' => date('Y-m-d', strtotime($entrada->datahorabatida)) . ' ' . $saida_justificada]);
+            $this->frequencia_model->update($saida->id, ['datahorabatida' => date('Y-m-d', strtotime($saida->datahorabatida)) . ' ' . $saida_justificada]);
         } else {
             $this->frequencia_model->delete(['id' => $saida->id]);
         }
         
-
         echo json_encode("sucesso"); exit;
     }
 

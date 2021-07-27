@@ -413,17 +413,13 @@ class Escalas extends Admin_Controller
                 $tp = 'E';
             } else if($linha->tipobatida == 2){
                 $tp = 'S';
-            } else if($linha->tipobatida == 3){
-                $tp = 'E';
-            } else if($linha->tipobatida == 4){
-                $tp = 'S';
             } else if($linha->tipobatida == 5){
                 $tp = 'E';
             } else if($linha->tipobatida == 6){
                 $tp = 'S';
             }
 
-            fwrite($file, (str_pad($linha->unidadehospitalar_id, 3, 0, STR_PAD_LEFT).str_pad($linha->id_assessus, 3, 0, STR_PAD_LEFT).date('Ymd', strtotime($linha->datahorabatida)). date('His', strtotime($linha->datahorabatida)) .str_pad($linha->crm, 6, 0, STR_PAD_LEFT).$tp).chr(13).chr(10);
+            fwrite($file, (str_pad($linha->unidadehospitalar_id, 3, 0, STR_PAD_LEFT).str_pad($linha->id_assessus, 3, 0, STR_PAD_LEFT).date('Ymd', strtotime($linha->datahorabatida)). date('His', strtotime($linha->datahorabatida)) .str_pad($linha->crm, 6, 0, STR_PAD_LEFT).$tp).chr(13).chr(10));
         } 
         fclose($file); 
         exit; 
