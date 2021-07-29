@@ -157,6 +157,7 @@ $(document).ready(function(){
 
 		entrada = document.getElementById('hora_entrada_justificada').innerText;
 		saida = document.getElementById('hora_saida_justificada').innerText;
+		
 		$.ajax({
 			type: "POST",
 			url: "/sgc/admin/justificativas/aprovar/",

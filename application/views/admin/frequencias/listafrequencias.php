@@ -61,23 +61,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-3">
                                                 <?php echo form_dropdown($setor_id);?>
                                             </div>
-                                        </div>                                       
+                                        </div>   
+                                        <div class="form-group">
+                                            <?php echo lang('frequencias_covid', 'covid', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-3">
+                                                <?php echo form_dropdown($covid);?>
+                                            </div>
+                                        </div>                                    
                                         <div class="form-group">
                                             <?php echo lang('frequencias_datainicialplantao', 'datainicial', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datainicial);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('frequencias_datafinalplantao', 'datafinal', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_input($datafinal);?>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <?php echo lang('frequencias_tipoescala', 'tipo_plantao', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($tipos);?>
                                             </div>
                                         </div>
@@ -108,9 +114,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <?php foreach ($frequencias as $profissional => $freqs) : ?>
                                 <div class="box-header with-border">
                                 <div class="print-header row">
-                                    <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-                                    <div class="col-lg-10 col-xs-10 pull-right"><?php echo htmlspecialchars(!empty($escalas[0]->unidadehospitalar_razaosocial) ? $escalas[0]->unidadehospitalar_razaosocial : '', ENT_QUOTES, 'UTF-8'); ?></div>
-                                    <div class="col-lg-10 col-xs-10 pull-right"><h3>Lista frequência por Setor</h3></div>
+                                    <div class="col-lg-4 col-xs-4 pull-left"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
+                                    <div class="col-lg-8 col-xs-8 pull-right"> <h3 style="float: right; font-size:16px;"><?php echo (date('d:m:Y H:i:s')); ?></h3><br><h3><?php echo($this->input->post('covid') == 1 ? $freqs[0]->nomefantasia . " - COVID" : $freqs[0]->nomefantasia); ?></h3></div>
+                                    <div class="col-lg-12 col-xs-12"><h3 class="text-center">Periodo: <?php echo date('d/m/Y', strtotime($this->input->post('datainicial'))); ?> a <?php echo date('d/m/Y', strtotime($this->input->post('datafinal'))); ?> Competência: <?php echo date('M/Y', strtotime($this->input->post('datafinal')));?> </h3>
+                                    </div>
                                 </div>
                                     <h3 class="box-title">
                                         <?php echo(lang('frequencias_profissional') . ": " .  $profissional); ?>

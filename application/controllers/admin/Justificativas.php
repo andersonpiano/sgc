@@ -111,7 +111,11 @@ class Justificativas extends Admin_Controller
             $status = $this->input->post('status');
             
         }
-
+        $setores = array(
+            0 => 'Todos',
+            1 => 'COVID',
+            2 => 'NÃO COVID',
+        );
         $this->data['data_plantao_inicio'] = array(
             'name'  => 'data_plantao_inicio',
             'id'    => 'data_plantao_inicio',
@@ -135,6 +139,15 @@ class Justificativas extends Admin_Controller
             'class' => 'form-control',
             'selected' => $status,
             'options' => $tipos_status,
+        );
+
+        $this->data['setor_id'] = array(
+            'name'  => 'setor_id',
+            'id'    => 'setor_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('setor_id'),
+            'options' => $setores,
         );
 
         // Anderson
@@ -332,40 +345,10 @@ class Justificativas extends Admin_Controller
                 'status' => 0,
                 'create_at' => date('Y-m-d H:m:i')
             );
-            $justificativa_id = $this->justificativa_model->insert($insert_data);
+
+            $this->justificativa_model->insert($insert_data);
             
-            if ($justificativa_id) {
-                $this->escala_model->update($escala_id,['justificativa' => 0]);
-                if ($hora_entrada >= '18:00'){
-                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 'tipobatida' => 5]);
-                    $this->frequencia_model->insert(['unidadehospitalar_id' => 1, 'setor_id' => $setor_id, 'escala_id' => $escala_id, 'profissional_id' => $profissional_id, 'datahorabatida' => strtotime("+1 day", $data_plantao_inicio) . ' ' . $hora_saida, 'tipobatida' => 6]);
-                } else {
-
-                    $this->frequencia_model->insert([
-                        'unidadehospitalar_id' => 1, 
-                        'setor_id' => $setor_id, 
-                        'escala_id' => $escala_id, 
-                        'profissional_id' => $profissional_id, 
-                        'datahorabatida' => $data_plantao_inicio . ' ' . $hora_entrada, 
-                        'tipobatida' => 5
-                    ]);
-
-                    $this->frequencia_model->insert([
-                        'unidadehospitalar_id' => 1, 
-                        'setor_id' => $setor_id, 
-                        'escala_id' => $escala_id, 
-                        'profissional_id' => $profissional_id, 
-                        'datahorabatida' => $data_plantao_inicio . ' ' . $hora_saida, 
-                        'tipobatida' => 6
-                       ]);
-
-                }
-                $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
-                redirect('admin/justificativas', 'refresh');
-            } else {
-                $this->session->set_flashdata('message', 'Houve um erro ao inserir a justificativa. Tente novamente.');
-                redirect('admin/justificativa/create', 'refresh');
-            }
+            
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
@@ -485,7 +468,7 @@ class Justificativas extends Admin_Controller
 
         /* Validate form input */
         $this->form_validation->set_rules('descricao', 'lang:justificativas_descricao', 'required');
-        $this->form_validation->set_rules('escala_id', 'escala_id', 'required');
+
 
         // Realizar o insert no model de unidades hospitalares
         if ($this->form_validation->run() == true) {
@@ -610,6 +593,7 @@ class Justificativas extends Admin_Controller
     }    
 
     public function aprovar(){
+
         
         $id = $this->input->get_post('justificativa');
         $entrada_justificada = $this->input->get_post('entrada');
@@ -617,24 +601,21 @@ class Justificativas extends Admin_Controller
 
         $this->load->model('cemerge/escala_model');
         $this->load->model('cemerge/frequencia_model');
+        $this->load->model('cemerge/setor_model');
 
-        $escala = $this->justificativa_model->get_by_id($id);
-        $entrada = $this->frequencia_model->get_where(['escala_id' => $escala->escala_id, 'tipobatida' => 5])[0];
-        $saida = $this->frequencia_model->get_where(['escala_id' => $escala->escala_id, 'tipobatida' => 6])[0];
-        //var_dump(date('Y-m-d', strtotime($entrada->datahorabatida)) . ' ' . $entrada_justificada); exit;
-        $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
-        $this->escala_model->update($escala->escala_id, ['status' => 4]);
-        if ($entrada_justificada != '-:00'){
-            $this->frequencia_model->update($entrada->id, ['datahorabatida' => date('Y-m-d', strtotime($entrada->datahorabatida)) . ' ' . $entrada_justificada]);
-        } else {
-            $this->frequencia_model->delete(['id' => $entrada->id]);
-        }
-        if($saida_justificada != '-:00'){
-            $this->frequencia_model->update($saida->id, ['datahorabatida' => date('Y-m-d', strtotime($saida->datahorabatida)) . ' ' . $saida_justificada]);
-        } else {
-            $this->frequencia_model->delete(['id' => $saida->id]);
-        }
+        $justificativa = $this->justificativa_model->get_by_id($id);
+        $escala = $this->escala_model->get_by_id($justificativa->escala_id);
+        $setor = $this->setor_model->get_by_id($justificativa->setor_id);
         
+        $this->justificativa_model->update($id, ['status' => 1 , 'motivo_recusa' => 'Autorizado mediante análise do coordenador']);
+        if ($id) {
+            $deferir = $this->escala_model->update($justificativa->escala_id, ['justificativa' => 0, 'status'=> 4]);
+            if ( $deferir ){
+                $this->frequencia_model->insert(['unidadehospitalar_id' => $setor->unidadehospitalar_id, 'setor_id' => $escala->setor_id, 'escala_id' => $justificativa->escala_id, 'profissional_id' => $justificativa->profissional_id, 'datahorabatida' => $escala->dataplantao . ' ' . $entrada_justificada, 'tipobatida' => 5]);
+                $this->frequencia_model->insert(['unidadehospitalar_id' => $setor->unidadehospitalar_id, 'setor_id' => $escala->setor_id, 'escala_id' => $justificativa->escala_id, 'profissional_id' => $justificativa->profissional_id, 'datahorabatida' => $escala->datafinalplantao . ' ' . $saida_justificada, 'tipobatida' => 6]);
+            } 
+            
+        }         
         echo json_encode("sucesso"); exit;
     }
 

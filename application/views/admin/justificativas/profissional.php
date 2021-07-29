@@ -140,7 +140,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
 
                                                 <td><?php echo htmlspecialchars($justificativa->status, ENT_QUOTES, 'UTF-8');?></td>
                                                 <td class="dontprint">
-                                                    <?php echo anchor('admin/justificativas/view/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
+                                                    <?php echo anchor('admin/justificativas/viewp/'.$justificativa->id, lang('actions_see'), array('class' => 'btn btn-primary btn-flat')); ?> &nbsp;
                                                 </td>
                                             </tr>
 <?php endforeach;?>

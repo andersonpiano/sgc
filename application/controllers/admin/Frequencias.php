@@ -58,20 +58,37 @@ class Frequencias extends Admin_Controller
             $datafinal = $this->input->post('datafinal');
             $setor_id = $this->input->post('setor_id');
             $tipoescala = $this->input->post('tipos');
+            $covid = $this->input->post('covid');
 
             $profissionais = $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
             $setores = $this->_get_setores($unidadehospitalar_id);
 
             $this->load->model('cemerge/escala_model');
-            if ($setor_id <> '' && $profissional_id == ''){
-               $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null, $tipoescala); 
-            } else if ($setor_id == '' && $profissional_id <> ''){
-                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id, $tipoescala); 
-            } else if ($setor_id == '' && $profissional_id == ''){
-                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null, $tipoescala); 
-            }else {
-                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $tipoescala); 
-            }
+            if ($setor_id <> '' && $profissional_id == '' && $covid == 0){
+               $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null, $tipoescala, 0); 
+            } else if ($setor_id == '' && $profissional_id <> '' && $covid == 0){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id, $tipoescala, 0); 
+            } else if ($setor_id == '' && $profissional_id == '' && $covid == 0){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null, $tipoescala, 0); 
+            } else if($setor_id <> '' && $profissional_id <> '' && $covid == 0){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $tipoescala, 0); 
+            } else if ($setor_id <> '' && $profissional_id == '' && $covid == 1){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null, $tipoescala, 1); 
+             } else if ($setor_id == '' && $profissional_id <> '' && $covid == 1){
+                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id, $tipoescala, 1); 
+             } else if ($setor_id == '' && $profissional_id == '' && $covid == 1){
+                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null, $tipoescala, 1); 
+             } else if($setor_id <> '' && $profissional_id <> '' && $covid == 1){
+                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $tipoescala, 1); 
+             } else if ($setor_id <> '' && $profissional_id == '' && $covid == 2){
+                $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, null, $tipoescala, 2); 
+             } else if ($setor_id == '' && $profissional_id <> '' && $covid == 2){
+                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, $profissional_id, $tipoescala, 2); 
+             } else if ($setor_id == '' && $profissional_id == '' && $covid == 2){
+                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, null, $datainicial, $datafinal, null, $tipoescala, 2); 
+             } else if($setor_id <> '' && $profissional_id <> '' && $covid == 2){
+                 $frequencias = $this->escala_model->get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $tipoescala, 2); 
+             }
             $this->load->helper('group_by');
             $this->data['frequencias'] = group_by('nome_profissional_frq', $frequencias);
             
@@ -139,6 +156,19 @@ class Frequencias extends Admin_Controller
             'class' => 'form-control',
             'value' => $this->form_validation->set_value('profissional_id'),
             'options' => $profissionais,
+        );
+        $tipo_covid = array(
+            0 => 'Todos',
+            1 => 'COVID',
+            2 => 'NÃO COVID' 
+        );
+        $this->data['covid'] = array(
+            'name'  => 'covid',
+            'id'    => 'covid',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('covid'),
+            'options' => $tipo_covid,
         );
 
         /* Load Template */

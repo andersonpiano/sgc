@@ -22,6 +22,7 @@ $lang['frequencias_tipofalta']           = 'Tipo de Falta';
 $lang['frequencias_turno']            = 'Turno';
 $lang['frequencias_unidadehospitalar']   = 'Unidade hospitalar';
 $lang['frequencias_setor']               = 'Setor';
+$lang['frequencias_covid']               = 'Tipo de Setor';
 $lang['frequencias_dataplantao']         = 'Data';
 $lang['frequencias_datainicialplantao']  = 'Data Inicial';
 $lang['frequencias_datafinalplantao']    = 'Data Final';

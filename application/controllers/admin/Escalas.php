@@ -157,6 +157,7 @@ class Escalas extends Admin_Controller
                 $datainicial = $this->input->post('datainicial');
                 $datafinal = $this->input->post('datafinal');
                 $tipoescala = $this->input->post('tipoescala');
+                $tipos = $this->input->post('tipos');
                 $tipovisualizacao = $this->input->post('tipovisualizacao');
 
                 $gerar_pdf = $this->input->post('bt_gerar_pdf');
@@ -169,12 +170,25 @@ class Escalas extends Admin_Controller
                 $this->data['setor_nome'] =  $this->setor_model->get_setor_por_id($setor_id);
                 
                 // Realizando a busca
-                $where = array(
-                    'unidadehospitalar_id' => $unidadehospitalar_id,
-                    'escalas.setor_id' => $setor_id,
-                    'escalas.dataplantao >=' => $datainicial,
-                    'escalas.dataplantao <=' => $datafinal,
-                );
+                if ($tipos == 0){
+
+                    $where = array(
+                        'unidadehospitalar_id' => $unidadehospitalar_id,
+                        'escalas.setor_id' => $setor_id,
+                        'escalas.dataplantao >=' => $datainicial,
+                        'escalas.dataplantao <=' => $datafinal,
+                    );                    
+                } else {
+                    $where = array(
+                        'unidadehospitalar_id' => $unidadehospitalar_id,
+                        'escalas.setor_id' => $setor_id,
+                        'escalas.dataplantao >=' => $datainicial,
+                        'escalas.dataplantao <=' => $datafinal,
+                        'escalas.tipo_escala' => $tipos
+                    );
+                }
+
+                
 
                 // Lista
                 if ($tipoescala == 0 and $tipovisualizacao == 0) {
@@ -188,11 +202,11 @@ class Escalas extends Admin_Controller
                 // Calendário
                 if ($tipovisualizacao == 1) {
                     if ($tipoescala == 0) {
-                        $this->data['escalas'] = $this->escala_model->get_escalas_originais_cal($setor_id, $datainicial, $datafinal);
+                        $this->data['escalas'] = $this->escala_model->get_escalas_originais_cal($setor_id, $datainicial, $datafinal, $tipos);
                     } elseif ($tipoescala == 1) {
-                        $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas_cal($setor_id, $datainicial, $datafinal);
+                        $this->data['escalas'] = $this->escala_model->get_escalas_consolidadas_cal($setor_id, $datainicial, $datafinal, $tipos);
                     } elseif ($tipoescala == 2) {
-                        $this->data['escalas'] = $this->escala_model->get_passagens_trocas_cal($setor_id, $datainicial, $datafinal);
+                        $this->data['escalas'] = $this->escala_model->get_passagens_trocas_cal($setor_id, $datainicial, $datafinal, $tipos);
                         //$this->data['escalas'] = null;
                     }
                     $this->load->library('calendar');
@@ -388,7 +402,7 @@ class Escalas extends Admin_Controller
         $this->pdf->stream("welcome.pdf");
     }
 
-    public function exportaFolha($unidadehospitalar_id, $setor_id,  $dataini, $datafinal, $profissional_id)
+    public function exportaFolha($unidadehospitalar_id, $setor_id,  $dataini, $datafinal, $profissional_id, $covid)
     {
         //var_dump($profissional_id); exit;
         $this->load->helper('file');
@@ -405,8 +419,12 @@ class Escalas extends Admin_Controller
             $profissional_id = null;
         }
 
-        $data = $this->escala_model->get_frequencias_export_txt($unidadehospitalar_id, $setor_id,  $dataini, $datafinal, $profissional_id);//$this->_get_frequencias('1', null,  '2021-07-01', '2021-07-31', null);
+        $data = $this->escala_model->get_frequencias_export_txt($unidadehospitalar_id, $setor_id,  $dataini, $datafinal, $profissional_id, $covid);//$this->_get_frequencias('1', null,  '2021-07-01', '2021-07-31', null);
         //var_dump($data); exit;
+        $covid_unidade = '';
+        $setor = '';
+        
+            
         foreach($data as $linha){
             
             if($linha->tipobatida == 1){
@@ -418,11 +436,26 @@ class Escalas extends Admin_Controller
             } else if($linha->tipobatida == 6){
                 $tp = 'S';
             }
+            if ($covid == 1){
+                $covid_unidade = 27;
+            } else {
+                $covid_unidade = $linha->unidadehospitalar_id;
+            }
 
-            fwrite($file, (str_pad($linha->unidadehospitalar_id, 3, 0, STR_PAD_LEFT).str_pad($linha->id_assessus, 3, 0, STR_PAD_LEFT).date('Ymd', strtotime($linha->datahorabatida)). date('His', strtotime($linha->datahorabatida)) .str_pad($linha->crm, 6, 0, STR_PAD_LEFT).$tp).chr(13).chr(10));
+            if ($linha->setor_id == '56' ){
+                if($linha->tipo_escala == '1'){
+                    $setor = $linha->id_assessus;
+                } else {
+                    $setor = '57'; 
+                }
+            } else {
+                $setor = $linha->id_assessus;
+            }
+            
+
+            fwrite($file, (str_pad($covid_unidade, 3, 0, STR_PAD_LEFT).str_pad($setor, 3, 0, STR_PAD_LEFT).date('Ymd', strtotime($linha->datahorabatida)). date('His', strtotime($linha->datahorabatida)) .str_pad($linha->crm, 6, 0, STR_PAD_LEFT).$tp).chr(13).chr(10));
         } 
-        fclose($file); 
-        exit; 
+        fclose($file); exit; 
     }
 
     public function listaroportunidades()
@@ -2085,7 +2118,7 @@ class Escalas extends Admin_Controller
                     }
                     
                     // Obtendo e vinculando as frequências inseridas mediante justificativa
-                    $frequencias_justificadas = $this->frequencia_model->get_frequencias_justificadas($freq->idunidade, $freq->idsetor, $freq->dataplantao);
+                    $frequencias_justificadas = $this->frequencia_model->get_frequencias_justificadas($freq->idunidade, $freq->idsetor, $freq->dataplantao, $freq->datafinalplantao);
                     $freq->frequencias_justificadas = array();
                     foreach ($frequencias_justificadas as $fj) {
                         if ($freq->id == $fj->escala_id && $freq->id_profissional == $fj->profissional_id) {
@@ -3744,7 +3777,7 @@ class Escalas extends Admin_Controller
         $setor_id = 2;
         $data_inicial = '2020-10-21';
         $data_final = '2020-12-20';
-        $plantoes = $this->escala_model->get_escalas_consolidadas_cal($setor_id, $data_inicial, $data_final);
+        $plantoes = $this->escala_model->get_escalas_consolidadas_cal($setor_id, $data_inicial, $data_final, 0);
 
         $this->load->library('calendar');
         $this->calendar->init($data_inicial, $data_final, $plantoes);

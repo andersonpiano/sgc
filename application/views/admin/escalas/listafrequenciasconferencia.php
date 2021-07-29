@@ -299,7 +299,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         if ($freq->frequencias_inseridas_mt[0]->tipobatida == 3) {
                                                             echo("<span class='title_help' title='* Batidas inseridas automaticamente nos plantões MT do mesmo profissional no mesmo setor.'>" . htmlspecialchars(date('H:i:s', strtotime($freq->frequencias_inseridas_mt[0]->datahorabatida)) . "*") . "</span>");
                                                         }
-                                                    } else if (!empty($freq->frequencias_justificadas && $freq->status == 4)) {
+                                                        if (isset($frequencia_justificada_entrada->tipobatida) == 5) {
+                                                            echo("<span class='title_help' title='** Batidas inseridas mediante justificativa.'>" . htmlspecialchars(date('H:i:s', strtotime($frequencia_justificada_entrada->datahorabatida)) . "**") . "</span>");
+                                                        }
+                                                    } else if (!empty($freq->frequencias_justificadas && $freq->status == 4 && empty($freq->frequencias_inseridas_mt))) {
                                                         if ($frequencia_justificada_entrada->tipobatida == 5) {
                                                             echo("<span class='title_help' title='** Batidas inseridas mediante justificativa.'>" . htmlspecialchars(date('H:i:s', strtotime($frequencia_justificada_entrada->datahorabatida)) . "**") . "</span>");
                                                         }
@@ -318,8 +321,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                         if ($freq->frequencias_inseridas_mt[0]->tipobatida == 4) {
                                                             echo("<span class='title_help' title='* Batidas inseridas automaticamente nos plantões MT do mesmo profissional no mesmo setor.'>" . htmlspecialchars(date('H:i:s', strtotime($freq->frequencias_inseridas_mt[0]->datahorabatida)) . "*") . "</span>");
                                                         }
+                                                        if (isset($frequencia_justificada_saida->tipobatida) == 6) {
+                                                            echo("<span class='title_help' title='** Batidas inseridas mediante justificativa.'>" . htmlspecialchars(date('H:i:s', strtotime($frequencia_justificada_saida->datahorabatida)) . "**") . "</span>");
+                                                        }
                                                     } else if (!empty($freq->frequencias_justificadas && $freq->status == 4)) {
-                                                        if ($frequencia_justificada_saida->tipobatida == 6) {
+                                                        if (isset($frequencia_justificada_saida->tipobatida) == 6) {
                                                             echo("<span class='title_help' title='** Batidas inseridas mediante justificativa.'>" . htmlspecialchars(date('H:i:s', strtotime($frequencia_justificada_saida->datahorabatida)) . "**") . "</span>");
                                                         }
                                                     } else {

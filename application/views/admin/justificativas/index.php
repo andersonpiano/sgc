@@ -58,6 +58,12 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                 <div class="box-body dontprint">
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-find_justificativa')); ?>
                                         <div class="form-group dontprint">
+                                            <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-3">
+                                                <?php echo form_dropdown($setor_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group dontprint">
                                             <?php echo lang('justificativas_data_inicio', 'data_plantao_inicio', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
                                                 <?php echo(form_input($data_plantao_inicio));?>

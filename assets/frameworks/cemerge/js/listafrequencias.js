@@ -38,6 +38,7 @@ $(document).ready(function(){
 		datainicial = document.getElementById('datainicial').value;
 		datafinal = document.getElementById('datafinal').value;
 		profissional = document.getElementById('profissional_id').value;
+		covid = document.getElementById('covid').value;
 		if (profissional == ''){
 			profissional = 0;
 		}
@@ -48,7 +49,7 @@ $(document).ready(function(){
 		if(unidade == ''){
 			swal('Aviso', 'Ops, você não selecionou a unidade hospitalar', 'info');
 		} else {
-			window.location.href='/sgc/admin/escalas/exportaFolha/'+unidade+'/'+setor+'/'+datainicial+'/'+datafinal+'/'+profissional;
+			window.location.href='/sgc/admin/escalas/exportaFolha/'+unidade+'/'+setor+'/'+datainicial+'/'+datafinal+'/'+profissional+'/'+covid;
 		}
 	});
 })

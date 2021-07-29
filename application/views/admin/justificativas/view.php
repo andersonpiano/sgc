@@ -32,7 +32,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                 <section class="content">
                 <div class="print-header row">
                     <div class="col-lg-2 col-xs-2"><img src="<?php echo base_url($frameworks_dir . '/cemerge/images/logo.png'); ?>"/></div>
-                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Justificativas ".$justificativa->status); ?></h3></div>
+                    <div class="col-lg-10 col-xs-10 pull-right"><h3><?php echo ("Justificativa Deferida"); ?></h3></div>
                 </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -97,14 +97,7 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                                     <?php echo(($justificativa->status == 4) ? htmlspecialchars(('Ignorada'), ENT_QUOTES, 'UTF-8') : ''); ?>
                                                 </td>
                                             </tr>
-                                            <tr  class="dontprint">
-                                                <td colspan='2' class="text-center"><a href="#" onclick="window.print();" class="btn btn-primary btn-flat dontprint">Imprimir</a>&nbsp;
-                                                <?php echo anchor('admin/justificativas/edit/'.$justificativa->id, lang('actions_edit'), array('class' => 'btn btn-primary btn-flat dontprint')); ?>&nbsp;
-                                                <?php echo ($justificativa->status == 0) ? anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint')) : '';?>&nbsp;
-                                                <?php echo ($justificativa->status != 2) ? anchor('admin/justificativas/edit_recusa/'.$justificativa->id, 'Indeferir', array('class' => 'btn btn-danger btn-flat dontprint')) : anchor('admin/justificativas/aprovar/'.$justificativa->id, 'Deferir', array('class' => 'btn btn-success btn-flat dontprint'));?>&nbsp;
-                                                <?php echo "<a href='" . $_SERVER['HTTP_REFERER'] . "' class='btn btn-primary btn-flat dontprint'>Voltar</a>";?></td>
-                                                <a href=<?php echo "/sgc/admin/justificativas/ignorar/$justificativa->id"; ?>>Ignorar</a>
-                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -116,4 +109,3 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                         <img src="<?php echo base_url($frameworks_dir . '/cemerge/images/assinatura.png'); ?>"/><br>
                         <span class="text-center"><?php echo $dia[$numero_dia].', '.$dia_mes.' de '.$mes[$numero_mes].' de '.$ano ?></span>
                 </div>
-            </div>

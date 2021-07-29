@@ -241,7 +241,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escalas_consolidadas_cal($setor_id, $data_inicial, $data_final)
+    public function get_escalas_consolidadas_cal($setor_id, $data_inicial, $data_final, $tipos)
     {
         $sql = "
         select id, idsetor, nomesetor, idunidade, nomeunidade,
@@ -249,9 +249,11 @@ class Escala_model extends MY_Model
         id_profissional, cd_pes_fis_profissional, crm_profissional, nome_profissional
         from vw_escalas_consolidadas ec
         where ec.idsetor = $setor_id
-        and ec.dataplantao between '$data_inicial' and '$data_final'
-        order by ec.dataplantao, ec.horainicialplantao
-        ";
+        and ec.dataplantao between '$data_inicial' and '$data_final' ";
+        if ($tipos <> 0){
+            $sql .= "and ec.tipo_escala = '$tipos' ";
+        }    
+        $sql .= " order by ec.dataplantao, ec.horainicialplantao ";
 
         $query = $this->db->query($sql);
 
@@ -295,7 +297,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escalas_originais_cal($setor_id, $data_inicial, $data_final)
+    public function get_escalas_originais_cal($setor_id, $data_inicial, $data_final, $tipos)
     {
         $sql = "
         select e.id, s.id as idsetor, s.nome as nomesetor, u.id as idunidade, u.razaosocial as nomeunidade,
@@ -306,9 +308,11 @@ class Escala_model extends MY_Model
         join setores s on (s.id = e.setor_id)
         join unidadeshospitalares u on (u.id = s.unidadehospitalar_id)
         where e.setor_id = $setor_id
-        and e.dataplantao between '$data_inicial' and '$data_final'
-        order by e.dataplantao, e.horainicialplantao
-        ";
+        and e.dataplantao between '$data_inicial' and '$data_final' ";
+        if ($tipos <> 0){
+            $sql .= "and e.tipo_escala = '$tipos' ";
+        }        
+        $sql .= "order by e.dataplantao, e.horainicialplantao ";
 
         $query = $this->db->query($sql);
 
@@ -316,7 +320,7 @@ class Escala_model extends MY_Model
     }
 
     
-    public function get_passagens_trocas_cal($setor_id, $data_inicial, $data_final)
+    public function get_passagens_trocas_cal($setor_id, $data_inicial, $data_final, $tipos)
     {
         $sql = "
             select id, idsetor, nomesetor, idunidade, nomeunidade,
@@ -325,9 +329,11 @@ class Escala_model extends MY_Model
             from vw_escalas_consolidadas ec
             where ec.idsetor = $setor_id
             and ec.dataplantao between '$data_inicial' and '$data_final'
-            and ec.nome_profissional <> profissional_titular
-            order by ec.dataplantao, ec.horainicialplantao
-        ";
+            and ec.nome_profissional <> profissional_titular ";
+            if ($tipos <> 0){
+                $sql .= "and ec.tipo_escala = '$tipos' ";
+            }  
+            $sql .= "order by ec.dataplantao, ec.horainicialplantao ";
 
         $query = $this->db->query($sql);
 
@@ -606,7 +612,7 @@ class Escala_model extends MY_Model
         $sql = "select ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
         $sql .= "ec.idsetor, ec.nomesetor, ec.idunidade, ec.nomeunidade, ec.id_profissional, ec.cd_pes_fis_profissional, ec.nome_profissional ";
         $sql .= "FROM `vw_escalas_consolidadas` ec ";
-        $sql .= "join escalas e on (ec.id = e.id and ((e.horainicialplantao = '07:00:00' and e.frequencia_entrada_id is not null) or e.horainicialplantao = '13:00:00')) ";
+        $sql .= "join escalas e on (ec.id = e.id and ((e.horainicialplantao = '07:00:00' and e.frequencia_entrada_id is not null) or e.horainicialplantao = '13:00:00' and (e.frequencia_saida_id is not null or e.status = 4))) ";
         $sql .= "where (ec.horainicialplantao = '07:00:00' or ec.horainicialplantao = '13:00:00') ";
         $sql .= "and ec.dataplantao = '$dataplantao' ";
         $sql .= "and ec.idunidade = '$unidadehospitalar_id' ";
@@ -718,30 +724,40 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $tipo_escala)
+    public function get_frequencias_escalas_nova($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $tipo_escala, $covid)
     {
         $sql = "select CONCAT(p.nome, ' Matricula: ', if(p.matricula is null, ' Sem Matricula', p.matricula)) as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_id, s.nome as nome_setor, ";
         $sql .= "f.profissional_id, f.datahorabatida, f.tipobatida, f.escala_id, ";
         $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
-        $sql .= "ec.idsetor, ec.nomesetor, ec.idunidade, ec.nomeunidade, e.tipo_escala, ";
+        $sql .= "ec.idsetor, ec.nomesetor, ec.idunidade, ec.nomeunidade, e.tipo_escala, un.nomefantasia as nomefantasia, ";
         $sql .= "ec.id_profissional, ec.cd_pes_fis_profissional, ec.crm_profissional, ec.nome_profissional ";
         $sql .= "from frequencias f "; 
         $sql .= "left join vw_escalas_consolidadas ec on (f.escala_id = ec.id) ";
-        $sql .= "join setores s on (s.id = f.setor_id) ";
+        $sql .= "left join setores s on (s.id = f.setor_id) ";
         $sql .= "left join escalas e on (e.id = ec.id) ";
-        $sql .= "join profissionais p on (f.profissional_id = p.id) ";
+        $sql .= "left join profissionais p on (f.profissional_id = p.id) ";
+        $sql .= "left join unidadeshospitalares un on (un.id = f.unidadehospitalar_id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
-        $sql .= "and tipobatida not in (3, 4) and deletado = 0 ";
+        $sql .= "and time(f.datahorabatida) <> '00:00:00' ";
+        //$sql .= "and f.tipobatida in (null, 1, 2, 5, 6) ";
+        $sql .= "and f.deletado = 0 ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         if ($tipo_escala != 0){
             $sql .= "and e.tipo_escala = $tipo_escala ";
         }
+
+        if ($covid == 1){
+            $sql .= "and s.nome like '%COVID%'";
+        }
+        if ($covid == 2){
+            $sql .= "and s.nome not like '%COVID%'";
+        } 
         $sql .= " and f.deletado <> 1 ";
         /*
         $sql .= "and f.cd_pes_jur in ";
         $sql .= "(select cd_pes_jur from grupos_unidadeshospitalares where unidadehospitalar_id = $unidadehospitalar_id) ";
         */
-        if ($setor_id) {
+        if ($setor_id != null) {
             $sql .= "and f.setor_id = $setor_id ";
             /*
             $sql .= "and f.cd_set in ";
@@ -750,7 +766,7 @@ class Escala_model extends MY_Model
             $sql .= "where setor_id = $setor_id) ";
             */
         }
-        if ($profissional_id) {
+        if ($profissional_id != null) {
             $sql .= "and f.profissional_id = $profissional_id ";
             /*
             $sql .= "and f.cd_set in ";
@@ -766,18 +782,22 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_frequencias_export_txt($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id)
+    public function get_frequencias_export_txt($unidadehospitalar_id, $setor_id, $datainicial, $datafinal, $profissional_id, $covid)
     {
-        $sql = "select CONCAT(p.nome, ' Matricula: ', if(p.matricula is null, ' Sem Matricula', p.matricula)) as nome_profissional_frq, f.id as frequencia_id, f.unidadehospitalar_id, f.setor_id, s.nome as nome_setor, ";
-        $sql .= "f.profissional_id, f.datahorabatida, f.tipobatida, f.escala_id, s.id_assessus, ";
+        $sql = "select CONCAT(p.nome, ' Matricula: ', if(p.matricula is null, ' Sem Matricula', p.matricula)) as nome_profissional_frq, ";
+        $sql .= "f.id as frequencia_id, f.unidadehospitalar_id, f.setor_id, s.id as setor_id, s.nome as nome_setor, ";
+        $sql .= "f.profissional_id, f.datahorabatida, f.tipobatida, f.escala_id, s.id_assessus, un.nomefantasia, ";
         $sql .= "ec.id, ec.dataplantao, ec.datafinalplantao, ec.horainicialplantao, ec.horafinalplantao, ";
-        $sql .= "ec.idsetor, ec.nomesetor, ec.idunidade, ec.nomeunidade, ";
+        $sql .= "ec.idsetor, ec.nomesetor, ec.idunidade, ec.nomeunidade, e.tipo_escala, ";
         $sql .= "ec.id_profissional, ec.cd_pes_fis_profissional, ec.crm_profissional, p.registro as crm, ec.nome_profissional ";
         $sql .= "from frequencias f "; 
         $sql .= "left join vw_escalas_consolidadas ec on (f.escala_id = ec.id) ";
         $sql .= "join setores s on (s.id = f.setor_id) ";
+        $sql .= "join escalas e on (e.id = ec.id) ";
+        $sql .= "join unidadeshospitalares un on (un.id = f.unidadehospitalar_id) ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
+        $sql .= "and time(f.datahorabatida) <> '00:00:00' ";
         $sql .= "and tipobatida is not null and tipobatida not in (3, 4) and deletado = 0 ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         /*
@@ -793,6 +813,12 @@ class Escala_model extends MY_Model
             $sql .= "where setor_id = $setor_id) ";
             */
         }
+        if ($covid == 1){
+            $sql .= "and s.nome like '%COVID%'";
+        }
+        if ($covid == 2){
+            $sql .= "and s.nome not like '%COVID%'";
+        } 
         if ($profissional_id) {
             $sql .= "and f.profissional_id = $profissional_id ";
             /*
