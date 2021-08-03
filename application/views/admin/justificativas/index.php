@@ -57,28 +57,41 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                 </div>
                                 <div class="box-body dontprint">
                                     <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-find_justificativa')); ?>
-                                        <div class="form-group dontprint">
-                                            <?php echo lang('escalas_setor', 'setor_id', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-3">
-                                                <?php echo form_dropdown($setor_id);?>
-                                            </div>
-                                        </div>
+                                   
                                         <div class="form-group dontprint">
                                             <?php echo lang('justificativas_data_inicio', 'data_plantao_inicio', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo(form_input($data_plantao_inicio));?>
                                             </div>
                                         </div>
                                         <div class="form-group dontprint">
                                             <?php echo lang('justificativas_data_fim', 'data_plantao_fim', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo(form_input($data_plantao_fim));?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('justificativas_status', 'status', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <?php echo form_dropdown($status);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group dontprint">
+                                            <?php echo lang('justificativas_unidade', 'unidadehospitalar_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-3">
+                                                <?php echo form_dropdown($unidadehospitalar_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group dontprint">
+                                            <?php echo lang('justificativas_profissionais', 'profissional_id', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-3">
+                                                <?php echo form_dropdown($profissional_id);?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group dontprint">
+                                            <?php echo lang('justificativas_setor', 'covid', array('class' => 'col-sm-2 control-label')); ?>
+                                            <div class="col-sm-3">
+                                                <?php echo form_dropdown($covid);?>
                                             </div>
                                         </div>
                                         <div class="form-group dontprint">
@@ -126,8 +139,8 @@ $mes = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Ju
                                         <tbody>
 <?php foreach ($justificativas as $justificativa):?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($justificativa->data_inicial_plantao)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                                <td><?php echo ($justificativa->create_at) ? htmlspecialchars(date('d/m/Y', strtotime($justificativa->create_at)), ENT_QUOTES, 'UTF-8'). '<br>'. htmlspecialchars(date('H:m:s', strtotime($justificativa->create_at)), ENT_QUOTES, 'UTF-8') : 'Sem data de criação'; ?></td>
+                                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($justificativa->data_plantao)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo ($justificativa->create_at && $justificativa->create_at != "0000-00-00 00:00:00") ? htmlspecialchars(date('d/m/Y', strtotime($justificativa->create_at)), ENT_QUOTES, 'UTF-8'). '<br>'. htmlspecialchars(date('H:m:s', strtotime($justificativa->create_at)), ENT_QUOTES, 'UTF-8') : 'Sem data de criação'; ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->turno, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->setor_nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($justificativa->nome_profissional, ENT_QUOTES, 'UTF-8'); ?></td>

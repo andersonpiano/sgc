@@ -101,7 +101,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/justificativas_create.js'); ?>"></script>
 <?php endif; ?>
 <?php if ($this->router->fetch_class() == 'justificativas' && in_array($this->router->fetch_method(), ['index'])) : ?>
-
+        <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/profissionais_por_unidade.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/util.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/sweetalert2.all.min.js'); ?>"></script>
         <script src="<?php echo base_url($frameworks_dir . '/cemerge/js/datatables.min.js'); ?>"></script>

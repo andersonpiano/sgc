@@ -124,7 +124,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </h3>
                                 </div>
                                 <div class="box-body"  style="page-break-after:always;">
-                                    <table class="table table-striped table-hover">
+                                    <table class="table-striped table-sm" style="width: 100%;">
                                         <thead>
                                             <tr>
                                                 <th class="w-20"><?php echo lang('frequencias_setor');?></th>

@@ -11,7 +11,7 @@ class Justificativa_model extends MY_Model
     }
 
 
-    public function get_justificativas_profissional($datainicial, $datafinal, $status)
+    public function get_justificativas_profissional($datainicial, $datafinal, $status, $covid, $profissional_id)
     {
         $fields = "j.id as id, ";
         $fields .= "e.id as plantao, e.dataplantao as data_inicial_plantao, ";
@@ -20,7 +20,7 @@ class Justificativa_model extends MY_Model
         $fields .= "p.id as profissional_id, ";
         $fields .= "s.nome as setor_nome, ";
         $fields .= "p.nome as nome_profissional, ";
-        $fields .= "j.status as status, ";
+        $fields .= "j.status as status, j.data_plantao,";
         $fields .= "j.entrada_justificada as entrada_justificada, ";
         $fields .= "j.saida_justificada as saida_justificada, j.create_at ";
 
@@ -30,12 +30,23 @@ class Justificativa_model extends MY_Model
         $sql .= "JOIN profissionais p on (j.profissional_id = p.id) ";
         $sql .= "JOIN setores s on (j.setor_id = s.id) ";
         $sql .= "WHERE ";
-        $sql .= "j.data_plantao BETWEEN '$datainicial' and '$datafinal'";
+        $sql .= "j.data_plantao BETWEEN '$datainicial' and '$datafinal' ";
         if ($status == 3){
 
         } else {
             $sql .= "AND j.status = $status";
         }
+        
+        if($covid == 1){
+            $sql .= "and s.nome like 'COVID%' ";
+        } else if ($covid == 2){
+            $sql .= "and s.nome not like 'COVID%' ";
+        }
+
+        if ($profissional_id != 0){
+            $sql .= "and p.id = $profissional_id ";
+        }
+
         $sql .= " order by e.dataplantao ";
         
         $query = $this->db->query($sql);

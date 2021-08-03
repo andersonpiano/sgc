@@ -43,9 +43,13 @@ class Justificativas extends Admin_Controller
         $this->data['breadcrumb'] = $this->breadcrumbs->show(); 
         // Modulos Carregados  
         $this->load->model('cemerge/FrequenciaAssessus_model');
+        
             $data_plantao_inicio = $this->input->post('data_plantao_inicio');
             $data_plantao_fim = $this->input->post('data_plantao_fim');
             $status = $this->input->post('status');
+            $covid = $this->input->post('covid');
+            $profissional_id = $this->input->post('profissional_id');
+            $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
         /* Validate form input */
         $this->form_validation->set_rules('data_plantao_inicio', 'lang:justificativas_data_inicio', 'required');
         $this->form_validation->set_rules('data_plantao_fim', 'lang:justificativas_data_fim', 'required');
@@ -60,11 +64,19 @@ class Justificativas extends Admin_Controller
             
         );
 
+        $unidadeshospitalares = $this->_get_unidadeshospitalares();
+
         if ($this->form_validation->run() == true) {       
             /* Justificativas */
             //$profissional_id = $this->session->userdata('profissional_id');
             //$this->data['justificativas'] = $this->justificativa_model->get_where(array('profissional_id' => $profissional_id, 'data_plantao >='=>$data_plantao_inicio, 'data_plantao <='=>$data_plantao_fim));
-            $this->data['justificativas'] = $this->justificativa_model->get_justificativas_profissional($data_plantao_inicio, $data_plantao_fim, $status);
+
+            if($profissional_id == ''){
+                $profissional_id = 0;
+            }
+
+            $this->data['justificativas'] = $this->justificativa_model->get_justificativas_profissional($data_plantao_inicio, $data_plantao_fim, $status, $covid, $profissional_id);
+            $profissionais= $this->_get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
             //$this->data['justificativas'] = $this->justificativa_model->get_where(array('data_plantao >='=>$data_plantao_inicio, 'data_plantao <='=>$data_plantao_fim));
 
             foreach ($this->data['justificativas'] as $ct) {
@@ -109,6 +121,7 @@ class Justificativas extends Admin_Controller
             $data_plantao_inicio = date('Y-m-d');
             $data_plantao_fim = date('Y-m-d');
             $status = $this->input->post('status');
+            $profissionais= $this->_get_profissionais_por_unidade_hospitalar(1);
             
         }
         $setores = array(
@@ -141,13 +154,31 @@ class Justificativas extends Admin_Controller
             'options' => $tipos_status,
         );
 
-        $this->data['setor_id'] = array(
-            'name'  => 'setor_id',
-            'id'    => 'setor_id',
+        $this->data['covid'] = array(
+            'name'  => 'covid',
+            'id'    => 'covid',
             'type'  => 'select',
             'class' => 'form-control',
-            'value' => $this->form_validation->set_value('setor_id'),
+            'value' => $this->form_validation->set_value('covid'),
             'options' => $setores,
+        );
+
+        $this->data['profissional_id'] = array(
+            'name'  => 'profissional_id',
+            'id'    => 'profissional_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('profissional_id'),
+            'options' => $profissionais,
+        );
+
+        $this->data['unidadehospitalar_id'] = array(
+            'name'  => 'unidadehospitalar_id',
+            'id'    => 'unidadehospitalar_id',
+            'type'  => 'select',
+            'class' => 'form-control',
+            'value' => $this->form_validation->set_value('unidadehospitalar_id'),
+            'options' => $unidadeshospitalares,
         );
 
         // Anderson
@@ -157,6 +188,22 @@ class Justificativas extends Admin_Controller
         /* Load Template */
         $this->template->admin_render('admin/justificativas/index', $this->data);
     }
+
+    public function _get_profissionais_por_unidade_hospitalar($unidadehospitalar_id)
+    {
+        $this->load->model('cemerge/profissional_model');
+        $profissionais_por_unidade_hospitalar = $this->profissional_model->get_profissionais_por_unidade_hospitalar($unidadehospitalar_id);
+
+        $profissionais = array(
+            '' => 'Todos',
+        );
+        foreach ($profissionais_por_unidade_hospitalar as $profissional) {
+            $profissionais[$profissional->id] = $profissional->nome;
+        }
+
+        return $profissionais;
+    }
+
 
     public function profissional()
     {
@@ -347,7 +394,8 @@ class Justificativas extends Admin_Controller
             );
 
             $this->justificativa_model->insert($insert_data);
-            
+            $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
+                redirect('admin/justificativas/profissional', 'refresh');
             
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
