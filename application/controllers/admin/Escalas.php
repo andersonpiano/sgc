@@ -2494,10 +2494,10 @@ class Escalas extends Admin_Controller
         /* Breadcrumbs */
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-        $frequencia = $this->frequenciaassessus_model->get_by_cdctlfrq($frequencia_id);
+        $frequencia = $this->frequencia_model->get_by_id($frequencia_id);
 
         if ($frequencia) {
-            $this->frequenciaassessus_model->update($frequencia_id, ['ignorar' => 1]);
+            $this->frequencia_model->update($frequencia_id, ['ignorar' => 1]);
             $this->session->set_flashdata('message', 'A frequência foi ignorada com sucesso. Feche esta janela e volte para a janela anterior.');
             redirect('admin/escalas/conferencia', 'refresh');
         } else {
@@ -2516,10 +2516,10 @@ class Escalas extends Admin_Controller
         /* Breadcrumbs */
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
-        $frequencia = $this->frequenciaassessus_model->get_by_cdctlfrq($frequencia_id);
+        $frequencia = $this->frequenciaassessus_model->get_by_id($frequencia_id);
 
         if ($frequencia) {
-            $this->frequenciaassessus_model->update($frequencia_id, ['ignorar' => 0]);
+            $this->frequencia_model->update($frequencia_id, ['ignorar' => 0]);
         }
 
         return $json['status'] = 1;
