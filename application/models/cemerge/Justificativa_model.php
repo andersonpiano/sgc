@@ -47,7 +47,7 @@ class Justificativa_model extends MY_Model
             $sql .= "and p.id = $profissional_id ";
         }
 
-        $sql .= " order by e.dataplantao ";
+        $sql .= " order by e.dataplantao, e.horainicialplantao, p.nome ";
         
         $query = $this->db->query($sql);
 

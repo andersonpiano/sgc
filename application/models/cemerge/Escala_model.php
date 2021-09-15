@@ -662,6 +662,7 @@ class Escala_model extends MY_Model
         $sql .= "from frequencias f ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where f.escala_id is null ";
+        $sql .= "and f.deletado = 0 ";
         $sql .= "and date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
         if ($setor_id == ''){
 
@@ -793,7 +794,7 @@ class Escala_model extends MY_Model
         $sql .= "from frequencias f "; 
         $sql .= "left join vw_escalas_consolidadas ec on (f.escala_id = ec.id) ";
         $sql .= "join setores s on (s.id = f.setor_id) ";
-        $sql .= "join escalas e on (e.id = ec.id) ";
+        $sql .= "left join escalas e on (e.id = ec.id) ";
         $sql .= "join unidadeshospitalares un on (un.id = f.unidadehospitalar_id) ";
         $sql .= "join profissionais p on (f.profissional_id = p.id) ";
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";

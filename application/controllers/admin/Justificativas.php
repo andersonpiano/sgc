@@ -38,12 +38,10 @@ class Justificativas extends Admin_Controller
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('auth/login', 'refresh');
         }
-
         /* Breadcrumbs */
         $this->data['breadcrumb'] = $this->breadcrumbs->show(); 
         // Modulos Carregados  
         $this->load->model('cemerge/FrequenciaAssessus_model');
-        
             $data_plantao_inicio = $this->input->post('data_plantao_inicio');
             $data_plantao_fim = $this->input->post('data_plantao_fim');
             $status = $this->input->post('status');
@@ -380,7 +378,7 @@ class Justificativas extends Admin_Controller
         if ($this->form_validation->run() == true) {
                 
             
-
+            $this->escala_model->update($escala_id, ['justificativa' => 0]);
             $insert_data = array(
                 'profissional_id' => $profissional_id,
                 'escala_id' => $escala_id,
@@ -392,14 +390,11 @@ class Justificativas extends Admin_Controller
                 'status' => 0,
                 'create_at' => date('Y-m-d H:m:i')
             );
-
             $this->justificativa_model->insert($insert_data);
             $this->session->set_flashdata('message', 'Justificativa inserida com sucesso.');
                 redirect('admin/justificativas/profissional', 'refresh');
-            
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-
             $this->data['profissional_id'] = $profissional_id;
             $this->data['escala_id'] = $this->input->post('plantao_id');
             $this->data['profissional_nome'] = $profissional_nome;      
