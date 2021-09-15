@@ -300,7 +300,7 @@ class Setores extends Admin_Controller {
             '' => 'Selecione um setor',
         );
         foreach ($setores_por_unidade as $setor) {
-            $setores[$setor->cd_set] = $setor->nm_set;
+            $setores[$setor->id] = $setor->nome;
         }
         return $setores;
     }
