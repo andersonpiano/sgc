@@ -346,13 +346,13 @@ class Justificativas extends Admin_Controller
         $this->load->model('cemerge/FrequenciaAssessus_model');
         $this->load->model('cemerge/frequencia_model');
         $this->load->model('cemerge/escala_model');
-
+        
         $escala_id = (int) $escala_id;
         /* Variables */
         $profissional_id = $this->session->userdata('profissional_id');
         $profissional_nome = $this->session->userdata('nome');
         $setores_profissional = $this->_get_setores_profissional($profissional_id);
-        $setor_id = $this->input->get_post('setor_id');
+        //$setor_id = $this->input->get_post('setor_id');
         $data_plantao_inicio = $this->input->get_post("data_plantao");
         $hora_entrada =  $this->input->post("hora_entrada");
         $hora_saida =  $this->input->post("hora_saida");
@@ -369,7 +369,8 @@ class Justificativas extends Admin_Controller
         }
 
         $escala = $this->escala_model->get_by_id($escala_id);
-
+        $setor_id = $escala->setor_id;
+        //var_dump($setor_id); exit;
         //var_dump($plantao_entrada); exit;
         /* Validate form input */
         $this->form_validation->set_rules('descricao', 'lang:justificativas_descricao', 'required');

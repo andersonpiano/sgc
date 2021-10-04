@@ -1671,6 +1671,7 @@ class Escala_model extends MY_Model
         $sql .= 'join setores on (escalas.setor_id = setores.id) ';
         $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
         $sql .= 'where escalas.publicada = 1 and profissionais.id = ? ';
+        $sql .= 'and escalas.id not in (select escala_id from justificativas) ';
         $sql .= 'and escalas.id not in ';
         $sql .= '(select escala_id from passagenstrocas ';
         $sql .= 'where escala_id = escalas.id) ';
@@ -1694,6 +1695,7 @@ class Escala_model extends MY_Model
         $sql .= 'join setores on (escalas.setor_id = setores.id) ';
         $sql .= 'join unidadeshospitalares on (setores.unidadehospitalar_id = unidadeshospitalares.id) ';
         $sql .= 'where profissionais.id = ? ';
+        $sql .= 'and escalas.id not in (select escala_id from justificativas) ';
         $sql .= 'and escalas.dataplantao between \'' . $datainicial  . '\' and \'' . $datafinal . '\' ';
         $sql .= 'and passagenstrocas.statuspassagem = 1 ';
 

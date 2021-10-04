@@ -34,7 +34,7 @@ class Justificativa_model extends MY_Model
         if ($status == 3){
 
         } else {
-            $sql .= "AND j.status = $status";
+            $sql .= "AND j.status = $status ";
         }
         
         if($covid == 1){

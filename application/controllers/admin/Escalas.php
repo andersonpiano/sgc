@@ -4123,7 +4123,7 @@ class Escalas extends Admin_Controller
         $vinculo = $this->profissional_model->get_vinculo_por_profissional($profissional_id);
         //var_dump($escalado); exit;
 
-        if (empty($sessoes) && $escalado < 1){
+        if ((empty($sessoes) && $escalado < 1 && ($escala->frequencia_entrada_id == null || $escala->frequencia_entrada_id == 0)) || $escala->tipo_escala != 1){
             try {
                 $this->escala_model->update($escala_id, ['profissional_id' => $profissional_id]);
                 $sucess = true;
@@ -4131,6 +4131,7 @@ class Escalas extends Admin_Controller
                 echo(json_encode($ex));
             }
         }
+
 
         //echo json_encode($profissional);
         //echo json_encode($escala);
