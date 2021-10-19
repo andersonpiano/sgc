@@ -29,13 +29,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                                 <div class="box-body">
                                     <?php echo form_open(uri_string(), array('class' => 'form-horizontal', 'id' => 'form-edit_funcionarios')); ?>
-                                        <div class="form-group">
-                                            <?php echo lang('funcionarios_registro', 'registro', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-2">
-                                                <?php echo form_input($registro);?>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" id="profissional_id" value=<?php echo $profissional->id; ?> ></input>
+                                        
+                                        <input type="hidden" id="profissional_id" value=<?php echo $funcionario->id; ?> ></input>
                                         <div class="form-group">
                                             <?php echo lang('funcionarios_matricula', 'matricula', array('class' => 'col-sm-2 control-label')); ?>
                                             <div class="col-sm-2">
@@ -91,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-sm-10">
                                                 <div class="checkbox">
                                                     <label>
-    <?php $checked = ($profissional->active == 1) ? 'checked' : '';?>
+    <?php $checked = ($funcionario->active == 1) ? 'checked' : '';?>
                                                         <input type="checkbox" name="active" value="1" <?php echo $checked; ?>>
                                                         <?php echo htmlspecialchars(lang('funcionarios_active'), ENT_QUOTES, 'UTF-8'); ?>
                                                     </label>
@@ -104,7 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php endif ?>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
-                                                <?php echo form_hidden('id', $profissional->id);?>
+                                                <?php echo form_hidden('id', $funcionario->id);?>
                                                 <?php echo form_hidden($csrf); ?>
                                                 <div class="btn-group">
                                                     <?php echo form_button(array('type' => 'submit', 'class' => 'btn btn-primary btn-flat', 'content' => lang('actions_save'))); ?>

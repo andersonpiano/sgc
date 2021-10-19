@@ -34,14 +34,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             
             <div id="tab_profissionais" class="tab-pane active">
                 <div class="container-fluid">
-                    <h2 class="text-center"><strong>Gerenciar Profissionais</strong></h2>
-                    <a id="btn_add_profissional" href="/sgc/admin/profissionais/create" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Cadastrar profissional</i></a>
+                    <h2 class="text-center"><strong>Gerenciar Funcionarios</strong></h2>
+                    <a id="btn_add_profissional" href="/sgc/admin/funcionarios/create" class="btn btn-primary"><i class="fa fa-plus">&nbsp;&nbsp;Cadastrar profissional</i></a>
                     <table id="dt_profissional" class="table table-striped table-bordered">
                         <thead>
                             <tr class="tableheader">
                                 <th class="dt-center text-center" >Matricula</th>
                                 <th class="dt-center text-center">Nome</th>
-                                <th class="dt-center text-center" >CRM</th>
                                 <th class="dt-center text-center">E-mail</th>
                                 <th class="dt-center no-sort text-center">Ações</th>
                             </tr> 

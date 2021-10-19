@@ -84,7 +84,6 @@ class Funcionarios extends Admin_Controller
         $vinculos = $this->_get_vinculos();
 
         /* Validate form input */
-        $this->form_validation->set_rules('registro', 'lang:funcionarios_registro', 'required|is_unique[funcionarios.registro]');
         $this->form_validation->set_rules('matricula', 'lang:funcionarios_matricula', 'required');
         $this->form_validation->set_rules('nome', 'lang:funcionarios_nome', 'required');
         $this->form_validation->set_rules('nomecurto', 'lang:funcionarios_nomecurto', 'required');
@@ -95,7 +94,6 @@ class Funcionarios extends Admin_Controller
         $this->form_validation->set_rules('orgao_expeditor_rg', 'lang:funcionarios_orgao_expeditor_rg', 'required');
 
         if ($this->form_validation->run() == true) {
-            $registro = $this->input->post('registro');
             $matricula = $this->input->post('matricula');
             $nome = $this->input->post('nome');
             $nomecurto = $this->input->post('nomecurto');
@@ -107,7 +105,6 @@ class Funcionarios extends Admin_Controller
             $active = $this->input->post('active');
 
             $additional_data = array(
-                'registro' => $this->input->post('registro'),
                 'matricula' => $this->input->post('matricula'),
                 'nome' => $this->input->post('nome'),
                 'vinculo_id' => $vinculo,
@@ -129,13 +126,6 @@ class Funcionarios extends Admin_Controller
         } else {
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-            $this->data['registro'] = array(
-                'name'  => 'registro',
-                'id'    => 'registro',
-                'type'  => 'text',
-                'class' => 'form-control',
-                'value' => $this->form_validation->set_value('registro'),
-            );
             $this->data['matricula'] = array(
                 'name'  => 'matricula',
                 'id'    => 'matricula',
@@ -424,7 +414,6 @@ class Funcionarios extends Admin_Controller
         //$currentGroups = $this->ion_auth->get_users_groups($id)->result();
 
         /* Validate form input */
-        $this->form_validation->set_rules('registro', 'lang:funcionarios_registro', 'required');
         $this->form_validation->set_rules('nome', 'lang:funcionarios_nome', 'required');
         $this->form_validation->set_rules('nomecurto', 'lang:funcionarios_nomecurto', 'required');
         $this->form_validation->set_rules('matricula', 'lang:funcionarios_matricula', 'required');
@@ -443,7 +432,6 @@ class Funcionarios extends Admin_Controller
 
                 if ($this->form_validation->run() == true) {
                     $data = array(
-                        'registro' => $this->input->post('registro'),
                         'matricula' => $this->input->post('matricula'),
                         'nome' => $this->input->post('nome'),
                         'nomecurto' => $this->input->post('nomecurto'),
@@ -477,13 +465,6 @@ class Funcionarios extends Admin_Controller
         // pass the funcionario to the view
         $this->data['funcionario'] = $funcionario;
 
-        $this->data['registro'] = array(
-            'name'  => 'registro',
-            'id'    => 'registro',
-            'type'  => 'text',
-            'class' => 'form-control',
-            'value' => $this->form_validation->set_value('registro', $funcionario->registro)
-        );
         $this->data['matricula'] = array(
             'name'  => 'matricula',
             'id'    => 'matricula',

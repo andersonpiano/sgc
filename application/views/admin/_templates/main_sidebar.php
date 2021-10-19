@@ -167,6 +167,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <span><?php echo lang('menu_profissionais'); ?></span>
                             </a>
                         </li>
+                        <li class="<?=active_link_controller('funcionarios')?>">
+                        <a href="/sgc/admin/funcionarios/">
+                                <i class="fa fa-user-md"></i>
+                                <span><?php echo lang('menu_funcionarios'); ?></span>
+                            </a>
+                        </li>
                         <li class="treeview <?=active_link_controller('residentes')?>">
                             <a href="#">
                                 <i class="fa fa-user-md"></i>

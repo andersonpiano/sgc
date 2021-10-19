@@ -71,7 +71,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th><?php echo lang('funcionarios_registro');?></th>
                                                 <th><?php echo lang('funcionarios_matricula');?></th>
                                                 <th><?php echo lang('funcionarios_nome');?></th>
                                                 <th><?php echo lang('funcionarios_nomecurto');?></th>
@@ -82,7 +81,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <tbody>
 <?php foreach ($funcionarios as $prof):?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($prof->registro, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($prof->matricula, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($prof->nome, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><?php echo htmlspecialchars($prof->nomecurto, ENT_QUOTES, 'UTF-8'); ?></td>

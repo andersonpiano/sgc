@@ -224,7 +224,7 @@ $("#form_lancador_profissional").submit(function() {
 		$(".btn-profissional-edit").click(function(){
 			clearErrors();
 			$id = $(this).attr('id');
-			window.location.href = href="http://localhost/sgc/admin/profissionais/edit/"+$id;
+			window.location.href = href="http://localhost/sgc/admin/funcionarios/edit/"+$id;
 		});
 
 		$(".btn-del-profissional").click(function(){

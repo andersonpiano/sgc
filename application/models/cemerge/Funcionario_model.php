@@ -10,7 +10,7 @@ class funcionario_model extends MY_Model
     }
 
     public function get_funcionarios_por_setor($setor_id) {
-        $fields = 'funcionarios.id, funcionarios.cd_pes_fis, funcionarios.registro, funcionarios.cpf, funcionarios.nome, funcionarios.nomecurto, funcionarios.email';
+        $fields = 'funcionarios.id, funcionarios.matricula, funcionarios.cpf, funcionarios.nome, funcionarios.nomecurto, funcionarios.email';
         $this->db->select($fields);
         $this->db->from($this->table);
         $this->db->join('funcionariosetor', 'funcionarios.id = funcionariosetor.funcionario_id');
@@ -23,7 +23,7 @@ class funcionario_model extends MY_Model
 
     public function get_funcionarios_por_setor_disponiveis($setor_id, $plantao)
     {
-        $fields = 'funcionarios.id, funcionarios.cd_pes_fis, funcionarios.registro, funcionarios.cpf, funcionarios.nome, funcionarios.nomecurto, funcionarios.email';
+        $fields = 'funcionarios.id, funcionarios.matricula, funcionarios.cpf, funcionarios.nome, funcionarios.nomecurto, funcionarios.email';
         $sql = "select ".$fields." from funcionarios
         join funcionariosetor on funcionarios.id = funcionariosetor.funcionario_id
         join setores on setores.id = funcionariosetor.setor_id
@@ -65,7 +65,7 @@ class funcionario_model extends MY_Model
     }
 
     public function get_by_user_id($user_id) {
-        $fields = 'funcionarios.id, funcionarios.cd_pes_fis, funcionarios.registro, funcionarios.nome, funcionarios.nomecurto, funcionarios.email';
+        $fields = 'funcionarios.id, funcionarios.matricula, funcionarios.nome, funcionarios.nomecurto, funcionarios.email';
         $this->db->select($fields);
         $this->db->from($this->table);
         $this->db->join('usuariosfuncionarios', 'funcionarios.id = usuariosfuncionarios.funcionario_id');
@@ -75,8 +75,8 @@ class funcionario_model extends MY_Model
         return $query->row();
     }
 
-    public function get_cd_pes_fis($user_id){
-        $this->db->select('cd_pes_fis');
+    public function get_matricula($user_id){
+        $this->db->select('matricula');
         $this->db->from($this->table);
         $this->db->where('id', $user_id);
         $query = $this->db->get();
@@ -91,16 +91,16 @@ class funcionario_model extends MY_Model
         return $query->row();
     }
 
-    public function get_by_cd_pes_fis($cd_pes_fis) {
-        $fields = 'id, cd_pes_fis, registro, nome, nomecurto';
+    public function get_by_matricula($matricula) {
+        $fields = 'id, matricula,  nome, nomecurto';
         $this->db->select($fields);
         $this->db->from($this->table);
-        $this->db->where('cd_pes_fis', $cd_pes_fis);
+        $this->db->where('matricula', $matricula);
         $query = $this->db->get();
         return $query->row();
     }
-    var $column_search = array('matricula',"nome","registro");
-    var $column_order = array('id',"matricula", "nome", "registro", "email");
+    var $column_search = array('matricula',"nome");
+    var $column_order = array('id',"matricula", "nome", "email");
 
     private function _get_datatable() {
         $search = NULL;

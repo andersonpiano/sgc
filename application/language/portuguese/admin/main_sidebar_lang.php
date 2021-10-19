@@ -34,6 +34,10 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_profissionais_edit'] = 'Editar';
 /* *********** */$lang['menu_profissionais_vincular'] = 'Vincular a Setor';
 
+/* ****** */$lang['menu_funcionarios']  = 'Funcionarios';
+/* *********** */$lang['menu_funcionarios_create'] = 'Buscar / Novo';
+/* *********** */$lang['menu_funcionarios_edit'] = 'Editar';
+
 /* ****** */$lang['menu_residentes']  = 'Residentes';
 /* *********** */$lang['menu_residentes_create'] = 'Novo';
 /* *********** */$lang['menu_residentes_find'] = 'Buscar';

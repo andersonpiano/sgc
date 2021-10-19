@@ -195,8 +195,8 @@ class Fopag extends Admin_Controller
         exit("Nenhum acesso de script direto permitido!");
     }
         
-    $this->load->model("cemerge/Profissional_model");
-    $profissionais = $this->Profissional_model->get_datatable();
+    $this->load->model("cemerge/Funcionario_model");
+    $profissionais = $this->Funcionario_model->get_datatable();
 
     $data = array();
     foreach ($profissionais as $profissional) {
@@ -204,7 +204,6 @@ class Fopag extends Admin_Controller
         $row = array();
         $row[] = '<center>'.$profissional->id.'</center>';
         $row[] = '<center>'.$profissional->nome.'</center>';
-        $row[] = '<center>'.$profissional->registro.'</center>';
         $row[] = '<center>'.$profissional->email.'</center>';
 
         $row[] = '<center><div style="display: inline-block;">
@@ -231,8 +230,8 @@ class Fopag extends Admin_Controller
     }
     $json = array(
         "draw" => $this->input->post("draw"),
-        "recordsTotal" => $this->Profissional_model->records_total(),
-        "recordsFiltered" => $this->Profissional_model->records_filtered(),
+        "recordsTotal" => $this->Funcionario_model->records_total(),
+        "recordsFiltered" => $this->Funcionario_model->records_filtered(),
         "data" => $data,
     );
     echo json_encode($json);
