@@ -72,6 +72,10 @@ $(document).ready(function(){
 				document.getElementById("justificativa_indeferir").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_edit").setAttribute("justificativa", justificativa);
 				document.getElementById("justificativa_aprovar").setAttribute("justificativa", justificativa);
+
+				if(document.getElementById('condicao').innerText == 'Deferida'){
+					document.getElementById("justificativa_aprovar").setAttribute("style", 'display: none;');
+				}
             },
             error: function(responseData) {
                 //swal("Erro",$sucess, "error");
