@@ -10,14 +10,15 @@ class Escala_model extends MY_Model
         parent::__construct($this->table);
     }
 
-    public function get_escala_referencia($setor_id, $datainicial)
+    public function get_escala_referencia($setor_id, $datainicial, $tipo)
     {
         $fields = 'dataplantao, horainicialplantao, horafinalplantao, duracao, profissional_id, tipo_plantao, extra';
         $where = 'dataplantao = \'' . $datainicial . '\' - INTERVAL 28 DAY ';
         //$where .= 'and dataplantao < \'' . $datainicial . '\' ';
         $where .= 'and setor_id = ' . $setor_id . ' ';
         $where .= 'and (extra = 0 or extra is null) ';
-        $where .= 'and tipo_plantao = 0 ';
+        $where .= 'and (tipo_plantao = 0 or tipo_plantao is null)';
+        $where .= 'and tipo_escala = ' . $tipo . ' ';
         $order_by = 'dataplantao, horainicialplantao, id';
 
         $this->db->select($fields);
@@ -686,6 +687,17 @@ class Escala_model extends MY_Model
         $sql .= "where profissional_id = '$profissional_id' ";
         $sql .= "and dataplantao = '$data' ";
         $sql .= "and horainicialplantao = '$hora' ";
+
+        $query = $this->db->query($sql);
+
+        return $query->num_rows();
+    }
+
+    public function get_status_plantao($id)
+    {
+
+        $sql = "SELECT * FROM passagenstrocas ";
+        $sql .= "where escala_id = '$id' ";
 
         $query = $this->db->query($sql);
 

@@ -768,14 +768,15 @@ class Plantoes extends Admin_Controller
 
         $json = array();
 
-        $json["status"] = 1;
+        $json["status"] = 0;
         $json["error_list"] = array();
 
 
         // Testando se o plantão ainda pode ser cedido ou trocado
         $data_hora_atual = date('Y-m-d H:i:s');
         $data_hora_plantao = $plantao->dataplantao . ' ' . $plantao->horainicialplantao;
-        if ($data_hora_atual > $data_hora_plantao) {
+        $plantao_cedido = $this->escala_model->get_status_plantao($id);
+        if ($data_hora_atual > $data_hora_plantao && $plantao_cedido < 0) {
             $json["error_list"]["#btn_confirmar_oferta"] = "O plantão não pode mais ser cedido ou trocado. As cessões ou trocas devem ser feitas até o horário do plantão.";
         }
 
@@ -847,20 +848,23 @@ class Plantoes extends Admin_Controller
                     );
                 }
                 
-                
-                if ($this->passagemtroca_model->insert($data)) {
-                    /* Send notifications */
-                    $notification_send = $this->_sendNotifications(
-                        $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO
-                    );
-                    if ($notification_send) {
+                if($plantao_cedido < 1){
+                    $json["status"] = 1;
+                    if ($this->passagemtroca_model->insert($data)) {
+                        /* Send notifications */
+                        $notification_send = $this->_sendNotifications(
+                            $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO
+                        );
+                        if ($notification_send) {
+                        } else {
+                        }
+    
                     } else {
+                        $json["error_list"]["#btn_confirmar_oferta"] = $this->ion_auth->errors();
+    
                     }
-
-                } else {
-                    $json["error_list"]["#btn_confirmar_oferta"] = $this->ion_auth->errors();
-
                 }
+                
                 
         echo json_encode($json);
         exit;

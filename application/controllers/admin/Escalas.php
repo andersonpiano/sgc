@@ -3640,7 +3640,8 @@ class Escalas extends Admin_Controller
             if ($datafinal >= $datainicial) {
                 $success = array();
                 for ($data = $datainicial; $data <= $datafinal; $data->modify('+1 day')) {
-                    $escala_referencia = $this->escala_model->get_escala_referencia($setor_id, $data->format('Y-m-d'));
+                    $escala_referencia = $this->escala_model->get_escala_referencia($setor_id, $data->format('Y-m-d'), $tipo);
+                    //var_dump($escala_referencia); exit;
                     foreach ($escala_referencia as $indice => $escala) {
                         $dtfinalplantao = $data->format('Y-m-d');
                         if ((int)$escala->horainicialplantao > (int)$escala->horafinalplantao) {
