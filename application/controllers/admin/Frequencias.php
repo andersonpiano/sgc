@@ -186,7 +186,8 @@ class Frequencias extends Admin_Controller
             $this->session->set_flashdata('message', 'O acesso &agrave; este recurso não é permitido ao seu perfil de usuário.');
             redirect('admin/dashboard', 'refresh');
         }
-
+        $this->load->model('cemerge/usuarioprofissional_model');
+        $this->load->model('cemerge/profissional_model');
         /* Breadcrumbs */
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
@@ -198,13 +199,18 @@ class Frequencias extends Admin_Controller
 
         /* Validate form input */
         $this->form_validation->set_rules('unidadehospitalar_id', 'lang:frequencias_unidadehospitalar', 'required');
-        $this->form_validation->set_rules('profissional_id', 'lang:frequencias_profissional', 'required');        
+        //$this->form_validation->set_rules('profissional_id', 'lang:frequencias_profissional', 'required');        
         $this->form_validation->set_rules('datainicial', 'lang:frequencias_datainicialplantao', 'required');
         $this->form_validation->set_rules('datafinal', 'lang:frequencias_datafinalplantao', 'required');
 
         if ($this->form_validation->run() == true) {
             $unidadehospitalar_id = $this->input->post('unidadehospitalar_id');
-            $profissional_id = $this->input->post('profissional_id');
+            $userId = $this->ion_auth->user()->row()->id;
+            $profissional = $this->usuarioprofissional_model->get_where(['user_id' => $userId]);
+            if ($profissional) {
+                $this->_profissional = $this->profissional_model->get_where(['id' => $profissional[0]->profissional_id])[0];
+                $profissional_id = $this->_profissional->id;
+            }
             $datainicial = $this->input->post('datainicial');
             $datafinal = $this->input->post('datafinal');
 

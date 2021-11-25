@@ -143,6 +143,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_plantoes_tooffer']       = 'Ceder plantão';
 /* *********** */$lang['menu_plantoes_toexchange']       = 'Trocar plantão';
 /* *********** */$lang['menu_plantoes_frequencia']       = 'Frequências';
+/* *********** */$lang['menu_plantoes_frequencia_G']       = 'Frequências Geral';
 
 /* ****** */$lang['menu_unidadeshospitalares']  = 'Unidades Hospitalares';
 /* *********** */$lang['menu_unidadeshospitalares_create']     = 'Criar';

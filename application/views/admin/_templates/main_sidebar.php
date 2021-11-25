@@ -71,6 +71,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li class="<?=active_link_controller('escalas/buscarfrequenciaprofissional')?>"><a href="<?php echo site_url('admin/escalas/buscarfrequenciaprofissional'); ?>"><?php echo lang('menu_plantoes_frequencia'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
+                                <li class="<?=active_link_controller('frequencias/buscarfrequenciaporprofissional')?>"><a href="<?php echo site_url('admin/frequencias/buscarfrequenciaporprofissional'); ?>"><?php echo lang('menu_plantoes_frequencia_G'); ?></a></li>
+                            </ul>
+                            <ul class="treeview-menu">
                                 <li class="<?=active_link_function('oportunidade')?>"><a href="<?php echo site_url('admin/escalas/listaroportunidades'); ?>"><?php echo lang('menu_oportunidades'); ?></a></li>
                             </ul>
                             <ul class="treeview-menu">
