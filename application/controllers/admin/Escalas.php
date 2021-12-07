@@ -448,6 +448,8 @@ class Escalas extends Admin_Controller
                 } else {
                     $setor = '57'; 
                 }
+            } else if($linha->setor_id >= '60' && $linha->setor_id <= '65'){
+                $setor = '204'; 
             } else {
                 $setor = $linha->id_assessus;
             }

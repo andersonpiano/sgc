@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </section>
         <?php endif; ?>
         <br>
-<section style="min-height: calc(100vh - 83px);" class="light-bg">
+<section style="min-height: calc(100vh - 83px);" class="light-bg; left: 50%; right: 50%;">
     <div class="container">        
             <div class="container-fluid">
                 <center><img src="/sgc/assets/frameworks/cemerge/images/logo.png"></center><br>
