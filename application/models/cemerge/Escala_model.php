@@ -991,7 +991,10 @@ class Escala_model extends MY_Model
         $sql .= "and timestampdiff(MINUTE, concat('$data_batida', ' ', '$hora_batida'), datahorabatida) <= 120) ";
         $sql .= "and frequencias.profissional_id = $id_profissional ";
         $sql .= "and unidadehospitalar_id = $id_unidadehospitalar ";
-        $sql .= "and setor_id = $setor_id ";
+        
+            if ($setor_id >= 60 && $setor_id <= 65 && $setor_id != null){
+                $sql .= "and setor_id = $setor_id ";
+            }
         $sql .= "and escala_id is null ";
         $sql .= "order by datahorabatida ";
 
@@ -1026,7 +1029,9 @@ class Escala_model extends MY_Model
         $sql .= "where date(f.datahorabatida) = '$data_batida' ";
         $sql .= "and p.id = $id_profissional ";
         $sql .= "and f.unidadehospitalar_id = $id_unidadehospitalar ";
-        $sql .= "and setor_id = $id_setor ";
+        if ($id_setor >= 60 && $id_setor <= 65 && $id_setor != null){
+            $sql .= "and setor_id = $id_setor ";
+        }
         $sql .= "and f.escala_id is null ";
         $sql .= "order by f.datahorabatida ";
 
@@ -1042,7 +1047,7 @@ class Escala_model extends MY_Model
         $sql .= "FROM vw_escalas_consolidadas ec ";
         $sql .= "join escalas e on (e.id = ec.id) ";
         $sql .= "where idunidade = $unidadehospitalar_id ";
-        if ($setor_id) {
+        if ($setor_id >= 60 && $setor_id <= 65 && $setor_id != null) {
             $sql .= "and idsetor = $setor_id ";
         } else {
             $sql .= "and idsetor in ( ";
