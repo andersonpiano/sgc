@@ -68,11 +68,11 @@ $(document).ready(function(){
 				},
 				success: function(response) {
 					clearErrors();
-					if (response["status"] != 0) {
+					if (response["status"] ) {
 						$("#modal_ofertar").modal("hide");
 						swal("Sucesso!","Oferta efetuada com sucesso!", "success");
 					} else {
-						swal("Erro!","Este plantão não pode mais ser cedido ou trocado!", "error");
+						showErrorsModal(response["error_list"])
 					}
 				},
 				error: function(response){
