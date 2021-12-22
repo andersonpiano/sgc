@@ -1119,6 +1119,11 @@ class Escala_model extends MY_Model
         $sql .= "where date(f.datahorabatida) between '$datainicial' and '$datafinal' ";
         $sql .= "and f.unidadehospitalar_id = $unidadehospitalar_id ";
         $sql .= "and p.id = $profissional_id ";
+
+        if ($setor_id >= 60 && $setor_id <= 65 && $setor_id != null){
+            $sql .= "and setor_id = $setor_id ";
+        }
+
         $sql .= "order by f.datahorabatida ";
 
         $query = $this->db->query($sql);

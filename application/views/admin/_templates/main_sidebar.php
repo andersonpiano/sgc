@@ -134,6 +134,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <ul class="treeview-menu">
                                 <li class="<?=active_link_function('createextra')?>"><a href="<?php echo site_url('admin/escalas/createextra'); ?>"><?php echo lang('menu_escalas_create_extra'); ?></a></li>
                             </ul>
+                            <ul class="treeview-menu">
+                                <li class="<?=active_link_function('relatorio')?>"><a href="<?php echo site_url('admin/escalas/relatorio'); ?>"><?php echo lang('menu_escalas_relatorio'); ?></a></li>
+                            </ul>
 
                         <li class="<?=active_link_controller('profissionais')?>">
                             <a href="<?php echo site_url('admin/especializacoes/'); ?>">

@@ -55,6 +55,7 @@ $lang['menu_search'] = 'Pesquisa';
 /* *********** */$lang['menu_escalas_edit']             = 'Editar';
 /* *********** */$lang['menu_escalas_atribuir']         = 'Atribuir a Médico(a)';
 /* *********** */$lang['menu_escalas_validar']          = 'Validar escala';
+/* *********** */$lang['menu_escalas_relatorio']          = 'Criar relatório';
 
 /* ****** */$lang['menu_conferencias']  = 'Conferências';
 /* *********** */$lang['menu_conferencias_create']           = 'Nova escala inicial';

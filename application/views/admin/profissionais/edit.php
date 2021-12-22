@@ -44,13 +44,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('profissionais_nome', 'nome', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <?php echo form_input($nome);?>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('profissionais_nomecurto', 'nomecurto', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <?php echo form_input($nomecurto);?>
                                             </div>
                                         </div>
@@ -62,7 +62,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </div>
                                         <div class="form-group">
                                             <?php echo lang('profissionais_email', 'email', array('class' => 'col-sm-2 control-label')); ?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <?php echo form_input($email);?>
                                             </div>
                                         </div>
