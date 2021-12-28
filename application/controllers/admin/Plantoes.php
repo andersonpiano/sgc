@@ -848,27 +848,22 @@ class Plantoes extends Admin_Controller
                     );
                 }
                 
-                if($plantao_cedido < 1){
-                    $json["status"] = 1;
-                    if ($this->passagemtroca_model->insert($data)) {
-                        /* Send notifications */
-                        $notification_send = $this->_sendNotifications(
-                            $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO
-                        );
-                        if ($notification_send) {
-                        } else {
-                        }
-    
-                    } else {
-                        $json["error_list"]["#btn_confirmar_oferta"] = $this->ion_auth->errors();
-    
-                    }
+                if ($this->passagemtroca_model->insert($data)) {
+                    /* Send notifications */
+                    $notification_send = $this->_sendNotifications(
+                        $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO
+                    );
+                    if ($notification_send) {
+                    }else {
+                    }    
+
+                } else {
+                    $json["error_list"]["#btn_confirmar_oferta"] = $this->ion_auth->errors();
+
                 }
-                
-                
+
         echo json_encode($json);
-        exit;
-    }
+    }            
 
     public function cederplantaoeprocessar($id)
     {
