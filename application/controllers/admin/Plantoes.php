@@ -854,12 +854,9 @@ class Plantoes extends Admin_Controller
                         $plantao, $this::TIPO_NOTIFICACAO_EMAIL, $this::ACAO_NOTIFICACAO_CESSAO_PLANTAO
                     );
                     if ($notification_send) {
-                    }else {
+                    } else {
+                        $json["error_list"]["#btn_confirmar_oferta"] = $this->ion_auth->errors();
                     }    
-
-                } else {
-                    $json["error_list"]["#btn_confirmar_oferta"] = $this->ion_auth->errors();
-
                 }
 
         echo json_encode($json);

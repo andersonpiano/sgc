@@ -242,7 +242,7 @@ class Escala_model extends MY_Model
         return $query->result();
     }
 
-    public function get_escalas_consolidadas_cal($setor_id, $data_inicial, $data_final, $tipos)
+    public function get_escalas_consolidadas_cal($setor_id, $data_inicial, $data_final)
     {
         $sql = "
         select id, idsetor, nomesetor, idunidade, nomeunidade,
